@@ -1,0 +1,7 @@
+empresa,resolucion,codigo_ruta,capacidad_min,capacidad_max,intervalo_pico_min,intervalo_valle_min,status
+SOBUSA,307-2014,B18-4175,34,41,,,historical_unconfirmed
+SOBUSA,307-2014,C11-4168,62,75,3,5,historical_unconfirmed
+SOBUSA,307-2014,C12-4169,41,50,3.5,5,historical_unconfirmed
+SOBUSA,307-2014,C13-4143,40,48,3.5,5,historical_unconfirmed
+SOBUSA,307-2014,C14-4170,66,80,3,5,historical_unconfirmed
+SOBUSA,307-2014,C16-4167,63,76,3,5,historical_unconfirmed
