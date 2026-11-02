@@ -1,0 +1,3 @@
+agency,resolution,route_code,route_name,length_km,peak_headway_min,offpeak_headway_min,fleet_min,fleet_max,source_url,status
+COOTRANSNORTE,183-2016,A6-4111,Urb La Playa - Via 40 - Prado - Centro - Circular,35.7,6,8,19,23,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/COOTRANSNORTE/Resolucion-183-de-2016-Cootrasnorte.pdf,historical_authorized
+COOTRANSNORTE,183-2016,A5-4110,,,,,22,27,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/COOTRANSNORTE/Resolucion-183-de-2016-Cootrasnorte.pdf,fleet_allocation_only
