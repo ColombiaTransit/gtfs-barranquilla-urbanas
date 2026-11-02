@@ -1,0 +1,4 @@
+empresa,codigo_ruta,codigo_base,nombre_ruta,resolucion,fecha,itinerario,longitud_km,intervalo_pico_min,intervalo_valle_min,capacidad_min,capacidad_max
+"COOTRASOL","D3-4147","D3-4147","San Fernando – American Bar – Las Nieves – Paseo Bolívar – Prado – Circular","467-2025","2025-12-01","","45.1","6.5","8","22","27"
+"COOTRASOL","D4-4148","D4-4148","Ciudad Bonita – Las Moras – Calle 30 – Paseo Bolívar – Prado – Circular","467-2025","2025-12-01","","36.4","7","9","18","22"
+"COOTRASOL","D5-4149","D5-4149","El Edén – Calle 30 – Hipódromo – Paseo Bolívar – Prado – Circular","467-2025","2025-12-01","","47.5","6.5","9","24","29"
