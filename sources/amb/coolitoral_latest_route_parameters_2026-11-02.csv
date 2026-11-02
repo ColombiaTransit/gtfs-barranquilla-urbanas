@@ -1,0 +1,15 @@
+agency,route_id,authorization_resolution,source_pdf_pages,peak_headway_minutes,offpeak_headway_minutes,headway_scope,itinerary_A_peak_minutes,itinerary_A_offpeak_minutes,itinerary_B_peak_minutes,itinerary_B_offpeak_minutes,length_km_or_note,company_fleet_min,company_fleet_max,whole_route_fleet_min,whole_route_fleet_max,vehicle_group,other_operator,legal_change,validation_notes,gtfs_ready
+COOLITORAL,A1-4106,192-2025,5-8,4.5,6,effective_combined_section,8.5,14,8.5,11,A=55.3;B=58.3,23,28,46,56,C,COOTRAB,route_and_capacity_modified,Company share 23-28; combined route 46-56; peak 4.5 and offpeak 6 only on common high-demand section,no
+COOLITORAL,A2-4107,192-2025,8-10,8.5,11,route,,,,,56.1,22,26,22,26,C,,route_and_capacity_modified,,no
+COOLITORAL,A3-4108,192-2025,11-12,6,9,route,,,,,37,21,25,21,25,C,,route_and_capacity_modified,,no
+COOLITORAL,A4-4109,192-2025,12-14,9,11,route,,,,,56.7,22,26,22,26,C,,route_modified_after_264_2024,2025 table visually confirmed 9/11,no
+COOLITORAL,B1-4117,192-2025,14-16,8,11,route,,,,,26.9,13,16,13,16,C,,route_and_capacity_modified,,no
+COOLITORAL,B2-A-4177,192-2025,17-18,4.5,7,route,,,,,31.5,24,29,24,29,C,,route_and_capacity_modified,Spelling B2-A / B2A varies,no
+COOLITORAL,B3-4119,192-2025,19-20,6,8,route,,,,,32.1,18,22,18,22,C,,route_and_capacity_modified,,no
+COOLITORAL,B17-4163,192-2025,21-22,2.5,4,route_shared_two_operators,,,,,51.9,35,42,70,84,C+D,SODETRANS,route_shared_and_capacity_modified,Coolitoral share 35-42; SODETRANS share 35-42; total 70-84; screenshot confirms 2.5 not OCR 25,no
+COOLITORAL,C19-4178,199-2025 correction of 192-2025,1-3 of 199;23-24 of 192,5.5,8,route,,,,,30.1,18,22,18,22,C,,formal_code_correction,199-2025 page 1 scan explicitly corrects C19-4119 to C19-4178; OCR incorrectly says 4173,no
+COOLITORAL,PT1-4101,192-2025,25-26,10,14,route_shared_two_operators,,,,,55.4,17,20,34,40,C,TRANSDIAZ,route_and_capacity_modified,Coolitoral share 17-20; TRANSDIAZ share 17-20; combined 34-40,no
+COOLITORAL,PT2-4102,210-2026,3-5;8,5,6,effective_combined_section,10,12,10,12,A=52.9;B=57.2,36,44,36,44,C,,route_and_headways_modified_2026,Company fleet retained by 210 art1 para1; previous 192-2025 interval 5/7 and length 52.9,no
+COOLITORAL,PT3-4103,210-2026,3;6-8,5.5,6.5,effective_combined_section,10.5,13,10.5,13,A=55.2;B=60,37,44,37,44,C_vs_D_CONFLICT,,route_and_headways_modified_2026,210-2026 says Grupo C p7 while 192-2025 says Grupo D p34; fleet retained 37-44 subject to checking vehicle-class modification,no
+COOLITORAL,PT4-4104,192-2025,30-32,4.5,7,route,,,,,34.5,27,32,27,32,C,,route_and_capacity_modified,,no
+COOLITORAL,PT5-4105,192-2025,32-34,4.5,7,route,,,,,35.5,27,32,27,32,C,,route_and_capacity_modified,,no
