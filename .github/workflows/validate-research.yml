@@ -1,0 +1,28 @@
+name: Validate GTFS research tables
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'gtfs/**'
+      - 'scripts/validate_research.py'
+      - '.github/workflows/validate-research.yml'
+  pull_request:
+    paths:
+      - 'gtfs/**'
+      - 'scripts/validate_research.py'
+      - '.github/workflows/validate-research.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate agency and routes
+        run: python scripts/validate_research.py
