@@ -1,0 +1,49 @@
+name: Recover Flota Angulo PDFs and OCR
+on:
+  push:
+    paths:
+      - scripts/resolve_amb_flota_links.py
+      - .github/workflows/recover-flota-angulo-pdfs.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recover-and-extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install HTML parser and PDF/OCR tools
+        run: |
+          python3 -m pip install --disable-pip-version-check requests beautifulsoup4
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils tesseract-ocr tesseract-ocr-spa
+      - name: Resolve and verify PDF links from official AMB archive
+        run: python3 scripts/resolve_amb_flota_links.py flota-link-results
+      - name: Extract confirmed documents (OCR for scanned pages)
+        run: |
+          python3 - <<'PY'
+          import csv
+          with open("flota-link-results/resolved_manifest.csv", encoding="utf-8") as f:
+              rows=list(csv.DictReader(f))
+          print(f"Verified PDFs to extract: {len(rows)}")
+          with open("/tmp/has_flota_pdfs","w") as f: f.write(str(int(bool(rows))))
+          PY
+          if [ "$(cat /tmp/has_flota_pdfs)" = "1" ]; then
+            python3 scripts/extract_amb_pdfs.py \
+              --manifest flota-link-results/resolved_manifest.csv \
+              --agency FLOTA_ANGULO \
+              --out flota-pdf-output
+          else
+            echo "No verified PDF URL found; archive and link report remain available."
+          fi
+      - name: Publish PDF-link evidence and extracted pages
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-flota-angulo-recovered-pdfs
+          path: |
+            flota-link-results/
+            flota-pdf-output/
+          if-no-files-found: warn
+          retention-days: 30
