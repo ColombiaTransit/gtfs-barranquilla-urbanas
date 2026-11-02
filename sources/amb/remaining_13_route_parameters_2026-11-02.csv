@@ -1,12 +1,12 @@
 agency,route_id,source_resolution,peak_minutes,offpeak_minutes,fleet_min,fleet_max,length_km,pdf_pages,evidence_note,latest_authorization_not_proven_current,gtfs_approved
-COOCHOFAL,A15-4159,242-2025,2.5,,59,70,,6 / 20–21,"spits bevestigd, dal OCR onleesbaar; A15-4129 in besluitkop",yes,no
-COOCHOFAL,C2-4133,242-2025,6,9,21,25,43,8,routeblad helder,yes,no
-COOCHOFAL,C2-B-4187,242-2025,4.5,,,24,26.3,10 / 20,vlootminima 20 samenvatting / 21 routetabel; code 4187 of 4188,yes,no
-COOCHOFAL,C3-4134,242-2025,,10,17,20,38,12,spits OCR onduidelijk,yes,no
-COOCHOFAL,C4-4135,242-2025,,,44,52,40,14,"OCR 3/5 gesuggereerd, scanverificatie vereist",yes,no
-COOCHOFAL,C9-4140,242-2025,,10,13,16,32.2,16,spits OCR onduidelijk,yes,no
-COOCHOFAL,C18-4141,242-2025,,10,13,16,33.2,18,spits OCR onduidelijk,yes,no
-COOCHOFAL,D20-4185,242-2025,2.5,,42,50,,20,dalinterval OCR onduidelijk,yes,no
+COOCHOFAL,A15-4159,242-2025,2.5,4,59,70,45.6,242-2025 p6 / p20,Original scan verifies 2.5/4 min 59-70 and 45.6 km; code A15-4129 in other parts of act; code conflict,yes,no
+COOCHOFAL,C2-4133,242-2025,6,9,21,25,43,242-2025 p8,Original scan verified,yes,no
+COOCHOFAL,C2-B-4187,242-2025,4.5,7,,24,26.3,242-2025 p10 / p20,Original scan confirms 21 minimum per-route on p10 but 20 in summary p20; 4187 per-route vs 4188 summary; both unresolved,yes,no
+COOCHOFAL,C3-4134,242-2025,7,10,17,20,38,242-2025 p12,Original scan verified 7/10,yes,no
+COOCHOFAL,C4-4135,242-2025,3,5,44,52,40,242-2025 p14,Original scan verified 3/5,yes,no
+COOCHOFAL,C9-4140,242-2025,7,10,13,16,32.2,242-2025 p16,Original scan verified 7/10,yes,no
+COOCHOFAL,C18-4141,242-2025,7,10,13,16,33.2,242-2025 p18,Original scan verified 7/10,yes,no
+COOCHOFAL,D20-4185,242-2025,2.5,4,42,50,33.2,242-2025 p20,Original scan verified 2.5/4,yes,no
 FLOTA_ROJA,A8-4113,260-2024,3,5,35,42,33.74,5,"scan p5 gecontroleerd, besluit 30-09-2024",yes,no
 LA_CAROLINA,D6-4150,404-2023,6,8,48,58,77.7,7,scan bevestigd; Terminal–Centro–Base Naval–Villa Carolina–Alameda del Río,yes,no
 LA_CAROLINA,D7-4151,404-2023,6,8,48,58,79.3,9,scan bevestigd; Terminal–Centro–Base Naval–Corredor Universitario,yes,no
