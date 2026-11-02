@@ -43,7 +43,7 @@ De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke ana
 
 - [Frequenties en capaciteit, 13 resterende bedrijven](../../sources/amb/remaining_13_route_parameters_2026-11-02.csv). **Gelabeld als vergunningsgegevens, GTFS niet goedgekeurd.**
 - [PDF-/besluiteninventaris, 159 registraties](../../sources/amb/remaining_13_resolution_inventory_2026-11-02.csv).
-- [41 vervolgcontroles uit de 13 bedrijfsdossiers](../../sources/amb/remaining_13_open_issues_2026-11-02.csv).
+- [41 vervolgitems uit de 13 bedrijfsdossiers](../../sources/amb/remaining_13_open_issues_2026-11-02.csv).
 - [23-bedrijven-voortgangsregister](../../sources/amb/company_completion_backlog_2026-11-02.csv).
 
 ## Wat aantoonbaar klaar is en wat niet
