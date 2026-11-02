@@ -1,0 +1,5 @@
+empresa,codigo_ruta,codigo_base,nombre_ruta,resolucion,fecha,itinerario,longitud_km,intervalo_pico_min,intervalo_valle_min,capacidad_min,capacidad_max
+"COOLITORAL","PT4-4104-A","PT4-4104","Vía 40 – Circunvalar – Circular","256-2026","2026-06-19","A","34.5","9","14","27","32"
+"COOLITORAL","PT4-4104-B","PT4-4104","Vía 40 – Circunvalar – Circular","256-2026","2026-06-19","B","34.5","9","14","27","32"
+"COOLITORAL","PT5-4105-A","PT5-4105","Circunvalar – Vía 40 – Circular","256-2026","2026-06-19","A","35.5","9","14","27","32"
+"COOLITORAL","PT5-4105-B","PT5-4105","Circunvalar – Vía 40 – Circular","256-2026","2026-06-19","B","35.3","9","14","27","32"
