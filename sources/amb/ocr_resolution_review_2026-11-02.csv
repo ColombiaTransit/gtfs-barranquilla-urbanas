@@ -1,0 +1,7 @@
+agency,resolution,route,peak_headway_min,offpeak_headway_min,vehicles_min,vehicles_max,pages,notes,review_status
+TRASALFA,111-2012,B2B-4118,,,,,11,route change; capacity unchanged,requires_manual_validation
+COOTRANSNORTE,183-2016,A6-4111,6,8,19,23,8,35.7 km; service window conditional,requires_manual_validation
+TRANSMECAR,324-2010,Soledad-Murillo-Vivero,4,6,40,48,11,route code and effective date need validation,requires_manual_validation
+TRASALIANCO,408-2013,D18-4179,7,10,27,33,11,terminal changed,requires_manual_validation
+LA CAROLINA,067-2011,A16-4161,,,,,9,technical values governed by 173-2010,requires_manual_validation
+EMBUSA,113-2012,B9-4125,4,6,37,45,7,route detours,requires_manual_validation
