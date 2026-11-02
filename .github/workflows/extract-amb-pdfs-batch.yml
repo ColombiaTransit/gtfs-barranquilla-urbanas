@@ -3,31 +3,53 @@ on:
   workflow_dispatch:
     inputs:
       agency:
-        description: "Optional company filter (empty = all 22 companies)"
+        description: "Optional company (empty = all)"
         required: false
         default: ""
         type: string
 permissions:
   contents: read
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      agencies: ${{ steps.select.outputs.agencies }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select agencies from manifest
+        id: select
+        env:
+          SELECTED_AGENCY: ${{ inputs.agency }}
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import csv, json, os
+          with open("sources/amb/pdf_manifest.csv", encoding="utf-8", newline="") as f:
+              names = sorted({r["agency"] for r in csv.DictReader(f)})
+          selected = os.environ["SELECTED_AGENCY"].strip().upper()
+          if selected:
+              if selected not in names:
+                  raise SystemExit(f"Unknown agency: {selected}; choices: {', '.join(names)}")
+              names = [selected]
+          print("agencies=" + json.dumps(names))
+          PY
   extract:
-    if: ${{ inputs.agency == '' || inputs.agency == matrix.agency }}
+    needs: prepare
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
-        agency: [COOTRAB, TRANSMECAR, FLOTA_ROJA, TRANSDIAZ, EMBUSA, MONTERREY, LA_CAROLINA, COOTRANSPORCAR, COOCHOFAL, TRASALFA, COOLITORAL, COOTRANTICO, LOLAYA, COOTRANSCO, COOTRASOL, SOBUSA, TRANSOLEDAD, TRANSURBAR, SODETRANS, COOTRANSNORTE, TRASALIANCO, COOASOATLAN]
+        agency: ${{ fromJSON(needs.prepare.outputs.agencies) }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
-      - name: Install PDF extraction and Spanish OCR tools
+      - name: Install PDF and Spanish OCR tools
         run: |
           sudo apt-get update
           sudo apt-get install -y poppler-utils tesseract-ocr tesseract-ocr-spa
-      - name: Extract company resolutions
-        run: python3 scripts/extract_amb_pdfs.py --agency "${{ matrix.agency }}" --out "ocr-output"
-      - name: Upload per-company extraction results
+      - name: Extract company PDFs
+        run: python3 scripts/extract_amb_pdfs.py --agency "${{ matrix.agency }}" --out ocr-output
+      - name: Upload per-company artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
