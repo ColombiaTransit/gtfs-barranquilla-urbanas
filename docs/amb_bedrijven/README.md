@@ -12,6 +12,14 @@ De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke ana
 
 Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor **GTFS** worden gelezen met **dit scopebesluit als override**. Er worden geen bestaande brongetallen verwijderd.
 
+
+## Bronaudit 2 november 2026 — nog ontbrekende resoluties
+
+- [**Geverifieerd resolutie-gatenregister**](../../sources/amb/resolution_gap_audit_2026-11-02.csv): **7** oorspronkelijke PDF-lacunes (FLOTA ÁNGULO **5**, COOLITORAL **256-2026** en COOTRANTICO **025-2011** met foutieve link), **2** te herextracteren reeds teruggevonden bronnen (SOBUSA **307-2014** en COOTRANTICO **108-2023**), plus **1** algemene pilotresolutie (**448-2025**) waarvan route-impact nog moet worden vastgesteld.
+- [**GTFS-routedekkingsgaten**](../../sources/amb/route_coverage_gaps_2026-11-02.csv): extra routes/itinerarios in de AMB-visor, waarvoor nog geen apart gevalideerd frequentie- en routepatroon bestaat. Dit betekent **niet automatisch** dat er een ontbrekende resolutie is.
+- De oorspronkelijke SOBUSA 307-2014-PDF (**20 pagina's**) is teruggevonden: https://www.ambq.gov.co/wp-content/uploads/2018/09/RESOLUCION_307-14-SOBUSA.pdf en de onjuiste URL is in het manifest vervangen. De nieuwe extractie is nog niet bevestigd.
+- Voertuigcapaciteit is **buiten GTFS-scope** en wordt niet opgevoerd als bronblokkade.
+
 ## De 13 laatst behandelde bedrijven
 
 | Bedrijf | Aantal PDF-registraties in eerste extractiebatch | Dossier |
