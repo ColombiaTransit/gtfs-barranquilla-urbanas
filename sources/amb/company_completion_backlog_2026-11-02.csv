@@ -4,7 +4,7 @@ COOCHOFAL,25,"242-2025;387-2018;076-2017","D20-4185;A15;C2;C3;C4;C9;C18",PENDING
 COOLITORAL,37,"210-2026;192-2025;199-2025","B17;A1;A2;A3;A4;B1;B3;C19",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
 COOTRAB,10,"358-2024;378-2023;200-2019","C5-4136;C6-4137;C5;C6",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
 COOTRANSCO,5,"098-2026;258-2024;024-2017","C7",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
-COOTRANSNORTE,12,"183-2016;156-2015;122-2015","A5-4110;A6-4111;A5;A6",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
+COOTRANSNORTE,12,"183-2016;156-2015;208-2015","A5-4110;A6-4111",ARTICLE_REVIEWED_LATEST_SCAN_VERIFIED,"CNORTE-01 current operation;CNORTE-02 geometry stops;CNORTE-03 peak time windows;CNORTE-04 terminal address 250 vs 520;CNORTE-05 historical 211-2010 OCR 13 vs 18;CNORTE-06 Transmetro implementation;CNORTE-07 vehicle class chronology;CNORTE-08 temporary diversions",no
 COOTRANSPORCAR,4,"389-2025;170-2017;281-2010","C8-4139;C8",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
 COOTRANTICO,19,"462-2025;284-2024;259-2024","B7;A18;B4;B5;B6;B20",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
 COOTRASOL,13,"467-2025;386-2018;060-2016","D3;D5;D4",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
