@@ -1,7 +1,19 @@
 # AMB TPC — afhandeling per bedrijf en vervolgwerk
 
 ## Werkwijze
-Per bedrijf: (1) controleer alle PDF's uit het manifest, (2) lees de beschikkende artikelen en technische tabellen, (3) leg per route vast welke besluiten wijzigingen, intrekkingen, verlengingen of pilots betreffen, (4) vergelijk besluiten chronologisch, (5) documenteer routesegmenten en voertuig-/frequentiegegevens met pagina en bron, (6) maak pas daarna GTFS-voorstellen. OCR-extractie is **geen** juridische of operationele verificatie.
+Per bedrijf: (1) controleer alle PDF's uit het manifest, (2) lees de beschikkende artikelen en technische tabellen, (3) leg per route vast welke besluiten wijzigingen, intrekkingen, verlengingen of pilots betreffen, (4) vergelijk besluiten chronologisch, (5) documenteer routesegmenten, haltes, frequenties en diensttijden met pagina en bron, (6) maak pas daarna GTFS-voorstellen. OCR-extractie is **geen** juridische of operationele verificatie.
+
+
+## GTFS-scope: voertuigcapaciteit niet gebruiken (2 november 2026)
+
+Per gebruikersbesluit zijn **vloot-/voertuigcapaciteit**, het aantal minimaal/maximaal vergunde bussen en voertuigklassen **buiten scope** van het GTFS-onderzoek. De historische vlootgegevens blijven als oorspronkelijke bronvermelding behouden, maar:
+
+- **Niet** gebruiken als GTFS-acceptatiecriterium of reden om verwerking te blokkeren.
+- Geen afzonderlijke werkzaamheden meer uitvoeren om tegenstrijdige wagenparkaantallen of wagenparkklassen op te lossen.
+- Niet meenemen bij het afleiden van ritfrequenties; gebruik expliciete intervallen per route-/itinerary en werkelijke dienstvensters.
+- Routecodeconflicten, juridische geldigheidsduur, ontbrekende bronbesluiten, routegeometrie, haltes en werkelijke dienstregeling **blijven relevant**.
+
+De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GTFS; de getallen worden **niet uit het bronarchief gewist**.
 
 ## Voortgang
 - 23 bedrijven en 274 manifestdocumenten in `sources/amb/company_completion_backlog_2026-11-02.csv`.
@@ -29,6 +41,6 @@ Per bedrijf: (1) controleer alle PDF's uit het manifest, (2) lees de beschikkend
 - **REVIEWED**: beschikkende artikelen en tabellen gelezen en met bron/pagina vastgelegd.
 - **LEGAL_CHAIN_CHECKED**: oudere en nieuwere besluiten vergeleken, incl. intrekkingen/pilots.
 - **OPERATION_CONFIRMED**: onafhankelijk bewijs voor huidige exploitatie en tijden.
-- **GTFS_READY**: benodigde GTFS-velden herleidbaar en intern consistent.
+- **GTFS_READY**: benodigde GTFS-velden herleidbaar en intern consistent; **vloot/capaciteit telt niet mee**.
 
 Bedrijven worden niet als voltooid gemarkeerd voordat de vereiste stappen aantoonbaar zijn uitgevoerd. Werk aan ontbrekende scans, URL's en routegegevens wordt afzonderlijk bijgehouden zodat het onderzoek aan de overige bedrijven kan doorgaan.
