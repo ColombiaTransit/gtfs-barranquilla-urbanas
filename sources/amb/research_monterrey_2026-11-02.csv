@@ -1,0 +1,5 @@
+agency,route_code,archive_url,source_status,notes
+"MONTERREY","B8-4124","https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-monterrey/","source_identified_parameters_pending","Archive page loads but does not expose resolution rows in fetched HTML; identify PDF URLs before extraction"
+"MONTERREY","B11-4166","https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-monterrey/","source_identified_parameters_pending","Archive page loads but does not expose resolution rows in fetched HTML; identify PDF URLs before extraction"
+"MONTERREY","B11-B-4192","https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-monterrey/","source_identified_parameters_pending","Archive page loads but does not expose resolution rows in fetched HTML; identify PDF URLs before extraction"
+"MONTERREY","B12-4127","https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-monterrey/","source_identified_parameters_pending","Archive page loads but does not expose resolution rows in fetched HTML; identify PDF URLs before extraction"
