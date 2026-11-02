@@ -74,7 +74,7 @@ De per-resolutie classificatie, exacte bronnen en uitzonderingen staan in
 11. **208-2015:** A6 naar Prado/Centro, 6/8 en 42,7 km; herverdeelt hele vloot naar **A5 22–27 + A6 19–23**.
 12. **183-2016:** A6 direct via Vía 40 naar Prado/Centro, **6/8, 35,7 km, 19–23**; bedrijfsvloot blijft **41–50**.
 
-Er zijn **geen mislukte PDF-extracties binnen deze twaalf**. De zes oude documenten met beeld-OCR (2010, 2012 en 2013) kunnen wel onnauwkeurigheden in straatnamen bevatten. Het juridische onderscheid tussen wijziging, gedeeltelijke herroeping en technisch rapport is in het register expliciet bewaard.
+Er zijn **geen mislukte PDF-extracties binnen deze twaalf**. De zeven oudere documenten met beeld-OCR (vijf uit 2010, één uit 2012 en één uit 2013) kunnen wel onnauwkeurigheden in straatnamen bevatten. Het juridische onderscheid tussen wijziging, gedeeltelijke herroeping en technisch rapport is in het register expliciet bewaard.
 
 ## 5. Resterend werk — apart voor vervolgacties
 
