@@ -1,0 +1,6 @@
+empresa,codigo_ruta,codigo_base,nombre_ruta,resolucion,fecha,itinerario,longitud_km,intervalo_pico_min,intervalo_valle_min,capacidad_min,capacidad_max
+"TRANSDIAZ","A10-4114 A","A10-4114","Soledad - Circunvalar - La Paz - Villa Carolina - Circular","501-2025","2025-12-23","A","65.7","8","10","67","80"
+"TRANSDIAZ","A10-4114 B","A10-4114","Soledad - Circunvalar - La Paz - Villa Carolina - Circular","501-2025","2025-12-23","B","48.3","4","6","67","80"
+"TRANSDIAZ","A11-4115","A11-4115","Soledad - Circunvalar - Malvinas - Ciudad Jardín - Villa Carolina - Centro - Circular","501-2025","2025-12-23","","43","6","8","24","28"
+"TRANSDIAZ","B16-4130","B16-4130","Soledad - Calle 17 - La Paz - Los Olivos - Alameda del Río - Circular","501-2025","2025-12-23","","50.6","9","11","19","22"
+"TRANSDIAZ","PT1-4101","PT1-4101","Villas de San Pablo - Juan Mina - Carrera 38 - Centro - Circular","501-2025","2025-12-23","","55.4","10","14","34","40"
