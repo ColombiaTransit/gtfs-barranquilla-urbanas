@@ -1,0 +1,62 @@
+name: Validate AMB Resolutions
+on:
+  workflow_dispatch:
+    inputs:
+      batch_run_id:
+        description: "22-company extraction run ID"
+        required: true
+        default: "41480204032"
+        type: string
+      flota_run_id:
+        description: "Flota Angulo extraction run ID"
+        required: true
+        default: "41488216079"
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download extraction artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BATCH_RUN: ${{ inputs.batch_run_id }}
+          FLOTA_RUN: ${{ inputs.flota_run_id }}
+        run: |
+          mkdir -p extraction-artifacts
+          gh run download "$BATCH_RUN" --pattern 'amb-pdf-*' --dir extraction-artifacts
+          gh run download "$FLOTA_RUN" --pattern 'amb-pdf-FLOTA_ANGULO' --dir extraction-artifacts
+      - name: Build validation queue
+        run: |
+          python3 scripts/build_amb_resolution_validation_queue.py \
+            --manifest sources/amb/pdf_manifest.csv \
+            --reports extraction-artifacts \
+            --out validation-results/resolution_validation_queue.csv
+      - name: Summarize issues
+        run: |
+          python3 - <<'PY'
+          import csv, collections, pathlib
+          rows=list(csv.DictReader(open("validation-results/resolution_validation_queue.csv", encoding="utf-8")))
+          by_status=collections.Counter(r["review_issue"] for r in rows)
+          by_agency=collections.Counter(r["agency"] for r in rows)
+          summary=["# AMB resolution validation", "",f"- Registered resolutions: {len(rows)}",f"- Companies: {len(by_agency)}", "", "## Review issues"]
+          summary += [f"- {k}: {v}" for k,v in sorted(by_status.items())]
+          summary += ["", "## Companies"]
+          summary += [f"- {k}: {v}" for k,v in sorted(by_agency.items())]
+          content="\n".join(summary)+"\n"
+          pathlib.Path("validation-results/summary.md").write_text(content,encoding="utf-8")
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"],"a") as f:f.write(content)
+          PY
+      - name: Upload validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-resolution-validation
+          path: validation-results/
+          if-no-files-found: warn
+          retention-days: 30
