@@ -1,6 +1,6 @@
 agency,manifest_documents,priority_resolutions,manifest_route_codes,validation_state,open_actions,gtfs_authorized
 COOASOATLAN,9,"369-2025;305-2014;433-2013","C1;C20;C5;C6",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
-COOCHOFAL,25,"242-2025;387-2018;076-2017","A15-4159;C2-4133;C2-B-4187;C3-4134;C4-4135;C9-4140;C18-4141;D20-4185",LATEST_2025_TABLES_PARTIAL_OCR_UNRESOLVED,"Zie docs/amb_bedrijven/coochofal_route_frequencies_2026-11-02.md en sources/amb/remaining_13_open_issues_2026-11-02.csv",no
+COOCHOFAL,25,"242-2025;387-2018;076-2017","A15-4159;C2-4133;C2-B-4187;C3-4134;C4-4135;C9-4140;C18-4141;D20-4185",LATEST_2025_EIGHT_ROUTE_TABLES_SCAN_VERIFIED_DOCUMENT_CONFLICTS_OPEN,"Zie docs/amb_bedrijven/coochofal_route_frequencies_2026-11-02.md en sources/amb/remaining_13_open_issues_2026-11-02.csv",no
 COOLITORAL,37,"210-2026;192-2025;199-2025","B17;A1;A2;A3;A4;B1;B3;C19",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
 COOTRAB,10,"358-2024;378-2023;200-2019","C5-4136;C6-4137;C5;C6",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
 COOTRANSCO,5,"098-2026;258-2024;024-2017","C7",PENDING_ARTICLE_REVIEW,Check operative articles; legal supersession; tables; route geometry; timetable; OCR discrepancies,no
