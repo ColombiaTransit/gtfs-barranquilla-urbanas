@@ -1,0 +1,4 @@
+agency,resolution,route_code,route_name,peak_headway_min,offpeak_headway_min,fleet_min,fleet_max,route_geometry,source_url,notes
+TRASALIANCO,408-2013,D18-4179,Concord - Murillo - Circunvalar - Carrera 43 - Calle 76,7,10,27,33,street_by_street,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/TRASALIANCO/RESOLUCION-408-13-TRASALIANCO.pdf,Historical authorized figures; no proof of actual current frequency
+LA_CAROLINA,067-2011,A16-4161,Terminal de Transportes - Miramar - Circular,,,,,street_by_street,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/LA-CAROLINA/LA-CAROLINA-A16-Resolucion-067-11.pdf,Resolution modifies geometry only; frequencies and fleet retained from 173-2010; check 204-2012 and A/B
+TRANSMECAR,324-2010,C17-4160,,,,,,scan_only,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/TRANSMECAR/TRANSMECAR-C17-Resolucion-324-10.pdf,11 page image-only PDF; numeric values not verified
