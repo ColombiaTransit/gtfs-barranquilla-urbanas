@@ -8,21 +8,26 @@ Acht nieuwe routevergunningen; totale vloot 229–273 in 2025 versus 208–251 i
 
 **Belangrijkste onderzochte besluiten:** 242-2025 vs 387-2018.
 
-## Routefrequenties en wagenpark
+## Routefrequenties en wagenpark — originele scans opnieuw gecontroleerd
 
-| Route | Spits (min) | Dal (min) | Vloot | Lengte (km) | PDF-pagina / bijzonderheid |
-|---|---:|---:|---|---:|---|
-| A15-4159 | 2.5 | **onbevestigd** | 59–70 | ? | 6 / 20–21: spits bevestigd, dal OCR onleesbaar; A15-4129 in besluitkop |
-| C2-4133 | 6 | 9 | 21–25 | 43 | 8: routeblad helder |
-| C2-B-4187 | 4.5 | **onbevestigd** | ?–24 | 26.3 | 10 / 20: vlootminima 20 samenvatting / 21 routetabel; code 4187 of 4188 |
-| C3-4134 | **onbevestigd** | 10 | 17–20 | 38 | 12: spits OCR onduidelijk |
-| C4-4135 | **onbevestigd** | **onbevestigd** | 44–52 | 40 | 14: OCR 3/5 gesuggereerd, scanverificatie vereist |
-| C9-4140 | **onbevestigd** | 10 | 13–16 | 32.2 | 16: spits OCR onduidelijk |
-| C18-4141 | **onbevestigd** | 10 | 13–16 | 33.2 | 18: spits OCR onduidelijk |
-| D20-4185 | 2.5 | **onbevestigd** | 42–50 | ? | 20: dalinterval OCR onduidelijk |
+Alle acht tabellen op **242-2025 p. 6, 8, 10, 12, 14, 16, 18 en 20** zijn visueel gecontroleerd. De eerdere OCR-blokkades voor de intervallen zijn opgelost.
 
+| Route in individuele tabel | Spits | Dal | Vloot min–max | Lengte | PDF |
+|---|---:|---:|---:|---:|---|
+| **A15-4159** | 2,5 min | 4 min | 59–70 | 45,6 km | p. 6 |
+| **C2-4133** | 6 min | 9 min | 21–25 | 43 km | p. 8 |
+| **C2-B-4187** | 4,5 min | 7 min | **21–24 p.10 / 20–24 p.20** | 26,3 km | p. 10, 20 |
+| **C3-4134** | 7 min | 10 min | 17–20 | 38 km | p. 12 |
+| **C4-4135** | 3 min | 5 min | 44–52 | 40 km | p. 14 |
+| **C9-4140** | 7 min | 10 min | 13–16 | 32,2 km | p. 16 |
+| **C18-4141** | 7 min | 10 min | 13–16 | 33,2 km | p. 18 |
+| **D20-4185** | 2,5 min | 4 min | 42–50 | 33,2 km | p. 20 |
 
-De waarden met **onbevestigd** mogen niet worden ingevuld op basis van OCR-gissingen. Waar een interval voor een *gemeenschappelijke drukste sectie* staat, is dit **geen** interval per afzonderlijke itinerary. Historische vlootmatrixwaarden zijn geen nieuwe routefrequenties.
+**Nieuwe conclusie uit scanverificatie:** er zijn géén ontbrekende numerieke intervallen meer voor deze acht routes. Wel blijven **twee echte documentconflicten**:
+- **A15** staat in de tekst bij hetzelfde besluit ook als **A15-4129**, terwijl tabel/vlootmatrix **A15-4159** vermelden;
+- **C2-B** heet in de individuele tabel **C2-B-4187** met **21–24 voertuigen**, terwijl de samenvattende bedrijfsvlootmatrix p. 20 **C2-B-4188** met **20–24 voertuigen** vermeldt.
+
+De samenvattende matrix komt rekenkundig uit op **229–273** voertuigen; dat lost de tegenstrijdige code en individuele minimumcapaciteit **niet juridisch op**. Beide bronteksten worden bewaard. **GTFS_READY=no.**
 
 ## Geregistreerde bronbesluiten
 
