@@ -1,5 +1,5 @@
 agency,issue,severity,source_document,state
-COOCHOFAL,"COOCH-01 Scancontrole onleesbare intervallen op p6–20",review_required,company_dossier,open
+COOCHOFAL,"COOCH-01 Scancontrole onleesbare intervallen op p6–20",resolved_numeric_scan;legal_conflict_remains,company_dossier,partially_resolved
 COOCHOFAL,"COOCH-02 routecodes en C2-B vlootminima juridisch vaststellen",review_required,company_dossier,open
 COOCHOFAL,"COOCH-03 overige 23 historische besluiten artikel voor artikel classificeren",review_required,company_dossier,open
 COOCHOFAL,"COOCH-04 werkelijke dienst en geometrie.",review_required,company_dossier,open
