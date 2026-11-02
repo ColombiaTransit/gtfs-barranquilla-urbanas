@@ -1,0 +1,6 @@
+agency,route_code,resolution,year,document_type,source_url,extracted_evidence,status
+FLOTA_ANGULO,A7-4112,232-2025,2025,route_resolution,https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-flota-angulo/,listed_in_official_archive,pdf_content_pending
+FLOTA_ANGULO,A7-4112,265-2019,2019,route_resolution,https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-flota-angulo/,listed_in_official_archive,pdf_content_pending
+FLOTA_ANGULO,A7-4112,301-2014,2014,route_restructuring,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/FLOTA-ANGULO/301-14-RESOLUCION-FLOTA-ANGULO.pdf,Barranquillita-La_Pradera-circular_with_street_itinerary,historical_geometry
+FLOTA_ANGULO,A7-4112,157-2010,2010,route_resolution,https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-flota-angulo/,listed_in_official_archive,pdf_content_pending
+FLOTA_ANGULO,A7-4112,242-2012,2012,route_resolution,https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-flota-angulo/,listed_in_official_archive,pdf_content_pending
