@@ -1,0 +1,8 @@
+agency,route_family,resolution,year,source_url,document_type,assessment
+TRANSMECAR,C17-4160,324-2010,2010,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/TRANSMECAR/TRANSMECAR-C17-Resolucion-324-10.pdf,route_restructuring,historical_route_source
+TRASALIANCO,D18-4179,408-2013,2013,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/TRASALIANCO/RESOLUCION-408-13-TRASALIANCO.pdf,route_restructuring,historical_route_source
+TRASALIANCO,B19-4176,266-2010,2010,https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-trasalianco/,route_resolution,listed_in_official_archive
+TRASALIANCO,D12-4154,265-2010,2010,https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-trasalianco/,route_resolution,listed_in_official_archive
+TRASALIANCO,D17-4158,268-2010,2010,https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-trasalianco/,route_resolution,listed_in_official_archive
+LA_CAROLINA,A16-4161,067-2011,2011,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/LA-CAROLINA/LA-CAROLINA-A16-Resolucion-067-11.pdf,route_restructuring,historical_route_source
+LA_CAROLINA,D6-4150;D7-4151,404-2023,2023,https://www.ambq.gov.co/wp-content/uploads/2026/03/RESOLUCION-MTC-N0.404-23-1.pdf,route_restructuring,newer_route_source_check_full_parameters
