@@ -1,0 +1,2 @@
+agency,resolution,date,route_code,route_name,length_km,peak_headway_min,offpeak_headway_min,fleet_min,fleet_max,terminal,source_url,status,source_quality_note
+TRANSOLEDAD,188-2024,2024-07-29,D13-4155,Villa Sol - Soledad - Barranquilla,46,5,7,32,37,Calle 18 con Carrera 40,https://www.ambq.gov.co/wp-content/uploads/2024/08/RESOLUCION-M.-188-2024-TRANSPORTES-SOLEDAD.pdf,authorized_not_observed,Source_capacity_table_total_mistakenly_labels_COOTRAB
