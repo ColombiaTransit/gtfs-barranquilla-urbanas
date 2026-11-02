@@ -4,7 +4,7 @@
 
 ## Inhoudelijke uitkomst
 
-D13-4155 is herstructureerd naar 5/7 minuten, 32–37 voertuigen, 46 km. Scan p6 is gecontroleerd; de tekstextractie van p4 leest 32–87 en noemt ten onrechte COOTRAB, wat niet mag worden overgenomen.
+D13-4155 is herstructureerd naar 5/7 minuten, 32–37 voertuigen, 46 km. Scan p6 is gecontroleerd; de tekstextractie van p4 noemt 32–87 en COOTRAB, terwijl de scan van het beschikkende routeblad p6 32–37 en TRANSOLEDAD toont; p4 vereist nog afzonderlijke visuele controle op OCR-fout versus documentfout.
 
 **Belangrijkste onderzochte besluiten:** 188-2024.
 
