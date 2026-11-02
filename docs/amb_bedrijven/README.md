@@ -49,7 +49,7 @@ Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor
 
 ## Centrale onderzoeksbestanden
 
-- [Routefrequenties (met historische vlootkolommen als archief), 13 resterende bedrijven](../../sources/amb/remaining_13_route_parameters_2026-11-02.csv). **Gelabeld als vergunningsgegevens, GTFS niet goedgekeurd.**
+- [**GTFS-gerichte kandidaatfrequenties zonder voertuigcapaciteit — 44 regels**](../../sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv). Nog niet operationeel geverifieerd.\n- [Oorspronkelijke bronextractie inclusief historische vlootcijfers (alleen archief)](../../sources/amb/remaining_13_route_parameters_2026-11-02.csv).
 - [PDF-/besluiteninventaris, 159 registraties](../../sources/amb/remaining_13_resolution_inventory_2026-11-02.csv).
 - [41 vervolgitems uit de 13 bedrijfsdossiers](../../sources/amb/remaining_13_open_issues_2026-11-02.csv).
 - [23-bedrijven-voortgangsregister](../../sources/amb/company_completion_backlog_2026-11-02.csv).
