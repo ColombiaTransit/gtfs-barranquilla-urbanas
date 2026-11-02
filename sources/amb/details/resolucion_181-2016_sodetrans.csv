@@ -1,0 +1,2 @@
+empresa,resolucion,codigo_ruta,longitud_km,capacidad_min,capacidad_max,intervalo_pico_min,intervalo_valle_min,horario_autorizado,estado
+SODETRANS,181-2016,B15-4129,45,20,24,6,8,00:00-24:00 sujeto a demanda,historical_unconfirmed
