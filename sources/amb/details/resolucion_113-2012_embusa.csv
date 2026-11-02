@@ -1,0 +1,2 @@
+agency,resolution,date,route_code,route_name,vehicle_type,peak_headway_min,offpeak_headway_min,fleet_min,fleet_max,terminal,source_url,source_pages,status
+EMBUSA,113-2012,2012-05-02,B9-4125,CENTRO-SANTUARIO-PRADO-CIRCULAR,Buseta-Buseton,4,6,37,45,Calle 8 No. 41N-70,https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/EMBUSA/EMBUSA-B9-Resolucion-113-12.pdf,5-7,historical_authorized_not_current
