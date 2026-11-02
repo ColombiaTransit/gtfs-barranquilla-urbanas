@@ -2,7 +2,15 @@
 
 **Peildatum 2 november 2026.** Dit indexdossier maakt duidelijk welke bedrijven inhoudelijk zijn behandeld en waar juridische of operationele controles nog open staan.
 
-De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke analyse** van beschikkende routebladen en voertuig-/frequentietabellen, vervolgens expliciete vervolgacties zonder fictieve waarden.
+De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke analyse** van routebesluiten, routevarianten, frequenties en geldigheidsperioden, vervolgens expliciete vervolgacties zonder fictieve waarden.
+
+## Afbakening GTFS — voertuigcapaciteit uitgesloten (besluit 2 november 2026)
+
+**Voertuigcapaciteit / vlootomvang (minimaal/maximaal aantal bussen, bustypen, padrónverdeling) valt buiten de scope van deze GTFS-opbouw.** Verschillen zoals *50–60 versus 56–68 voertuigen* zijn daarom **geen GTFS-blokkade** en hoeven niet apart te worden opgelost. Ook voertuigklasse is niet nodig voor de gekozen GTFS-datalevering. De bestaande cijfers blijven in de oorspronkelijke dossiers en CSV's staan **uitsluitend als bronarchief**, maar worden niet meegenomen bij prioritering, validatie, routefrequentieberekening of het genereren van GTFS.
+
+**Wat wél telt voor GTFS:** routecode/bedrijf, juridisch geldige route en routevarianten/richting, geometrie en haltevolgorde, spits-/dalinterval **per itinerary**, dienstvensters en kalender (werkdagen/weekend/feestdagen), daadwerkelijke operationele status en herleidbare PDF-bronnen. Voor ritgeneratie is een vergund interval zonder begin-/eindtijd niet voldoende. Route-/codefouten en ontbrekende PDF's blijven relevant; een verschil **alleen in vlootaantal** niet.
+
+Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor **GTFS** worden gelezen met **dit scopebesluit als override**. Er worden geen bestaande brongetallen verwijderd.
 
 ## De 13 laatst behandelde bedrijven
 
@@ -41,14 +49,14 @@ De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke ana
 
 ## Centrale onderzoeksbestanden
 
-- [Frequenties en capaciteit, 13 resterende bedrijven](../../sources/amb/remaining_13_route_parameters_2026-11-02.csv). **Gelabeld als vergunningsgegevens, GTFS niet goedgekeurd.**
+- [Routefrequenties (met historische vlootkolommen als archief), 13 resterende bedrijven](../../sources/amb/remaining_13_route_parameters_2026-11-02.csv). **Gelabeld als vergunningsgegevens, GTFS niet goedgekeurd.**
 - [PDF-/besluiteninventaris, 159 registraties](../../sources/amb/remaining_13_resolution_inventory_2026-11-02.csv).
 - [41 vervolgitems uit de 13 bedrijfsdossiers](../../sources/amb/remaining_13_open_issues_2026-11-02.csv).
 - [23-bedrijven-voortgangsregister](../../sources/amb/company_completion_backlog_2026-11-02.csv).
 
 ## Wat aantoonbaar klaar is en wat niet
 
-**Klaar:** De officiële PDF's van alle 13 overgebleven bedrijven zijn systematisch doorzocht en de laatst gevonden beschikbare routefrequenties, routecodes, vlootcijfers en bronpaginanummers zijn opgenomen, met scancontrole van bepalende tabellen waar OCR fouten had. Bij COOCHOFAL zijn alle acht 2025-tabellen tegen de originele pagina's gecontroleerd.
+**Klaar:** De officiële PDF's van alle 13 overgebleven bedrijven zijn systematisch doorzocht en de laatst gevonden beschikbare routefrequenties, routecodes en bronpaginanummers zijn opgenomen, met scancontrole van bepalende tabellen waar OCR fouten had. Bij COOCHOFAL zijn alle acht 2025-tabellen tegen de originele pagina's gecontroleerd.
 
 **Nog niet klaar:** volledige rechtsgeldigheidscontrole van **iedere** historische resolutie, onvindbare PDF's (bijvoorbeeld FLOTA ÁNGULO 2025/2019 en SOBUSA 307-2014), interne tegenstrijdigheden binnen besluiten, 2026-actuele dienstregelingen, haltevolgordes en GPS-geometrie. Geen bedrijf krijgt een onvoorwaardelijke `GTFS_READY=yes` op basis van alleen deze vergunningen.
 
