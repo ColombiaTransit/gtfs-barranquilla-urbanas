@@ -1,0 +1,16 @@
+{
+  "source_patterns": 70,
+  "official_2026_KMZ_patterns": 63,
+  "GraphHopper_bus_fallback_patterns": 7,
+  "source_road_sections": 352,
+  "official_2026_KMZ_sections": 340,
+  "GH_fallback_sections": 12,
+  "KMZ_source_vertex_steps_over_400m_warn_sections": 144,
+  "all_patterns_used_exact_source_v3_SIU_stop_order": true,
+  "no_new_GH_or_OSM_queries": true,
+  "2026_KMZ_source_route_is_current_legal_operational_service_verified": false,
+  "GTFS_production_modified": false,
+  "GTFS_demo_only": true,
+  "geometries_equal_pilot_baseline_population": true,
+  "physical_SIU_stop_records_created": 0
+}

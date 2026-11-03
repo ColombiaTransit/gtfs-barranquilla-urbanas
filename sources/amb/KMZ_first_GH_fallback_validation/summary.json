@@ -1,0 +1,21 @@
+{
+  "comparison": "Official AMB 2026 KMZ where usable, otherwise existing GH bus route versus reviewed GH baseline",
+  "both_same_gtfs_trip_and_stop_population": true,
+  "synthetic_gtfs_not_for_publication": true,
+  "official_KMZ_source_route_patterns": 63,
+  "GH_bus_fallback_source_patterns": 7,
+  "routes_in_both_feeds": 59,
+  "synthetic_trips_in_both_feeds": 67,
+  "stop_visits_in_both_feeds": 8867,
+  "GH_source_errors": 0,
+  "KMZ_first_errors": 0,
+  "GH_source_warnings": 2433,
+  "KMZ_first_warnings": 2381,
+  "GH_stop_too_far_from_shape": 64,
+  "KMZ_first_stop_too_far_from_shape": 1,
+  "GH_stops_match_shape_out_of_order": 4,
+  "KMZ_first_stops_match_shape_out_of_order": 0,
+  "KMZ_first_seven_biggest_original_stops_offshape": 0,
+  "KMZ_first_source_KMZ_geo_line_must_not_be_assumed_road_routable": true,
+  "automatic_road_candidate_promoted_to_published_gtfs": false
+}

@@ -1,0 +1,9 @@
+notice_code,severity,GH_baseline,KMZ_first_plus_GH_fallback,change_KMZ_minus_GH
+equal_shape_distance_diff_coordinates_distance_below_threshold,WARNING,8,24,16
+future_calendar,INFO,1,1,0
+missing_recommended_file,WARNING,1,1,0
+mixed_case_recommended_field,WARNING,2354,2354,0
+stop_has_too_many_matches_for_shape,WARNING,1,0,-1
+stop_too_far_from_shape,WARNING,64,1,-63
+stops_match_shape_out_of_order,WARNING,4,0,-4
+trip_coverage_not_active_for_next7_days,WARNING,1,1,0
