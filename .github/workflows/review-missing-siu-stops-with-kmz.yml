@@ -5,6 +5,7 @@ on:
     paths:
       - scripts/review_sobusa_kmz_patterns.py
       - scripts/review_siu_kmz_variant_crosswalk.py
+      - scripts/audit_sobusa_kmz_legal_lengths.py
       - scripts/build_missing_siu_route_workqueue.py
       - .github/workflows/review-missing-siu-stops-with-kmz.yml
 permissions:
@@ -21,17 +22,19 @@ jobs:
       - name: Install spatial analysis dependencies
         run: python -m pip install --disable-pip-version-check "shapely>=2.0,<3" "pyproj>=3.5,<4"
       - name: Check scripts
-        run: python -m py_compile scripts/review_sobusa_kmz_patterns.py scripts/review_siu_kmz_variant_crosswalk.py scripts/build_missing_siu_route_workqueue.py
+        run: python -m py_compile scripts/review_sobusa_kmz_patterns.py scripts/review_siu_kmz_variant_crosswalk.py scripts/build_missing_siu_route_workqueue.py scripts/audit_sobusa_kmz_legal_lengths.py
       - name: Build prioritized 60-record missing-SIU queue
         run: python scripts/build_missing_siu_route_workqueue.py
       - name: Project candidate locations onto SOBUSA A/B and measure small deviations
         run: python scripts/review_sobusa_kmz_patterns.py
+      - name: Flag SOBUSA legal A/B length mismatches against KMZ
+        run: python scripts/audit_sobusa_kmz_legal_lengths.py
       - name: Compare existing SIU ordered stop sequences against AMB KMZ candidates
         run: python scripts/review_siu_kmz_variant_crosswalk.py
       - name: Display source-bound findings
         if: always()
         run: |
-          for file in build/amb-stops-priority-queue/summary.md build/amb-sobusa-pattern-review/summary.md build/amb-siu-kmz-crosswalk/summary.md; do
+          for file in build/amb-stops-priority-queue/summary.md build/amb-sobusa-pattern-review/summary.md build/amb-sobusa-pattern-review/legal_length_QA.md build/amb-siu-kmz-crosswalk/summary.md; do
             if [ -f "$file" ]; then cat "$file" >> "$GITHUB_STEP_SUMMARY"; echo >> "$GITHUB_STEP_SUMMARY"; fi
           done
       - name: Save research staging only (never live GTFS files)
