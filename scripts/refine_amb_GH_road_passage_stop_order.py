@@ -237,6 +237,50 @@ def main():
     detail.sort(key=lambda r:(r["research_priority"],-r["refined_unresolved_order_backtracks"],
                                -r["stop_visits_requiring_GH_or_KMZ_review"]))
     counts=Counter(x["refined_route_stop_assessment"] for x in output)
+    # Map exactly the unresolved research exceptions; the physical SIU stop
+    # catalog remains read-only and shared across all bus routes.
+    resolved_classes={
+        "road_order_compatible_tentative",
+        "multiple_road_passages_order_resolved_tentative",
+    }
+    exceptions=[x for x in output if x["refined_route_stop_assessment"] not in resolved_classes]
+    point_features=[]
+    for x in exceptions:
+        stop=physical[x["SIU_physical_stop_id"]]
+        point_features.append({
+            "type":"Feature",
+            "properties":{
+                "company":x["company"],
+                "route_label":x["route_label"],
+                "trip_pattern_id":x["trip_pattern_id"],
+                "stop_sequence":x["source_stop_sequence"],
+                "physical_SIU_stop_id":x["SIU_physical_stop_id"],
+                "stop_name":x["stop_name"],
+                "research_issue":x["refined_route_stop_assessment"],
+                "GH_nearest_bus_road_distance_m":x["refined_GH_stop_distance_to_bus_road_m"],
+                "GH_multiple_road_passages":x["possible_GH_road_passages_within_75m"],
+                "confirmed_operator_stop":"no",
+            },
+            "geometry":{"type":"Point","coordinates":[float(stop["stop_lon"]),float(stop["stop_lat"])]},
+        })
+    (OUT/"GH_unresolved_stop_location_issues_REVIEW.geojson").write_text(
+        json.dumps({"type":"FeatureCollection","features":point_features},
+                   ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
+    jump_features=[x for x in point_features if
+                   x["properties"]["research_issue"]=="road_order_backwards_unresolved"]
+    (OUT/"GH_unresolved_stop_order_49_points.geojson").write_text(
+        json.dumps({"type":"FeatureCollection","features":jump_features},
+                   ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
+    mismatches=[]
+    for feature in raw["features"]:
+        p=feature["properties"]
+        key=(p["trip_pattern_id"],int(p["section"]))
+        if metrics[key]["road_geometry_candidate_status"]!="candidate_consistent_with_KMZ":
+            mismatches.append(feature)
+    (OUT/"GH_road_segments_differing_from_KMZ_REVIEW.geojson").write_text(
+        json.dumps({"type":"FeatureCollection","features":mismatches},
+                   ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
+
     summary={
         "full_route_patterns_audited":len(records),
         "graphhopper_road_segments_reused_without_new_queries":len(segments),
@@ -252,6 +296,9 @@ def main():
             counts["multiple_road_passages_order_resolved_tentative"],
         "route_patterns_needing_priority_1_review":sum(r["research_priority"]=="P1_order_or_geometry_review"
                                                        for r in detail),
+        "stop_review_point_features":len(point_features),
+        "unresolved_stop_order_point_features":len(jump_features),
+        "GH_bus_road_mismatch_sections_geojson":len(mismatches),
         "graphhopper_new_queries":0,
         "stop_times_or_trip_splitting_generated":False,
         "SIU_stops_created_or_removed":0,
@@ -284,6 +331,12 @@ def main():
         "2. Beoordeel onopgeloste achteruitlopende stopprojecties op echte keerpunten, eenrichtingswegen en kruisingen.",
         "3. Beoordeel haltes boven 45 meter van de GH-busweg en bronroute (netwerk-/stopspecifiek), niet blind verwijderen.",
         "4. Zodra routegeometrie en haltevolgorde betrouwbaar genoeg zijn, kunnen reisduur en tripgrenzen apart komen.",
+        "",
+        "## Kaartbestanden voor broncontrole",
+        "",
+        "- GH_unresolved_stop_location_issues_REVIEW.geojson: alle haltebezoeken met nog onopgeloste weg-/volgordeafwijking.",
+        "- GH_unresolved_stop_order_49_points.geojson: haltepunten waarbij de volgorde ook na mogelijke alternatieve wegpassages achteruitloopt.",
+        "- GH_road_segments_differing_from_KMZ_REVIEW.geojson: buswegsegmenten die nog onvoldoende met het brontraject overeenstemmen.",
         "",
         "Bron: GraphHopper bus 11.1 via private organisatievariabele; publieke API: https://github.com/graphhopper/graphhopper/blob/master/docs/web/api-doc.md",
         "Geen OSM-query's, nieuwe GraphHopper-query's of productie-GTFS-wijzigingen.",
