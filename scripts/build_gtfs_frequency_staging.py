@@ -98,15 +98,16 @@ def build_sources():
                 push(data,"COOLITORAL",code,r["authorization_resolution"],
                     r[f"itinerary_{variant}_peak_minutes"],r[f"itinerary_{variant}_offpeak_minutes"],
                     source,"per_itinerary",variant)
-    # Pilot 256-2026 is documented as running for six months starting 22 June
-    # 2026, but the original PDF is not yet in manifest. Preserve provenance.
+    # Official original 256-2026 pilot PDF has now been recovered and verified
+    # (7 pages, four PT4/PT5 A/B variants); six months from 22 June 2026.
+    # SIU-to-license pattern assignment and any extension remain unverified.
     source="sources/amb/details/resolucion_256-2026.csv"
     for r in load(BASE/"details/resolucion_256-2026.csv"):
         push(data,"COOLITORAL",r["codigo_base"],r["resolucion"],
             r["intervalo_pico_min"],r["intervalo_valle_min"],source,
             "per_itinerary",r["itinerario"],
-            "PT4/PT5 pilot begins 2026-06-22; verify original PDF and any extension; values are from curated resolution extraction",
-            "structured_resolution_pilot_original_pdf_pending")
+            "PT4/PT5 pilot begins 2026-06-22; original official PDF verified with 9/14 min per A/B; SIU-to-A/B crosswalk and later extensions remain unknown",
+            "pilot_256_primary_pdf_verified_pattern_link_pending")
     specs=[
       ("cootrab_latest_route_parameters_2026-11-02.csv","COOTRAB","route_id","latest_reviewed_resolution","peak_minutes","offpeak_minutes"),
       ("cootransnorte_latest_route_parameters_2026-11-02.csv","COOTRANSNORTE","route_id","latest_route_resolution_in_manifest","peak_headway_minutes","offpeak_headway_minutes"),
@@ -216,8 +217,8 @@ def run(output):
                 blockers.append("effective_combined_corridor_not_pattern")
             if source["status"] in ("conflicting_official_extractions","pilot_extension_unverified","permanent_backup_pending_pilot_expiry_check"):
                 blockers.append(source["status"])
-            if source["status"]=="structured_resolution_pilot_original_pdf_pending":
-                blockers.append("pilot_original_pdf_legal_review_pending")
+            if source["status"]=="pilot_256_primary_pdf_verified_pattern_link_pending":
+                blockers.append("pilot_SIU_to_legal_AB_mapping_unresolved")
         if not window:blockers.append(wstatus)
         if agency=="COOTRAB" and n(base)==n("C5-4135"):
             blockers.append("route_code_4135_vs_official_4136")
