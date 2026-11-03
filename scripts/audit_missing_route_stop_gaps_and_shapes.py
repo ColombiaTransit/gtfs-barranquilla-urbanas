@@ -13,6 +13,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from shapely.geometry import Point
+from shapely.ops import substring
 
 from map_missing_siu_route_stops_to_trips import (
     ROOT, BACK, ARCGIS_INVENTORY, COVERAGE, load_arcgis, read_csv, source_selection
@@ -129,6 +130,7 @@ def main():
     arc = load_arcgis(ARCGIS)
     inv = read_csv(ARCGIS_INVENTORY)
     source_by_key = {}
+    shape_for_pattern = {}
     nodes = []
     edges = []
     geometry_jumps = []
@@ -143,6 +145,9 @@ def main():
             raise ValueError("Geometry components changed since mapping for " + "/".join(key))
         out=[]
         for i,line in enumerate(lines,1):
+            if int(selected[i-1]["geometry_component"]) != i:
+                raise ValueError("Unexpected geometry component order for " + "/".join(key))
+            shape_for_pattern[selected[i-1]["trip_pattern_id"]] = line
             ends=(Point(line.coords[0]),Point(line.coords[-1]))
             out.append((i,line,ends))
             nodes.append({
@@ -201,6 +206,56 @@ def main():
                 "next_step":"review_segment_order_and_roundtrip_against_official_shape",
             })
 
+    # Export the exact portions of the official KMZ / historic ArcGIS line
+    # between consecutive modeled stops. They are research geojson shapes,
+    # not GraphHopper tracks or approved GTFS shape segments.
+    gap_features=[]
+    for gap in gap_rows:
+        pat=gap["trip_pattern_id"]
+        if pat not in shape_for_pattern:
+            raise ValueError("Missing geometry for gap: " + pat)
+        line=shape_for_pattern[pat]
+        begin=float(gap["distance_along_shape_start_m"])
+        end=float(gap["distance_along_shape_end_m"])
+        if begin<0 or end>line.length+1 or end<=begin:
+            raise ValueError("Invalid projected gap chainage: " + pat)
+        p0=line.interpolate(begin)
+        p1=line.interpolate(end)
+        lon1,lat1=BACK.transform(p0.x,p0.y)
+        lon2,lat2=BACK.transform(p1.x,p1.y)
+        gap["from_route_lon"]=round(lon1,7)
+        gap["from_route_lat"]=round(lat1,7)
+        gap["to_route_lon"]=round(lon2,7)
+        gap["to_route_lat"]=round(lat2,7)
+        section=substring(line,begin,min(end,line.length))
+        if section.geom_type!="LineString":
+            raise ValueError("Unexpected geometric substring: " + pat)
+        gap_features.append({
+            "type":"Feature",
+            "properties":{
+                "company":gap["company"],"route_label":gap["route_label"],
+                "trip_pattern_id":pat,
+                "gap_index":gap["gap_index"],"gap_m":gap["gap_m"],
+                "classification":gap["gap_review_class"],
+                "geometry_source":gap["geometry_source"],
+                "stop_service_verified":False,
+            },
+            "geometry":{"type":"LineString",
+                        "coordinates":[[round(lon,7),round(lat,7)]
+                                       for lon,lat in (BACK.transform(*xy) for xy in section.coords)]},
+        })
+    (BASE/"gap_corridors_for_review.geojson").write_text(
+        json.dumps({"type":"FeatureCollection","features":gap_features},
+                   ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
+    candidate_points=[{
+        "type":"Feature",
+        "properties":{k:v for k,v in row.items() if k not in ("stop_lat","stop_lon")},
+        "geometry":{"type":"Point","coordinates":[float(row["stop_lon"]),float(row["stop_lat"])]}
+    } for row in review]
+    (BASE/"SIU_stop_alternatives_inside_gaps_REVIEW_ONLY.geojson").write_text(
+        json.dumps({"type":"FeatureCollection","features":candidate_points},
+                   ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
+
     if len(source_by_key)!=60:
         raise ValueError("All 60 missing-SIU route variants must be audited")
     # Determine routes with at least one large between-stop gap.
@@ -217,6 +272,7 @@ def main():
         "individual_stop_sequence_gaps_over_2km":len(gap_rows),
         "gap_classification_counts":dict(gap_count),
         "possible_nearby_SIU_candidates_for_review":len(review),
+        "mapped_gap_corridor_geojson_features":len(gap_features),
         "routes_with_geometry_edges_longer_than_800m":len(jump_by_route),
         "geometry_edges_longer_than_800m":len(geometry_jumps),
         "route_variants_with_multiple_shape_components":len(fragmentation),
@@ -290,6 +346,14 @@ def main():
     report+=["","## Classificatie van gaten", ""]
     for k,v in sorted(gap_count.items(),key=lambda a:-a[1]):
         report.append("- "+k+": "+str(v))
+    report+=["",
+        "## Geografische inspectie",
+        "",
+        "- gap_corridors_for_review.geojson: elk geclassificeerd trajectgedeelte als officiële bronlijn tussen opeenvolgende kandidaat-haltes.",
+        "- SIU_stop_alternatives_inside_gaps_REVIEW_ONLY.geojson: nabije, NIET toegevoegde alternatieve bestaande SIU-haltes.",
+        "- De geometrie is een onderzoekscorridor: dit is geen GraphHopper-wegroutering, geen busstopbewijs en geen nieuwe GTFS shape.",
+        ""
+    ]
     report+=["","## Gefragmenteerde routes",""]
     for x in fragmentation:
         report.append(
