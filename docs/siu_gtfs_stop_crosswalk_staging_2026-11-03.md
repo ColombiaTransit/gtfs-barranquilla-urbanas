@@ -1,5 +1,13 @@
 # SIU → AMB-routekoppeling en voorlopige GTFS-haltes (3 november 2026)
 
+## Update — gecontroleerde spellingsnormalisatie
+
+Twee duidelijke bronfouten zijn via een [kleine, expliciete correctietabel](../sources/siu/stop_name_spelling_corrections_2026-11-03.csv) opgelost: `LOS MANATIALES` → `LOS MANANTIALES` en `COLEGIO LA ENSE?ANZA` → `COLEGIO LA ENSEÑANZA`. De bron-`stop_name` uit SIU wordt niet aangepast; per betrokken UUID bewaren we [de oorspronkelijke en de gestandaardiseerde naam](../sources/siu/gtfs_staging/stop_name_correction_audit.csv). De normalisatie wordt ook toegepast op de concept-`stops.txt` en de geordende haltevermeldingen.
+
+Na de [geslaagde herbouw en vijf regressietests](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41600627039) zijn er **3.117 concept-haltes** en **53 resterende naamconflicten** (voorheen 3.118 en 54). De MANATIALES-variant is samengevoegd met de correct gespelde halte op exact dezelfde GPS; de oude `stop_id` blijft [als alias](../sources/siu/gtfs_staging/stop_id_alias_history.csv) naar de nieuwe kandidaat verwijzen. De schoolnaam is alleen gecorrigeerd: de richtingsaanduiding `-SN` blijft behouden, dus daar is niets samengevoegd.
+
+Straatnummers, `EO/OE/NS/SN` en `REGRESO/RETORNO` worden bewust niet automatisch aangepast of samengevoegd. De officiële SIU-/GTFS-routekoppeling blijft voorlopig.
+
 **Status:** onderzoek / staging, **geen publiceerbare GTFS-feed**. Script: [`scripts/build_siu_gtfs_stop_staging.py`](../scripts/build_siu_gtfs_stop_staging.py). Action: [Stage SIU route crosswalk and GTFS stop candidates](../.github/workflows/stage-siu-gtfs-stops.yml), geslaagde [run 41598939812](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41598939812).
 
 ## 1. Gegevens die nu bouwbaar zijn
@@ -9,8 +17,8 @@
 | Openbare SIU-reguliere itineraries | **33** |
 | Expliciet uitgesloten SIU-testitineraries | **3** |
 | Geordende GPS-haltevermeldingen voor de 33 | **6.407** |
-| Kandidaten voor fysieke `stop_id`, conservatief gededupliceerd | **3.118** |
-| Regels samengebracht bij een al bekende kandidaat-halte | **3.289** |
+| Kandidaten voor fysieke `stop_id`, conservatief gededupliceerd | **3.117** |
+| Regels samengebracht bij een al bekende kandidaat-halte | **3.290** |
 | Naam- of richtingsverschillen op dezelfde berekende GPS-locatie, apart gehouden | **54** |
 | **Sterke voorlopige SIU→GTFS-route-ID-koppelingen** | **12** |
 | Itineraries zonder voldoende bewijs voor automatische routecodekoppeling | **21** |
@@ -59,7 +67,7 @@ Het programma neemt het volledige SIU-halte-UUID, de SIU-itinerary UUID en de ex
 
 1. **Exact dezelfde genormaliseerde volledige haltenaam** (hoofdletters, accenten en leestekens geneutraliseerd; richtingsafkortingen zoals `NS`, `SN`, `OE`, `EO` blijven in de naam).
 2. **Onderlinge afstand maximaal 5 meter tussen alle punten in een cluster**, niet alleen via een keten van tussengelegen punten.
-3. Identieke GPS-posities met verschillende namen of rijrichtingen blijven **afzonderlijk** en gaan naar de [54 conflictlocaties](../sources/siu/gtfs_staging/coincident_different_name_review.csv).
+3. Identieke GPS-posities met verschillende namen of rijrichtingen blijven **afzonderlijk** en gaan naar de [53 conflictlocaties](../sources/siu/gtfs_staging/coincident_different_name_review.csv).
 
 Het concept-`stop_id` is `SIU_<kleinste originele SIU-stop-UUID in het cluster>`, stabiel **binnen dezelfde bronopname**. Bij een volgende SIU-versie moeten de oude alias-/ID-koppelingen behouden blijven zodat publieke stop-ID's niet door een nieuwe invoer wijzigen. Het concept-geometrisch midden is de gemiddelde broncoördinaat, uitsluitend bij clusters binnen 5 m.
 
@@ -68,11 +76,11 @@ Een halte met dezelfde naam op 200 m afstand blijft een **andere** halte. Tegeng
 ## 3. GitHub-uitvoer
 
 - [Volledige review-crosswalk van 33 routes](../sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv) — bevat matchregels, percentuele GIS-dekking, operatorcontrole en status.
-- [Catalogus van 3.118 fysieke stopkandidaten](../sources/siu/gtfs_staging/candidate_stops.csv) — bevat naam, GPS, bronschema en merge-herkomst.
+- [Catalogus van 3.117 fysieke stopkandidaten](../sources/siu/gtfs_staging/candidate_stops.csv) — bevat naam, GPS, bronschema en merge-herkomst.
 - [Alle 6.407 SIU-stop-UUID's → voorlopige `stop_id` + volgnummer](../sources/siu/gtfs_staging/siu_stop_occurrence_crosswalk.csv) — volledig herleidbaar.
 - [GTFS-achtige `stops.txt`-proefversie, **NIET PUBLICEREN**](../sources/siu/gtfs_staging/stops_draft_NOT_FOR_PUBLICATION.txt) — vijf standaard GTFS-stopvelden, exclusief interne researchmetadata.
 - [Voorlopige route-stopvolgorde voor de 12 hoge-confidence routekoppelingen](../sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv) — **2.361 regels**, met lege `trip_id`, `arrival_time` en `departure_time`.
-- [54 conflicten op identieke berekende GPS-locatie](../sources/siu/gtfs_staging/coincident_different_name_review.csv)
+- [53 conflicten op identieke berekende GPS-locatie](../sources/siu/gtfs_staging/coincident_different_name_review.csv)
 - [Samenvatting van de stagingrun](../sources/siu/gtfs_staging/summary.json)
 
 **Belangrijk voor GTFS:** `stops.txt` kent een fysieke instapplaats die door meerdere routes mag worden gebruikt; `stop_times.txt` vereist een gekoppeld `trip_id`, stopvolgorde en noodzakelijke tijdvelden. De preview van haltevolgordes is daarom **nog geen geldige `stop_times.txt`**.
