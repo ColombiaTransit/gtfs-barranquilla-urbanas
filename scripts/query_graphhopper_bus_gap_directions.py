@@ -289,6 +289,11 @@ def main():
                 "distance_to_KMZ_m":c["distance_to_gap_shape_m"],
                 "bus_route_baseline_m":base_distance if base_distance is not None else "",
                 "bus_via_candidate_status":"",
+                "bus_KMZ_constrained_via_candidate_status":"",
+                "bus_KMZ_constrained_via_distance_m":"",
+                "additional_distance_KMZ_constrained_via_m":"",
+                "ratio_KMZ_constrained_via":"",
+                "GH_constrained_via_fraction_within_KMZ_50m":"",
                 "bus_via_candidate_distance_m":"",
                 "additional_distance_via_candidate_m":"",
                 "distance_ratio_via_vs_baseline":"",
@@ -308,6 +313,20 @@ def main():
             via_calls+=1
             via,via_status=client.route([a,candidate_coords(c),b])
             result["bus_via_candidate_status"]=via_status
+            relative_pos=max(0.,min(reference.length,float(c["global_shape_position_m"])-
+                                      float(g["baseline_start_global_chainage_m"])))
+            through_points=via_anchor_points(a,b,anchor_positions,anchor_points,
+                                             candidate_coords(c),relative_pos)
+            via_kmz,via_kmz_status=client.route(through_points)
+            result["bus_KMZ_constrained_via_candidate_status"]=via_kmz_status
+            if via_kmz:
+                result["bus_KMZ_constrained_via_distance_m"]=via_kmz["distance_m"]
+                result["GH_constrained_via_fraction_within_KMZ_50m"]=path_similarity(
+                    via_kmz,reference)["fraction_GH_path_within_50m_KMZ"]
+                if kmz_distance is not None:
+                    result["additional_distance_KMZ_constrained_via_m"]=round(
+                        via_kmz["distance_m"]-kmz_distance,1)
+                    result["ratio_KMZ_constrained_via"]=round(via_kmz["distance_m"]/kmz_distance,3)
             if via:
                 more=via["distance_m"]-base_distance if base_distance is not None else None
                 ratio=via["distance_m"]/base_distance if base_distance else None
@@ -323,13 +342,17 @@ def main():
                     snapped_distance=Point(*PROJECT.transform(float(lon),float(lat))).distance(
                         Point(*PROJECT.transform(*target)))
                     result["GH_snapped_candidate_offset_m"]=round(snapped_distance,1)
-                if base_distance is not None:
-                    if more is not None and more<=300 and (ratio or 100)<=1.2:
-                        result["direction_and_access_assessment"]="bus_via_routable_small_detour_review"
+                if via_kmz and kmz_distance:
+                    extra=via_kmz["distance_m"]-kmz_distance
+                    fraction=float(result["GH_constrained_via_fraction_within_KMZ_50m"])
+                    if fraction<0.5:
+                        result["direction_and_access_assessment"]="constrained_bus_route_diverges_from_KMZ_review"
+                    elif extra<=300 and via_kmz["distance_m"]/kmz_distance<=1.20:
+                        result["direction_and_access_assessment"]="corridor_bus_via_candidate_small_detour_review"
                     else:
-                        result["direction_and_access_assessment"]="bus_via_large_detour_review_oneway_or_curb"
+                        result["direction_and_access_assessment"]="corridor_bus_via_candidate_large_detour_review"
                 else:
-                    result["direction_and_access_assessment"]="bus_via_routable_no_baseline"
+                    result["direction_and_access_assessment"]="KMZ_bus_constrained_query_failed_do_not_infer"
                 if (curbside_calls<args.max_curbside_checks and
                     c["candidate_kind"]=="existing_physical_SIU_stop"):
                     curbside_calls+=1
@@ -340,7 +363,9 @@ def main():
                     # Curbside unsupported profiles result in HTTP400; do not
                     # claim wrong-side bus stop from unsupported routing feature.
             else:
-                result["direction_and_access_assessment"]="bus_via_routing_failed_review"
+                result["direction_and_access_assessment"]="direct_bus_via_failed_wait_for_constrained_review"
+            if not via and via_kmz:
+                result["direction_and_access_assessment"]="direct_bus_via_failed_but_KMZ_constrained_route_available_review"
             rows.append(result)
         # The directory includes only publicly sourced geometry+anonymous metrics,
         # not the configured private instance URL nor request credentials.
@@ -353,6 +378,9 @@ def main():
                "physical_SIU_stop_id_if_known","candidate_kind",
                "original_KMZ_direction_assessment","gap_length_m","distance_to_KMZ_m",
                "bus_route_baseline_m","bus_via_candidate_status","bus_via_candidate_distance_m",
+               "bus_KMZ_constrained_via_candidate_status","bus_KMZ_constrained_via_distance_m",
+               "additional_distance_KMZ_constrained_via_m","ratio_KMZ_constrained_via",
+               "GH_constrained_via_fraction_within_KMZ_50m",
                "additional_distance_via_candidate_m","distance_ratio_via_vs_baseline",
                "GH_via_fraction_within_KMZ_50m","GH_snapped_candidate_offset_m",
                "GH_right_curbside_status","GH_right_curbside_distance_m","GraphHopper_profile",
