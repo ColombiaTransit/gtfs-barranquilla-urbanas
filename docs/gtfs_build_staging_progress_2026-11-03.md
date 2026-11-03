@@ -1,3 +1,25 @@
+## Update 3 november 2026 — KMZ-bronroutes waar nodig met GraphHopper-buswegbochten verfijnd
+
+De [geslaagde routeverfijning en volledige MobilityData-validatie](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41702838829) heeft de **144 KMZ-deeltrajecten** met ongedetailleerde bron-vertices onderzocht. Daarin zitten **457 individuele bronverbindingen groter dan 400 meter**. Alle 457 zijn tegen het private GraphHopper-profiel bus gerouteerd, zonder de oorspronkelijke AMB-KMZ-sleutelpunten te veranderen. **414** kandidaat-wegverbindingen voldeden lokaal aan de corridortoets, de eindpuntaansluiting, een begrensde rijomweg en geen verslechtering van SIU-halteafstand; 43 zijn al op deze lokale toets afgevallen.
+
+De ruwe bundel met 414 kandidaat-wegverbindingen bleek niet veilig genoeg: MobilityData-waarschuwingen gingen van 2.381 naar **2.474**. Daarom is conservatief **per volledig bron-ritpatroon** teruggevallen waar nieuwe validator-waarschuwingen ontstonden. Van 136 kandidaat-aangepaste KMZ-deeltrajecten zijn **22 daadwerkelijk behouden** op **13 ritpatronen**, met samen **40** individueel verfijnde langere verbindingen. **114 deeltrajecten** zijn teruggezet naar de officiële KMZ-bron. Die 114 kunnen later met fijnmaziger, individueel gevalideerde segmentkeuzes worden heronderzocht; ze mogen niet onvoorwaardelijk als gewijzigde routes worden overgenomen.
+
+De **uiteindelijke veilige proefbuild** is opnieuw door de echte MobilityData 8.0.1-validator gegaan, met exact dezelfde 59 routes, 67 synthetische trips, 8.867 haltebezoeken, agency/calendar/stops/trips/stop_times als de KMZ-first-referentie: alleen shapes.txt wijzigt.
+
+| Melding | KMZ-first referentie | KMZ met validator-veilige GH-bochten |
+|---|---:|---:|
+| GTFS ERROR | 0 | 0 |
+| Alle WARNING | 2.381 | **2.378** |
+| stop_too_far_from_shape | 1 | **1** |
+| stops_match_shape_out_of_order | 0 | **0** |
+
+Er zijn **geen nieuwe offroute-halte-ID's of volgordewaarschuwingen**. De enige resterende stopafstandsmelding is onveranderd **LOLAYA D8-4165, Homecenter Calle 30 (SN), ca. 105,24 m**, op een GH-fallbackroute zonder bruikbare AMB-KMZ. De **7 oorspronkelijke GH-fallback-onderzoekscomponenten** (3 COOLITORAL PT2, 4 LOLAYA D8, samen 12 secties) zijn bij deze ronde ongemoeid gelaten.
+
+**Nieuwe reproduceerbare scripts:** [lokale GH-buswegbochten](../scripts/refine_amb_sparse_kmz_edges_on_gh_bus_roads.py), [selectie met validator-blokkade en terugval](../scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py), [feitelijke bron-/eindvergelijking](../scripts/compare_amb_kmz_refined_with_mobilitydata.py), [GitHub Action](../.github/workflows/refine-amb-kmz-sparse-road-geometry.yml). Onderzoeksresultaten: [summary.md](../sources/amb/KMZ_GH_road_refinement_QA/summary.md), [besluit per lange KMZ-verbinding](../sources/amb/KMZ_GH_road_refinement_QA/KMZ_sparse_edges_GH_bus_decisions.csv), [validatorrollback per sectie](../sources/amb/KMZ_GH_road_refinement_QA/KMZ_sparse_road_refinement_validator_guard.csv), [overblijvende waarschuwing](../sources/amb/KMZ_GH_road_refinement_QA/remaining_stop_vs_refined_shape_QA.csv) en [samengevoegde onderzoeksshapes](../sources/amb/KMZ_GH_road_refinement_QA/GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson). Complete demo-GTFS-ZIP's en echte MobilityData-reports staan in het GitHub Action-artifact.
+
+**Nog steeds onderzoek, niet publiceerbaar:** Een GraphHopper-lijn langs KMZ-keypoints is niet hetzelfde als bewezen actuele concessiebediening; de volledige GTFS-proefkalender en de tijden zijn fictief, tripgrenzen en rijrichtingen nog niet juridisch bevestigd. Geen productiebestanden onder gtfs/ en geen oorspronkelijke SIU-haltegegevens gewijzigd.
+
+
 ## Update 3 november 2026 — officiële KMZ-first-shapes met GraphHopper-fallback door MobilityData
 
 [Geslaagde tweeledige MobilityData 8.0.1-Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41699328357). De vergelijking wijzigde **uitsluitend shapes.txt**: agency, routes, stops, trips, stop_times en calendar waren byte-identiek in beide proef-ZIP's met **59 routes, 67 synthetische ritten en 8.867 haltebezoeken**.
