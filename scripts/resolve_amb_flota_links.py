@@ -33,6 +33,50 @@ def extract_links(row):
                 if url not in result: result.append(url)
     return result
 
+
+def resolution_matches(text, resolution):
+    if re.search(RES[resolution], text, re.I):
+        return True
+    number, year = resolution.split("-")
+    # AMB's dynamic index may use 'Resolución No. 232 de 2025'
+    return bool(re.search(r"\b" + re.escape(number) + r"\b.{0,32}\b" +
+                          r"(?:20)?" + re.escape(year[-2:]) + r"\b", text, re.I | re.S))
+
+def find_dynamic_archive_rows(http, html, out):
+    """The AMB index is a Ninja Tables AJAX table, not a static HTML <table>."""
+    data_urls=[]
+    for match in re.finditer(r'"data_request_url"\s*:\s*("(?:\\.|[^"\\])*")', html):
+        try:
+            endpoint=json.loads(match.group(1))
+            parsed=urlparse(endpoint)
+            if parsed.scheme=="https" and parsed.hostname in ("ambq.gov.co","www.ambq.gov.co"):
+                if endpoint not in data_urls: data_urls.append(endpoint)
+        except (ValueError, TypeError):
+            continue
+    results=[]; diagnostics=[]
+    for endpoint in data_urls:
+        try:
+            response=http.get(endpoint,timeout=90,headers={"Referer":ARCHIVE})
+            response.raise_for_status()
+            payload=response.json()
+            (out/"ninja_table_rows.json").write_text(
+                json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
+            if isinstance(payload,list): data=payload
+            elif isinstance(payload,dict):
+                data=payload.get("data",payload.get("rows",[]))
+                if isinstance(data,dict): data=data.get("data",data.get("rows",[]))
+            else: data=[]
+            if not isinstance(data,list): data=[]
+            results.extend(r for r in data if isinstance(r,dict))
+            diagnostics.append({"endpoint":endpoint.split("&ninja_table_public_nonce=")[0],
+                                "status":"ok","rows":len(data)})
+        except (requests.RequestException, ValueError) as exc:
+            diagnostics.append({"endpoint":endpoint.split("&ninja_table_public_nonce=")[0],
+                                "status":"error","message":str(exc)[:300]})
+    (out/"ninja_table_status.json").write_text(
+        json.dumps(diagnostics,ensure_ascii=False,indent=2),encoding="utf-8")
+    return results
+
 def main():
     out=Path(sys.argv[1] if len(sys.argv)>1 else "flota-link-results")
     out.mkdir(parents=True,exist_ok=True)
@@ -45,7 +89,7 @@ def main():
     links={k:[] for k in RES}
     for row in soup.select("tr, li, div.wp-block-file"):
         label=row.get_text(" ",strip=True)
-        found=[k for k,pat in RES.items() if re.search(pat,label,re.I)]
+        found=[k for k in RES if resolution_matches(label,k)]
         if len(found)!=1: continue
         for url in extract_links(row):
             if url not in links[found[0]]: links[found[0]].append(url)
@@ -54,10 +98,27 @@ def main():
         if not node.parent: continue
         row=node.parent.find_parent("tr") or node.parent.parent
         label=row.get_text(" ",strip=True)
-        found=[k for k,pat in RES.items() if re.search(pat,label,re.I)]
+        found=[k for k in RES if resolution_matches(label,k)]
         if len(found)==1:
             for url in extract_links(row):
                 if url not in links[found[0]]: links[found[0]].append(url)
+    # WordPress Ninja Tables: rows are loaded from the embedded AJAX data_request_url.
+    # Without this request the archive HTML is empty and the recovery appears to
+    # succeed while never discovering its five missing resolutions.
+    for item in find_dynamic_archive_rows(http, response.text, out):
+        html_cells=" ".join(str(v) for v in item.values())
+        row=BeautifulSoup(html_cells,"html.parser")
+        label=row.get_text(" ",strip=True)
+        found=[k for k in RES if resolution_matches(label,k)]
+        if len(found)!=1: continue
+        candidates=extract_links(row)
+        # Also handle a raw PDF URL held in a Ninja Tables text column.
+        for value in item.values():
+            raw=str(value).strip()
+            if raw.startswith("https://") and ".pdf" in raw.lower():
+                if raw not in candidates: candidates.append(raw)
+        for url in candidates:
+            if url not in links[found[0]]:links[found[0]].append(url)
     links["301-2014"].append(KNOWN_301)
     output=[]
     with (out/"resolved_manifest.csv").open("w",encoding="utf-8",newline="") as f:
