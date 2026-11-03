@@ -1,3 +1,16 @@
+## Update 3 november 2026 — KMZ/SIU-routes zonder haltevolgorde, SOBUSA eerst
+
+De [werkende GitHub Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41620034866) heeft de **60 van de 93 officiële KMZ-route-/variantvermeldingen zonder SIU-basisroutekandidaat** omgezet in een [prioritaire werkvoorraad](../sources/amb/kmz_stop_research/workqueue/siu_missing_60_kmz_route_variant_workqueue.csv). Dit betreft 55 verschillende combinaties van vervoerder plus basisroutecode, **geen 60 aparte GTFS-route_id's**. De 12 sterkere en 8 voorlopige reeds bestaande SIU-route-/haltevolgordes blijven behouden.
+
+**SOBUSA-proef:** negen KMZ-records (zes basisroutes, drie A/B-paren) zijn verwerkt. [Bron- en haltekandidaatanalyse](../sources/amb/kmz_stop_research/sobusa/summary.md), [geprojecteerde SIU-/OSM-haltekandidaten](../sources/amb/kmz_stop_research/sobusa/sobusa_all_nearby_candidates_NOT_CONFIRMED.csv) en [A/B-verschillen](../sources/amb/kmz_stop_research/sobusa/sobusa_AB_shape_differences.csv). **3.276 route-kandidaat-combinaties binnen 35 meter** (3.241 vanuit SIU op *andere* lijnen en 35 vanuit niet-bevestigde OSM-objecten) zijn louter geografische kandidaten; **0 formeel bevestigde SOBUSA-haltes**. Geen verzonnen stopvolgorde, GTFS-trip of stop_times toegevoegd.
+
+**Nieuwe bronconflicten:** [vergelijking officiële lengte versus KMZ](../sources/amb/kmz_stop_research/sobusa/legal_length_QA.md) laat zien dat SOBUSA **B18 A/B wat lengtes betreft precies omgewisseld lijkt**: resolutie 082-2026 p6 A 73,6 km en B 75,6 km, terwijl KMZ A 75,56 km en B 73,61 km meet. **C16** wijkt ook af van 466-2025 p18. Geen automatische A/B-omwisseling of export voordat de wettelijke straattrajecten tegen KMZ zijn gecontroleerd.
+
+**SIU crosswalk-review:** alle 33 reguliere SIU-itineraries tegen de nieuwe officiële KMZ vergeleken (296 ruimtelijke vergelijkingen); [13 nog onbesliste SIU-koppelingen](../sources/amb/kmz_stop_research/siu_crosswalk/thirteen_unresolved_siu_itineraries_kmz_ranking.csv) kregen gerangschikte opties. Dit zijn *alleen geografische aanwijzingen*: gedeelde operators, overlappende corridors en vier dubbele KMZ-URL's kunnen een nummer-1 match misleidend maken. [Volledige review](../sources/amb/kmz_stop_research/siu_crosswalk/summary.md). **0 routecodes of varianten juridisch definitief bevestigd door enkel geografie**.
+
+**Vervolg:** valideren van haltebediening per route tegen aanvullende primaire/derdepartijbronnen, eerst SOBUSA, daarna de overige werkvoorraad. De bronbestanden en kilometer-/A/B-conflicten zijn nu reproduceerbaar gearchiveerd, zonder brongegevens te overschrijven of een onvolledige GTFS te publiceren.
+
+
 ## Aanvulling — review van alle 21 open SIU→AMB routecodes
 
 De [volledige 21-dossiersreview](siu_remaining_21_route_links_review_2026-11-03.md) heeft **acht nieuwe, strikt voorlopige één-op-één basisroutevoorstellen** en **1.620 extra haltevermeldingen** in staging gezet. Inclusief de eerdere 12 sterke geografie-kandidaten is nu een [gecombineerd 20-routebestand met **3.981** haltevolgorderegels en **2.394** afzonderlijke stop-ID's](../sources/siu/open_route_review/combined_20_route_stop_candidates_NO_TIMES.csv) beschikbaar. Voor de overige 13 itineraries blijven 8 gedeelde exploitatiegevallen, 3 A/B-gevallen en 2 PT4/PT5-conflicten open.
