@@ -12,6 +12,7 @@ Routelijnen: historische openbare AMB ArcGIS-gegevens (2019/2023).
 | Daarvan stop_position | 45 |
 | Daarvan mogelijke instapplaats of platform | 34 |
 | Daarvan binnen 50 m van een GIS-route | 16 |
+| Mogelijke instapplaats binnen 50 m van expliciet Transmetro-punt | 2 |
 | Daarvan binnen 100 m | 18 |
 | Bevestigde TPC-haltes | 0 |
 

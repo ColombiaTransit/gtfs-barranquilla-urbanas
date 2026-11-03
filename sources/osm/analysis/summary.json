@@ -12,6 +12,7 @@
   "unclassified_possible_boarding_locations": 34,
   "unclassified_possible_boarding_locations_named": 3,
   "unclassified_possible_boarding_locations_within_50m": 16,
+  "unclassified_boarding_near_tagged_transmetro_50m": 2,
   "unclassified_possible_boarding_locations_within_100m": 18,
   "arcgis_reference_features": 93,
   "confirmed_tpc_stops_from_this_export": 0,
