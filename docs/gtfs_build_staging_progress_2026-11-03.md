@@ -1,3 +1,14 @@
+## Update 3 november 2026 — grote route-haltegaten en gefragmenteerde shapes beoordeeld
+
+De [geslaagde QA Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41625987637) heeft de 60 routevarianten zonder eigen SIU-haltevolgorde verder beoordeeld. De 39 routes met een grootste tussenhalteafstand boven 2 km hebben samen **73 concrete gaten**: **38** zonder bestaande SIU-halte binnen de onderzoekscorridor, **18** met SIU-locaties op 25–35 m van de shape en **17** waar alleen haltes met tegengestelde richtingsaanduiding in de buurt liggen. Deze aantallen zeggen niets definitiefs over de daadwerkelijke haltebediening: een lang niet-stoppend wegdeel kan correct zijn.
+
+[De exacte 73 gap-corridors staan als GeoJSON](../sources/amb/missing_siu_trip_stop_patterns/gap_corridors_for_review.geojson), samen met [111 alternatieve, bestaande SIU-haltepunten](../sources/amb/missing_siu_trip_stop_patterns/SIU_stop_alternatives_inside_gaps_REVIEW_ONLY.geojson) en [alle 73 bron-/reviewregels](../sources/amb/missing_siu_trip_stop_patterns/stop_gaps_over_2km_review.csv). De [prioritaire controlelijst](../sources/amb/missing_siu_trip_stop_patterns/route_gap_priority_queue_60.csv) begint met COOTRANTICO B4 (max. 22,36 km zonder geselecteerde halte), LOLAYA B10 (11,25 km), TRASALIANCO D18 (8,43 km) en SOBUSA B18-B (8,22 km). Deze hiaten moeten tegen OSM-wegen en bronstraten worden getoetst; geen automatische stopfabricatie.
+
+De drie [routegeometrieën met afzonderlijke onderdelen](../sources/amb/missing_siu_trip_stop_patterns/fragmented_shape_route_summary.csv) zijn COOLITORAL A4 (6), COOLITORAL PT2 met gemarkeerde oude ArcGIS-fallback (4) en LOLAYA D8 met oude ArcGIS-fallback (7). De [eindpuntafstanden](../sources/amb/missing_siu_trip_stop_patterns/shape_fragment_join_candidates_REVIEW_ONLY.csv) tonen **9 mogelijke verbindingen binnen 80 m**, maar geen geverifieerde rijrichting of segmentvolgorde. Er zijn **25 routes met 59 onderliggende rechte polyline-randen langer dan 800 m**; zulke ruwe geometrie kan legitiem zijn of extra broncontrole vergen.
+
+**Geen enkele bestaande stop_sequence, stop_id, trip, shape of timetable is automatisch aangepast.** Reistijden blijven voor later, met GraphHopper. Alle nieuwe resultaten zijn onderzoeksdata, niet de publiceerbare GTFS.
+
+
 ## Update 3 november 2026 — stopvolgorde voor 60 nog ontbrekende SIU-routes; geen tijden
 
 De [geslaagde GIS/KMZ-halte-naar-trip Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41624783681) heeft alle **60 AMB-KMZ-route-/variantvermeldingen zonder eigen SIU-itinerary-haltevolgorde** tegen de bestaande fysieke SIU-haltecatalogus gematcht. Bij ontbrekende of foutieve KMZ-geometrie is de historische 2019–2023 ArcGIS-routelaag duidelijk als fallback gemarkeerd. Er zijn geen route-specifieke nieuwe stop-ID's aangemaakt.
