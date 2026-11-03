@@ -12,6 +12,7 @@ marked. Missing route_id mappings are excluded, never synthesized.
 Never writes gtfs/*. No network calls. Run MobilityData independently on zip.
 """
 from __future__ import annotations
+import argparse
 import csv
 import json
 import math
@@ -111,6 +112,14 @@ def build_shapes(road_features):
     return accum,stats
 
 def main():
+    global OUT, FEED_DIR, ROAD
+    parser=argparse.ArgumentParser(description="Build a NON-PUBLISHABLE validation fixture only")
+    parser.add_argument("--road-dir",type=Path,default=ROAD)
+    parser.add_argument("--out",type=Path,default=OUT)
+    args=parser.parse_args()
+    ROAD=args.road_dir
+    OUT=args.out
+    FEED_DIR=OUT/"gtfs_demo"
     OUT.mkdir(parents=True,exist_ok=True)
     FEED_DIR.mkdir(parents=True,exist_ok=True)
     routes=read(GTFS/"routes.txt")
