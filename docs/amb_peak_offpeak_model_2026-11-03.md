@@ -12,6 +12,14 @@ De gebruikerskeuze is om de hieronder vermelde **uniforme modeltijdvakken** toe 
 | Maandag t/m vrijdag | **Vóór 07:00 en ná 20:00**, uitsluitend voor zover de route rijdt | `hora valle` uit toepasselijke resolutie |
 | Zaterdag, zondag, Colombiaanse feestdag | **Nog niet bepaald** | aparte kalender-/dienstvensterbeslissing nodig |
 
+## Externe historische bron: eerste/laatste vertrek (2020)
+
+De [AMB-routekaarten van 17 juli 2020](https://www.ambq.gov.co/continuan-las-rutas-y-frecuencias-del-transporte-publico-colectivo/) bevatten per route de eerste en laatste vertrektijden. We hebben **24 kaarten en 84 routevermeldingen** gecontroleerd, waarvan **83 unieke bedrijf-routes**. [Geverifieerde CSV](../sources/amb/amb_2020_first_last_dispatch_times_verified.csv) en [match met 44 routekandidaten](../sources/amb/amb_2020_vs_resolution_route_dispatch_matching.csv).
+
+De eerste/laatste vertrekuren uit **2020 worden niet automatisch als huidige diensturen voor 2026 gebruikt**. Eerst afzonderlijk besluiten of deze als transparante modelaanname dienen of er recenter SIU/SIBUS-materiaal is. Een AMB-publicatie kan op verschillende momenten technisch zijn bijgewerkt zonder dat de routeschema's uit 2020 zijn vervangen.
+
+De kaart met COOCHOFAL C3, C9 en C18 drukt foutief `5:30 AM` af in de `último despacho (PM)`-kolom. Bij TRASALFA D14 en D15 is dat `6:00 AM`. Laatste vertrektijden voor deze vijf routes zijn in de data **onbekend**; niet corrigeren door AM naar PM om te zetten zonder bewijs.
+
 ## Toepassingsregels
 
 1. **De AMB-resolutie is leidend voor de frequentie** (bijv. `6 min / 9 min` betekent 360 seconden tijdens `peak` en 540 seconden tijdens `offpeak`). Geen realtime-feed of ritwaarneming vereist.
