@@ -1,0 +1,48 @@
+name: Audit SIU Coolitoral PT4 PT5 against original pilot 256-2026
+on:
+  push:
+    paths:
+      - scripts/audit_siu_coolitoral_256_street_sequences.py
+      - .github/workflows/audit-siu-coolitoral-256-streets.yml
+      - sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv
+      - sources/siu/public_extract/siu_route_stop_sequences.csv
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: siu-coolitoral-256-street-audit
+  cancel-in-progress: false
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compare full SIU stop sequences with four legally specified A/B patterns
+        run: python scripts/audit_siu_coolitoral_256_street_sequences.py
+      - name: Add result to job summary
+        run: cat build/siu-coolitoral-256-street-audit/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit reproducible research comparison
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/siu/coolitoral_256_street_audit
+          cp build/siu-coolitoral-256-street-audit/* sources/siu/coolitoral_256_street_audit/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/siu/coolitoral_256_street_audit
+          if ! git diff --cached --quiet; then
+            git commit -m "research(siu): compare Coolitoral 256-2026 legal A/B streets with ordered SIU stops"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Upload full street-level audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-coolitoral-256-street-audit
+          path: build/siu-coolitoral-256-street-audit/
+          if-no-files-found: warn
+          retention-days: 45
