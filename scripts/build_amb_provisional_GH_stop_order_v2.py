@@ -32,7 +32,7 @@ BASE_HEADERS = [
 ]
 MORE_HEADERS = [
     "source_row_kind","original_stop_sequence","GH_candidate_source_id",
-    "GH_classification","GH_KMZ_constrained_extra_distance_m",
+    "GH_source_gap_index","GH_classification","GH_KMZ_constrained_extra_distance_m",
     "GH_KMZ_constrained_detour_ratio","same_stop_id_elsewhere_in_trip",
     "near_existing_same_stop_passage_warning",
     "nearby_candidate_visit_warning","candidate_service_verified",
@@ -189,6 +189,7 @@ def main():
                     "source_row_kind":"NEW_GH_bus_addition_candidate_RESEARCH_ONLY",
                     "original_stop_sequence":"",
                     "GH_candidate_source_id":sid,
+                    "GH_source_gap_index":str(n),
                     "GH_classification":"toevoegkandidaat",
                     "GH_KMZ_constrained_extra_distance_m":candidate["GH_bus_KMZ_constrained_extra_distance_m"],
                     "GH_KMZ_constrained_detour_ratio":candidate["GH_bus_KMZ_constrained_detour_ratio"],
@@ -250,11 +251,11 @@ def main():
         original_replayed=[x["stop_id"] for x in records if x["source_row_kind"]=="existing_GIS_KMZ_SIU_physical_stop"]
         if original_replayed != [x["stop_id"] for x in orig]:
             raise ValueError("Original stop visit order was modified: "+tripid)
-        new_positions={x["GH_candidate_source_id"]:x["stop_sequence"] for x in records
+        new_positions={(x["GH_source_gap_index"],x["GH_candidate_source_id"]):x["stop_sequence"] for x in records
                        if x["source_row_kind"].startswith("NEW_")}
         for change in changes:
             if change["trip_pattern_id"]==tripid:
-                change["new_concept_stop_sequence"]=new_positions[change["inserted_same_physical_SIU_stop_id"]]
+                change["new_concept_stop_sequence"]=new_positions[(str(change["source_gap_index"]),change["inserted_same_physical_SIU_stop_id"])]
         final.extend(records)
         QA.append({
             "trip_pattern_id":tripid,
