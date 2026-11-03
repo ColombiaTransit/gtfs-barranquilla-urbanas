@@ -2,7 +2,17 @@
 
 **Datum:** 3 november 2026. **Repository:** `ColombiaTransit/gtfs-barranquilla-urbanas`. **Status:** onderzoeksresultaten, nog geen definitieve juridische route-toewijzing en geen volledige GTFS.
 
-De [GitHub Action Review all unresolved SIU to AMB route links](../.github/workflows/review-siu-open-route-links.yml) is voor alle **21** openstaande SIU-itineraries uitgevoerd, inclusief PT4/PT5. De [laatste geslaagde run](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41603387801) heeft het volledige [reviewregister](../sources/siu/open_route_review/open_21_route_crosswalk_review.csv) weggeschreven. De **12 eerdere sterke geografische routekoppelingen** blijven in hun afzonderlijke stagingbestand staan.
+De [GitHub Action Review all unresolved SIU to AMB route links](../.github/workflows/review-siu-open-route-links.yml) is voor alle **21** openstaande SIU-itineraries uitgevoerd, inclusief PT4/PT5. De [laatste geslaagde run](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41605472015) heeft het volledige [reviewregister](../sources/siu/open_route_review/open_21_route_crosswalk_review.csv) weggeschreven. De **12 eerdere sterke geografische routekoppelingen** blijven in hun afzonderlijke stagingbestand staan.
+
+## Update — origineel pilotbesluit geverifieerd en alle voorstellen samengevoegd
+
+De oorspronkelijke [AMB-resolutie **256-2026**](https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf) is nu **volledig teruggevonden en op de oorspronkelijke zeven PDF-pagina's gecontroleerd**. OCR was niet nodig. De [vier wettelijke straattrajecten](../sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv) bevestigen: **PT4-A/B vertrekken van Calle 17 con Carrera 30**; **PT5-A/B vertrekken van Vía 40 No. 51-310**. Het besluit noemt voor alle vier 9 minuten spits/14 minuten dal. De afzonderlijke B-varianten volgen een afwijkende zijstraatroute.
+
+Deze primaire bron **lost het SIU-coderingprobleem niet automatisch op**: `CIRCUNVALAR VIA 40` begint in SIU bij Calle 17 (terminalstraat **PT4**), maar de routebenaming past bij de officiële titel van **PT5**. `VIA 40 CIRCUNVALAR` begint bij Vía 40 (terminalstraat **PT5**), maar de titel past bij **PT4**. Eerste SIU-halte is niet per se de officiële terminal. De twee oorspronkelijke juridische PT4/PT5-termini zijn in de pilot **niet gewijzigd**.
+
+De [nieuwe gedetailleerde SIU-straatcontrole](../sources/siu/coolitoral_256_street_audit/pt4_pt5_street_sequence_review.csv) heeft **256 SIU-halteregels** vergeleken met de vier juridische A/B-routebeschrijvingen. Alleen één van de vier genoemde PT4-B-specifieke zijstraten komt in de ene SIU-lijst als haltenaam terug; voor de andere route nul van vier. **Dat is onvoldoende voor een betrouwbare A/B-toewijzing.** De vier definitieve juridische GTFS-route-ID's blijven dus open, hoewel het bron-PDF nu verwerkt is.
+
+Na deze onderzoeksslag staan in [één gecombineerd, niet-publiceerbaar reviewbestand](../sources/siu/open_route_review/combined_20_route_stop_candidates_NO_TIMES.csv) **20 SIU-itineraries** (12 al sterke en 8 nieuwe voorlopige koppelingen), **3.981 geordende halteregels**, met **2.394 verschillende kandidaat-stop-ID's**. De nieuwe acht zijn uitdrukkelijk *extra basisroutevoorstellen*, niet acht definitief juridisch goedgekeurde koppelingen. Het [actuele reviewregister](../sources/siu/open_route_review/open_21_route_crosswalk_review.csv) omvat **alle 21** open oorspronkelijke dossiers; daarvan zijn **13 nog niet eens aan één enkel route-ID-kandidaat toe te wijzen** (8 gedeelde operatoren, 3 A/B-gevallen, 2 PT4/PT5-conflicten). **0 nieuwe juridische eindbevestigingen**.
 
 ## 1. Resultaat per categorie
 
@@ -11,7 +21,7 @@ De [GitHub Action Review all unresolved SIU to AMB route links](../.github/workf
 | Eén vervoerder, één plausibele niet-A/B AMB-code | **8** | **Voorlopig basisroutevoorstel**, 1.620 geordende SIU-stops, juridisch nog te vergelijken |
 | Eén gemeenschappelijke SIU-lijst voor meerdere vervoerders | **8** | Dezelfde lijst **niet** blind vermenigvuldigen tot GTFS-route-/ritpatronen per vervoerder |
 | A/B-routevarianten zonder wettelijke variantcrosswalk | **3** | Eén SIU-lijst kan niet zonder bewijs naar één juridische A- of B-variant |
-| PT4/PT5 met **tegenstrijdige titel- en vertrekpuntaanwijzingen** | **2** | Beide basisroute- en A/B-koppelingen expliciet geblokkeerd tot de juiste 2026-pilotstraattrajecten zijn gecontroleerd |
+| PT4/PT5 met **tegenstrijdige titel- en vertrekpuntaanwijzingen** | **2** | Oorspronkelijke pilot-256-straattrajecten zijn gecontroleerd; beide SIU→basisroute- en A/B-toewijzingen blijven wegens tegenstrijdige SIU-namen en startstraten geblokkeerd |
 | **Totaal** | **21** | Ieder geval beoordeeld; **0 nieuw juridisch definitief bevestigd** |
 
 De scheiding is bewust strenger dan automatisch de dichtstbijzijnde 2019-GIS-lijn nemen.
@@ -27,11 +37,11 @@ De scheiding is bewust strenger dan automatisch de dichtstbijzijnde 2019-GIS-lij
 
 **Bewijs B (SIU-2026):** SIU `CIRCUNVALAR VIA 40` begint in de aangeleverde complete lijst bij `CALLE 17 CON CARRERA 28 (NS)` en eindigt bij `CARRERA 30 CON CALLE 12 (EO)`. SIU `VIA 40 CIRCUNVALAR` begint bij `VIA 40 CON CARRERA 53B (SN)` en eindigt bij `PASTAS COMARICO (VIA 40 - SN)`. Het SIU-beginpunt lijkt dus bij de **andere** 2025-dispatchterminal te horen dan het legale routenaamvolgorde-label. De volledige dienst kan bovendien een circulair traject zijn: het eerste SIU-haltepunt is niet automatisch een formeel dispatchterminal. Dit is daarom **een conflict tussen aanwijzingen**, geen bewezen fout in één van de datasets.
 
-**Bewijs C (resolutie 256-2026):** de [gecurateerde vergunningsregels](../sources/amb/details/resolucion_256-2026.csv) onderscheiden **vier legale itineraries**, namelijk PT4-A, PT4-B, PT5-A en PT5-B, elk met **9 minuten spits en 14 minuten dal**. Volgens het [AMB-resolutieoverzicht](https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-coolitoral/) bestaat het officiële document **256-2026 PILOTO**. Het volledige originele PDF-bestand is in onze onderzoekskopie **nog niet verifieerbaar**, zodat de **straatbeschrijvingen en eventuele nieuwe terminals van de 2026-pilot** ontbreken. De pilot is eerder vastgelegd met start **22 juni 2026** en duur **6 maanden**, met mogelijkheid tot verlenging; die geldigheid moet later opnieuw worden getoetst.
+**Bewijs C (resolutie 256-2026):** de [primaire officiële bron, zeven pagina's](https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf) is inmiddels volledig gecontroleerd en bevat **vier aparte itineraries** PT4-A/B en PT5-A/B, elk met **9 minuten spits/14 minuten dal**. De [juridische straatbeschrijvingen](../sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv) staan in een gestructureerde bron-CSV. De vertrekterminals blijven **Calle 17 con Carrera 30** (PT4) en **Vía 40 No. 51-310** (PT5), dus ook de primaire pilot bevestigt het verschil tussen de letterlijke SIU-routenamen en de eerste stopstraten. Artículo Segundo start de pilot op **22 juni 2026**, duur zes maanden, eventueel verlengbaar; de eventuele verlenging is niet bevestigd.
 
 **Stopvolgordecontrole:** de twee SIU-lijsten delen bij vergelijking van exacte GPS-posities op zes decimalen **0 punten**, en slechts **1 identieke genormaliseerde haltenaam**. Dat ondersteunt dat SIU twee heel verschillende patronen toont. Het zegt **niet** welke van vier A/B-patronen daarbij horen.
 
-**Praktisch besluit:** noch de twee basisroutecodes noch de vier A/B-ID's worden nu als bevestigd aangewezen. De [PT4/PT5-controlefile](../sources/siu/open_route_review/pt4_pt5_pilot_specific_review.csv) bewaart beide hypotheses. Voor de volgende juridische stap moet het *originele* 256-2026-besluit worden opgehaald en de route- en A/B-straatverlopen één voor één vergeleken met SIU.
+**Praktisch besluit:** noch de twee basisroutecodes noch de vier A/B-ID's worden als bevestigd aangewezen. De [PT4/PT5-controlefile](../sources/siu/open_route_review/pt4_pt5_pilot_specific_review.csv) bewaart beide hypotheses, nu tegen de **gecontroleerde primaire 256-PDF**. Voor een besluit is aanvullend **ruimtelijk/ordelijk trajectbewijs vanuit SIU** of een verifieerbare expliciete koppeling tussen SIU en het juridische route-ID nodig.
 
 ## 3. Acht aanvullende voorlopige, enkelvoudige basisroutekoppelingen
 
@@ -79,7 +89,7 @@ Hier mogen de route-stoplijsten **niet automatisch naar alle genoemde bedrijven 
 
 ## 6. Aanpak resterende verificatie
 
-1. **256-2026 origineel:** PT4/PT5 juridisch actuele tracés en A/B, oude terminal-tegenspraak oplossen.
+1. **256-2026 origineel — uitgevoerd:** volledige PDF gevonden en A/B-straten uitgewerkt; resterend is de expliciete SIU-codekoppeling of GPS-volgordecontrole van de B-zijstraten.
 2. **210-2026 / 192-2025:** PT2/PT3 A/B-koppeling en terminal-/rijrichtingcontrole.
 3. **COOTRAB 358-2024:** C5/C6 en alle straatsegmenten bij de 8 voorlopige routes tegen de actuele SIU-stopvolgorde leggen.
 4. **LA CAROLINA / COOCHOFAL / TRANSURBAR:** overlappende routeparen of afsplitsingen verifiëren met de originele beschikking en GIS-kaart.
