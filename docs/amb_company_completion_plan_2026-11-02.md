@@ -1,5 +1,16 @@
 # AMB TPC — afhandeling per bedrijf en vervolgwerk
 
+## Projectbesluit 3 november 2026 — aangenomen eerste/laatste vertrekken
+
+De AMB-routekaarten gepubliceerd in **juli 2020** worden vanaf nu **als voorlopige bron voor de huidige GTFS-model-diensturen** gebruikt. De bron blijft gemarkeerd als `source_period=2020-07` en `model_assumption`, niet als officieel bevestigde 2026-tijd. Een nieuwere betrouwbare bron kan deze gegevens **per route vervangen**, zonder dat alle andere routes of hun vergunningsfrequenties opnieuw moeten worden berekend.
+
+- [**83 routevensters (78 compleet)**](../sources/amb/amb_dispatch_window_assumptions_2026-11-03.csv).
+- [**Modelmatch voor 44 routes: 38 bruikbare vensters; 35 daarvan inclusief complete piek- en dalfrequenties**](../sources/amb/gtfs_route_service_windows_assumed_2026-11-03.csv).
+- [**138 kandidaatperiodeblokken**](../sources/amb/gtfs_weekday_frequency_period_candidates_2026-11-03.csv), waarvan 15 bij gedeelde corridorfrequenties en dus nog niet klaar voor individuele itinerarios.
+- **Uitzonderingen:** vijf onbetrouwbare laatste vertrektijden uit de bronkaarten blijven open (TRASALFA D14/D15, COOCHOFAL C3/C9/C18); ontbrekende bronmatch TRASALFA B2-B blijft open.
+- Het eerder afgesproken werkdagmodel 07:00–09:00/17:00–20:00 piek en dal daarbuiten blijft gelden; weekend, feestdagen, haltes, shapes, pilots en routevarianten moeten apart worden uitgewerkt.
+- **GTFS-techniek:** laatste vertrek is inclusief; `frequencies.txt.end_time` exclusief. Per periodemodel nog het laatste vertrekmoment / tripfase correct genereren.
+
 ## Projectbesluit 3 november 2026 — frequenties uit resoluties zijn gezaghebbend
 
 Voor de statische GTFS accepteren we de spits- en dalintervallen van het **toepasselijke officiële AMB-routebesluit als waarheid voor de geplande dienst**. Er is voor dit type vervoerder geen bruikbare GTFS-RT-feed beschikbaar; het ontbreken van realtime-waarnemingen is **geen GTFS-blokkade**. Een veldstudie, SIBUS-meting of andere observatie is niet vereist om de vergunde `headway_secs` te gebruiken.
