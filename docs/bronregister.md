@@ -13,6 +13,18 @@ Onderzochte resoluties:
 - TRANSDIAZ: 501-2025
 - COOTRANSPORCAR: 389-2025
 
+## Officiële AMB KMZ-routeviewer — nieuw bronspoor (2026-11-03)
+Op het bestaande AMB-bronportaal `https://www.ambq.gov.co/transporte/transporte-publico-colectivo/` staat óók **Visor de Rutas AMBQ**. De HTML bevat routeitems per bedrijf, waaronder expliciet **SOBUSA B18-4175 A/B, C12-4169 A/B en C16-4167 A/B**, evenals A/B van TRANSDIAZ A10, LA CAROLINA A16 en SODETRANS B15/C21. Een route-item is nog geen geverifieerd/downloadbaar KMZ-bestand: de **werkelijke `data-*`-download-URL's moeten nog uit ruwe HTML worden uitgelezen en getest**.
+
+**Huidige repo-status:** nog geen originele KMZ-bestanden, KMZ-inventaris of op KMZ gebaseerde route-shapes ingeladen. Bestaande `sources/amb/arcgis_shape_staging` is de **andere**, oudere AMB ArcGIS FeatureServer/6 bron (93 geometrieën).
+
+**Apart bevestigde webindexen, met mogelijk verschillende generaties kaarten:**
+- `https://www.ambq.gov.co/rutas-de-buses/SOBUSA/`: index van **zes niet-A/B-opgesplitste** SOBUSA-KMZ's, met bestandsdatum **26 oktober 2018**. Geen bewijs dat deze aan de **2025/2026**-vergunningen voldoen.
+- `https://www.ambq.gov.co/ruta-de-buses/COOLITORAL/`: index met onder meer **A1-4106 A.kmz / A1-4106 B.kmz**, bestandsdatum **20 mei 2026**; het lijkt een nieuwere KMZ-verzameling.
+- `https://www.ambq.gov.co/ruta-de-buses/EMBUSA/`: **B9-4125.kmz**, bestandsdatum **20 mei 2026**.
+
+**Aanbevolen technische volgende stap:** spider de ruwe HTML en lees de echte `data-*`-waarden uit; download alleen publiek bereikbare `.kmz`-bestanden met HTTP-status/inhoudstype/ZIP-validatie en SHA256-manifest; extraheer KML `LineString` + trackmetadata; bouw een **basisroute + A/B-variant-crosswalk** op basis van bestandsnamen én actuele vergunningen; controleer geometrie tegen SIU-haltevolgorde en bronjaar. Geef prioriteit aan SOBUSA C12/C16/B18. Niet direct automatisch naar `gtfs/shapes.txt` publiceren; controleer actualiteit/licenties.
+
 ## GIS
 Bron: https://services3.arcgis.com/oGYAc07w6wsvgUYr/ArcGIS/rest/services/Movilidad_Transito_WFL1/FeatureServer/6
 
