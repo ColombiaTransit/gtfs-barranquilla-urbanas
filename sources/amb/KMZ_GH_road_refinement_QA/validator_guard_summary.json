@@ -1,0 +1,20 @@
+{
+  "KMZ_source_sections_with_long_gaps": 144,
+  "GH_local_sparse_edge_candidates": 414,
+  "KMZ_sections_locally_changed": 136,
+  "source_route_patterns_changed_before_validator": 45,
+  "source_route_patterns_rejected_by_validator": 32,
+  "source_route_patterns_approved_by_validator": 13,
+  "KMZ_sections_kept_with_road_densification": 22,
+  "KMZ_sections_rolled_back_to_official": 114,
+  "MobilityData_baseline_ERROR": 0,
+  "MobilityData_unfiltered_proposal_ERROR": 0,
+  "MobilityData_baseline_WARNING": 2381,
+  "MobilityData_unfiltered_proposal_WARNING": 2474,
+  "validator_global_rollback_reasons": [],
+  "source_SIU_stop_IDs_and_stop_order_modified": false,
+  "official_AMB_KMZ_originally_modified": false,
+  "actual_operator_stop_service_proven": false,
+  "full_final_validator_recheck_required": true,
+  "production_GTFS_modified": false
+}

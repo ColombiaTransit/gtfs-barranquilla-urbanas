@@ -1,0 +1,20 @@
+{
+  "input_route_patterns": 70,
+  "official_KMZ_source_sections_with_sparse_edges": 144,
+  "all_KMZ_gaps_over_400m": 457,
+  "GraphHopper_bus_profile": "bus",
+  "GH_bus_route_queries": 457,
+  "locally_accepted_GH_road_substitutions": 414,
+  "not_locally_accepted_GH_road_substitutions": 43,
+  "source_sections_locally_refined": 136,
+  "existing_GH_no_KMZ_fallback_sections_unchanged": 12,
+  "local_decision_reasons": {
+    "GH_road_local_candidate": 414,
+    "rejected_GH_corridor_or_stop_risk": 43
+  },
+  "validator_pass_required_before_research_candidate_approval": true,
+  "source_KMZ_original_vertices_preserved": true,
+  "source_v3_stop_visit_sequences_changed": false,
+  "real_stop_service_or_route_direction_confirmed": false,
+  "production_GTFS_modified": false
+}

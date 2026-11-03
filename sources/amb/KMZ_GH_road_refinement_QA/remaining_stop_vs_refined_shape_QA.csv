@@ -1,0 +1,2 @@
+trip_pattern_id,stop_id,stop_name,distance_m,status
+AMB_RECON_LOLAYA_D84165_P2,SIU_2ace23a6-7511-43ce-b421-36400dc6728f,HOMECENTER CALLE 30 (SN),105.24,still_offroute_unverified_GH_or_source
