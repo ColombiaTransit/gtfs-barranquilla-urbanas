@@ -96,8 +96,6 @@ def main():
         byuid[row["trip_pattern_id"]]["sections"]+=1
         byuid[row["trip_pattern_id"]]["locally_accepted"]+=int(
             row["GH_locally_accepted_gap_count"])
-    if not impacted:
-        raise ValueError("No locally accepted GH bus road candidates to compare")
     bgroup=groups(br);pgroup=groups(pr)
     rejected=defaultdict(set)
     global_rollback_reasons=[]
