@@ -1,0 +1,46 @@
+name: Recover AMB Coolitoral 256-2026 original pilot PDF
+on:
+  push:
+    paths:
+      - scripts/resolve_amb_coolitoral_256_pdf.py
+      - .github/workflows/recover-amb-coolitoral-256.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install retrieval and PDF inspection dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4 pymupdf
+      - name: Find official archive link and inspect PDF native text
+        run: python scripts/resolve_amb_coolitoral_256_pdf.py build/amb-coolitoral-pilot-recovery
+      - name: Report source availability
+        run: cat build/amb-coolitoral-pilot-recovery/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit official source URL and extraction status (not entire PDF)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/amb/256_2026_recovery
+          cp build/amb-coolitoral-pilot-recovery/source_report.json sources/amb/256_2026_recovery/
+          cp build/amb-coolitoral-pilot-recovery/summary.md sources/amb/256_2026_recovery/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/amb/256_2026_recovery/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record AMB 256-2026 pilot source retrieval outcome"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Upload original PDF and native text where available
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-coolitoral-256-2026-source
+          path: build/amb-coolitoral-pilot-recovery/
+          if-no-files-found: warn
+          retention-days: 45
