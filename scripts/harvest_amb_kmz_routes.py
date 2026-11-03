@@ -30,7 +30,7 @@ SODETRANS COOTRANSNORTE TRASALIANCO COOASOATLAN""".split()
 FIELDS = """company route_label route_code base_route_id_candidate variant source_attribute
 kmz_url final_url http_last_modified sha256 size_bytes raw_kmz_path geojson_path
 kml_members linestring_count point_count bbox status error legal_route_verified
-siu_variant_verified source_page snapshot_utc""".split()
+siu_variant_verified source_url_collision source_page snapshot_utc""".split()
 
 def normalize(s):
     s = unicodedata.normalize("NFKD", s.upper())
@@ -227,6 +227,31 @@ def main():
         print("[%s/%s] %s / %s: %s" % (idx, len(discovered), company, label, row["status"]), flush=True)
         if not args.page_html:
             time.sleep(0.1)
+    # A successful download does NOT prove that the route label points to its own geometry.
+    # The AMB HTML sometimes points different legal routes to the exact same KMZ file.
+    by_final_url = {}
+    for row in rows:
+        if row["status"] in ("geometry_imported", "no_linestring"):
+            by_final_url.setdefault(row["final_url"] or row["kmz_url"], []).append(row)
+    collisions = []
+    for url, group in by_final_url.items():
+        if len(group) < 2:
+            continue
+        for row in group:
+            row["source_url_collision"] = "yes"
+            collisions.append({"company":row["company"], "route_label":row["route_label"],
+                               "base_route_id_candidate":row["base_route_id_candidate"],
+                               "variant":row["variant"], "kmz_url":row["kmz_url"],
+                               "sha256":row["sha256"], "issue":"same_source_url_used_by_multiple_route_labels",
+                               "gtfs_shape_mapping_approved":"no"})
+    for row in rows:
+        if not row["source_url_collision"]:
+            row["source_url_collision"] = "no"
+    if collisions:
+        with (outdir/"source_url_collisions.csv").open("w", newline="", encoding="utf-8") as fh:
+            writer = csv.DictWriter(fh, list(collisions[0]))
+            writer.writeheader()
+            writer.writerows(collisions)
     with (outdir/"manifest.csv").open("w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, FIELDS)
         writer.writeheader()
@@ -237,6 +262,9 @@ def main():
                "file_statuses":dict(states),"explicit_AB_variants":sum(bool(x["variant"]) for x in rows),
                "total_linestrings":sum(int(x["linestring_count"] or 0) for x in rows),
                "total_line_vertices":sum(int(x["point_count"] or 0) for x in rows),
+               "unique_download_urls":len(by_final_url),
+               "source_url_collision_groups":sum(len(v)>1 for v in by_final_url.values()),
+               "source_url_collision_route_entries":len(collisions),
                "gtfs_export_approved":False}
     (outdir/"summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False)+"\n",encoding="utf-8")
     (outdir/"summary.md").write_text(
@@ -246,6 +274,9 @@ def main():
         " met lijngeometrie**; **"+str(summary["explicit_AB_variants"])+" expliciete A/B-vermeldingen**.\n\n"+
         "## Importstatus\n"+ "".join("- "+k+": "+str(v)+"\n" for k,v in states.items())+
         "\nOriginele KMZ, geconverteerde GeoJSON en manifest bewaren de provenance en variant.\n"+
+        "LET OP: "+str(summary["source_url_collision_groups"])+" gedeelde KMZ-URL's bij "+
+        str(summary["source_url_collision_route_entries"])+" routelabels; zie source_url_collisions.csv. "+
+        "Deze mapping is NIET gevalideerd, ook als de KMZ downloadt.\\n"+
         "Historische geometrie: controleer tegen toepasselijke vergunning en SIU. "+
         "**Niet rechtstreeks naar GTFS shapes.txt publiceren.**\n", encoding="utf-8")
     print(json.dumps(summary,indent=2,ensure_ascii=False))
