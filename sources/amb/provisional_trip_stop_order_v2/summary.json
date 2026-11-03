@@ -1,0 +1,19 @@
+{
+  "existing_route_stop_visits_preserved": 9000,
+  "new_GH_addition_candidate_visits": 65,
+  "concept_route_stop_visits_total": 9065,
+  "unique_existing_SIU_physical_stop_ids_newly_referenced": 50,
+  "affected_trip_patterns": 19,
+  "affected_route_variants": 19,
+  "trip_patterns_with_existing_sequence": 70,
+  "new_candidates_that_already_occur_elsewhere_in_same_trip": 26,
+  "adjacent_pairs_with_new_candidate_under_115m_to_review": 13,
+  "all_original_stop_visit_orders_preserved": true,
+  "all_original_physical_stop_ids_preserved": true,
+  "new_physical_stop_ids_created": 0,
+  "trip_timing_calculation_performed": false,
+  "source_KMZ_GH_route_stop_service_verified": false,
+  "production_GTFS_stops_trips_or_stop_times_changed": false,
+  "classification_source": "sources/amb/graphhopper_stop_classification/GH_bus_stop_candidate_decisions_125.csv",
+  "source_observed_counts_expected": true
+}
