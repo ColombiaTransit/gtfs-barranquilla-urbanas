@@ -4,6 +4,17 @@
 
 De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke analyse** van routebesluiten, routevarianten, frequenties en geldigheidsperioden, vervolgens expliciete vervolgacties zonder fictieve waarden.
 
+## Besluit 3 november 2026 — AMB-2020 vertrektijden zijn een aanvaard voorlopig GTFS-model
+
+De gebruiker heeft besloten de eerste en laatste dispatch-tijden van de AMB-routekaarten uit **juli 2020** voor de huidige model-GTFS **voorlopig te gebruiken**. De aanname is omkeerbaar: zodra een betere officiële routebron wordt gevonden, vervangen we per route het vertrekvenster en bewaren we bronjaar en oorspronkelijke waarden. De vertrekuren worden **niet voorgesteld als officieel bevestigd voor 2026**.
+
+- [**83 historische routevensters → voorlopig model (78 compleet)**](../../sources/amb/amb_dispatch_window_assumptions_2026-11-03.csv).
+- [**44 routekandidaten → 38 bruikbare voorlopige vensters, 35 met volledige vergunningsfrequenties**](../../sources/amb/gtfs_route_service_windows_assumed_2026-11-03.csv).
+- [**138 werkdag-spits/dalperiode-kandidaten**](../../sources/amb/gtfs_weekday_frequency_period_candidates_2026-11-03.csv). Hiervan zijn **15 periodevoorstellen gedeelde corridorwaarden**, dus nog niet zonder itinerary-splitsing als patroonfrequentie bruikbaar.
+- [Volledig tijdvakkenbeleid, inclusief vervangingsregels](../amb_peak_offpeak_model_2026-11-03.md).
+
+Voorlopig **maandag–vrijdag**: 07:00–09:00 en 17:00–20:00 piek; elders binnen de aangenomen diensturen dal. **Vijf bronregels hebben geen bruikbare laatste vertrektijd; die blijven leeg**. Weekenden, feestdagen, haltes, shapes en afzonderlijke A/B-routes blijven buiten deze aanname. Frequencies end_time is exclusief; de laatste dispatch uit de poster moet bij ritgeneratie apart correct worden verwerkt. Voertuigcapaciteit negeren we.
+
 ## Historische AMB-tijden voor eerste/laatste vertrek (2020)
 
 Een afzonderlijke officiële [AMB-publicatie van **17 juli 2020**](https://www.ambq.gov.co/continuan-las-rutas-y-frecuencias-del-transporte-publico-colectivo/) bevat **24 routekaarten** met vertrekvensters en veelal frequenties. Deze bron is volledig uitgelezen via de [geslaagde Action-run 41588049698](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41588049698), met **24/24 unieke originele beelden**.
