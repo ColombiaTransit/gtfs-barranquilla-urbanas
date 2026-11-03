@@ -1,0 +1,2 @@
+old_stop_id,new_stop_id,reason,source_rule_file
+SIU_924b1840-ce1c-417f-8c42-8854e1b9cec1,SIU_8b8a9430-8354-4e2a-a379-863598802f1a,verified_spelling_normalization_merged_same_named_stop_within_5m,sources/siu/stop_name_spelling_corrections_2026-11-03.csv

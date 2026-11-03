@@ -1,0 +1,3 @@
+siu_stop_uuid,siu_itinerary_uuid,original_name,canonical_name,candidate_stop_id,rule_file
+924b1840-ce1c-417f-8c42-8854e1b9cec1,4cc2ed1d-9fcd-440c-8373-84e51f9fc04a,LOS MANATIALES - GIRASOL (CARRERA 12 - OE),LOS MANANTIALES - GIRASOL (CARRERA 12 - OE),SIU_8b8a9430-8354-4e2a-a379-863598802f1a,sources/siu/stop_name_spelling_corrections_2026-11-03.csv
+538954e1-d25c-4c3b-9be1-a1d09b3ecbd2,acb3f70c-b5b1-46a8-a5d2-3cebd5755c5d,COLEGIO LA ENSE?ANZA (CALLE 87 -SN),COLEGIO LA ENSEÑANZA (CALLE 87 -SN),SIU_538954e1-d25c-4c3b-9be1-a1d09b3ecbd2,sources/siu/stop_name_spelling_corrections_2026-11-03.csv
