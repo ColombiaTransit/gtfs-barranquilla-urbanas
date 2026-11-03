@@ -3,6 +3,7 @@
 **33 non-test SIU itineraries**, 6407 ordered stop visits.
 **3118 candidate physical stops** grouped only by SAME direction-preserving normalized name and all points within 5.0m.
 **54 same-coordinate/different-name cases left separate**.
+**2361 stop visits have a provisional AMB route ID**, with no timetable fields.
 **12 high-confidence geographic/operator route links**; NO legal code mappings automatically confirmed.
 
 Route crosswalk status:
