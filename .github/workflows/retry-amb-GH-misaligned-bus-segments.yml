@@ -1,0 +1,72 @@
+name: Retry mismatch AMB bus route geometry with dense GraphHopper KMZ anchors
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/retry_amb_GH_misaligned_bus_segments.py
+      - .github/workflows/retry-amb-GH-misaligned-bus-segments.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-GH-dense-shape-retry-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install GIS and GraphHopper Python modules
+        run: python -m pip install --disable-pip-version-check "shapely>=2.0,<3" "pyproj>=3.5,<4" requests
+      - name: Compile research code
+        run: python -m py_compile scripts/retry_amb_GH_misaligned_bus_segments.py
+      - name: Fetch old ArcGIS route fallback for source reconstruction
+        run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
+      - name: Recheck 42 bus route shape mismatches with 450m KMZ waypoints
+        env:
+          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
+        run: |
+          if [ -z "$GRAPHHOPPER_URL" ]; then
+            echo "::error::ColombiaTransit GRAPHHOPPER_URL not available to repository"
+            exit 1
+          fi
+          echo "::add-mask::$GRAPHHOPPER_URL"
+          python scripts/retry_amb_GH_misaligned_bus_segments.py --max-sections 42 --anchor-spacing-m 450
+      - name: Report improvement in mapping official route to bus road
+        if: always()
+        run: |
+          if [ -f build/amb-GH-dense-KMZ-segment-retry/summary.md ]; then
+            cat build/amb-GH-dense-KMZ-segment-retry/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit research-only differences and GH road candidates
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [ ! -f build/amb-GH-dense-KMZ-segment-retry/summary.json ]; then
+            echo "No research data to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/GH_dense_KMZ_shape_retry/
+            cp -a build/amb-GH-dense-KMZ-segment-retry/. sources/amb/GH_dense_KMZ_shape_retry/
+            git add sources/amb/GH_dense_KMZ_shape_retry/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: retry 42 mismatching bus road sections using denser KMZ anchors"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Archive dense-source waypoint geometry evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-KMZ-GH-42-geometry-retries
+          path: build/amb-GH-dense-KMZ-segment-retry/
+          if-no-files-found: warn
+          retention-days: 45
