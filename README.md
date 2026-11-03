@@ -28,6 +28,7 @@ De officiële AMB-resoluties gelden als onze leidende bron voor de **spits-/dalf
 ## Belangrijke bestanden
 
 - [Onderzoeksrapport GTFS-bouwketen](docs/gtfs_build_staging_progress_2026-11-03.md)
+- [Inventaris haltebronnen en nog ontbrekende TPC-stopdata](docs/stop_data_inventory_2026-11-03.md)
 - [Frequentiebron per GTFS-route](sources/amb/gtfs_staging/route_headway_candidates.csv)
 - [Voorgestelde weekdagperiodeblokken](sources/amb/gtfs_staging/weekday_period_staging.csv)
 - [34 routes met open punten](sources/amb/gtfs_staging/unresolved_route_issues.csv)
