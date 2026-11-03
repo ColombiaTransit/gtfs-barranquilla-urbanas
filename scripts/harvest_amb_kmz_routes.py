@@ -276,7 +276,7 @@ def main():
         "\nOriginele KMZ, geconverteerde GeoJSON en manifest bewaren de provenance en variant.\n"+
         "LET OP: "+str(summary["source_url_collision_groups"])+" gedeelde KMZ-URL's bij "+
         str(summary["source_url_collision_route_entries"])+" routelabels; zie source_url_collisions.csv. "+
-        "Deze mapping is NIET gevalideerd, ook als de KMZ downloadt.\\n"+
+        "Deze mapping is NIET gevalideerd, ook als de KMZ downloadt.\n"+
         "Historische geometrie: controleer tegen toepasselijke vergunning en SIU. "+
         "**Niet rechtstreeks naar GTFS shapes.txt publiceren.**\n", encoding="utf-8")
     print(json.dumps(summary,indent=2,ensure_ascii=False))
