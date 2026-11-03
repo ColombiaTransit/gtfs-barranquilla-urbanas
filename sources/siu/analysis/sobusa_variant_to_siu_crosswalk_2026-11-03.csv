@@ -1,0 +1,7 @@
+agency,official_route_id,legal_variant,legal_resolution,peak_headway_min,offpeak_headway_min,siu_listing_snapshot_utc,siu_operator_matches,siu_itinerary_uuid,siu_variant_match_status,external_route_direction_source,external_direction_count,external_direction_cannot_be_assumed_AB,gtfs_pattern_export_approved,verification_note
+SOBUSA,B18-4175,A,082-2026,10,12,2026-11-03T07:28:14Z,0,,not_available_in_current_public_SIU_snapshot,Moovit,2,yes,no,Do not infer AB from Moovit direction; 082-2026 replaces 466-2025 for B18
+SOBUSA,B18-4175,B,082-2026,10,12,2026-11-03T07:28:14Z,0,,not_available_in_current_public_SIU_snapshot,Moovit,2,yes,no,SIU 36 total and 33 non-test itineraries; SOBUSA absent
+SOBUSA,C12-4169,A,466-2025,6,9,2026-11-03T07:28:14Z,0,,not_available_in_current_public_SIU_snapshot,Moovit,2,yes,no,Legal A departs terminal via Via Granabastos; Moovit directions do not establish AB
+SOBUSA,C12-4169,B,466-2025,3,6,2026-11-03T07:28:14Z,0,,not_available_in_current_public_SIU_snapshot,Moovit,2,yes,no,Legal B departs terminal via Calle 58E; p9 has conflicting printed C12-4149
+SOBUSA,C16-4167,A,466-2025,7,9,2026-11-03T07:28:14Z,0,,not_available_in_current_public_SIU_snapshot,Moovit,2,yes,no,Legal A departs terminal via Via Granabastos
+SOBUSA,C16-4167,B,466-2025,7,9,2026-11-03T07:28:14Z,0,,not_available_in_current_public_SIU_snapshot,Moovit,2,yes,no,Legal B departs terminal via Calle 58E
