@@ -72,6 +72,17 @@ def main():
     geometries = [transform(to_utm, shape(f["geometry"])) for f in gis_features]
     tree = STRtree(geometries)
 
+    # Nearby tagged Transmetro points make untagged OSM candidates especially
+    # worth reviewing; proximity does not automatically mean same network.
+    explicit_tm = []
+    for entry in osm["elements"]:
+        if classify(entry.get("tags") or {}) != "transmetro_explicit":
+            continue
+        pos = entry if entry.get("type") == "node" else entry.get("center") or {}
+        if pos.get("lat") is not None and pos.get("lon") is not None:
+            explicit_tm.append(transform(to_utm, Point(float(pos["lon"]), float(pos["lat"]))))
+    tm_tree = STRtree(explicit_tm) if explicit_tm else None
+
     rows = []
     for entry in osm["elements"]:
         tags = entry.get("tags") or {}
@@ -86,6 +97,7 @@ def main():
         point = transform(to_utm, Point(float(lon), float(lat)))
         nearest_index = int(tree.nearest(point))
         nearest_distance = round(point.distance(geometries[nearest_index]), 1)
+        near_tm = round(point.distance(explicit_tm[int(tm_tree.nearest(point))]), 1) if tm_tree else None
         nearby_indices = tree.query(point.buffer(50))
         within50 = [
             gis_features[int(idx)]["properties"].get("Name", "")
@@ -107,6 +119,8 @@ def main():
             "boarding_candidate": str(boarding_candidate(tags, category)).lower(),
             "nearest_arcgis_route_code": gis_features[nearest_index]["properties"].get("Name", ""),
             "nearest_arcgis_distance_m": nearest_distance,
+            "nearest_tagged_transmetro_distance_m": near_tm,
+            "near_tagged_transmetro_50m": str(near_tm is not None and near_tm <= 50).lower(),
             "n_arcgis_route_features_within_50m": len(within50),
             "arcgis_route_names_within_50m": ";".join(sorted(set(within50))),
             "tpc_confirmed": "no",
@@ -158,6 +172,8 @@ def main():
         "unclassified_possible_boarding_locations": len(platforms),
         "unclassified_possible_boarding_locations_named": sum(bool(r["name"]) for r in platforms),
         "unclassified_possible_boarding_locations_within_50m": len(priority),
+        "unclassified_boarding_near_tagged_transmetro_50m":
+            sum(r["near_tagged_transmetro_50m"] == "true" for r in platforms),
         "unclassified_possible_boarding_locations_within_100m":
             sum(r["nearest_arcgis_distance_m"] <= 100 for r in platforms),
         "arcgis_reference_features": len(gis_features),
@@ -179,6 +195,7 @@ def main():
         f"| Daarvan stop_position | {summary['unclassified_stop_positions']} |",
         f"| Daarvan mogelijke instapplaats of platform | {len(platforms)} |",
         f"| Daarvan binnen 50 m van een GIS-route | {len(priority)} |",
+        f"| Mogelijke instapplaats binnen 50 m van expliciet Transmetro-punt | {summary['unclassified_boarding_near_tagged_transmetro_50m']} |",
         f"| Daarvan binnen 100 m | {summary['unclassified_possible_boarding_locations_within_100m']} |",
         f"| Bevestigde TPC-haltes | 0 |", "",
         "Geen onbevestigde stop wordt in GTFS stops.txt opgenomen.",
