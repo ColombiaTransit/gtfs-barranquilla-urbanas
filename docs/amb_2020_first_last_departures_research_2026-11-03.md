@@ -1,5 +1,7 @@
 # AMB TPC — eerste/laatste vertrekken op officiële routekaarten (juli 2020)
 
+> **Update 3 november 2026:** de gebruiker heeft de routegebonden tijden uit juli 2020 **geaccepteerd als voorlopig GTFS-model voor 2026**, met het uitgangspunt dat betere bronnen de aannames later per route kunnen vervangen. Zie [tijdvakkenmodel](amb_peak_offpeak_model_2026-11-03.md), [78 geaccepteerde dienstvensters](../sources/amb/amb_dispatch_window_assumptions_2026-11-03.csv) en [de 44-route-matching](../sources/amb/gtfs_route_service_windows_assumed_2026-11-03.csv). De oude kaarten blijven historisch bronmateriaal en worden niet ten onrechte aangeduid als actueel AMB-bevestigde tijden.
+
 **Onderzoeksdatum:** 3 november 2026. **Publicatiedatum van het artikel: 17 juli 2020** (WordPress `datePublished=2020-07-17T20:17:09+00:00`; later technisch gewijzigd op 6 maart 2025, maar deze kaarten dateren nog van juli 2020). **Primaire bron:** [AMB: Continúan las rutas y frecuencias del Transporte Público Colectivo](https://www.ambq.gov.co/continuan-las-rutas-y-frecuencias-del-transporte-publico-colectivo/).
 
 AMB publiceerde **24 afbeeldingskaarten** (WordPress uploads `2020/07`) met voor elke opgenomen route: **RUTA**, **NOMBRE CAMPO**, **PRIMER DESPACHO (AM)**, **ÚLTIMO DESPACHO (PM)**, **HORA PICO (MINUTOS)** en **HORA VALLE (MINUTOS)**. Een kaart kan meerdere routes bevatten.
