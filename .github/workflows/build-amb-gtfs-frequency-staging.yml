@@ -42,6 +42,7 @@ jobs:
           git add sources/amb/gtfs_staging/
           if ! git diff --cached --quiet; then
             git commit -m "data: refresh AMB staged frequency periods and unresolved route report"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
       - name: Upload staged GTFS inputs (not a GTFS feed)
