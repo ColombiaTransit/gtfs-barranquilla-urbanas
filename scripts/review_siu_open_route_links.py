@@ -22,6 +22,7 @@ REV=SIU/"gtfs_staging/siu_amb_route_crosswalk_review.csv"
 STOPS=SIU/"public_extract/siu_route_stop_sequences.csv"
 ROUTES=ROOT/"gtfs/routes.txt"
 PILOT=ROOT/"sources/amb/details/resolucion_256-2026.csv"
+PT_TERMINALS=ROOT/"sources/amb/details/coolitoral_192_2025_pt4_pt5_terminals_verified_2026-11-03.csv"
 
 def read(path):
     with path.open(newline="",encoding="utf-8-sig") as f:return list(csv.DictReader(f))
@@ -69,7 +70,7 @@ def pairwise_metrics(a,b):
 
 def run(out):
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
-    reviews=read(REV);routes=read(ROUTES);itinerary_stops=read(STOPS);legal=read(PILOT)
+    reviews=read(REV);routes=read(ROUTES);itinerary_stops=read(STOPS);legal=read(PILOT);verified_terminal_rows=read(PT_TERMINALS)
     assert len(reviews)==33,len(reviews)
     grouped=defaultdict(list)
     for s in itinerary_stops:
@@ -86,14 +87,24 @@ def run(out):
     for r in legal:
         pilot_bybase[r["codigo_base"]].append(r)
     assert set(pilot_bybase)=={"PT4-4104","PT5-4105"}
+    terminal_bybase={r["route_code"]:r for r in verified_terminal_rows}
+    assert set(terminal_bybase)=={"PT4-4104","PT5-4105"}
     assert all({r["itinerario"] for r in rs}=={"A","B"} for rs in pilot_bybase.values())
 
     # This is not inferred from GIS proximity: the *order of the terms* in
     # the SIU display name matches that of the curated resolution 256-2026
     # PT4 and PT5 'nombre_ruta'. A/B remains unknown for BOTH.
     title_order={
-       "VIA 40 CIRCUNVALAR":("PT4-4104","explicit_display_name_term_order_matches_256_2026_route_title"),
-       "CIRCUNVALAR VIA 40":("PT5-4105","explicit_display_name_term_order_matches_256_2026_route_title")
+       "VIA 40 CIRCUNVALAR":("PT4-4104","route_title_matches_192_2025_and_curated_256_2026"),
+       "CIRCUNVALAR VIA 40":("PT5-4105","route_title_matches_192_2025_and_curated_256_2026")
+    }
+    # Independent 192-2025 PDF terminal evidence points the OPPOSITE way:
+    # 'CIRCUNVALAR VIA 40' starts Calle 17, like 2025 PT4; 'VIA 40
+    # CIRCUNVALAR' starts Vía 40 like 2025 PT5. This is contradictory
+    # evidence, NOT a justified swap; pilot 256-2026 may change itineraries.
+    terminal_order={
+        "VIA 40 CIRCUNVALAR":"PT5-4105",
+        "CIRCUNVALAR VIA 40":"PT4-4104"
     }
     open_rows=[];proposals=[];proposals_stop_orders=[]
     by_uuid={r["siu_itinerary_uuid"]:r for r in reviews}
@@ -115,8 +126,8 @@ def run(out):
         one_company=len(company)==1
         status=it["route_match_status"]
         if special:
-            verdict="base_code_title_match_requires_current_legal_confirmation"
-            next_action="Confirm route PT4/PT5 title against original 256-2026 PDF, then determine A/B from official itinerary street sequence; do not assign both A/B from one SIU route."
+            verdict="title_vs_2025_terminal_conflict_requires_256_pdf"
+            next_action="SIU name matches 192/curated 256 title, but SIU first stop matches the opposite route's 192-2025 terminal. Read full 256-2026 pilot PDF to resolve base route first; then its A/B street sequences."
         elif not one_company:
             verdict="shared_operator_route_pattern_not_allocatable"
             next_action="Resolve operator-specific licensing and pattern/frequency shares; do not replicate one stop list to multiple companies."
@@ -143,6 +154,9 @@ def run(out):
           "legacy_gis_runner_up":it["second_gis_name"],
           "proposed_amb_base_code":base,
           "base_code_evidence":evidence,
+          "alternative_amb_base_by_2025_terminal":terminal_order.get(norm(name),""),
+          "independent_2025_terminal_evidence":terminal_bybase[terminal_order[norm(name)]]["official_dispatch_terminal"] if special else "",
+          "base_route_hypotheses_conflict":str(bool(special)).lower(),
           "possible_gtfs_route_ids":";".join(options),
           "resolved_amb_AB_itinerary":"",
           "can_assign_pattern_specific_GTFS_route_id":"no",
@@ -155,7 +169,7 @@ def run(out):
           "last_siu_lon":stopdata[-1]["stop_lon"] if stopdata else "",
           "source_siu_snapshot_utc":it["source_siu_snapshot_utc"],
           "source_amb_resolution":"256-2026" if special else "",
-          "source_legal_review_status":"curated_route_title_only_original_pdf_not_verified" if special else "no_specific_legal_text_verified",
+          "source_legal_review_status":"192_2025_primary_pdf_title_and_terminal_verified;256_2026_original_missing" if special else "no_specific_legal_text_verified",
           "next_manual_evidence":next_action,
           "final_legal_route_match_confirmed":"no",
         }
@@ -185,6 +199,9 @@ def run(out):
         "VIA 40 CIRCUNVALAR":"PT4-4104",
         "CIRCUNVALAR VIA 40":"PT5-4105"
     }
+    assert all(r["base_route_hypotheses_conflict"]=="true" and
+               r["proposed_amb_base_code"]!=r["alternative_amb_base_by_2025_terminal"]
+               for r in tp)
 
     names=["CIRCUNVALAR VIA 40","VIA 40 CIRCUNVALAR",
            "MIRAMAR ALAMEDA DEL RIO","LAS GAVIOTAS CALLE 76",
@@ -218,7 +235,8 @@ def run(out):
     writeout("provisional_base_route_stop_sequences_NO_TIMES.csv",proposals_stop_orders)
     writeout("selected_siu_sequence_pair_comparison.csv",comparisons)
     fields=["siu_itinerary_uuid","siu_name","proposed_amb_base_code","possible_gtfs_route_ids",
-            "source_amb_resolution","legal_A_B_itinerary",
+            "source_amb_resolution","title_based_candidate","terminal_based_candidate",
+            "official_192_terminal","legal_A_B_itinerary",
             "peak_minutes_each_AB","offpeak_minutes_each_AB","SIU_stop_count","review_status"]
     pt_rows=[]
     for r in tp:
@@ -228,18 +246,22 @@ def run(out):
             "siu_name":r["siu_name"],
             "proposed_amb_base_code":r["proposed_amb_base_code"],
             "possible_gtfs_route_ids":r["possible_gtfs_route_ids"],
-            "source_amb_resolution":"256-2026",
+            "source_amb_resolution":"256-2026 (curated);192-2025 (original PDF)",
+            "title_based_candidate":r["proposed_amb_base_code"],
+            "terminal_based_candidate":r["alternative_amb_base_by_2025_terminal"],
+            "official_192_terminal":r["independent_2025_terminal_evidence"],
             "legal_A_B_itinerary":"",
             "peak_minutes_each_AB":";".join(f'{x["itinerario"]}:{x["intervalo_pico_min"]}' for x in related),
             "offpeak_minutes_each_AB":";".join(f'{x["itinerario"]}:{x["intervalo_valle_min"]}' for x in related),
             "SIU_stop_count":r["siu_stop_count"],
-            "review_status":"route_base_text_order_only_no_AB_assignment"
+            "review_status":"contradicting_title_and_terminal_base_codes_AB_unknown"
         })
     write(out/"pt4_pt5_pilot_specific_review.csv",pt_rows,fields)
     statuses=dict(Counter(r["crosswalk_review_status"] for r in open_rows))
     summary={
        "siu_open_records_reviewed":len(open_rows),
        "PT4_PT5_base_route_title_matches":len(tp),
+       "PT4_PT5_terminal_conflicts_to_reconcile":len(tp),
        "PT4_PT5_AB_assignments_verified":0,
        "single_operator_single_route_base_proposals":len(proposals),
        "stop_occurrences_in_new_single_route_proposals":len(proposals_stop_orders),
@@ -258,13 +280,15 @@ def run(out):
     lines.extend(f"- {k}: {v}" for k,v in summary.items() if isinstance(v,(int,str)))
     lines+=["","## PT4/PT5 (source 256-2026)",""]
     for x in tp:
-        lines.append(f'- SIU **{x["siu_name"]}** ({x["siu_stop_count"]} stops) → '
-                     f'provisional legal **base route {x["proposed_amb_base_code"]}** '
-                     '(matching sequence of place names in the resolution title), '
-                     '**NOT** itinerary A/B and not fully source-verified.')
+        lines.append(f'- SIU **{x["siu_name"]}** ({x["siu_stop_count"]} stops): '
+                     f'**title suggests {x["proposed_amb_base_code"]}** while '
+                     f'**old terminal suggests {x["alternative_amb_base_by_2025_terminal"]}**. '
+                     'This contradiction blocks any base or A/B confirmation.')
     lines+=["","For PT4 and PT5, each of A and B has **9 min peak / 14 min offpeak** according to the curated resolution table. "
             "A/B refers to a licensed pattern, not automatically the SIU route's outbound/return half. "
             "A 2019 GIS line that matches at 100% to both routes does not disambiguate direction.",
+            "**The primary 192-2025 PDF has now been checked:** PT4 starts by Calle 17/Carrera 30 and PT5 by Vía 40 No. 51-310. "
+            "The original 256-2026 pilot PDF is needed to know whether these starting points changed.",
             "","## Other unresolved links",""]
     for x in open_rows:
         if x in tp:continue
