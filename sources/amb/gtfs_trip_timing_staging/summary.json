@@ -1,0 +1,28 @@
+{
+  "SIU_trip_patterns_reused": 20,
+  "SIU_ordered_stop_visits_in_model": 3981,
+  "distinct_physical_SIU_stops_referenced": 2394,
+  "trip_templates_with_official_headway_and_provisional_2020_service_window": 17,
+  "frequency_model_period_rows": 68,
+  "frequency_trip_template_staging_statuses": {
+    "ready_to_stage": 17,
+    "held_for_review": 3
+  },
+  "trip_patterns_with_large_source_stop_coordinate_gaps": 0,
+  "maximum_model_trip_duration_minutes": 336.6,
+  "timing_model_id": "AMB_RESEARCH_SPEED20_FACTOR1_25_DWELL10_V1",
+  "timing_parameters": {
+    "timing_model_id": "AMB_RESEARCH_SPEED20_FACTOR1_25_DWELL10_V1",
+    "avg_moving_speed_kmh": "20",
+    "distance_factor_for_between_stop_straight_lines": "1.25",
+    "dwell_seconds_per_stop": "10",
+    "minimum_stop_to_stop_seconds": "15",
+    "unusual_straight_line_gap_m": "2500",
+    "description": "Exploratory interpolation from source SIU consecutive stop GPS only; not official journey times and requires route-specific calibration",
+    "method_status": "NOT_FOR_PUBLICATION"
+  },
+  "real_runtimes_or_passage_times_observed": 0,
+  "trip_start_00_00_is_a_frequency_reference_not_actual_dispatch": true,
+  "GTFS_routes_or_stops_modified": false,
+  "GTFS_publication_approved": false
+}
