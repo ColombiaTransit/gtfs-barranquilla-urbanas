@@ -1,0 +1,47 @@
+name: Harvest official AMB route KMZ geometry
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/harvest_amb_kmz_routes.py
+      - .github/workflows/harvest-amb-kmz-routes.yml
+permissions:
+  contents: write
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public-page parser
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4
+      - name: Download and convert KMZ links from official AMB TPC routeviewer
+        run: python scripts/harvest_amb_kmz_routes.py --output build/amb-kmz
+      - name: Report import coverage
+        if: always()
+        run: |
+          if [ -f build/amb-kmz/summary.md ]; then cat build/amb-kmz/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Commit original KMZ and provisional GeoJSON source geometry
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/amb/kmz
+          cp -a build/amb-kmz/. sources/amb/kmz/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/amb/kmz
+          if ! git diff --cached --quiet; then
+            git commit -m "data: import official AMB KMZ shapes as research staging"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Upload original KMZ and extracted GeoJSON as job artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-amb-kmz-route-geometry
+          path: build/amb-kmz/
+          if-no-files-found: warn
+          retention-days: 45
