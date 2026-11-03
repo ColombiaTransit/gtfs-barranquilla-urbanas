@@ -1,0 +1,9 @@
+company,route_label,base_route_id_candidate,variant,kmz_url,sha256,issue,gtfs_shape_mapping_approved
+LA-CAROLINA,A16-4161 A,A16-4161,A,https://www.ambq.gov.co/ruta-de-buses/LA-CAROLINA/A16-4161%20A.kmz,48f2d504d1df0f27a2e07545d58875b16d58cb4dfa95a8a46763475d78d2f5c1,same_source_url_used_by_multiple_route_labels,no
+LA-CAROLINA,A16-4161 B,A16-4161,B,https://www.ambq.gov.co/ruta-de-buses/LA-CAROLINA/A16-4161%20A.kmz,48f2d504d1df0f27a2e07545d58875b16d58cb4dfa95a8a46763475d78d2f5c1,same_source_url_used_by_multiple_route_labels,no
+COOCHOFAL,C9-4140,C9-4140,,https://www.ambq.gov.co/ruta-de-buses/COOCHOFAL/C9-4140.kmz,cfb5140a3f7e360dfe0d4791ebe2c5efb6bc61efedf35c7ada8afcfdd6f71221,same_source_url_used_by_multiple_route_labels,no
+COOCHOFAL,C18-4141,C18-4141,,https://www.ambq.gov.co/ruta-de-buses/COOCHOFAL/C9-4140.kmz,cfb5140a3f7e360dfe0d4791ebe2c5efb6bc61efedf35c7ada8afcfdd6f71221,same_source_url_used_by_multiple_route_labels,no
+COOLITORAL,PT1-4101,PT1-4101,,https://www.ambq.gov.co/ruta-de-buses/COOLITORAL/PT1-4101.kmz,980cfa94668f42e87dc0de8441232ff59109aa8839053dffe4c5bab28339ad98,same_source_url_used_by_multiple_route_labels,no
+COOLITORAL,PT2-4102,PT2-4102,,https://www.ambq.gov.co/ruta-de-buses/COOLITORAL/PT1-4101.kmz,980cfa94668f42e87dc0de8441232ff59109aa8839053dffe4c5bab28339ad98,same_source_url_used_by_multiple_route_labels,no
+SODETRANS,B13-4128,B13-4128,,https://www.ambq.gov.co/ruta-de-buses/SODETRANS/B13-4128.kmz,141f1480851156654be76ceb54ff65886fee49545158fd5c6b2ebb43f8a33368,same_source_url_used_by_multiple_route_labels,no
+SODETRANS,B13-B-4189,B13-B-4189,,https://www.ambq.gov.co/ruta-de-buses/SODETRANS/B13-4128.kmz,141f1480851156654be76ceb54ff65886fee49545158fd5c6b2ebb43f8a33368,same_source_url_used_by_multiple_route_labels,no

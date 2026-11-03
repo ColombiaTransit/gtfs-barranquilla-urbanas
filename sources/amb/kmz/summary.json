@@ -1,6 +1,6 @@
 {
   "source_page": "https://www.ambq.gov.co/transporte/transporte-publico-colectivo/",
-  "snapshot_utc": "2026-11-03T10:02:28+00:00",
+  "snapshot_utc": "2026-11-03T10:10:34+00:00",
   "page_kmz_attributes": 93,
   "unique_route_files": 93,
   "companies": [
@@ -34,5 +34,8 @@
   "explicit_AB_variants": 16,
   "total_linestrings": 334,
   "total_line_vertices": 62419,
+  "unique_download_urls": 89,
+  "source_url_collision_groups": 4,
+  "source_url_collision_route_entries": 8,
   "gtfs_export_approved": false
 }
