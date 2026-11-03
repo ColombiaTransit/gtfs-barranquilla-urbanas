@@ -1,0 +1,18 @@
+{
+  "source_route_variants": 60,
+  "route_variants_with_geometric_stop_gaps_over_2km": 39,
+  "individual_stop_sequence_gaps_over_2km": 73,
+  "gap_classification_counts": {
+    "only_opposite_direction_source_stops_nearby": 17,
+    "no_source_SIU_stop_on_this_corridor": 38,
+    "nearby_existing_SIU_stops_outside_25m_limit": 18
+  },
+  "possible_nearby_SIU_candidates_for_review": 111,
+  "routes_with_geometry_edges_longer_than_800m": 25,
+  "geometry_edges_longer_than_800m": 59,
+  "route_variants_with_multiple_shape_components": 3,
+  "component_near_endpoint_pairs_within_80m": 9,
+  "new_boarding_stops_or_stop_times_generated": 0,
+  "existing_trip_stop_orders_modified": false,
+  "autoroute_component_stitching_performed": false
+}

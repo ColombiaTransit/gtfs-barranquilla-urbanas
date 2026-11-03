@@ -1,0 +1,61 @@
+company,route_label,route_shape_source,gaps_over_2km,largest_between_stop_shape_gap_m,long_raw_geometry_edges_over_800m,component_count,priority,qa_flags,model_ready_for_graphhopper_without_manual_validation,stop_service_is_confirmed
+COOTRANTICO,B4-4120,AMB_KMZ_2026,3,22363.0,2,1,P1_source_or_segment_problem,gap_exceeds_5km;long_shape_coordinate_edges,no,no
+LOLAYA,B10-4126,AMB_KMZ_2026,2,11254.1,1,1,P1_source_or_segment_problem,gap_exceeds_5km;long_shape_coordinate_edges,no,no
+TRASALIANCO,D18-4179,AMB_KMZ_2026,3,8433.5,4,1,P1_source_or_segment_problem,gap_exceeds_5km;long_shape_coordinate_edges,no,no
+SOBUSA,B18-4175 B,AMB_KMZ_2026,4,8223.9,3,1,P1_source_or_segment_problem,gap_exceeds_5km;long_shape_coordinate_edges;official_B18_AB_lengths_suggest_source_label_swap,no,no
+SOBUSA,C16-4167 B,AMB_KMZ_2026,2,5981.1,2,1,P1_source_or_segment_problem,gap_exceeds_5km;long_shape_coordinate_edges,no,no
+SOBUSA,C14-4170,AMB_KMZ_2026,1,5973.2,0,1,P1_source_or_segment_problem,gap_exceeds_5km,no,no
+SOBUSA,C16-4167 A,AMB_KMZ_2026,1,5965.4,2,1,P1_source_or_segment_problem,gap_exceeds_5km;long_shape_coordinate_edges,no,no
+SOBUSA,C11-4168,AMB_KMZ_2026,1,5954.9,0,1,P1_source_or_segment_problem,gap_exceeds_5km,no,no
+SOBUSA,B18-4175 A,AMB_KMZ_2026,3,5769.2,2,1,P1_source_or_segment_problem,gap_exceeds_5km;long_shape_coordinate_edges;official_B18_AB_lengths_suggest_source_label_swap,no,no
+COOLITORAL,PT2-4102,ARCGIS_2019_2023_FALLBACK,2,2360.3,1,4,P1_source_or_segment_problem,fragmented_route_geometry;gap_exceeds_2km;long_shape_coordinate_edges;official_AMB_source_URL_collision,no,no
+COOLITORAL,A4-4109,AMB_KMZ_2026,0,0,0,6,P1_source_or_segment_problem,fragmented_route_geometry,no,no
+LOLAYA,D8-4165,ARCGIS_2019_2023_FALLBACK,0,0,0,7,P1_source_or_segment_problem,fragmented_route_geometry,no,no
+COOTRANSNORTE,A5-4110,AMB_KMZ_2026,1,4282.7,0,1,P2_gap_review,gap_exceeds_2km,no,no
+LOLAYA,B10-B-4193,AMB_KMZ_2026,4,4195.4,3,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+MONTERREY,B11-4166,AMB_KMZ_2026,2,4058.3,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOASOATLAN,C1-4132,AMB_KMZ_2026,2,3952.7,1,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+COOCHOFAL,C3-4134,AMB_KMZ_2026,2,3634.0,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOTRASOL,D4-4148,AMB_KMZ_2026,2,3595.6,2,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+COOCHOFAL,C2-4133,AMB_KMZ_2026,1,3553.1,2,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+TRANSDIAZ,B16-4130,AMB_KMZ_2026,1,3383.8,0,1,P2_gap_review,gap_exceeds_2km,no,no
+TRANSMECAR,D11-4153,AMB_KMZ_2026,3,3257.6,0,1,P2_gap_review,gap_exceeds_2km,no,no
+SOBUSA,C12-4169 B,AMB_KMZ_2026,2,3163.1,0,1,P2_gap_review,gap_exceeds_2km,no,no
+SOBUSA,C12-4169 A,AMB_KMZ_2026,1,3155.8,0,1,P2_gap_review,gap_exceeds_2km,no,no
+TRANSOLEDAD,D13-4155,AMB_KMZ_2026,5,2854.0,4,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+TRANSDIAZ,A11-4115,AMB_KMZ_2026,3,2807.5,1,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+COOTRANSPORCAR,C8-4139,AMB_KMZ_2026,2,2781.8,1,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+TRANSMECAR,C17-4160,AMB_KMZ_2026,2,2766.1,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOTRANTICO,B5-B-4190,AMB_KMZ_2026,2,2704.6,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOASOATLAN,C20-4181,AMB_KMZ_2026,1,2626.7,3,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+COOASOATLAN,C1-B-4186,AMB_KMZ_2026,1,2602.2,3,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+SOBUSA,C13-4143,AMB_KMZ_2026,1,2512.9,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOTRANTICO,B20-B-4191,AMB_KMZ_2026,1,2478.3,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOLITORAL,A3-4108,AMB_KMZ_2026,1,2421.1,0,1,P2_gap_review,gap_exceeds_2km,no,no
+TRASALIANCO,B19-4176,AMB_KMZ_2026,1,2333.8,0,1,P2_gap_review,gap_exceeds_2km,no,no
+TRASALFA,B2-B-4118,AMB_KMZ_2026,2,2303.7,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOTRANTICO,B7-4123,AMB_KMZ_2026,1,2177.9,3,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+COOTRASOL,D5-4149,AMB_KMZ_2026,2,2156.0,0,1,P2_gap_review,gap_exceeds_2km,no,no
+SODETRANS,B15-4129 B,AMB_KMZ_2026,2,2139.6,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOLITORAL,B1-4117,AMB_KMZ_2026,1,2134.5,2,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+COOTRANTICO,B20-4180,AMB_KMZ_2026,1,2123.7,0,1,P2_gap_review,gap_exceeds_2km,no,no
+COOLITORAL,A1-4106 B,AMB_KMZ_2026,1,2045.6,6,1,P2_gap_review,gap_exceeds_2km;long_shape_coordinate_edges,no,no
+COOASOATLAN,C20-B-4187,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+COOCHOFAL,A15-4159,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+COOCHOFAL,C9-4140,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,official_AMB_source_URL_collision,no,no
+COOCHOFAL,D20-4185,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+COOLITORAL,A1-4106 A,AMB_KMZ_2026,0,0,6,1,P3_routine_geography_review,long_shape_coordinate_edges,no,no
+COOLITORAL,A2-4107,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+COOTRANSCO,C7-4138,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+COOTRANSNORTE,A6-4111,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+COOTRANTICO,A18-4183,AMB_KMZ_2026,0,0,1,1,P3_routine_geography_review,long_shape_coordinate_edges,no,no
+COOTRANTICO,B5-4121,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+COOTRANTICO,B6-4122,AMB_KMZ_2026,0,0,1,1,P3_routine_geography_review,long_shape_coordinate_edges,no,no
+COOTRASOL,D3-4147,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+FLOTA-ROJA,A8-4113,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+SODETRANS,B14-4174,AMB_KMZ_2026,0,0,1,1,P3_routine_geography_review,long_shape_coordinate_edges,no,no
+SODETRANS,B15-4129 A,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+TRANSMECAR,D10-4172,AMB_KMZ_2026,0,0,2,1,P3_routine_geography_review,long_shape_coordinate_edges,no,no
+TRANSMECAR,D9-4152,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+TRASALIANCO,D12-4154,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
+TRASALIANCO,D17-4158,AMB_KMZ_2026,0,0,0,1,P3_routine_geography_review,,no,no
