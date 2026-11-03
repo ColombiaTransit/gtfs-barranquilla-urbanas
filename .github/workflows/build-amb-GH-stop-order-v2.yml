@@ -1,0 +1,62 @@
+name: Build provisional stop sequence v2 with 65 GraphHopper candidates
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/build_amb_provisional_GH_stop_order_v2.py
+      - .github/workflows/build-amb-GH-stop-order-v2.yml
+      - sources/amb/graphhopper_stop_classification/GH_bus_stop_candidate_decisions_125.csv
+      - sources/amb/missing_siu_trip_stop_patterns/candidate_stop_order_per_trip_NO_TIMES.csv
+permissions:
+  contents: write
+concurrency:
+  group: amb-GH-stop-order-v2-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile builder
+        run: python -m py_compile scripts/build_amb_provisional_GH_stop_order_v2.py
+      - name: Build full 9000+65 shared-SIU-stop trip sequence draft
+        run: python scripts/build_amb_provisional_GH_stop_order_v2.py
+      - name: Display totals and data quality observations
+        if: always()
+        run: |
+          if [ -f build/amb-provisional-trip-stop-order-v2/summary.md ]; then
+            cat build/amb-provisional-trip-stop-order-v2/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit independent v2 research staging only
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/provisional_trip_stop_order_v2/
+            cp -a build/amb-provisional-trip-stop-order-v2/. sources/amb/provisional_trip_stop_order_v2/
+            git add sources/amb/provisional_trip_stop_order_v2/
+            if git diff --cached --quiet; then
+              exit 0
+            fi
+            git commit -m "data: stage v2 trip stop sequences with 65 GH candidates and no times"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+      - name: Archive v2 mapping and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provisional-AMB-trip-stop-sequences-v2
+          path: build/amb-provisional-trip-stop-order-v2/
+          if-no-files-found: warn
+          retention-days: 45
