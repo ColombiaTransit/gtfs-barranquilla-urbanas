@@ -65,7 +65,21 @@ class Client:
         self.info_url,self.route_url=endpoints(base)
         self.timeout=timeout
         self.session=requests.Session()
-        self.session.headers.update({"User-Agent":"ColombiaTransit-GTFS-GH-bus-research","Accept":"application/json"})
+        self.session.headers.update({
+            # Cloudflare-fronted self-hosted GraphHopper: use normal browser request
+            # headers for both /info and /route, while retaining a single session.
+            # A browser User-Agent alone cannot solve a JavaScript challenge.
+            "User-Agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+            ),
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Dest": "empty",
+        })
         self.route_queries=0
         self.info_queries=0
     def _call(self,kind,url,payload=None):
