@@ -242,6 +242,27 @@ def run(out):
     write(out/"siu_amb_route_crosswalk_review.csv",crosswalk,list(crosswalk[0]))
     write(out/"candidate_stops.csv",stops,list(stops[0]))
     write(out/"siu_stop_occurrence_crosswalk.csv",seq,list(seq[0]))
+    # These previews are GTFS-shaped but not a publishable stops.txt/feed.
+    preview_stops=[
+        {k:r[k] for k in ("stop_id","stop_name","stop_lat","stop_lon","location_type")}
+        for r in stops
+    ]
+    write(out/"stops_draft_NOT_FOR_PUBLICATION.txt",preview_stops,
+          ["stop_id","stop_name","stop_lat","stop_lon","location_type"])
+    matched_stop_orders=[
+        {"route_id":r["proposed_gtfs_route_id"],
+         "siu_itinerary_uuid":r["siu_itinerary_uuid"],
+         "stop_sequence":r["stop_sequence"],
+         "stop_id":r["candidate_stop_id"],
+         "stop_name":r["stop_name_source"],
+         "status":"provisional_route_mapping_not_stop_times",
+         "trip_id":"","arrival_time":"","departure_time":""}
+        for r in seq if r["proposed_gtfs_route_id"]
+    ]
+    write(out/"candidate_route_stop_orders_NO_TIMES.csv",matched_stop_orders,
+          ["route_id","siu_itinerary_uuid","stop_sequence","stop_id","stop_name",
+           "status","trip_id","arrival_time","departure_time"])
+
     write(out/"coincident_different_name_review.csv",conflicts,
           list(conflicts[0]) if conflicts else ["stop_lat","stop_lon","candidate_stop_ids","distinct_stop_names","manual_review_reason","auto_merged"])
     summary={
@@ -250,6 +271,8 @@ def run(out):
         "siu_stop_occurrences_regular":len(seq),
         "conservatively_deduplicated_candidate_stops":len(stops),
         "stop_records_merged_to_existing_candidate":len(seq)-len(stops),
+        "provisionally_linked_route_stop_occurrences":len(matched_stop_orders),
+        "provisionally_linked_distinct_stop_ids":len({r["stop_id"] for r in matched_stop_orders}),
         "different_name_same_rounded_coordinate_review":len(conflicts),
         "high_confidence_provisional_route_code_links":types["high_confidence_provisional"],
         "route_code_links_held_for_review":len(crosswalk)-types["high_confidence_provisional"],
@@ -265,6 +288,7 @@ def run(out):
            f"**{len(crosswalk)} non-test SIU itineraries**, {len(seq)} ordered stop visits.",
            f"**{len(stops)} candidate physical stops** grouped only by SAME direction-preserving normalized name and all points within {MAX_MERGE_METERS}m.",
            f"**{len(conflicts)} same-coordinate/different-name cases left separate**.",
+           f"**{len(matched_stop_orders)} stop visits have a provisional AMB route ID**, with no timetable fields.",
            f"**{types['high_confidence_provisional']} high-confidence geographic/operator route links**; NO legal code mappings automatically confirmed.",
            "", "Route crosswalk status:"]
     lines.extend(f"- {k}: {v}" for k,v in sorted(types.items()))
