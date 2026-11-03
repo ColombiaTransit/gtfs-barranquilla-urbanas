@@ -63,14 +63,20 @@ def links_from_html(source):
     return out
 
 def possible_urls(raw, company):
+    # AMB page data-kmz stores paths such as "SOBUSA/C12-4169 A.kmz",
+    # relative to /ruta-de-buses/, NOT relative to the HTML page.
     if raw.startswith(("https://", "http://", "/")):
         options = [urljoin(PAGE, raw)]
     else:
         options = []
-        if company and "/" not in raw:
+        relative = raw.lstrip("./")
+        if relative.startswith(("ruta-de-buses/", "rutas-de-buses/")):
+            options.append("https://www.ambq.gov.co/" + relative)
+        else:
             for directory in ("ruta-de-buses", "rutas-de-buses"):
-                options.append("https://www.ambq.gov.co/" + directory + "/" + company + "/" + raw)
-        options.append(urljoin(PAGE, raw))
+                suffix = relative if "/" in relative else company + "/" + relative if company else relative
+                options.append("https://www.ambq.gov.co/" + directory + "/" + suffix)
+        options.append(urljoin(PAGE, relative))
     result = []
     for link in options:
         s = urlsplit(link)
