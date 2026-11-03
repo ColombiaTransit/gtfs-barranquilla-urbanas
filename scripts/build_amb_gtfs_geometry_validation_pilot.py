@@ -312,7 +312,7 @@ def main():
         "demonstration_patterns_included":len(eligible),
         "patterns_excluded_without_real_route_id":len(missing_routes),
         "A_B_variant_route_ids_fixed_using_existing_routes_txt":sum(
-            x["route_id"] and x["route_id"]!=x["source_route_id_proposed"] for x in lookup),
+            bool(x["route_id"]) and x["route_id"]!=x["source_route_id_proposed"] for x in lookup),
         "GTFS_agencies":len(used_agencies),
         "GTFS_routes":len(used_routes),
         "GTFS_stops":len(used_stops),
