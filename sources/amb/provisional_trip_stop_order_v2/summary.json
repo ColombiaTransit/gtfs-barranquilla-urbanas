@@ -2,7 +2,7 @@
   "existing_route_stop_visits_preserved": 9000,
   "new_GH_addition_candidate_visits": 65,
   "concept_route_stop_visits_total": 9065,
-  "unique_existing_SIU_physical_stop_ids_newly_referenced": 50,
+  "distinct_existing_SIU_stop_ids_among_65_added_visits": 50,
   "affected_trip_patterns": 19,
   "affected_route_variants": 19,
   "trip_patterns_with_existing_sequence": 70,
