@@ -36,6 +36,7 @@ jobs:
           git add sources/amb/arcgis_shape_staging/
           if ! git diff --cached --quiet; then
             git commit -m "data: refresh 2023 ArcGIS candidate routes and coverage audit"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
       - name: Upload source geojson and shape match reports
