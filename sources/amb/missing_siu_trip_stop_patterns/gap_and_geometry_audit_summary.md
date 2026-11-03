@@ -10,6 +10,7 @@ Een nabije SIU-halte op een andere route bewijst bovendien niet dat de nieuwe li
 - route_variants_with_geometric_stop_gaps_over_2km: **39**
 - individual_stop_sequence_gaps_over_2km: **73**
 - possible_nearby_SIU_candidates_for_review: **111**
+- mapped_gap_corridor_geojson_features: **73**
 - routes_with_geometry_edges_longer_than_800m: **25**
 - geometry_edges_longer_than_800m: **59**
 - route_variants_with_multiple_shape_components: **3**
@@ -23,6 +24,13 @@ Een nabije SIU-halte op een andere route bewijst bovendien niet dat de nieuwe li
 - no_source_SIU_stop_on_this_corridor: 38
 - nearby_existing_SIU_stops_outside_25m_limit: 18
 - only_opposite_direction_source_stops_nearby: 17
+
+## Geografische inspectie
+
+- gap_corridors_for_review.geojson: elk geclassificeerd trajectgedeelte als officiële bronlijn tussen opeenvolgende kandidaat-haltes.
+- SIU_stop_alternatives_inside_gaps_REVIEW_ONLY.geojson: nabije, NIET toegevoegde alternatieve bestaande SIU-haltes.
+- De geometrie is een onderzoekscorridor: dit is geen GraphHopper-wegroutering, geen busstopbewijs en geen nieuwe GTFS shape.
+
 
 ## Gefragmenteerde routes
 

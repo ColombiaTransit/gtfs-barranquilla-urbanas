@@ -8,6 +8,7 @@
     "nearby_existing_SIU_stops_outside_25m_limit": 18
   },
   "possible_nearby_SIU_candidates_for_review": 111,
+  "mapped_gap_corridor_geojson_features": 73,
   "routes_with_geometry_edges_longer_than_800m": 25,
   "geometry_edges_longer_than_800m": 59,
   "route_variants_with_multiple_shape_components": 3,
