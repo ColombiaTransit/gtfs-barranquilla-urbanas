@@ -2,9 +2,11 @@
 
 **Bronpeildatum:** 2 november 2026. **Technische bron:** GitHub Actions-run [41480204032](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41480204032), artifact `amb-pdf-SOBUSA`. **Manifest:** 21 documenten. Deze gegevens zijn **vergunningsparameters**, geen aangetoonde uitvoering van de actuele dienstregeling.
 
+**Update 3 november 2026 — SOBUSA 307-2014 teruggevonden.** [20 pagina's bronanalyse](../sobusa_307_2014_analysis_2026-11-03.md) | [zes historische routefrequenties (CSV)](../../sources/amb/sobusa_307_2014_historical_route_parameters.csv). De 2014-lacune is opgelost. Voertuigcapaciteit blijft buiten GTFS-scope.
+
 ## Inhoudelijke uitkomst
 
-466-2025 wijzigt zes routes, vlootmatrix totaal 381–456; 082-2026 wijzigt B18 naar twee itinerarios A/B, elk 10/12 minuten, gezamenlijk 5/6 op drukste traject. 307-2014 PDF was 404.
+466-2025 wijzigt zes routes, vlootmatrix totaal 381–456; 082-2026 wijzigt B18 naar twee itinerarios A/B, elk 10/12 minuten, gezamenlijk 5/6 op drukste traject. 307-2014 was eerder 404, maar de **volledige originele PDF is op 3-11-2026 hersteld en met 20/20 pagina's geëxtraheerd**; zie [aparte juridische/frequentieanalyse](../sobusa_307_2014_analysis_2026-11-03.md). De zes intervallen uit 2014 zijn uitsluitend historische vergunningswaarden, geen actuele GTFS-vervangingen.
 
 **Belangrijkste onderzochte besluiten:** 466-2025 en B18-wijziging 082-2026.
 
@@ -52,7 +54,7 @@ De bronbestanden zijn technisch geëxtraheerd, behalve specifieke mislukte downl
 
 ## Ontbrekend werk (zelfstandig vervolg)
 
-- SOB-01 307-2014 404 herstel
+- SOB-01 307-2014 opgelost; historische juridische werking vergelijken
 - SOB-02 artikelketen 173/225/466-2025 versus 082-2026
 - SOB-03 pattern-varianten C12/C16 en B18 nauwkeurig uiteenhouden
 - SOB-04 actuele rittenkalender en haltes.
