@@ -1,0 +1,15 @@
+{
+  "original_MobilityData_route_order_warnings": 4,
+  "unsafe_MobilityData_route_order_warnings": 32,
+  "route_patterns_with_new_warnings_guarded": 28,
+  "original_GH_bus_road_sections": 352,
+  "initial_GH_road_sections_that_improved_stop_shape": 110,
+  "initial_GH_road_sections_on_problem_routes": 56,
+  "individual_MobilityData_probe_runs": 56,
+  "stop_aware_road_sections_still_approved": 79,
+  "road_sections_reverted_for_order_safety": 31,
+  "GH_bus_sections_accepted_as_better_road_candidates": 79,
+  "source_GTFS_stop_sequence_unchanged": true,
+  "actual_route_stop_service_confirmed": false,
+  "unverified_GH_geometry_automatically_published": false
+}

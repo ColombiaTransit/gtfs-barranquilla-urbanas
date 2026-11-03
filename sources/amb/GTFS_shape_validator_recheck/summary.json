@@ -1,0 +1,18 @@
+{
+  "validator_version_before": "8.0.1",
+  "validator_version_after": "8.0.1",
+  "baseline_validation_errors": 0,
+  "new_validation_errors": 0,
+  "baseline_warnings_total": 2615,
+  "new_warnings_total": 2436,
+  "before_stop_to_shape_over_100m_count": 249,
+  "after_stop_to_shape_over_100m_count": 67,
+  "resolved_stop_to_shape_over_100m_warnings": 182,
+  "before_stop_match_out_of_order_warnings": 4,
+  "after_stop_match_out_of_order_warnings": 4,
+  "road_sections_selected_as_improved_candidates": 79,
+  "validated_reduction_without_new_order_warnings": true,
+  "stop_id_or_stop_sequence_modified": false,
+  "full_final_real_operator_feed_created": false,
+  "fully_publishable": false
+}

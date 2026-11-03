@@ -1,0 +1,9 @@
+notice_code,severity,before,after,difference
+equal_shape_distance_diff_coordinates_distance_below_threshold,WARNING,5,8,3
+future_calendar,INFO,1,1,0
+missing_recommended_file,WARNING,1,1,0
+mixed_case_recommended_field,WARNING,2354,2354,0
+stop_has_too_many_matches_for_shape,WARNING,1,1,0
+stop_too_far_from_shape,WARNING,249,67,-182
+stops_match_shape_out_of_order,WARNING,4,4,0
+trip_coverage_not_active_for_next7_days,WARNING,1,1,0
