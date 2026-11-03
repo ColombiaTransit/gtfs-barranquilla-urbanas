@@ -1,0 +1,617 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5661381726,
+        "name": "Parada Bus",
+        "nearest_arcgis_route_code": "C20-B-4187",
+        "nearest_arcgis_distance_m": 1.1,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8004033,
+          10.9841971
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 6903840204,
+        "name": "",
+        "nearest_arcgis_route_code": "B13-4128",
+        "nearest_arcgis_distance_m": 23.7,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8516232,
+          11.0171393
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 6903842956,
+        "name": "",
+        "nearest_arcgis_route_code": "B13-4128",
+        "nearest_arcgis_distance_m": 51.3,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8517272,
+          11.0169014
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7685394710,
+        "name": "",
+        "nearest_arcgis_route_code": "B13-4128",
+        "nearest_arcgis_distance_m": 174.3,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8612601,
+          11.0161051
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7685394711,
+        "name": "",
+        "nearest_arcgis_route_code": "B13-4128",
+        "nearest_arcgis_distance_m": 151.8,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8612654,
+          11.0163587
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10905979105,
+        "name": "",
+        "nearest_arcgis_route_code": "C8-4139",
+        "nearest_arcgis_distance_m": 5.0,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.7780996,
+          10.9418588
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12123155924,
+        "name": "",
+        "nearest_arcgis_route_code": "C21-4182",
+        "nearest_arcgis_distance_m": 1222.3,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8966014,
+          11.0119562
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12123155942,
+        "name": "",
+        "nearest_arcgis_route_code": "C21-4182",
+        "nearest_arcgis_distance_m": 1292.1,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8971942,
+          11.0116783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12479678221,
+        "name": "Carrera 3a No. 65-215 C.R. Naos",
+        "nearest_arcgis_route_code": "C12-4169",
+        "nearest_arcgis_distance_m": 161.1,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8053302,
+          10.8866914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12670418970,
+        "name": "",
+        "nearest_arcgis_route_code": "D6-4150",
+        "nearest_arcgis_distance_m": 10.2,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8424057,
+          11.0166497
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12675445655,
+        "name": "",
+        "nearest_arcgis_route_code": "A14-4116 NUEVA",
+        "nearest_arcgis_distance_m": 3.1,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.7954265,
+          10.9973185
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714746350,
+        "name": "",
+        "nearest_arcgis_route_code": "A2-4107",
+        "nearest_arcgis_distance_m": 9.0,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8335118,
+          11.0170229
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714767789,
+        "name": "",
+        "nearest_arcgis_route_code": "PT1-4101",
+        "nearest_arcgis_distance_m": 11216.4,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.0074115,
+          10.9438496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714770796,
+        "name": "",
+        "nearest_arcgis_route_code": "PT1-4101",
+        "nearest_arcgis_distance_m": 16836.5,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.0466935,
+          10.8919072
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714770797,
+        "name": "",
+        "nearest_arcgis_route_code": "PT1-4101",
+        "nearest_arcgis_distance_m": 16848.3,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.0467022,
+          10.891657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714777467,
+        "name": "",
+        "nearest_arcgis_route_code": "PT1-4101",
+        "nearest_arcgis_distance_m": 11265.2,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.0078148,
+          10.9433117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714794638,
+        "name": "",
+        "nearest_arcgis_route_code": "A6-4111",
+        "nearest_arcgis_distance_m": 0.9,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8581342,
+          11.031126
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714794639,
+        "name": "",
+        "nearest_arcgis_route_code": "B18-4175",
+        "nearest_arcgis_distance_m": 24.4,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8584919,
+          11.0309154
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714794841,
+        "name": "",
+        "nearest_arcgis_route_code": "A14-4116 NUEVA",
+        "nearest_arcgis_distance_m": 7.0,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8002088,
+          11.0038047
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714794842,
+        "name": "",
+        "nearest_arcgis_route_code": "A14-4116 NUEVA",
+        "nearest_arcgis_distance_m": 9.1,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8009823,
+          11.0048691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714801700,
+        "name": "",
+        "nearest_arcgis_route_code": "PT1-4101",
+        "nearest_arcgis_distance_m": 6281.4,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.9447916,
+          10.9929876
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714820591,
+        "name": "",
+        "nearest_arcgis_route_code": "C21-4182",
+        "nearest_arcgis_distance_m": 4042.9,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.9212854,
+          11.0043576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714827365,
+        "name": "",
+        "nearest_arcgis_route_code": "C13-4143",
+        "nearest_arcgis_distance_m": 8.8,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.7866962,
+          10.9282744
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714832556,
+        "name": "",
+        "nearest_arcgis_route_code": "C21-4182",
+        "nearest_arcgis_distance_m": 4035.4,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.9211493,
+          11.0041325
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714839501,
+        "name": "",
+        "nearest_arcgis_route_code": "C21-4182",
+        "nearest_arcgis_distance_m": 3391.9,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.9159592,
+          11.0075632
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12714839502,
+        "name": "",
+        "nearest_arcgis_route_code": "C21-4182",
+        "nearest_arcgis_distance_m": 3380.0,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.915801,
+          11.0073618
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12810424983,
+        "name": "Carrera 58 con calle 68",
+        "nearest_arcgis_route_code": "B6-4122",
+        "nearest_arcgis_distance_m": 2.4,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.7966116,
+          10.9986465
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13477871084,
+        "name": "",
+        "nearest_arcgis_route_code": "C12-4169",
+        "nearest_arcgis_distance_m": 8.7,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.7888663,
+          10.9875544
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13477950378,
+        "name": "",
+        "nearest_arcgis_route_code": "C8-4139",
+        "nearest_arcgis_distance_m": 3.0,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8061247,
+          10.9935606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1298935337,
+        "name": "",
+        "nearest_arcgis_route_code": "A18-4183",
+        "nearest_arcgis_distance_m": 131.2,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.7717027,
+          10.9852235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1298936511,
+        "name": "",
+        "nearest_arcgis_route_code": "D15-4157",
+        "nearest_arcgis_distance_m": 52.6,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8077202,
+          10.994671
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1298946654,
+        "name": "",
+        "nearest_arcgis_route_code": "B5-B-4190",
+        "nearest_arcgis_distance_m": 100.9,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.7713471,
+          10.9852784
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1299156880,
+        "name": "",
+        "nearest_arcgis_route_code": "D15-4157",
+        "nearest_arcgis_distance_m": 39.7,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8079469,
+          10.9945198
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1299156881,
+        "name": "",
+        "nearest_arcgis_route_code": "D15-4157",
+        "nearest_arcgis_distance_m": 39.7,
+        "tpc_confirmed": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.8077189,
+          10.9949025
+        ]
+      }
+    }
+  ]
+}
