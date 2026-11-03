@@ -1,0 +1,42 @@
+name: Build AMB GTFS frequency staging
+on:
+  push:
+    paths:
+      - scripts/build_gtfs_frequency_staging.py
+      - .github/workflows/build-amb-gtfs-frequency-staging.yml
+      - sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv
+      - sources/amb/amb_dispatch_window_assumptions_2026-11-03.csv
+      - sources/amb/coolitoral_latest_route_parameters_2026-11-02.csv
+      - sources/amb/cootrab_latest_route_parameters_2026-11-02.csv
+      - sources/amb/cootransnorte_latest_route_parameters_2026-11-02.csv
+      - sources/amb/cootrantico_latest_route_parameters_2026-11-02.csv
+      - sources/amb/cootrasol_route_parameters_2026-11-02.csv
+      - sources/amb/details/**
+      - gtfs/routes.txt
+      - gtfs/agency.txt
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate research route and agency IDs
+        run: python scripts/validate_research.py
+      - name: Create headway staging and unresolved route report
+        run: python scripts/build_gtfs_frequency_staging.py --out build/gtfs-frequency-staging
+      - name: Write GitHub summary
+        run: cat build/gtfs-frequency-staging/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload staged GTFS inputs (not a GTFS feed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-gtfs-frequency-staging
+          path: build/gtfs-frequency-staging/
+          if-no-files-found: warn
+          retention-days: 45
