@@ -29,6 +29,7 @@ CAND=ROOT/"sources/amb/gap_direction_staging"
 STOPS=ROOT/"sources/siu/gtfs_staging/candidate_stops.csv"
 DEFAULT_OUT=ROOT/"build/amb-graphhopper-bus-direction-QA"
 PROJECT=Transformer.from_crs("EPSG:4326","EPSG:32618",always_xy=True)
+BACK=Transformer.from_crs("EPSG:32618","EPSG:4326",always_xy=True)
 
 def read_csv(path):
     with path.open(encoding="utf-8-sig",newline="") as f:
@@ -132,6 +133,18 @@ def path_similarity(result,expected):
         "fraction_GH_path_within_50m_KMZ":round(sum(x<=50 for x in dist)/len(dist),3)
     }
 
+def constrained_anchor_points(line,maximum=12):
+    """Use intermediary KMZ waypoints to prevent shortest-path shortcuts across loops."""
+    n=min(maximum+1,max(2,math.ceil(line.length/700)))
+    positions=[line.length*i/n for i in range(1,n)]
+    points=[list(BACK.transform(*line.interpolate(d).coords[0])) for d in positions]
+    return positions,points
+
+def via_anchor_points(a,b,positions,anchors,stop,along_m):
+    items=list(zip(positions,anchors))+[(along_m,stop)]
+    items.sort(key=lambda pair:pair[0])
+    return [a]+[point for _,point in items]+[b]
+
 def load_inputs():
     gaps=read_csv(CAND/"gap_review_with_existing_OSM_snapshot.csv")
     candidates=read_csv(CAND/"existing_SIU_OSM_direction_candidates_for_GraphHopper.csv")
@@ -209,6 +222,10 @@ def main():
         base_distance=ab["distance_m"] if ab else None
         reverse_distance=ba["distance_m"] if ba else None
         off_reference=path_similarity(ab,reference) if ab else {}
+        anchor_positions,anchor_points=constrained_anchor_points(reference)
+        kmz_bus,kmz_bus_status=client.route([a]+anchor_points+[b])
+        kmz_bus_metrics=path_similarity(kmz_bus,reference) if kmz_bus else {}
+        kmz_distance=kmz_bus["distance_m"] if kmz_bus else None
         diag={
             "company":g["company"],"route_label":g["route_label"],
             "trip_pattern_id":g["trip_pattern_id"],"gap_index":g["gap_index"],
@@ -216,6 +233,12 @@ def main():
             "baseline_to_SIU_stop_id":g["baseline_to_existing_stop_id"],
             "KMZ_gap_length_m":g["gap_length_m"],
             "GH_profile":"bus",
+            "KMZ_interior_waypoints":len(anchor_points),
+            "GH_constrained_bus_status":kmz_bus_status,
+            "GH_constrained_bus_distance_m":kmz_distance if kmz_distance is not None else "",
+            "GH_constrained_fraction_within_KMZ_50m":kmz_bus_metrics.get("fraction_GH_path_within_50m_KMZ",""),
+            "GH_shortest_bus_distance_less_than_half_KMZ_length":"yes" if base_distance is not None
+               and base_distance<float(g["gap_length_m"])*0.5 else "no_or_unknown",
             "GH_baseline_A_to_B_status":ab_status,
             "GH_reverse_B_to_A_status":ba_status,
             "GH_baseline_bus_distance_m":base_distance if base_distance is not None else "",
@@ -238,6 +261,14 @@ def main():
                               "gap_index":g["gap_index"],"type":"GH_bus_shortest_A_to_B",
                               "GH_KMZ_coverage_50m":diag["GH_baseline_fraction_within_KMZ_50m"]},
                 "geometry":{"type":"LineString","coordinates":ab["coordinates"]},
+            })
+        if kmz_bus:
+            geometry_features.append({
+                "type":"Feature",
+                "properties":{"company":g["company"],"route_label":g["route_label"],
+                              "gap_index":g["gap_index"],"type":"GH_bus_KMZ_anchor_constrained_A_to_B",
+                              "GH_KMZ_coverage_50m":diag["GH_constrained_fraction_within_KMZ_50m"]},
+                "geometry":{"type":"LineString","coordinates":kmz_bus["coordinates"]},
             })
         if ba:
             geometry_features.append({
