@@ -1,0 +1,12 @@
+{
+  "original_256_2026_pdf_verified": true,
+  "route_variants_in_pdf": 4,
+  "regular_siu_itineraries_reviewed": 2,
+  "siu_route_stop_occurrences": 256,
+  "source_legal_street_reference": "sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv",
+  "source_pdf": "https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf",
+  "A_B_legal_itineraries_verified_in_pdf": 4,
+  "PT4_PT5_siu_base_assignments_legally_confirmed": 0,
+  "SIU_to_A_B_variant_assignments_legally_confirmed": 0,
+  "warning": "Not enough evidence that the first SIU stop is an official terminal, and street-name tokens are not an authoritative path ordering."
+}
