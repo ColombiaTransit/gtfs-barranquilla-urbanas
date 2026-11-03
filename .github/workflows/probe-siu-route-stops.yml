@@ -1,0 +1,38 @@
+name: Probe public SIU Alameda route stops
+on:
+  push:
+    paths:
+      - scripts/probe_siu_public_route_stops.py
+      - .github/workflows/probe-siu-route-stops.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install headless browser
+        run: |
+          python -m pip install --disable-pip-version-check playwright
+          python -m playwright install --with-deps chromium
+      - name: Collect a single route via public UI
+        run: python scripts/probe_siu_public_route_stops.py
+      - name: Display result
+        if: always()
+        run: |
+          if [ -f build/siu-public-route-probe/summary.md ]; then
+            cat build/siu-public-route-probe/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Preserve extracted public stop candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-siu-alameda-stop-probe
+          path: build/siu-public-route-probe/
+          if-no-files-found: warn
+          retention-days: 45
