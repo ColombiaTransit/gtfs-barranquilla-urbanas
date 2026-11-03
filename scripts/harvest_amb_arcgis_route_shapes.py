@@ -16,6 +16,11 @@ ROOT=Path(__file__).resolve().parents[1]
 LAYER="https://services3.arcgis.com/oGYAc07w6wsvgUYr/ArcGIS/rest/services/Movilidad_Transito_WFL1/FeatureServer/6"
 def clean(v):
     return re.sub(r"[^A-Z0-9]", "", str(v or "").upper())
+def code_tokens(text):
+    # Include codes with whitespace in the source name: 'C18- 4141'.
+    raw=[clean(t) for t in re.split(r"[\s/()|,;]+",text)]
+    embedded=[clean(t) for t in re.findall(r"[A-Z]{1,5}\d+[A-Z]?(?:-[A-Z])?-\s*\d{4}",text.upper())]
+    return set(raw+embedded)
 def read_csv(path):
     with path.open("r",newline="",encoding="utf-8-sig") as f:
         return list(csv.DictReader(f))
@@ -77,12 +82,14 @@ def main(out):
             display=" ".join(str(props.get(k) or "") for k in ("Name","FolderPath","Snippet"))
             # Conservative: the full alphanumeric code must occur in a
             # separated piece. We don't infer codes from route descriptions.
-            candidates=[clean(t) for t in re.split(r"[\s/()|,;]+",display)]
+            candidates=code_tokens(display)
             if base in candidates:
                 possible.append(feature)
         rec={"gtfs_route_id":gtfs["route_id"],"route_short_name":route,
              "agency_id":gtfs["agency_id"],"arcgis_feature_count":len(possible),
              "matching_objectids":";".join(str((x.get("properties") or {}).get("OBJECTID","")) for x in possible),
+             "pattern_variant":re.search(r"[\\s-][AB]$",route,re.I).group(0).strip(" -") if re.search(r"[\\s-][AB]$",route,re.I) else "",
+             "variant_specific_geometry_qualified":"no" if re.search(r"[\\s-][AB]$",route,re.I) else "not_applicable",
              "geometry_status":"exact_code_candidate_review_required" if len(possible)==1 else
                  "ambiguous_multiple_shape_candidates" if possible else "no_exact_code_match",
              "source_last_edit":"2023-12-27","source_url":LAYER}
@@ -93,14 +100,15 @@ def main(out):
         props=f.get("properties") or {}
         oid=str(props.get("OBJECTID",""))
         display=" ".join(str(props.get(k) or "") for k in ("Name","FolderPath","Snippet"))
-        candidates=[clean(t) for t in re.split(r"[\s/()|,;]+",display)]
-        matches=sorted(set(candidates)&route_tokens)
+        candidates=code_tokens(display)
+        matches=sorted(candidates&route_tokens)
         unmatched.append({"OBJECTID":oid,"Name":props.get("Name",""),
             "FolderPath":props.get("FolderPath",""),"route_code_tokens":";".join(matches),
             "geometry_type":f.get("geometry",{}).get("type","")})
     save_csv(out/"route_shape_matches.csv",matched,
         ["gtfs_route_id","route_short_name","agency_id","arcgis_feature_count",
-         "matching_objectids","geometry_status","source_last_edit","source_url"])
+         "matching_objectids","pattern_variant","variant_specific_geometry_qualified",
+         "geometry_status","source_last_edit","source_url"])
     save_csv(out/"arcgis_feature_inventory.csv",unmatched,
         ["OBJECTID","Name","FolderPath","route_code_tokens","geometry_type"])
     status={
