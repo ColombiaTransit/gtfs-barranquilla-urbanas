@@ -1,0 +1,24 @@
+{
+  "source_KMZ_route_variants_missing_SIU": 60,
+  "route_variants_with_at_least_one_shape": 59,
+  "generated_provisional_trip_patterns": 172,
+  "trip_patterns_with_at_least_five_candidate_stops": 69,
+  "distinct_company_base_routes_in_patterns": 54,
+  "provisional_route_stop_visits": 8826,
+  "distinct_existing_physical_SIU_stop_ids_reused": 2357,
+  "total_route_stop_projection_candidates_within_35m": 24048,
+  "arcgis_fallback_pattern_components": 0,
+  "missing_route_variants_with_no_geometry": 1,
+  "new_physical_stop_ids_created": 0,
+  "arrival_departure_times_generated": 0,
+  "graphhopper_route_duration_future_dependency": true,
+  "SIU_existing_route_stop_links_preserved": true,
+  "service_of_route_at_stop_confirmed_by_geometry_alone": false,
+  "publication_ready": false,
+  "parameters": {
+    "max_search_m": 35,
+    "selected_distance_m": 25,
+    "minimum_stop_spacing_along_route_m": 115,
+    "passage_collapse_m": 60
+  }
+}
