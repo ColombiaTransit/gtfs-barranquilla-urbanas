@@ -1,10 +1,20 @@
 # AMB TPC — eerste/laatste vertrekken op officiële routekaarten (juli 2020)
 
-**Onderzoeksdatum:** 3 november 2026. **Primaire bron:** [AMB: Continúan las rutas y frecuencias del Transporte Público Colectivo](https://www.ambq.gov.co/continuan-las-rutas-y-frecuencias-del-transporte-publico-colectivo/).
+**Onderzoeksdatum:** 3 november 2026. **Publicatiedatum van het artikel: 17 juli 2020** (WordPress `datePublished=2020-07-17T20:17:09+00:00`; later technisch gewijzigd op 6 maart 2025, maar deze kaarten dateren nog van juli 2020). **Primaire bron:** [AMB: Continúan las rutas y frecuencias del Transporte Público Colectivo](https://www.ambq.gov.co/continuan-las-rutas-y-frecuencias-del-transporte-publico-colectivo/).
 
 AMB publiceerde **24 afbeeldingskaarten** (WordPress uploads `2020/07`) met voor elke opgenomen route: **RUTA**, **NOMBRE CAMPO**, **PRIMER DESPACHO (AM)**, **ÚLTIMO DESPACHO (PM)**, **HORA PICO (MINUTOS)** en **HORA VALLE (MINUTOS)**. Een kaart kan meerdere routes bevatten.
 
 **Ze zijn historisch (2020), niet de actuele 2026-exploitatie.** De beelden kunnen COVID-gerelateerde of anderszins tijdsgebonden tijden bevatten. Geen route of vertrektijd als 'momenteel bevestigd' presenteren zonder specifiek recenter bewijs.
+
+## Uitkomst: alle 24 kaarten en 84 routevermeldingen verwerkt
+
+De Action [41586978991](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41586978991) is **geslaagd**. De oorspronkelijke versie van de scraper zag sommige afbeeldingen dubbel als `http://` versus `https://`: daardoor bevat het eerste OCR-artifact **48 gedownloade bestanden voor 24 unieke posters**. De extractor is direct daarna verbeterd met canonieke URL-pad-deduplicatie. Er zijn **24 echte bronkaarten**, niet 48.
+
+**Van alle 24 originele poster-tabellen zijn 84 routevermeldingen visueel gelezen** (83 unieke combinaties van bedrijf + routecode). Dubbele A7-4112-poster: nummer 9 is verkeerd als *Flota Roja* getiteld en bevat in werkelijkheid Flota Ángulo; nummer 21 is de juiste Flota Ángulo-poster. Er zijn **vijf expliciet foutief afgedrukte laatste dispatchwaarden**: TRASALFA D14 en D15 `6:00 AM` in de `último despacho (PM)`-kolom; COOCHOFAL C3, C9 en C18 `5:30 AM` in dezelfde PM-kolom. Deze vijf einde-tijden blijven **leeg/ongeldig** in de genormaliseerde CSV, niet stilzwijgend op 18:00/17:30 gecorrigeerd.
+
+- [**Machineleesbaar volledig historisch vertrektijdenregister (84 rijen)**](../sources/amb/amb_2020_first_last_dispatch_times_verified.csv).
+- [**Koppeling aan 44 onderzochte recente routefrequentie-kandidaten**](../sources/amb/amb_2020_vs_resolution_route_dispatch_matching.csv): **42 exacte koppelingen, één afgeleide korte routecode (TRANSMECAR D10 → D10-4172), één zonder 2020-kaart (TRASALFA B2-B)**. Voor 38 matchende regels zijn beide historische vertrektijden bruikbaar; vijf hebben een ongeldige laatste tijd.
+- Onze huidige 23-bedrijvenlijst is niet identiek aan de 23 namen op de historische posterkaarten (onder andere TRANSPORTES ATLÁNTICO en COOTRATLÁNTICO; sommige huidige bedrijven ontbreken). De bron mag daarom niet gebruikt worden als volledige actuele bedrijvenlijst.
 
 ## Automatische bronoogst en OCR
 
@@ -38,4 +48,4 @@ Op de COOTRANTICO-kaart hebben ook B5, B5-B, B6, B7, B20 en B20-B **05:00–18:0
 6. Gedeelde corridors, routes met A/B itinerarios en beëindigde routevergunningen vereisen matching met de nieuwste vergunningsroutecode.
 7. **Geen voertuigcapaciteit in GTFS.**
 
-**Volgende fase:** tabelgegevens uit 24 oorspronkelijke kaarten in een machineleesbare route-CSV verifiëren, dan per route naar de recentere vergunningen linken. Per regel `source_period=2020-07`, `source_is_historical=true`, `review_status` en `current_2026_service_window_confirmed=false` gebruiken.
+**Uitgevoerd:** 84 afbeeldingsrijen en 44 routekoppelingen zijn beschikbaar. **Volgende fase:** officiële recentere routegebonden eerste/laatste vertrekken zoeken (SIU/SIBUS) of, als die ontbreken, expliciet besluiten of de historische 2020-tijd als afzonderlijke huidige *modelaanname* mag dienen; geen automatische overschrijving van recente resolutie-intervallen. Per regel `source_period=2020-07`, `source_is_historical=true`, `review_status` en `current_2026_service_window_confirmed=false` gebruiken.
