@@ -1,3 +1,17 @@
+## Belangrijkste actualisering 3 november 2026 — SIU-stopdata nu compleet voor 33 reguliere itineraries
+
+De eerder genoemde haltegegevenslacune is **gedeeltelijk opgelost**: de officiële SIU-webapp levert op de publieke routelijst via **GraphQL Base64/zlib** **36 itineraries, waarvan 3 test**, met **6.873 GPS-haltevermeldingen**. Voor de **33 reguliere itineraries** zijn het **6.407 geordende haltevermeldingen**, met geldige GPS, **3.612 exact verschillende coördinaten** en **2.961 verschiedenen haltenamen**. Iedere haltevermelding heeft een SIU-UUID; die UUID's zijn per vermelding uniek en mogen niet worden verward met unieke fysieke haltes.
+
+De volledige extractie is met jouw twee MHT-opnamen bevestigd: de **127** haltes van FLOTA ÁNGULO *ALAMEDA DEL RIO* bevatten exact dezelfde **10** stop-UUID's op posities **75–84**. Geen enkele van deze 10 hoeft dus via OSM-afstand te worden aangenomen.
+
+- [Volledige SIU-analyse](siu_sibus_mht_route_stop_analysis_2026-11-03.md)
+- [33 reguliere en 3 test-SIU-itineraries](../sources/siu/public_extract/siu_itineraries.csv)
+- [6.873 route-haltevermeldingen met GPS en volgorde](../sources/siu/public_extract/siu_route_stop_sequences.csv)
+- [SIU-halte UUID-catalogus](../sources/siu/public_extract/siu_unique_stops.csv)
+- [Geografische routecrosswalk (kandidaten, niet automatisch juridisch correct)](../sources/siu/analysis/siu_to_amb_routecode_candidates.csv)
+
+**Nieuwe primaire haltesbron voor de routes die SIU bevat: SIU.** OSM en Transmetro blijven aanvullende controledatasets. De resterende GTFS-werkzaamheden zijn vooral fysieke halte-deduplicatie, koppeling aan de 97 vergunningsroutes, nog niet door SIU gedekte routes, en een verantwoord reistijdmodel. **Publicatierechten van de SIU-gegevens moeten nog gecontroleerd worden.**
+
 ## Nieuwe bron: SIU-routegebonden stoplijst (3 november 2026)
 
 Twee door de gebruiker aangeleverde browser-MHTML-pagina's van `https://siu.ambq.gov.co/siu/schedule-mng/schedules` tonen **routegebonden haltegegevens voor FLOTA ÁNGULO / ALAMEDA DEL RIO**. De twee opnamen zijn onderling te koppelen via één vaste SIU-route-UUID `6948fedb-74b6-4a1f-9c33-dcac379a736b`. De tweede opname bevat **10 zichtbare stopnamen en 10 individuele stop-UUID's**, met geschatte posities **75–84**. De virtuele lijst lijkt rond 110 items te bevatten, maar dat moet nog uit de complete webrespons worden bewezen.
