@@ -21,7 +21,7 @@ De test is uitsluitend onderzoek naar bus-toegankelijke wegtrajecten, rijrichtin
 - bus_via_queries_attempted: **22**
 - curbside_queries_attempted: **5**
 - successful_right_curbside_tests: **0**
-- total_route_queries: **47**
+- total_route_queries: **57**
 - total_info_queries: **1**
 - GTFS_stops_created: **0**
 - GTFS_trip_sequences_modified: **False**
