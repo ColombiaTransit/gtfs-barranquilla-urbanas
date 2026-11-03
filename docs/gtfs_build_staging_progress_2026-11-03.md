@@ -1,3 +1,12 @@
+## Update 3 november 2026 — geen nieuwe OSM-query; bestaande haltes bewaren voor GraphHopper-richtingstoets
+
+De [geslaagde staging Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41627896318) gebruikt uitsluitend de reeds ontvangen OSM-export en bestaande SIU-haltepunten. **0 nieuwe Overpass-query's.** De 73 eerder ontdekte route-haltegaten bevatten 38 segmenten zonder SIU-alternatief. Uit de bestaande 34 niet-geclassificeerde OSM-instapkandidaten komen **14 route-gap-kandidaatverwijzingen** naar voren, verdeeld over **9 van die 38 SIU-lege gaten**. De overige **29 gaten** hebben in beide reeds aanwezige bronnen geen kandidaat.
+
+Er is nu een [gezamenlijke kandidaatpool](../sources/amb/gap_direction_staging/existing_SIU_OSM_direction_candidates_for_GraphHopper.csv) met **125 route-gap-kandidaatverwijzingen**: 111 bestaande SIU-kandidaten, en 14 verwijzingen naar al bekende OSM-objecten. **80 SIU-kandidaten** waren eerder door de KMZ-naamsrichtingsheuristiek als tegengesteld beoordeeld; ze blijven voor de latere **GraphHopper-eenrichtingsweg-, rijbaan- en instapzijdecontrole** beschikbaar in plaats van definitief afgewezen. Voor sommige OSM-objecten ontbreekt een SIU-fysieke stop_id; die behouden hun OSM-ID en zijn niet als nieuwe GTFS-halte aangemaakt.
+
+De [controle per gat](../sources/amb/gap_direction_staging/gap_review_with_existing_OSM_snapshot.csv) bevat de eerste en laatste reeds toegewezen SIU-stop_ID's plus de kandidaten daartussen. [Kaartpunten als GeoJSON](../sources/amb/gap_direction_staging/existing_source_direction_candidates.geojson) geven positie en herkomst. Geen trip stop_sequence, GTFS-halte, aankomsttijd of vertrektijd gewijzigd. GraphHopper is nog niet aangeroepen.
+
+
 ## Update 3 november 2026 — grote route-haltegaten en gefragmenteerde shapes beoordeeld
 
 De [geslaagde QA Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41625987637) heeft de 60 routevarianten zonder eigen SIU-haltevolgorde verder beoordeeld. De 39 routes met een grootste tussenhalteafstand boven 2 km hebben samen **73 concrete gaten**: **38** zonder bestaande SIU-halte binnen de onderzoekscorridor, **18** met SIU-locaties op 25–35 m van de shape en **17** waar alleen haltes met tegengestelde richtingsaanduiding in de buurt liggen. Deze aantallen zeggen niets definitiefs over de daadwerkelijke haltebediening: een lang niet-stoppend wegdeel kan correct zijn.
