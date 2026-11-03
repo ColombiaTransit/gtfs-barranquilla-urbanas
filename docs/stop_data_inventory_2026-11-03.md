@@ -1,3 +1,14 @@
+## Nieuwe bron: SIU-routegebonden stoplijst (3 november 2026)
+
+Twee door de gebruiker aangeleverde browser-MHTML-pagina's van `https://siu.ambq.gov.co/siu/schedule-mng/schedules` tonen **routegebonden haltegegevens voor FLOTA ÁNGULO / ALAMEDA DEL RIO**. De twee opnamen zijn onderling te koppelen via één vaste SIU-route-UUID `6948fedb-74b6-4a1f-9c33-dcac379a736b`. De tweede opname bevat **10 zichtbare stopnamen en 10 individuele stop-UUID's**, met geschatte posities **75–84**. De virtuele lijst lijkt rond 110 items te bevatten, maar dat moet nog uit de complete webrespons worden bewezen.
+
+- [Volledige analyse en de tien namen](siu_sibus_mht_route_stop_analysis_2026-11-03.md)
+- [Zeven zichtbare SIU-routekaarten en route-ID's](../sources/siu/siu_visible_route_list_2026-11-03.csv)
+- [Tien geordende routehaltepunten met stop-UUID](../sources/siu/siu_visible_flota_angulo_stops_2026-11-03.csv)
+- [Lokale parser voor MHT-snapshots](../scripts/extract_siu_mht_snapshot.py)
+
+**Nieuwe prioriteit:** SIU blijkt aantoonbaar een bron voor TPC-stopnamen en routevolgorde; dit is sterker dan OSM-routelijnnabijheid. In de opgeslagen MHT ontbreken echter GPS-coördinaten en de overige onzichtbare stops. Het is daarom nog geen complete `stops.txt`.
+
 # Inventaris haltes en GPS-stoppunten — Barranquilla Urbanas (3 november 2026)
 
 ## Nieuwe bevinding: Overpass-export verwerkt op 3 november 2026
