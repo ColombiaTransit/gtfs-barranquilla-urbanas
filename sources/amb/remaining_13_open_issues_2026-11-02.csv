@@ -2,41 +2,41 @@ agency,issue,severity,source_document,state
 COOCHOFAL,"COOCH-01 Scancontrole onleesbare intervallen op p6–20",resolved_numeric_scan;legal_conflict_remains,company_dossier,partially_resolved
 COOCHOFAL,"COOCH-02 routecodevarianten A15 en C2-B juridisch vaststellen (vlootverschil buiten GTFS-scope)",review_required,company_dossier,open
 COOCHOFAL,"COOCH-03 overige 23 historische besluiten artikel voor artikel classificeren",review_required,company_dossier,open
-COOCHOFAL,"COOCH-04 werkelijke dienst en geometrie.",review_required,company_dossier,open
+COOCHOFAL,"COOCH-04 routegeometrie, haltes en spits-/daltijdvakken (frequenties uit resolutie zijn leidend).",review_required,company_dossier,open
 FLOTA_ROJA,"FR-01 Historische A9-status en 2014-besluit controleren",review_required,company_dossier,open
 FLOTA_ROJA,"FR-02 oud/nieuw A8 traject op straatniveau vergelijken",review_required,company_dossier,open
-FLOTA_ROJA,"FR-03 diensturen en stopvolgorde.",review_required,company_dossier,open
+FLOTA_ROJA,"FR-03 officiële of aangenomen periodegrenzen, kalender en stopvolgorde.",review_required,company_dossier,open
 LA_CAROLINA,"LC-01 A16 juridische voortzetting toetsen",review_required,company_dossier,open
 LA_CAROLINA,"LC-02 D6/D7 geordende routegeometrie",review_required,company_dossier,open
-LA_CAROLINA,"LC-03 echte diensttijden, haltes, recentere besluiten.",review_required,company_dossier,open
+LA_CAROLINA,"LC-03 spits-/daltijdvakken, haltes en recentere besluiten.",review_required,company_dossier,open
 LOLAYA,"LOL-01 2018 versus 2025 straattrajecten",review_required,company_dossier,open
 LOLAYA,"LOL-02 tijdelijke besluiten en eventuele opvolging",review_required,company_dossier,open
-LOLAYA,"LOL-03 actuele rittenkalender en haltes.",review_required,company_dossier,open
+LOLAYA,"LOL-03 dienstvensters, kalenderdagen en haltes.",review_required,company_dossier,open
 MONTERREY,"MON-01 Latere/actuele rechtsgeldigheid tijdelijke 2018-vergunning",review_required,company_dossier,open
 MONTERREY,"MON-02 437-2016 B11-4146 versus B11-4166",review_required,company_dossier,open
-MONTERREY,"MON-03 werkelijke ritten/haltes en kaartgeometrie.",review_required,company_dossier,open
+MONTERREY,"MON-03 geldigheidsduur, dienstperioden, haltes en kaartgeometrie.",review_required,company_dossier,open
 SOBUSA,"SOB-01 307-2014 20-page PDF recovered, extracted, six route headways reviewed",resolved,company_dossier,closed_2026-11-03
 SOBUSA,"SOB-02 artikelketen 173/225/466-2025 versus 082-2026",review_required,company_dossier,open
 SOBUSA,"SOB-03 pattern-varianten C12/C16 en B18 nauwkeurig uiteenhouden",review_required,company_dossier,open
-SOBUSA,"SOB-04 actuele rittenkalender en haltes.",review_required,company_dossier,open
+SOBUSA,"SOB-04 dienstvensters, werkdag/weekendkalender en haltes.",review_required,company_dossier,open
 SODETRANS,"SODE-01 B17-aandeel 2018 versus 2025 formeel reconciliëren",review_required,company_dossier,open
 SODETRANS,"SODE-02 B15-frequentie uit eerdere besluiten",review_required,company_dossier,open
-SODETRANS,"SODE-03 huidige dienst vaststellen (klasse D-padrón niet voor GTFS onderzoeken)",review_required,company_dossier,open
+SODETRANS,"SODE-03 geldigheidsstatus en dienstvensters vastleggen (geen realtime- of voertuigencontrole)",review_required,company_dossier,open
 SODETRANS,"SODE-04 geometrie en haltevolgorde.",review_required,company_dossier,open
 TRANSDIAZ,"TD-01 A10 itinerary A/B en overlappende sectie",review_required,company_dossier,open
 TRANSDIAZ,"TD-02 gedeelde PT1 en COOLITORAL-vergunning vergelijken",review_required,company_dossier,open
-TRANSDIAZ,"TD-03 2019 Alameda del Río-routewijzigingen en feitelijke dienst.",review_required,company_dossier,open
-TRANSMECAR,"TMEC-01 2010 ingangsdata/2026 operationele status",review_required,company_dossier,open
+TRANSDIAZ,"TD-03 2019 Alameda del Río-routewijzigingen en dienstvensters/kalender.",review_required,company_dossier,open
+TRANSMECAR,"TMEC-01 2010 ingangsdata en eventuele intrekkings-/opvolgingsbesluiten",review_required,company_dossier,open
 TRANSMECAR,"TMEC-02 samenhang 219/220/221 en 239/240/241/324/325 juridisch controleren",review_required,company_dossier,open
 TRANSMECAR,"TMEC-03 D10 technische tabel en huidige routecodes.",review_required,company_dossier,open
 TRANSOLEDAD,"TSOL-01 Historische 2013/2010 vergunningen en inwerkingtreding",review_required,company_dossier,open
 TRANSOLEDAD,"TSOL-02 p4/p6 verschil in exploitantnaam auditten (voertuigaantallen buiten GTFS-scope)",review_required,company_dossier,open
-TRANSOLEDAD,"TSOL-03 actuele stops/kalender/geometrie.",review_required,company_dossier,open
+TRANSOLEDAD,"TSOL-03 haltes, dienstperioden, kalender en geometrie.",review_required,company_dossier,open
 TRANSURBAR,"TUR-01 historische routebesluiten vergelijken",review_required,company_dossier,open
-TRANSURBAR,"TUR-02 feitelijke dienstregeling en haltes verifiëren",review_required,company_dossier,open
+TRANSURBAR,"TUR-02 periodegrenzen, kalender en haltes registreren; officiële vergunningsintervallen zijn leidend",review_required,company_dossier,open
 TRASALFA,"TA-01 139-2013 art2 D14 slecht leesbare vlootwaarden tegen scan",out_of_scope_gtfs,company_dossier,archived_ignore_fleet
 TRASALFA,"TA-02 ontwerpintervallen versus rechten 285/286/287",review_required,company_dossier,open
-TRASALFA,"TA-03 intrekkingen 282/283/284 en daadwerkelijke ritten.",review_required,company_dossier,open
+TRASALFA,"TA-03 intrekkingen 282/283/284, tijdvensters en kalender.",review_required,company_dossier,open
 TRASALIANCO,"TALI-01 405-2011 bezwaar en 2604 historische code",review_required,company_dossier,open
 TRASALIANCO,"TALI-02 oude intrekkingen 2010",review_required,company_dossier,open
-TRASALIANCO,"TALI-03 latere status en huidige haltes/ritten.",review_required,company_dossier,open
+TRASALIANCO,"TALI-03 latere vergunningsstatus, haltes en dienstvensters.",review_required,company_dossier,open
