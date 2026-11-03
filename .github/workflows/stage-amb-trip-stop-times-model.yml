@@ -1,0 +1,62 @@
+name: Stage GTFS trip templates and modeled stop_times from SIU
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/build_amb_trip_timing_staging.py
+      - scripts/build_amb_shared_stop_reuse.py
+      - sources/amb/gtfs_timing_model_assumptions.csv
+      - .github/workflows/stage-amb-trip-stop-times-model.yml
+      - sources/siu/open_route_review/combined_20_route_stop_candidates_NO_TIMES.csv
+      - sources/amb/gtfs_staging/weekday_period_staging.csv
+      - sources/amb/gtfs_staging/route_headway_candidates.csv
+permissions:
+  contents: write
+jobs:
+  stage-trip-models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Python
+        run: python -m py_compile scripts/build_amb_trip_timing_staging.py scripts/build_amb_shared_stop_reuse.py
+      - name: Reuse one physical SIU stop ID for all proposed nearby route patterns
+        run: python scripts/build_amb_shared_stop_reuse.py
+      - name: Build SIU ordered trip templates and changeable frequency/stop_times model
+        run: python scripts/build_amb_trip_timing_staging.py
+      - name: Display results and risks
+        if: always()
+        run: |
+          for file in build/amb-shared-stop-reuse/summary.md build/gtfs-trip-timing-staging/summary.md; do
+            if [ -f "$file" ]; then
+              cat "$file" >> "$GITHUB_STEP_SUMMARY"
+              printf '\n' >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+      - name: Save research staging without modifying publishable GTFS
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/amb/gtfs_trip_timing_staging sources/amb/shared_stop_reuse
+          cp build/gtfs-trip-timing-staging/* sources/amb/gtfs_trip_timing_staging/
+          cp build/amb-shared-stop-reuse/* sources/amb/shared_stop_reuse/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/amb/gtfs_trip_timing_staging/ sources/amb/shared_stop_reuse/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: stage shared SIU stop IDs and modeled GTFS frequency trip stop_times"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Archive trip and stop model as full review artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barranquilla-gtfs-trip-stop-times-research-model
+          path: |
+            build/gtfs-trip-timing-staging/
+            build/amb-shared-stop-reuse/
+          if-no-files-found: warn
+          retention-days: 45
