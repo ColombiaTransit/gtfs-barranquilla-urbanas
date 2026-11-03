@@ -4,6 +4,8 @@
 
 **Update 3 november 2026 — SOBUSA 307-2014 teruggevonden.** [20 pagina's bronanalyse](../sobusa_307_2014_analysis_2026-11-03.md) | [zes historische routefrequenties (CSV)](../../sources/amb/sobusa_307_2014_historical_route_parameters.csv). De 2014-lacune is opgelost. Voertuigcapaciteit blijft buiten GTFS-scope.
 
+**Update 3 november 2026 — volledige visuele controle 466-2025:** [bronanalyse per pagina](sobusa_466_2025_analysis_2026-11-03.md) en [varianten/frequenties CSV](../../sources/amb/sobusa_466_2025_route_variant_parameters.csv). **C12 A 6/9, B 3/6, gecombineerd drukste sectie 3/5; C16 A en B elk 7/9, gecombineerd 3,5/6.** Het historische B18-interval in 466-2025 is **5/7** (p6); de **huidige** B18-kandidaat uit 082-2026 is **5/6**. C12-codeconflict `C12-4149` op 466-2025 p9, terwijl overige bronnen `C12-4169` tonen. De A/B-vertrektijden en kalender blijven onbekend.
+
 ## Inhoudelijke uitkomst
 
 466-2025 wijzigt zes routes, vlootmatrix totaal 381–456; 082-2026 wijzigt B18 naar twee itinerarios A/B, elk 10/12 minuten, gezamenlijk 5/6 op drukste traject. 307-2014 was eerder 404, maar de **volledige originele PDF is op 3-11-2026 hersteld en met 20/20 pagina's geëxtraheerd**; zie [aparte juridische/frequentieanalyse](../sobusa_307_2014_analysis_2026-11-03.md). De zes intervallen uit 2014 zijn uitsluitend historische vergunningswaarden, geen actuele GTFS-vervangingen.
@@ -19,7 +21,7 @@
 | C12-4169 | 3 | 5 | 56–68 | ? | 466-2025 p11: effectief gedeeld; A 6/9 (47.8 km), B 3/6 (48.6 km) |
 | C13-4143 | 3 | 5 | 56–68 | 48 | 466-2025 p13: scan gecontroleerd |
 | C14-4170 | 2 | 4 | 90–108 | 56.3 | 466-2025 p15: scan gecontroleerd |
-| C16-4167 | 3.5 | 6 | 67–80 | ? | 466-2025 p18: effectief drukste traject; aparte itinerarios niet volledig gecontroleerd |
+| C16-4167 | 3.5 | 6 | 67–80 | ? | 466-2025 p18: effectief drukste traject; A/B elk 7/9 min, lengte 63.5/63.3 km; visueel gecontroleerd |
 
 
 De waarden met **onbevestigd** mogen niet worden ingevuld op basis van OCR-gissingen. Waar een interval voor een *gemeenschappelijke drukste sectie* staat, is dit **geen** interval per afzonderlijke itinerary. Historische vlootmatrixwaarden zijn geen nieuwe routefrequenties.
@@ -56,7 +58,7 @@ De bronbestanden zijn technisch geëxtraheerd, behalve specifieke mislukte downl
 
 - SOB-01 307-2014 opgelost; historische juridische werking vergelijken
 - SOB-02 artikelketen 173/225/466-2025 versus 082-2026
-- SOB-03 pattern-varianten C12/C16 en B18 nauwkeurig uiteenhouden
+- SOB-03 C12/C16 A/B frequenties zijn in 466-2025 visueel gecontroleerd; geometrie, haltevolgorde en GTFS-richtingen nog bepalen; B18 uit 082-2026
 - SOB-04 actuele rittenkalender en haltes.
 
 ## GTFS-status
