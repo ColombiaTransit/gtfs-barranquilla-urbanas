@@ -1,0 +1,6 @@
+model_id,day_type,day_numbers,period_label,start_time,end_time,frequency_class,conditional_on_route_service_window,source_status
+AMB_WEEKDAY_0709_1720_V1,weekday,1-5,early_offpeak,00:00:00,07:00:00,offpeak,yes,project_assumption_not_official_AMB
+AMB_WEEKDAY_0709_1720_V1,weekday,1-5,morning_peak,07:00:00,09:00:00,peak,yes,project_assumption_not_official_AMB
+AMB_WEEKDAY_0709_1720_V1,weekday,1-5,daytime_offpeak,09:00:00,17:00:00,offpeak,yes,project_assumption_not_official_AMB
+AMB_WEEKDAY_0709_1720_V1,weekday,1-5,evening_peak,17:00:00,20:00:00,peak,yes,project_assumption_not_official_AMB
+AMB_WEEKDAY_0709_1720_V1,weekday,1-5,late_offpeak,20:00:00,24:00:00,offpeak,yes,project_assumption_not_official_AMB
