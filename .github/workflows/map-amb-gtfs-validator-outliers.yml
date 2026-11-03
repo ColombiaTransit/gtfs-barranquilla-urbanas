@@ -1,0 +1,52 @@
+name: Map remaining MobilityData GTFS stop and shape issues for source review
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/map_amb_mobilitydata_remaining_shape_order_issues.py
+      - .github/workflows/map-amb-gtfs-validator-outliers.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-gtfs-final-validator-outliers-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile scripts/map_amb_mobilitydata_remaining_shape_order_issues.py
+      - name: Map remaining 67 distance and 4 order warnings to actual SIU/KMZ data
+        run: python scripts/map_amb_mobilitydata_remaining_shape_order_issues.py
+      - name: Show final unresolved source-evidence counts
+        run: cat build/amb-GTFS-remaining-geography-review/summary.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit mapping QA only, not GTFS demo
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/GTFS_shape_validator_recheck/
+            cp -a build/amb-GTFS-remaining-geography-review/. sources/amb/GTFS_shape_validator_recheck/
+            git add sources/amb/GTFS_shape_validator_recheck/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: document 67 unresolved stop-to-road distances and 4 possible loop-order cases"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Archive CSV and GeoJSON route/stop review data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-MobilityData-67-stop-4-order-geojson-review
+          path: build/amb-GTFS-remaining-geography-review/
+          if-no-files-found: warn
+          retention-days: 45
