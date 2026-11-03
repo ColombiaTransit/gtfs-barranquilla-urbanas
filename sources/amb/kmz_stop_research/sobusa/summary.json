@@ -1,0 +1,13 @@
+{
+  "route_variant_records": 9,
+  "base_routes": 6,
+  "variant_pairs_analyzed": 3,
+  "unique_nearby_candidate_route_assignments": 3276,
+  "nearby_SIU_other_route_locations": 3241,
+  "nearby_OSM_unclassified_candidate_locations": 35,
+  "SOBUSA_stops_authoritatively_confirmed": 0,
+  "A_B_differences_include_one_street_possibility": true,
+  "gtfs_stops_or_stop_times_created": false,
+  "source": "official_AMB_KMZ_plus_existing_SIU_and_OSM_locations",
+  "source_status": "geographical_nearby_only"
+}

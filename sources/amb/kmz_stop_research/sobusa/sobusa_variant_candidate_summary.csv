@@ -1,0 +1,10 @@
+route,route_id_candidate,variant,kmz_source_url,source_url_collision,kmz_length_m,kmz_lines,unverified_SIU_location_candidates_35m,unverified_OSM_boarding_candidates_35m,candidates_15m,candidates_30m,total_unverified_candidates_35m,verified_SOBUSA_boarding_stops,correct_stop_sequence_verified,source_geometry_source,needs_review
+B18-4175 A,B18-4175,A,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/B18-4175%20A.kmz,no,75554.6,1,451,4,407,449,455,0,no,official_AMB_KMZ,yes
+B18-4175 B,B18-4175,B,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/B18-4175%20B.kmz,no,73606.9,1,423,3,366,420,426,0,no,official_AMB_KMZ,yes
+C11-4168,C11-4168,,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/C11-4168.kmz,no,62714.1,1,313,4,292,310,317,0,no,official_AMB_KMZ,yes
+C12-4169 A,C12-4169,A,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/C12-4169%20A.kmz,no,47836.1,1,321,4,281,320,325,0,no,official_AMB_KMZ,yes
+C12-4169 B,C12-4169,B,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/C12-4169%20B.kmz,no,48549.1,1,325,4,282,320,329,0,no,official_AMB_KMZ,yes
+C13-4143,C13-4143,,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/C13-4143.kmz,no,48064.5,1,240,3,223,238,243,0,no,official_AMB_KMZ,yes
+C14-4170,C14-4170,,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/C14-4170.kmz,no,56235.7,1,319,4,296,320,323,0,no,official_AMB_KMZ,yes
+C16-4167 A,C16-4167,A,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/C16-4167%20A.kmz,no,63223.3,1,424,4,379,421,428,0,no,official_AMB_KMZ,yes
+C16-4167 B,C16-4167,B,https://www.ambq.gov.co/ruta-de-buses/SOBUSA/C16-4167%20B.kmz,no,63883.3,1,425,5,379,422,430,0,no,official_AMB_KMZ,yes

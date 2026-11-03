@@ -1,0 +1,13 @@
+{
+  "total_missing_kmz_route_variant_records": 60,
+  "distinct_official_base_route_code_and_operator": 55,
+  "sOBUSA_variant_records": 9,
+  "priority_counts": {
+    "P1_SOBUSA_AB_and_base_routes": 9,
+    "P2_review_nearby_OSM_platforms_and_SIU_cross_route_stops": 28,
+    "P2_fix_official_KMZ_link_conflict": 2,
+    "P3_seek_extra_TPC_stops_and_cross_route_evidence": 21
+  },
+  "source": "KMZ-SIU gap audit and proximity candidate reports",
+  "approval_status": "All research only; no claimed boarding stops"
+}

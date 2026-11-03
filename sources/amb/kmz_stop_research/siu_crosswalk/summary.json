@@ -1,0 +1,10 @@
+{
+  "siu_itineraries_scored": 33,
+  "siu_unresolved_itineraries_scored": 13,
+  "siu_strong_staging_itineraries_scored": 12,
+  "siu_provisional_staging_itineraries_scored": 8,
+  "spatial_candidate_comparisons": 296,
+  "legally_confirmed_AB_assignments_from_geometry_alone": 0,
+  "legal_route_crosswalk_overwritten": false,
+  "scope": "Research only: SIU stop GPS proximity to official KMZ paths"
+}
