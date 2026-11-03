@@ -1,0 +1,30 @@
+company,route_label,candidate_links,toevoegkandidaat,mogelijk_richtingsconflict,onzeker,previous_name_direction_conflicts_reopened,route_stop_service_confirmed,stop_sequences_modified
+COOASOATLAN,C1-B-4186,3,3,0,0,3,no,no
+COOASOATLAN,C20-4181,4,4,0,0,3,no,no
+COOLITORAL,A1-4106 B,5,5,0,0,4,no,no
+COOLITORAL,A3-4108,1,0,1,0,0,no,no
+COOLITORAL,B1-4117,2,2,0,0,2,no,no
+COOLITORAL,PT2-4102,20,0,8,12,0,no,no
+COOTRANSNORTE,A5-4110,6,5,0,1,5,no,no
+COOTRANSPORCAR,C8-4139,2,0,0,2,0,no,no
+COOTRANTICO,B4-4120,4,4,0,0,4,no,no
+COOTRANTICO,B5-B-4190,5,5,0,0,4,no,no
+COOTRANTICO,B7-4123,3,3,0,0,2,no,no
+COOTRASOL,D4-4148,1,1,0,0,0,no,no
+COOTRASOL,D5-4149,1,1,0,0,1,no,no
+LOLAYA,B10-4126,2,0,0,2,0,no,no
+LOLAYA,B10-B-4193,8,6,2,0,3,no,no
+MONTERREY,B11-4166,5,0,2,3,0,no,no
+SOBUSA,B18-4175 A,2,0,1,1,0,no,no
+SOBUSA,B18-4175 B,9,0,2,7,0,no,no
+SOBUSA,C12-4169 A,2,2,0,0,0,no,no
+SOBUSA,C12-4169 B,3,2,0,1,0,no,no
+SOBUSA,C13-4143,1,0,0,1,0,no,no
+SOBUSA,C16-4167 B,1,0,0,1,0,no,no
+TRANSDIAZ,A11-4115,5,3,1,1,2,no,no
+TRANSMECAR,C17-4160,3,1,2,0,1,no,no
+TRANSMECAR,D11-4153,4,3,0,1,2,no,no
+TRANSOLEDAD,D13-4155,3,2,1,0,1,no,no
+TRASALFA,B2-B-4118,1,0,1,0,0,no,no
+TRASALIANCO,B19-4176,5,4,1,0,4,no,no
+TRASALIANCO,D18-4179,14,9,2,3,6,no,no
