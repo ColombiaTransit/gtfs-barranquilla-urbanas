@@ -5,6 +5,7 @@ on:
     paths:
       - scripts/build_amb_trip_timing_staging.py
       - scripts/build_amb_shared_stop_reuse.py
+      - scripts/audit_siu_trip_direction_splits.py
       - sources/amb/gtfs_timing_model_assumptions.csv
       - .github/workflows/stage-amb-trip-stop-times-model.yml
       - sources/siu/open_route_review/combined_20_route_stop_candidates_NO_TIMES.csv
@@ -22,15 +23,17 @@ jobs:
         with:
           python-version: '3.12'
       - name: Validate Python
-        run: python -m py_compile scripts/build_amb_trip_timing_staging.py scripts/build_amb_shared_stop_reuse.py
+        run: python -m py_compile scripts/build_amb_trip_timing_staging.py scripts/build_amb_shared_stop_reuse.py scripts/audit_siu_trip_direction_splits.py
       - name: Reuse one physical SIU stop ID for all proposed nearby route patterns
         run: python scripts/build_amb_shared_stop_reuse.py
       - name: Build SIU ordered trip templates and changeable frequency/stop_times model
         run: python scripts/build_amb_trip_timing_staging.py
+      - name: Flag SIU itineraries that may combine outbound, return or circular journeys
+        run: python scripts/audit_siu_trip_direction_splits.py
       - name: Display results and risks
         if: always()
         run: |
-          for file in build/amb-shared-stop-reuse/summary.md build/gtfs-trip-timing-staging/summary.md; do
+          for file in build/amb-shared-stop-reuse/summary.md build/gtfs-trip-timing-staging/summary.md build/gtfs-trip-timing-staging/direction_split_review.md; do
             if [ -f "$file" ]; then
               cat "$file" >> "$GITHUB_STEP_SUMMARY"
               printf '\n' >> "$GITHUB_STEP_SUMMARY"
