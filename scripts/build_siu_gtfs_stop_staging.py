@@ -147,7 +147,7 @@ def spelling_rules(rows):
         if before in rules:
             raise ValueError("Duplicate spelling correction: "+before)
         # Spelling fixes may not change direction codes or the return marker.
-        dirs=lambda x:re.findall(r"(?<!\\w)(?:NS|SN|EO|OE|REGRESO|RETORNO|VUELTA)(?!\\w)",simplify(x))
+        dirs=lambda x:re.findall(r"(?<!\w)(?:NS|SN|EO|OE|REGRESO|RETORNO|VUELTA)(?!\w)",simplify(x))
         if dirs(before)!=dirs(after):
             raise ValueError("Spelling rule modifies a direction/return marker")
         rules[before]=after
@@ -246,6 +246,39 @@ def build_stop_candidates(stop_rows,route_by_siu,corrections):
         })
     return cluster_list,occurrence,conflicts
 
+def compute_aliases(occurrences):
+    """Retain old stop IDs merged by spelling correction on future reruns."""
+    oldmap={}
+    oldfile=PREVIOUS/"siu_stop_occurrence_crosswalk.csv"
+    if oldfile.is_file():
+        oldmap={x["siu_stop_uuid"]:x["candidate_stop_id"] for x in load(oldfile)}
+    aliases={}
+    aliasfile=PREVIOUS/"stop_id_alias_history.csv"
+    if aliasfile.is_file():
+        for row in load(aliasfile):
+            aliases[row["old_stop_id"]]=row["new_stop_id"]
+    changes=[]
+    for row in occurrences:
+        old=oldmap.get(row["siu_stop_uuid"])
+        new=row["candidate_stop_id"]
+        if old and old!=new:
+            if old in aliases and aliases[old]!=new:
+                raise ValueError("Existing stop ID alias changed unexpectedly: "+old)
+            aliases[old]=new
+            changes.append((old,new))
+    target_ids={x["candidate_stop_id"] for x in occurrences}
+    for old,new in aliases.items():
+        if old in target_ids:
+            raise ValueError("Alias still points to a current stop ID: "+old)
+        if new not in target_ids:
+            raise ValueError("Alias target no longer exists: "+new)
+    alias_rows=[{
+        "old_stop_id":old,"new_stop_id":new,
+        "reason":"verified_spelling_normalization_merged_same_named_stop_within_5m",
+        "source_rule_file":"sources/siu/stop_name_spelling_corrections_2026-11-03.csv"
+        } for old,new in sorted(aliases.items())]
+    return alias_rows,len(set(changes))
+
 def validate(routes,occurrence,stop_rows):
     by_it=defaultdict(list)
     for r in occurrence:by_it[r["siu_itinerary_uuid"]].append(int(r["stop_sequence"]))
@@ -264,8 +297,23 @@ def run(out):
     routes=load(ROUTES)
     gis=load(GIS)
     crosswalk,route_map,types=build_crosswalk(itins,gis,routes)
-    stops,seq,conflicts=build_stop_candidates(route_rows,route_map)
+    rules=spelling_rules(load(CORRECTIONS))
+    unrecognized=set(rules)-{r["stop_name"] for r in route_rows}
+    if unrecognized:
+        raise ValueError("Spelling rule source absent in original SIU export: "+str(sorted(unrecognized)))
+    stops,seq,conflicts=build_stop_candidates(route_rows,route_map,rules)
     validate(crosswalk,seq,stops)
+    aliases,new_alias_count=compute_aliases(seq)
+    corrected=[r for r in seq if r["spelling_correction_applied"]=="true"]
+    write(out/"stop_name_correction_audit.csv",[
+        {"siu_stop_uuid":r["siu_stop_uuid"],"siu_itinerary_uuid":r["siu_itinerary_uuid"],
+         "original_name":r["stop_name_source"],"canonical_name":r["stop_name_normalized"],
+         "candidate_stop_id":r["candidate_stop_id"],
+         "rule_file":"sources/siu/stop_name_spelling_corrections_2026-11-03.csv"}
+        for r in corrected],
+        ["siu_stop_uuid","siu_itinerary_uuid","original_name","canonical_name","candidate_stop_id","rule_file"])
+    write(out/"stop_id_alias_history.csv",aliases,
+        ["old_stop_id","new_stop_id","reason","source_rule_file"])
     write(out/"siu_amb_route_crosswalk_review.csv",crosswalk,list(crosswalk[0]))
     write(out/"candidate_stops.csv",stops,list(stops[0]))
     write(out/"siu_stop_occurrence_crosswalk.csv",seq,list(seq[0]))
@@ -281,14 +329,15 @@ def run(out):
          "siu_itinerary_uuid":r["siu_itinerary_uuid"],
          "stop_sequence":r["stop_sequence"],
          "stop_id":r["candidate_stop_id"],
-         "stop_name":r["stop_name_source"],
+         "stop_name":r["stop_name_normalized"],
+         "stop_name_original_siu":r["stop_name_source"],
          "status":"provisional_route_mapping_not_stop_times",
          "trip_id":"","arrival_time":"","departure_time":""}
         for r in seq if r["proposed_gtfs_route_id"]
     ]
     write(out/"candidate_route_stop_orders_NO_TIMES.csv",matched_stop_orders,
           ["route_id","siu_itinerary_uuid","stop_sequence","stop_id","stop_name",
-           "status","trip_id","arrival_time","departure_time"])
+           "stop_name_original_siu","status","trip_id","arrival_time","departure_time"])
 
     write(out/"coincident_different_name_review.csv",conflicts,
           list(conflicts[0]) if conflicts else ["stop_lat","stop_lon","candidate_stop_ids","distinct_stop_names","manual_review_reason","auto_merged"])
@@ -301,6 +350,10 @@ def run(out):
         "provisionally_linked_route_stop_occurrences":len(matched_stop_orders),
         "provisionally_linked_distinct_stop_ids":len({r["stop_id"] for r in matched_stop_orders}),
         "different_name_same_rounded_coordinate_review":len(conflicts),
+        "approved_spelling_rules":len(rules),
+        "siu_stop_occurrences_spelling_normalized":len(corrected),
+        "retained_historical_stop_id_aliases":len(aliases),
+        "new_stop_id_aliases_detected_this_run":new_alias_count,
         "high_confidence_provisional_route_code_links":types["high_confidence_provisional"],
         "route_code_links_held_for_review":len(crosswalk)-types["high_confidence_provisional"],
         "route_crosswalk_statuses":dict(sorted(types.items())),
@@ -315,6 +368,8 @@ def run(out):
            f"**{len(crosswalk)} non-test SIU itineraries**, {len(seq)} ordered stop visits.",
            f"**{len(stops)} candidate physical stops** grouped only by SAME direction-preserving normalized name and all points within {MAX_MERGE_METERS}m.",
            f"**{len(conflicts)} same-coordinate/different-name cases left separate**.",
+           f"**{len(rules)} reviewed spelling corrections**, {len(corrected)} SIU occurrences corrected; originals preserved.",
+           f"**{len(aliases)} historical stop ID aliases** retained after merge.",
            f"**{len(matched_stop_orders)} stop visits have a provisional AMB route ID**, with no timetable fields.",
            f"**{types['high_confidence_provisional']} high-confidence geographic/operator route links**; NO legal code mappings automatically confirmed.",
            "", "Route crosswalk status:"]
