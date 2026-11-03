@@ -19,8 +19,8 @@ De SIU-GraphQL-oproep gebruikt `ServiceMngCompressedItineraryListing`. Het besta
 
 | Route | Itinerario A — vertrekzijde | Itinerario B — vertrekzijde | Frequentie spits/dal A | Frequentie spits/dal B |
 |---|---|---|---|---|
-| C12-4169 | Vía Granabastos en vervolgens Carrera 3/Transversal 14A | Calle 58E, Calle 56 en Carrera 6 | 6/9 min | 3/6 min |
-| C16-4167 | Vía Granabastos en vervolgens Carrera 3/Transversal 14A | Calle 58E, Calle 56 en Carrera 6 | 7/9 min | 7/9 min |
+| C12-4169 | Vía Granabastos en vervolgens Carrera 3 (aansluitend op het lokale wegenpatroon) | Calle 58E, Calle 56 en Carrera 6 | 6/9 min | 3/6 min |
+| C16-4167 | Vía Granabastos en vervolgens Carrera 3 (aansluitend op het lokale wegenpatroon) | Calle 58E, Calle 56 en Carrera 6 | 7/9 min | 7/9 min |
 
 De routebeschrijvingen bevatten grotendeels dezelfde lange corridor. **Het zijn daarom niet zonder meer twee volledig tegengestelde rijrichtingen**: bij de beoordeling moeten we het **gehele geordende traject** vergelijken en verschillen in één straat of korte lus niet wegmiddelen.
 
