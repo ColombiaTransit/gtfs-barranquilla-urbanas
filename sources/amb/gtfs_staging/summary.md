@@ -15,7 +15,7 @@
 - official_interval_missing: 3
 - permanent_backup_pending_pilot_expiry_check: 1
 - pilot_A_B_not_in_routes_txt: 1
-- pilot_original_pdf_legal_review_pending: 4
+- pilot_SIU_to_legal_AB_mapping_unresolved: 4
 - variant_headway_not_documented: 8
 
 No stops.txt, trips.txt, stop_times.txt or route geometry was invented.
