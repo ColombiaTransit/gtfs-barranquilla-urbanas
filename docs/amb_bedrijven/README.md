@@ -4,6 +4,16 @@
 
 De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke analyse** van routebesluiten, routevarianten, frequenties en geldigheidsperioden, vervolgens expliciete vervolgacties zonder fictieve waarden.
 
+## Historische AMB-tijden voor eerste/laatste vertrek (2020)
+
+Een afzonderlijke officiële [AMB-publicatie van **17 juli 2020**](https://www.ambq.gov.co/continuan-las-rutas-y-frecuencias-del-transporte-publico-colectivo/) bevat **24 routekaarten** met vertrekvensters en veelal frequenties. Deze bron is volledig uitgelezen via de [geslaagde Action-run 41588049698](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41588049698), met **24/24 unieke originele beelden**.
+
+- [Volledig AMB-vertrektijdenregister, 84 regels en 83 unieke bedrijf-routes](../../sources/amb/amb_2020_first_last_dispatch_times_verified.csv).
+- [Koppeling aan nieuwste onderzoeksfrequenties: 42 exact, 1 codealias, 1 zonder match](../../sources/amb/amb_2020_vs_resolution_route_dispatch_matching.csv).
+- [Historische publicatieanalyse en data-afwijkingen](../amb_2020_first_last_departures_research_2026-11-03.md).
+
+**Beleid:** het jaar **2020 is verplicht als bronperiode**. De oude eerste/laatste vertrekken zijn niet bewezen geldig in 2026; ze mogen als afzonderlijk gemarkeerde *dienstvenster-modelaanname* worden voorgesteld maar niet zonder besluit worden ingevoerd als officiële huidige tijden. Het huidige resolutie-interval blijft leidend. **Vijf oude kaarten bevatten in de laatste-vertrekkolom een ongeldig AM-achtervoegsel; deze waarden staan niet in de bruikbare eindtijdkolom.**
+
 ## Vastgesteld model voor werkdagspits en -dal (3 november 2026)
 
 We hanteren voortaan voor **maandag t/m vrijdag, lokale tijd Barranquilla**: **07:00–09:00 spits**, **09:00–17:00 dal**, **17:00–20:00 spits**; voor overige uren geldt **dal uitsluitend binnen de diensturen van de route**. Dit is een **expliciete ColombiaTransit-modelaanname**, geen AMB-bepaling. Weekend/feestdagroosters, eerste en laatste vertrek blijven apart te bepalen. Een resolutie met specifieke afwijkende tijdvakken gaat voor.
@@ -63,7 +73,7 @@ Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor
 | TRASALFA | 8 | [Analyse en open acties](trasalfa_route_frequencies_2026-11-02.md) |
 | TRASALIANCO | 11 | [Analyse en open acties](trasalianco_route_frequencies_2026-11-02.md) |
 
-**Dekking van deze batch:** 13 bedrijven, **159 manifestregistraties**, **44 route- en variantregels**, plus afzonderlijke vastlegging van openstaande juridische en operationele controles. **SOBUSA 307-2014** heeft een mislukte PDF-download; de overige bronbestanden zijn technisch geëxtraheerd, wat niet hetzelfde is als juridische controle.
+**Historische batchstand (2 november):** 13 bedrijven, **159 oorspronkelijke manifestregistraties**, **44 route- en variantregels**. De SOBUSA-307-2014-downloadfout is op **3 november** hersteld; zie de bronaudit hierboven. De tijdelijke batchinventarisatie is geen volledige juridische verificatie.
 
 ## Eerder behandelde bedrijven
 
