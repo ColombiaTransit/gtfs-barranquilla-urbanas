@@ -1,0 +1,203 @@
+name: Refine sparse official AMB KMZ shapes on GH bus roads and revalidate
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/refine_amb_sparse_kmz_edges_on_gh_bus_roads.py
+      - scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py
+      - scripts/compare_amb_kmz_refined_with_mobilitydata.py
+      - .github/workflows/refine-amb-kmz-sparse-road-geometry.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-KMZ-sparse-GH-safe-refinement-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  research-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install exact project GIS libraries
+        run: python -m pip install --disable-pip-version-check requests "pyproj>=3.5,<4" "shapely>=2,<3"
+      - name: Validate research scripts compile
+        run: |
+          python -m py_compile scripts/build_amb_kmz_first_gh_fallback_shapes.py \
+            scripts/refine_amb_sparse_kmz_edges_on_gh_bus_roads.py \
+            scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py \
+            scripts/compare_amb_kmz_refined_with_mobilitydata.py \
+            scripts/build_amb_gtfs_geometry_validation_pilot.py
+      - name: Reconstruct source ArcGIS only for routes without usable 2026 KMZ
+        run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
+      - name: Rebuild exact official AMB KMZ-first baseline with existing GH fallback
+        run: python scripts/build_amb_kmz_first_gh_fallback_shapes.py
+      - name: Attempt bus-road-following details only between KMZ vertices more than 400m apart
+        env:
+          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
+        run: |
+          if [ -z "$GRAPHHOPPER_URL" ]; then
+            echo "::error::Private ColombiaTransit GRAPHHOPPER_URL organization variable missing"
+            exit 1
+          fi
+          echo "::add-mask::$GRAPHHOPPER_URL"
+          python scripts/refine_amb_sparse_kmz_edges_on_gh_bus_roads.py \
+            --min-gap-m 400 --max-queries 2000 \
+            --max-end-snap-m 45 --max-road-detour-ratio 1.55
+      - name: Build baseline GTFS from official KMZ plus existing fallback
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-kmz-first-GH-fallback-research \
+            --out build/amb-KMZ-sparse-baseline-validation
+      - name: Build provisional GTFS with local KMZ sparse-road improvements
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-KMZ-dense-roads-research \
+            --out build/amb-KMZ-sparse-proposal-validation
+      - name: Require byte-identical GTFS fields except shapes.txt
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          a=Path("build/amb-KMZ-sparse-baseline-validation/gtfs_demo")
+          b=Path("build/amb-KMZ-sparse-proposal-validation/gtfs_demo")
+          # The generic pilot generator estimates fake travel times from
+          # shape length; we use baseline synthetic times in BOTH feeds.
+          (b/"stop_times.txt").write_bytes((a/"stop_times.txt").read_bytes())
+          z=b.parent/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip"
+          with ZipFile(z,"w",ZIP_DEFLATED,compresslevel=6) as f:
+              for p in sorted(b.glob("*.txt")):f.write(p,arcname=p.name)
+          for name in ("agency.txt","routes.txt","stops.txt","trips.txt","stop_times.txt","calendar.txt"):
+              if (a/name).read_bytes()!=(b/name).read_bytes():
+                  raise ValueError("Only shapes.txt may change; unexpected "+name)
+          print("Both 67-demo-trip GTFS feeds differ only in shape geometry")
+          PY
+      - name: Download official MobilityData Validator 8.0.1 and verify SHA256
+        run: |
+          curl --fail --location --retry 3 --silent --show-error \
+            https://github.com/MobilityData/gtfs-validator/releases/download/v8.0.1/gtfs-validator-8.0.1-cli.jar \
+            -o /tmp/gtfs-validator-8.0.1-cli.jar
+          echo "19293ddd9b6f954f216d4f12054bd8a3232921751c4484339e339764a91000e2  /tmp/gtfs-validator-8.0.1-cli.jar" | sha256sum -c -
+      - name: Validate baseline 2026 KMZ-first shapes with MobilityData
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-sparse-baseline-validation/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-sparse-baseline-validation/validator \
+            -c co -t 2 \
+            > build/amb-KMZ-sparse-baseline-validation/validator_stdout.log 2>&1
+          test -s build/amb-KMZ-sparse-baseline-validation/validator/report.json
+      - name: Validate provisional GH bus detailed shapes with MobilityData
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-sparse-proposal-validation/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-sparse-proposal-validation/validator \
+            -c co -t 2 \
+            > build/amb-KMZ-sparse-proposal-validation/validator_stdout.log 2>&1
+          test -s build/amb-KMZ-sparse-proposal-validation/validator/report.json
+      - name: Roll back source route patterns with any new GTFS or stop-shape issue
+        run: python scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py
+      - name: Build final candidate with only validator-guarded KMZ road refinements
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-KMZ-road-refinement-safe \
+            --out build/amb-KMZ-sparse-final-validation
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          baseline=Path("build/amb-KMZ-sparse-baseline-validation/gtfs_demo")
+          final=Path("build/amb-KMZ-sparse-final-validation/gtfs_demo")
+          (final/"stop_times.txt").write_bytes((baseline/"stop_times.txt").read_bytes())
+          z=final.parent/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip"
+          with ZipFile(z,"w",ZIP_DEFLATED,compresslevel=6) as f:
+              for p in sorted(final.glob("*.txt")):f.write(p,arcname=p.name)
+          for name in ("agency.txt","routes.txt","stops.txt","trips.txt","stop_times.txt","calendar.txt"):
+              assert (baseline/name).read_bytes()==(final/name).read_bytes(), name
+          PY
+      - name: Validate final risk-guarded KMZ road refinement with MobilityData 8.0.1
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-sparse-final-validation/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-sparse-final-validation/validator \
+            -c co -t 2 \
+            > build/amb-KMZ-sparse-final-validation/validator_stdout.log 2>&1
+          test -s build/amb-KMZ-sparse-final-validation/validator/report.json
+      - name: Compare actual MobilityData and apply complete safe rollback if unexpected regression
+        run: |
+          set +e
+          python scripts/compare_amb_kmz_refined_with_mobilitydata.py
+          comparison_status=$?
+          set -e
+          if [ "$comparison_status" -ne 0 ]; then
+            echo "::warning::Final validator regression detected, reverting ALL sparse GH improvements"
+            python scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py --rollback-all
+            python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+              --road-dir build/amb-KMZ-road-refinement-safe \
+              --out build/amb-KMZ-sparse-final-validation
+            python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          baseline=Path("build/amb-KMZ-sparse-baseline-validation/gtfs_demo")
+          final=Path("build/amb-KMZ-sparse-final-validation/gtfs_demo")
+          (final/"stop_times.txt").write_bytes((baseline/"stop_times.txt").read_bytes())
+          z=final.parent/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip"
+          with ZipFile(z,"w",ZIP_DEFLATED,compresslevel=6) as f:
+              for p in sorted(final.glob("*.txt")):f.write(p,arcname=p.name)
+          PY
+            rm -rf build/amb-KMZ-sparse-final-validation/validator
+            java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+              -i build/amb-KMZ-sparse-final-validation/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+              -o build/amb-KMZ-sparse-final-validation/validator \
+              -c co -t 2 \
+              > build/amb-KMZ-sparse-final-validation/validator_stdout.log 2>&1
+            python scripts/compare_amb_kmz_refined_with_mobilitydata.py
+          fi
+      - name: Publish concise actual geometry quality and validator statistics
+        if: always()
+        run: |
+          if [ -f build/amb-KMZ-GH-refinement-final-QA/summary.md ]; then
+            cat build/amb-KMZ-GH-refinement-final-QA/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit research-only selected bus-road geometry and all evidence
+        if: github.ref == 'refs/heads/main'
+        run: |
+          test -s build/amb-KMZ-GH-refinement-final-QA/summary.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/KMZ_GH_road_refinement_QA/
+            cp -a build/amb-KMZ-GH-refinement-final-QA/. sources/amb/KMZ_GH_road_refinement_QA/
+            cp build/amb-KMZ-dense-roads-research/summary.json sources/amb/KMZ_GH_road_refinement_QA/local_GH_retry_summary.json
+            cp build/amb-KMZ-dense-roads-research/KMZ_sparse_edges_GH_bus_decisions.csv sources/amb/KMZ_GH_road_refinement_QA/
+            cp build/amb-KMZ-dense-roads-research/KMZ_sparse_sections_review.csv sources/amb/KMZ_GH_road_refinement_QA/
+            cp build/amb-KMZ-road-refinement-safe/summary.json sources/amb/KMZ_GH_road_refinement_QA/validator_guard_summary.json
+            cp build/amb-KMZ-road-refinement-safe/KMZ_sparse_road_refinement_validator_guard.csv sources/amb/KMZ_GH_road_refinement_QA/
+            cp build/amb-KMZ-road-refinement-safe/GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson sources/amb/KMZ_GH_road_refinement_QA/
+            git add sources/amb/KMZ_GH_road_refinement_QA/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: source-constrained refine sparse KMZ bus road curves with MobilityData-safe guards"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Archive non-publishable GTFS ZIPs, real validator reports and QA shapes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-KMZ-sparse-GH-curve-refinement-MobilityData-verified-RESEARCH
+          path: |
+            build/amb-KMZ-dense-roads-research/
+            build/amb-KMZ-road-refinement-safe/
+            build/amb-KMZ-GH-refinement-final-QA/
+            build/amb-KMZ-sparse-baseline-validation/
+            build/amb-KMZ-sparse-proposal-validation/
+            build/amb-KMZ-sparse-final-validation/
+          if-no-files-found: warn
+          retention-days: 60
