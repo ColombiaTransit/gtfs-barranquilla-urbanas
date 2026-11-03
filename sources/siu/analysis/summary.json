@@ -1,0 +1,10 @@
+{
+  "siu_production_itineraries": 33,
+  "gis_reference_route_features": 93,
+  "source_siu_route_stop_rows": 6873,
+  "geographic_strong_candidates": 16,
+  "geographic_ambiguous_overlap": 5,
+  "geographic_partial_match": 12,
+  "n_confirmed_legal_gtfs_route_matches": 0,
+  "warning": "Do not use the nearest 2019/2023 line to assign a 2026 legal route automatically; repeated corridors and A/B variants may share geometry."
+}
