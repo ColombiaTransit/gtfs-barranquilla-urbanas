@@ -157,6 +157,7 @@ def build_stop_candidates(stop_rows,route_by_siu,corrections):
     prod=[s for s in stop_rows if s["likely_test_itinerary"]!="true"]
     # Strictly preserve directional codes by keeping *full* normalized name.
     indexed=defaultdict(list)
+    prepared=[]
     for s in prod:
         uid=s["siu_stop_uuid"]
         if not uid:raise ValueError("Missing SIU stop UUID")
@@ -169,6 +170,7 @@ def build_stop_candidates(stop_rows,route_by_siu,corrections):
            "_original_stop_name":original,"stop_name":canonical,
            "_name_was_corrected":original!=canonical}
         indexed[key(s["stop_name"])].append(s)
+        prepared.append(s)
     cluster_list=[]
     mapping={}
     # Deterministic input sort makes stop IDs stable for the same input data.
@@ -211,7 +213,7 @@ def build_stop_candidates(stop_rows,route_by_siu,corrections):
                 if row["siu_stop_uuid"] in mapping:raise ValueError("duplicate SIU source stop UUID")
                 mapping[row["siu_stop_uuid"]]=stop_id
     occurrence=[]
-    for row in sorted(prod,key=lambda r:(r["siu_itinerary_uuid"],int(r["siu_stop_sequence"]))):
+    for row in sorted(prepared,key=lambda r:(r["siu_itinerary_uuid"],int(r["siu_stop_sequence"]))):
         occurrence.append({
             "siu_itinerary_uuid":row["siu_itinerary_uuid"],
             "siu_base_route_uuid":row["siu_base_route_uuid"],
