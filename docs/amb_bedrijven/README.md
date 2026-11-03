@@ -4,11 +4,24 @@
 
 De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke analyse** van routebesluiten, routevarianten, frequenties en geldigheidsperioden, vervolgens expliciete vervolgacties zonder fictieve waarden.
 
+## Frequentiebeleid voor GTFS — officiële AMB-intervallen zijn leidend (3 november 2026)
+
+**Projectbesluit:** neem de spits- en dalfrequenties die in de **toepasselijke AMB-resolutie** staan als de te gebruiken GTFS-bronwaarden. Een onafhankelijke controle met GPS, SIBUS, voertuigmetingen of GTFS-Realtime is **niet vereist en geen blokkade**. We claimen daarmee niet dat iedere bus in de praktijk precies op tijd rijdt; we publiceren de **officieel vergunde/geplande dienst**.
+
+- **Controleer wel welk besluit geldt** per route (latere wijziging, ingetrokken vergunning, tijdelijke pilot met einddatum, gedeelde exploitatie). Gebruik niet automatisch het hoogste resolutienummer of de meest recente PDF als de rechtsgeldigheid onduidelijk is.
+- **Gebruik exact het interval uit de oorspronkelijke tabel**, na controle van OCR/scan als de tekstlezing twijfelachtig is. Geen handmatige correctie om het aan waargenomen realiteit aan te passen.
+- **Houd aparte itinerarios en gedeelde corridors uit elkaar.** Een effectief 5-minuteninterval op een overlap is niet noodzakelijk de 5-minutenfrequentie van elk individueel patroon.
+- **Frequentie ≠ diensturen:** `frequencies.txt` vereist nog `start_time`, `end_time` en `headway_secs`. Als een besluit geen spits-/dal-kloktijden noemt, zijn die periodegrenzen nog **onbekend** en mogen ze niet als officiële bronfeit worden verzonnen. Een expliciete, als *aanname* gemarkeerde modelkalender kan later separaat worden gekozen.
+- Routegeometrie, haltevolgorde, feestdagen/werkdagpatroon, juridisch relevante pilotstatus en ontbrekende geldige besluitinformatie blijven aparte werkzaamheden. **Voertuigcapaciteit blijft buiten scope.**
+- `GTFS_READY=no` in bestaande bronregisters betekent daarom **niet dat de vermelde frequentie onbetrouwbaar is**: het betekent dat andere GTFS-velden of de toepasselijke vergunningsstatus nog ontbreken.
+
+**Geen GTFS-RT nodig** om de officiële statische frequentie te gebruiken. Real-time afwijkingen zijn een ander product.
+
 ## Afbakening GTFS — voertuigcapaciteit uitgesloten (besluit 2 november 2026)
 
 **Voertuigcapaciteit / vlootomvang (minimaal/maximaal aantal bussen, bustypen, padrónverdeling) valt buiten de scope van deze GTFS-opbouw.** Verschillen zoals *50–60 versus 56–68 voertuigen* zijn daarom **geen GTFS-blokkade** en hoeven niet apart te worden opgelost. Ook voertuigklasse is niet nodig voor de gekozen GTFS-datalevering. De bestaande cijfers blijven in de oorspronkelijke dossiers en CSV's staan **uitsluitend als bronarchief**, maar worden niet meegenomen bij prioritering, validatie, routefrequentieberekening of het genereren van GTFS.
 
-**Wat wél telt voor GTFS:** routecode/bedrijf, juridisch geldige route en routevarianten/richting, geometrie en haltevolgorde, spits-/dalinterval **per itinerary**, dienstvensters en kalender (werkdagen/weekend/feestdagen), daadwerkelijke operationele status en herleidbare PDF-bronnen. Voor ritgeneratie is een vergund interval zonder begin-/eindtijd niet voldoende. Route-/codefouten en ontbrekende PDF's blijven relevant; een verschil **alleen in vlootaantal** niet.
+**Wat wél telt voor GTFS:** routecode/bedrijf, juridisch geldige route en routevarianten/richting, geometrie en haltevolgorde, spits-/dalinterval **per itinerary**, dienstvensters en kalender (werkdagen/weekend/feestdagen), de vergunde/formeel toepasselijke routeperiode en herleidbare PDF-bronnen. Voor ritgeneratie is een vergund interval zonder begin-/eindtijd niet voldoende. Route-/codefouten en ontbrekende PDF's blijven relevant; een verschil **alleen in vlootaantal** niet.
 
 Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor **GTFS** worden gelezen met **dit scopebesluit als override**. Er worden geen bestaande brongetallen verwijderd.
 
@@ -59,7 +72,8 @@ Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor
 
 ## Centrale onderzoeksbestanden
 
-- [**GTFS-gerichte kandidaatfrequenties zonder voertuigcapaciteit — 44 regels**](../../sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv). Nog niet operationeel geverifieerd.\n- [Oorspronkelijke bronextractie inclusief historische vlootcijfers (alleen archief)](../../sources/amb/remaining_13_route_parameters_2026-11-02.csv).
+- [**GTFS-gerichte kandidaatfrequenties zonder voertuigcapaciteit — 44 regels**](../../sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv). Officiële resolutie-intervallen zijn geaccepteerd als GTFS-bron; ontbrekende periodegrenzen/haltes blijven open.
+- [Oorspronkelijke bronextractie inclusief historische vlootcijfers (alleen archief)](../../sources/amb/remaining_13_route_parameters_2026-11-02.csv).
 - [PDF-/besluiteninventaris, 159 registraties](../../sources/amb/remaining_13_resolution_inventory_2026-11-02.csv).
 - [41 vervolgitems uit de 13 bedrijfsdossiers](../../sources/amb/remaining_13_open_issues_2026-11-02.csv).
 - [23-bedrijven-voortgangsregister](../../sources/amb/company_completion_backlog_2026-11-02.csv).
@@ -68,7 +82,7 @@ Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor
 
 **Klaar:** De officiële PDF's van alle 13 overgebleven bedrijven zijn systematisch doorzocht en de laatst gevonden beschikbare routefrequenties, routecodes en bronpaginanummers zijn opgenomen, met scancontrole van bepalende tabellen waar OCR fouten had. Bij COOCHOFAL zijn alle acht 2025-tabellen tegen de originele pagina's gecontroleerd.
 
-**Nog niet klaar:** volledige rechtsgeldigheidscontrole van **iedere** historische resolutie, nog ontbrekende PDF's (vooral COOLITORAL 256-2026 en de correcte COOTRANTICO 025-2011), interne tegenstrijdigheden binnen besluiten, 2026-actuele dienstregelingen, haltevolgordes en GPS-geometrie. Geen bedrijf krijgt een onvoorwaardelijke `GTFS_READY=yes` op basis van alleen deze vergunningen.
+**Nog niet klaar:** volledige rechtsgeldigheidscontrole van **iedere** historische resolutie, nog ontbrekende PDF's (vooral COOLITORAL 256-2026 en de correcte COOTRANTICO 025-2011), interne tegenstrijdigheden binnen besluiten, dienstvensters, kalenderdagen, haltevolgordes en GPS-geometrie. De vergunde frequenties zijn als normbron voldoende; `GTFS_READY` vereist daarnaast dienstvensters, kalender, routepatroon en haltes.
 
 **Let op:** Een interval op een overlappend traject (bijv. B18-SOBUSA, A10-TRANSDIAZ) is niet gelijk aan de vertrekken van een individuele itinerary. Een voorwaardelijk dienstvenster `00:00–24:00 afhankelijk van vraag` is geen bewijs voor 24-uursbediening.
 
