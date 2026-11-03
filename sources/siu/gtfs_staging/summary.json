@@ -5,13 +5,13 @@
   "conservatively_deduplicated_candidate_stops": 3118,
   "stop_records_merged_to_existing_candidate": 3289,
   "different_name_same_rounded_coordinate_review": 54,
-  "high_confidence_provisional_route_code_links": 9,
-  "route_code_links_held_for_review": 24,
+  "high_confidence_provisional_route_code_links": 12,
+  "route_code_links_held_for_review": 21,
   "route_crosswalk_statuses": {
     "gis_coverage_below_80pct": 4,
-    "high_confidence_provisional": 9,
+    "high_confidence_provisional": 12,
     "overlapping_routes_margin_below_15pct": 4,
-    "shared_multi_operator_itinerary": 10,
+    "shared_multi_operator_itinerary": 7,
     "test_excluded": 3,
     "top_gis_operator_does_not_match_siu": 1,
     "variant_A_B_unresolved": 5

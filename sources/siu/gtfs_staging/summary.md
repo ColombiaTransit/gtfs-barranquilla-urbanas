@@ -3,13 +3,13 @@
 **33 non-test SIU itineraries**, 6407 ordered stop visits.
 **3118 candidate physical stops** grouped only by SAME direction-preserving normalized name and all points within 5.0m.
 **54 same-coordinate/different-name cases left separate**.
-**9 high-confidence geographic/operator route links**; NO legal code mappings automatically confirmed.
+**12 high-confidence geographic/operator route links**; NO legal code mappings automatically confirmed.
 
 Route crosswalk status:
 - gis_coverage_below_80pct: 4
-- high_confidence_provisional: 9
+- high_confidence_provisional: 12
 - overlapping_routes_margin_below_15pct: 4
-- shared_multi_operator_itinerary: 10
+- shared_multi_operator_itinerary: 7
 - test_excluded: 3
 - top_gis_operator_does_not_match_siu: 1
 - variant_A_B_unresolved: 5
