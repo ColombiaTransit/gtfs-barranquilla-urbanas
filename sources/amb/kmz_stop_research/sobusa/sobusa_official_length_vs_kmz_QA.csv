@@ -1,0 +1,10 @@
+company,kmz_route_label,legal_resolution,legal_length_km,kmz_length_km,kmz_minus_legal_km,alternate_variant_legal_length_km,kmz_nearer_other_AB_length_by_at_least_250m,length_QA_status,legal_geometry_verified,manual_review_required,interpretation
+SOBUSA,B18-4175 A,082-2026 p6,73.6,75.555,1.955,75.6,yes,serious_legal_KMZ_length_mismatch_possible_AB_swap,no,yes,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,B18-4175 B,082-2026 p6,75.6,73.607,-1.993,73.6,yes,serious_legal_KMZ_length_mismatch_possible_AB_swap,no,yes,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,C11-4168,466-2025 p8,62.7,62.714,0.014,,no,length_reasonably_consistent,no,no,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,C12-4169 A,466-2025 p11,47.8,47.836,0.036,48.6,no,length_reasonably_consistent,no,no,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,C12-4169 B,466-2025 p11,48.6,48.549,-0.051,47.8,no,length_reasonably_consistent,no,no,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,C13-4143,466-2025 p13,48.0,48.065,0.065,,no,length_reasonably_consistent,no,no,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,C14-4170,466-2025 p15,56.3,56.236,-0.064,,no,length_reasonably_consistent,no,no,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,C16-4167 A,466-2025 p18,63.5,63.223,-0.277,63.3,no,legal_KMZ_length_difference_250_to_500m,no,yes,A/B length correspondence alone cannot prove a wrong map link
+SOBUSA,C16-4167 B,466-2025 p18,63.3,63.883,0.583,63.5,no,legal_KMZ_length_difference_over_500m,no,yes,A/B length correspondence alone cannot prove a wrong map link
