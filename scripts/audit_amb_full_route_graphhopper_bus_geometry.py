@@ -192,10 +192,10 @@ def main():
             raise ValueError("Source stop order is nonmonotonic")
     shapes,sources=load_geometries(patterns)
     client=Client(os.environ.get("GRAPHHOPPER_URL",""),timeout=args.timeout)
-    info,status=client.info()
+    server_info,status=client.info()
     if status!="ok":
         raise SystemExit("Private GraphHopper /info not available: "+status)
-    if "bus" not in [p.get("name") for p in info.get("profiles",[]) if isinstance(p,dict)]:
+    if "bus" not in [p.get("name") for p in server_info.get("profiles",[]) if isinstance(p,dict)]:
         raise SystemExit("GraphHopper /info does not advertise the required bus profile")
     segment_rows=[]
     stop_rows=[]
@@ -207,7 +207,7 @@ def main():
         p=patterns[uid]
         key=(p["company"],p["official_route_label"],p["geometry_component"])
         source=shapes[key]
-        info=sources[key]
+        source_info=sources[key]
         sections=divide(source.length,args.segment_km*1000)
         region_rows=[]
         region_lines={}
@@ -233,7 +233,7 @@ def main():
                         "trip_pattern_id":uid,"company":p["company"],
                         "route_label":p["official_route_label"],
                         "component":p["geometry_component"],"section":i+1,
-                        "source":info["source"],
+                        "source":source_info["source"],
                         "GH_profile":"bus",
                         "GH_road_candidate_only":True,
                         "road_near_source_fraction":metric["road_near_source"],
@@ -253,8 +253,8 @@ def main():
                 "KMZ_segment_start_m":round(start,1),
                 "KMZ_segment_end_m":round(end,1),
                 "KMZ_segment_length_m":round(section.length,1),
-                "source_geometry":info["source"],
-                "source_geometry_warning":info["warning"],
+                "source_geometry":source_info["source"],
+                "source_geometry_warning":source_info["warning"],
                 "GH_bus_status":route_status,
                 "GH_bus_road_distance_m":response["distance_m"] if response else "",
                 "GH_road_to_KMZ_ratio":ratio,
@@ -286,8 +286,8 @@ def main():
         trip_rows.append({
             "trip_pattern_id":uid,
             "company":p["company"],"route_label":p["official_route_label"],
-            "source_geometry":info["source"],
-            "source_geometry_warning":info["warning"],
+            "source_geometry":source_info["source"],
+            "source_geometry_warning":source_info["warning"],
             "source_component_count_for_this_pattern":1,
             "KMZ_component_length_m":round(source.length,1),
             "GH_sequential_sections_tested":len(region_rows),
@@ -319,8 +319,8 @@ def main():
     count=Counter(x["road_and_order_research_status"] for x in trip_rows)
     summary={
         "GH_profile":"bus",
-        "GH_version":str(info.get("version","")) if False else
-            str(client.info_queries)+"_info_query_completed",
+        "GH_version":str(server_info.get("version","")),
+        "GH_OSM_import_date":str(server_info.get("import_date","")),
         "patterns_selected":len(trip_rows),
         "total_v3_patterns_available":len(bypattern),
         "GH_segment_route_requests":client.route_queries,
