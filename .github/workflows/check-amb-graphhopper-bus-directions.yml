@@ -1,0 +1,92 @@
+name: Check AMB stop gap directions with private GraphHopper bus profile
+on:
+  workflow_dispatch:
+    inputs:
+      max_gaps:
+        description: Number of gap corridors to test (1-73)
+        required: false
+        default: '73'
+      max_via_queries:
+        description: Maximum stop via-point checks (0-125)
+        required: false
+        default: '125'
+      max_curbside_checks:
+        description: Maximum right-curbside tests (0-125)
+        required: false
+        default: '25'
+  push:
+    paths:
+      - scripts/query_graphhopper_bus_gap_directions.py
+      - .github/workflows/check-amb-graphhopper-bus-directions.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-graphhopper-bus-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bus-gap-direction-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install GIS routing analysis libraries
+        run: python -m pip install --disable-pip-version-check "shapely>=2.0,<3" "pyproj>=3.5,<4" requests
+      - name: Compile research source
+        run: python -m py_compile scripts/query_graphhopper_bus_gap_directions.py
+      - name: Route via GraphHopper bus profile with the existing SIU and OSM candidates
+        # No endpoint address in any source files or outputs.
+        # The organization variable is user-provided and not a GitHub Secret;
+        # mask the value immediately before invoking the script.
+        env:
+          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
+          MAX_GAPS: ${{ github.event.inputs.max_gaps || '10' }}
+          MAX_VIA_QUERIES: ${{ github.event.inputs.max_via_queries || '30' }}
+          MAX_CURBSIDE_CHECKS: ${{ github.event.inputs.max_curbside_checks || '5' }}
+        run: |
+          if [ -z "$GRAPHHOPPER_URL" ]; then
+            echo "::error::ColombiaTransit organization variable GRAPHHOPPER_URL is not available to this repository"
+            exit 1
+          fi
+          echo "::add-mask::$GRAPHHOPPER_URL"
+          python scripts/query_graphhopper_bus_gap_directions.py \
+            --max-gaps "$MAX_GAPS" \
+            --max-via-queries "$MAX_VIA_QUERIES" \
+            --max-curbside-checks "$MAX_CURBSIDE_CHECKS"
+      - name: Show non-secret audit summary
+        if: always()
+        run: |
+          if [ -f build/amb-graphhopper-bus-direction-QA/summary.md ]; then
+            cat build/amb-graphhopper-bus-direction-QA/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Save research-only GH results; never modify published GTFS
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [ ! -f build/amb-graphhopper-bus-direction-QA/summary.json ]; then
+            echo "No GH data to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/graphhopper_bus_direction_review/
+            cp -a build/amb-graphhopper-bus-direction-QA/. sources/amb/graphhopper_bus_direction_review/
+            git add sources/amb/graphhopper_bus_direction_review/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: research GraphHopper bus-direction and curbside reachability of SIU stop gaps"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Upload all non-private GraphHopper review data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: graphhopper-bus-gap-direction-review
+          path: build/amb-graphhopper-bus-direction-QA/
+          if-no-files-found: warn
+          retention-days: 45
