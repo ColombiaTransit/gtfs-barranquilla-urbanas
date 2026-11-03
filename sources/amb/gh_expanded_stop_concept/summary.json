@@ -1,0 +1,19 @@
+{
+  "original_existing_stop_visits": 9000,
+  "GH_add_candidates_inserted_in_concept": 65,
+  "concept_stop_visits": 9065,
+  "existing_trip_pattern_components": 70,
+  "route_variants_in_concept": 60,
+  "trip_pattern_components_with_additions": 19,
+  "route_variants_with_additions": 19,
+  "unique_existing_physical_SIU_stop_ids_reused": 2372,
+  "original_gaps_over_2km": 73,
+  "remaining_concept_gaps_over_2km": 57,
+  "close_pairs_under_60m_around_new_candidates": 7,
+  "existing_stop_visits_deleted_or_reordered": false,
+  "new_physical_stops_created": 0,
+  "travel_times_generated": 0,
+  "published_GTFS_files_modified": false,
+  "all_added_stops_require_operator_boarding_validation": true,
+  "trip_direction_and_legal_variant_verified": false
+}

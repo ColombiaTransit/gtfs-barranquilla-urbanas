@@ -1,0 +1,8 @@
+trip_pattern_id,stop_id_A,stop_id_B,concept_sequence_A,concept_sequence_B,KMZ_distance_between_visits_m,same_physical_SIU_stop_id,rejected_automatically,needs_manual_review
+AMB_RECON_TRANSMECAR_D114153_P1,SIU_023652fe-d904-4ddc-9b02-d62474499713,SIU_569bf0eb-3f8c-4b4e-bdbd-3c9c5c44058b,70,71,0.1,no,no,yes
+AMB_RECON_COOTRANTICO_B5B4190_P1,SIU_4fcf3e7f-be05-45c2-ac13-a924c7365459,SIU_b957c264-8593-47cb-81ab-25addc2aefcc,15,16,0.0,no,no,yes
+AMB_RECON_COOTRANTICO_B74123_P1,SIU_99707388-a94d-43d3-bfa9-5b7316656b80,SIU_68e9854a-b652-431c-97a7-24fe9ecbb719,13,14,3.5,no,no,yes
+AMB_RECON_LOLAYA_B10B4193_P1,SIU_a36deb20-c9ee-4f7b-ab5e-24450d9dcdff,SIU_29ed898d-512d-4c2c-bd74-6134a65e800e,18,19,18.3,no,no,yes
+AMB_RECON_LOLAYA_B10B4193_P1,SIU_8fb5b179-63f6-4e16-95ef-a1c38030b92c,SIU_9d11d6c8-edb4-4908-93a7-30ebafe33c1c,96,97,0.0,no,no,yes
+AMB_RECON_SOBUSA_C124169A_P1,SIU_8fb5b179-63f6-4e16-95ef-a1c38030b92c,SIU_9d11d6c8-edb4-4908-93a7-30ebafe33c1c,82,83,0.0,no,no,yes
+AMB_RECON_SOBUSA_C124169B_P1,SIU_8fb5b179-63f6-4e16-95ef-a1c38030b92c,SIU_9d11d6c8-edb4-4908-93a7-30ebafe33c1c,87,88,0.0,no,no,yes
