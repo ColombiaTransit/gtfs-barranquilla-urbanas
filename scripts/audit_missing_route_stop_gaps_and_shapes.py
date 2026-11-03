@@ -15,7 +15,7 @@ from pathlib import Path
 from shapely.geometry import Point
 
 from map_missing_siu_route_stops_to_trips import (
-    ROOT, ARCGIS_INVENTORY, COVERAGE, load_arcgis, read_csv, source_selection
+    ROOT, BACK, ARCGIS_INVENTORY, COVERAGE, load_arcgis, read_csv, source_selection
 )
 
 BASE = ROOT / "build/amb-missing-route-stop-trip-patterns"
@@ -148,8 +148,8 @@ def main():
             nodes.append({
                 "company":key[0],"route_label":key[1],
                 "component_index":i,"component_length_m":round(line.length,1),
-                "first_lon_lat":str(tuple(round(x,7) for x in line.coords[0])),
-                "last_lon_lat":str(tuple(round(x,7) for x in line.coords[-1])),
+                "first_lon_lat":str(tuple(round(x,7) for x in BACK.transform(*line.coords[0]))),
+                "last_lon_lat":str(tuple(round(x,7) for x in BACK.transform(*line.coords[-1]))),
                 "source_geometry":source,"source_warning":warning,
                 "correct_component_order_known":"no",
             })
