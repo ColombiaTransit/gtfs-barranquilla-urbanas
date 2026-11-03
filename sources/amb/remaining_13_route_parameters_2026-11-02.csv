@@ -20,10 +20,10 @@ MONTERREY,B11-B-4192,390-2018,7,9,10,12,53.8,11,scan bevestigd,yes,no
 MONTERREY,B12-4127,390-2018,4,6,20,24,,12,"scan bevestigd, lengte niet betrouwbaar uit scan",yes,no
 SOBUSA,B18-4175,"082-2026 (B18), 466-2025 (zes routes)",5,6,52,62,,082-2026 p6,"gecombineerd drukste traject; itinerary A/B elk 10/12; lengte A 73.6, B 75.6 km",yes,no
 SOBUSA,C11-4168,"082-2026 (B18), 466-2025 (zes routes)",3.5,5,60,72,62.7,466-2025 p8,scan gecontroleerd,yes,no
-SOBUSA,C12-4169,"082-2026 (B18), 466-2025 (zes routes)",3,5,56,68,,466-2025 p11,"effectief gedeeld; A 6/9 (47.8 km), B 3/6 (48.6 km)",yes,no
+SOBUSA,C12-4169,"082-2026 (B18), 466-2025 (zes routes)",3,5,56,68,,466-2025 p11,"effectief drukste traject 3/5; A 6/9 (47.8 km), B 3/6 (48.6 km), origineel p11 gecontroleerd; p9 code C12-4149 lijkt drukfout voor C12-4169",yes,no
 SOBUSA,C13-4143,"082-2026 (B18), 466-2025 (zes routes)",3,5,56,68,48,466-2025 p13,scan gecontroleerd,yes,no
 SOBUSA,C14-4170,"082-2026 (B18), 466-2025 (zes routes)",2,4,90,108,56.3,466-2025 p15,scan gecontroleerd,yes,no
-SOBUSA,C16-4167,"082-2026 (B18), 466-2025 (zes routes)",3.5,6,67,80,,466-2025 p18,effectief drukste traject; aparte itinerarios niet volledig gecontroleerd,yes,no
+SOBUSA,C16-4167,"082-2026 (B18), 466-2025 (zes routes)",3.5,6,67,80,,466-2025 p18,"effectief drukste traject 3.5/6; A en B elk 7/9 min, lengte A 63.5 km en B 63.3 km; p18 visueel geverifieerd",yes,no
 SODETRANS,B13-4128,719-2018,5,7,34,41,73.2,719-2018 p8,beschikkend routeblad,yes,no
 SODETRANS,B14-4174,719-2018,5,7,34,41,67.4,719-2018 p9,beschikkend routeblad,yes,no
 SODETRANS,C21-4182,719-2018,4,6,51,62,72.7,719-2018 p10,beschikkend routeblad,yes,no
