@@ -25,6 +25,8 @@ ROOT=Path(__file__).resolve().parents[1]
 SIU=ROOT/"sources/siu/public_extract"
 GIS=ROOT/"sources/siu/analysis/siu_to_amb_routecode_candidates.csv"
 ROUTES=ROOT/"gtfs/routes.txt"
+CORRECTIONS=ROOT/"sources/siu/stop_name_spelling_corrections_2026-11-03.csv"
+PREVIOUS=ROOT/"sources/siu/gtfs_staging"
 MAX_MERGE_METERS=5.0
 
 def load(path):
@@ -134,7 +136,24 @@ def build_crosswalk(itins,gis,routes):
         })
     return output,route_by_siu,summary
 
-def build_stop_candidates(stop_rows,route_by_siu):
+def spelling_rules(rows):
+    rules={}
+    for row in rows:
+        if row["review_status"]!="approved_clear_typo":
+            continue
+        before,after=row["source_name_exact"],row["canonical_name"]
+        if not before or not after or before==after:
+            raise ValueError("Invalid approved spelling rule")
+        if before in rules:
+            raise ValueError("Duplicate spelling correction: "+before)
+        # Spelling fixes may not change direction codes or the return marker.
+        dirs=lambda x:re.findall(r"(?<!\\w)(?:NS|SN|EO|OE|REGRESO|RETORNO|VUELTA)(?!\\w)",simplify(x))
+        if dirs(before)!=dirs(after):
+            raise ValueError("Spelling rule modifies a direction/return marker")
+        rules[before]=after
+    return rules
+
+def build_stop_candidates(stop_rows,route_by_siu,corrections):
     prod=[s for s in stop_rows if s["likely_test_itinerary"]!="true"]
     # Strictly preserve directional codes by keeping *full* normalized name.
     indexed=defaultdict(list)
@@ -144,7 +163,11 @@ def build_stop_candidates(stop_rows,route_by_siu):
         lat=float(s["stop_lat"]);lon=float(s["stop_lon"])
         if not (10.0<=lat<=11.5 and -75.5<=lon<=-74.0):
             raise ValueError("Out-of-region SIU coordinate: "+uid)
-        s={**s,"_lat":lat,"_lon":lon}
+        original=s["stop_name"]
+        canonical=corrections.get(original,original)
+        s={**s,"_lat":lat,"_lon":lon,
+           "_original_stop_name":original,"stop_name":canonical,
+           "_name_was_corrected":original!=canonical}
         indexed[key(s["stop_name"])].append(s)
     cluster_list=[]
     mapping={}
@@ -174,6 +197,8 @@ def build_stop_candidates(stop_rows,route_by_siu):
                 "stop_id":stop_id,"stop_name":chosen_name,"stop_lat":lat,
                 "stop_lon":lon,"location_type":0,
                 "source_uuid_anchor":marker,
+                "original_siu_names":" | ".join(sorted({x["_original_stop_name"] for x in cl})),
+                "spelling_corrected_occurrences":sum(x["_name_was_corrected"] for x in cl),
                 "siu_uuid_occurrences":len(cl),
                 "siu_itineraries":len({x["siu_itinerary_uuid"] for x in cl}),
                 "merge_rule":"same_full_normalized_name_exact_coordinate" if is_exact else "same_full_normalized_name_all_within_5m",
@@ -196,7 +221,9 @@ def build_stop_candidates(stop_rows,route_by_siu):
             "siu_stop_uuid":row["siu_stop_uuid"],
             "candidate_stop_id":mapping[row["siu_stop_uuid"]],
             "proposed_gtfs_route_id":route_by_siu.get(row["siu_itinerary_uuid"],""),
-            "stop_name_source":row["stop_name"],
+            "stop_name_source":row["_original_stop_name"],
+            "stop_name_normalized":row["stop_name"],
+            "spelling_correction_applied":str(row["_name_was_corrected"]).lower(),
             "stop_lat_source":row["stop_lat"],
             "stop_lon_source":row["stop_lon"],
             "stop_time_intervals_available":"no",
