@@ -1,0 +1,38 @@
+{
+  "source_page": "https://www.ambq.gov.co/transporte/transporte-publico-colectivo/",
+  "snapshot_utc": "2026-11-03T10:02:28+00:00",
+  "page_kmz_attributes": 93,
+  "unique_route_files": 93,
+  "companies": [
+    "COOASOATLAN",
+    "COOCHOFAL",
+    "COOLITORAL",
+    "COOTRAB",
+    "COOTRANSCO",
+    "COOTRANSNORTE",
+    "COOTRANSPORCAR",
+    "COOTRANTICO",
+    "COOTRASOL",
+    "EMBUSA",
+    "FLOTA-ANGULO",
+    "FLOTA-ROJA",
+    "LA-CAROLINA",
+    "LOLAYA",
+    "MONTERREY",
+    "SOBUSA",
+    "SODETRANS",
+    "TRANSDIAZ",
+    "TRANSMECAR",
+    "TRANSOLEDAD",
+    "TRANSURBAR",
+    "TRASALFA",
+    "TRASALIANCO"
+  ],
+  "file_statuses": {
+    "geometry_imported": 93
+  },
+  "explicit_AB_variants": 16,
+  "total_linestrings": 334,
+  "total_line_vertices": 62419,
+  "gtfs_export_approved": false
+}
