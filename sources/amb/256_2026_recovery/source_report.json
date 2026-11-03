@@ -1,0 +1,28 @@
+{
+  "archive": "https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-coolitoral/",
+  "ninja_dynamic_endpoints": 1,
+  "dynamic_rows_total": 38,
+  "matching_256_rows": 1,
+  "candidate_pdf_urls": [
+    "https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf"
+  ],
+  "attempts": [
+    {
+      "url": "https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf",
+      "http": 200,
+      "bytes": 515478,
+      "pdf_header": true
+    }
+  ],
+  "verified_source_url": "https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf",
+  "original_pdf_retrieved": true,
+  "native_text_available": true,
+  "requires_separate_ocr": false,
+  "pt4_pt5_legal_A_B_text_identified": true,
+  "pdf_pages": 7,
+  "native_text_chars": 13722,
+  "mentions_PT4": true,
+  "mentions_PT5": true,
+  "mentions_itinerario_A": true,
+  "mentions_itinerario_B": true
+}
