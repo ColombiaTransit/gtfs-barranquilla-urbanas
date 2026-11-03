@@ -67,6 +67,9 @@ async def main():
                                 item["data_shapes"]=";".join(
                                     f"{k}:{'list_'+str(len(v)) if isinstance(v,list) else 'object' if isinstance(v,dict) else type(v).__name__}"
                                     for k,v in list(payload.items())[:16])
+                                item["data_nested_keys"]=";".join(
+                                    f"{k}=>"+",".join(str(y) for y in list(v)[:20])
+                                    for k,v in list(payload.items())[:10] if isinstance(v,dict))
                         elif isinstance(data,list):
                             item["json_type"]="array"
                             item["root_array_length"]=len(data)
@@ -83,7 +86,7 @@ async def main():
             # Virtualized Material-UI cards can be obstructed by an animation;
             # activate React's real li onClick via DOM instead of coordinates.
             label=page.get_by_text(TARGET,exact=True).first
-            await label.evaluate("(el)=>{const li=el.closest('li'); if(li)li.click();else el.click();}")
+            await label.evaluate("(el)=>{const wrapper=el.closest('.wrapper'); if(wrapper)wrapper.click();else el.click();}")
             await page.wait_for_timeout(1600)
             await page.locator(".l-card__inner .title").first.wait_for(timeout=20000)
             summary["detail_title"]=await page.locator(".l-card__inner .title").first.inner_text()
@@ -148,7 +151,7 @@ async def main():
         # response JSON, HTTP headers or credentials.
         unique=list({(r["endpoint_path"],r["method"],r["status"]):r for r in responses}.values())
         with (OUT/"public_xhr_endpoint_metadata.csv").open("w",newline="",encoding="utf-8") as f:
-            keys=["endpoint_path","method","status","resource_type","json_type","top_level_keys","root_array_length","data_keys","data_shapes","graphql_operation_name","graphql_query_operation","graphql_variable_names"]
+            keys=["endpoint_path","method","status","resource_type","json_type","top_level_keys","root_array_length","data_keys","data_shapes","graphql_operation_name","graphql_query_operation","graphql_variable_names","data_nested_keys"]
             w=csv.DictWriter(f,fieldnames=keys,extrasaction="ignore");w.writeheader();w.writerows(unique)
     (OUT/"summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
     (OUT/"summary.md").write_text(
