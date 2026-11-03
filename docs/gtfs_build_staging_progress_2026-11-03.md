@@ -1,3 +1,19 @@
+## Update 3 november 2026 — ontbrekende SIU-routehalte-koppelingen op bestaande haltes geprojecteerd
+
+De [geslaagde GitHub Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41624525178) heeft nu **alle 60 KMZ-routevarianten zonder direct geordend SIU-route-haltepatroon** op bestaande fysieke SIU-haltes gematcht. Geen dienstregeling- of reistijdberekening: GraphHopper volgt pas in de latere tijdfase.
+
+- **60/60 routevarianten** met een bestaande bronshape en minstens één bruikbaar voorlopig haltepatroon (minstens vijf haltes).
+- **74 geografische kandidaatpatronen** (sommige bronshapes hebben meer dan één LineString), waarvan **70 met minimaal vijf kandidaat-haltes** en dus met een geordende stop_sequence in de staging.
+- **9.000 kandidaat-haltebezoeken**, verwijzend naar **2.368 al bestaande fysieke SIU stop_id's**. Geen aparte haltes voor de buslijnen gemaakt; een bestaand SIU stop_id kan aan verschillende trip-patronen worden gekoppeld.
+- Op 35m zijn **24.279 route-stop-projectiekandidaten** bekeken; selectie is restrictiever (maximaal 25m, richtingscontrole NS/SN/OE/EO en een model-spreidingsafstand van 115m). De niet-geselecteerde kandidaten blijven traceerbaar.
+- [Trip-patronen zonder tijden](../sources/amb/missing_siu_trip_stop_patterns/trip_patterns_MISSING_SIU_NO_TIMES.csv) en [trip→stop_id, stop_sequence zonder tijden](../sources/amb/missing_siu_trip_stop_patterns/candidate_stop_order_per_trip_NO_TIMES.csv) vormen de nieuwe basis voor latere GraphHopper-reistijden.
+- [Alle kandidaatselecties incl. afwijzingsreden](../sources/amb/missing_siu_trip_stop_patterns/all_projected_SIU_stop_candidates_WITH_DECISIONS.csv), [geometrie- en richting-QA](../sources/amb/missing_siu_trip_stop_patterns/route_shape_and_stop_mapping_QA.csv) en [samenvatting](../sources/amb/missing_siu_trip_stop_patterns/summary.md) zijn gearchiveerd.
+
+**Shape-keuze:** officiële AMB-KMZ waar coherent en niet foutief gelabeld. **COOLITORAL PT2** verwijst op de AMB-website naar PT1 en gebruikt daarom voorlopig de expliciet gemarkeerde oudere ArcGIS-routevorm. **LOLAYA D8** heeft >100 grotendeels korte, ongeordende KML-fragmenten en is daarom overgezet naar ArcGIS 2019–2023 voor een veel kleinere, toetsbare verzameling routedeelpatronen. Ook COOCHOFAL C9 draagt de bestaande URL-conflictvlag. **Alle drie bronuitzonderingen blijven niet-publiceerbaar totdat de juiste lijn is gecontroleerd.**
+
+**Beperkingen:** shapevolgorde is geen bewijs van werkelijk halteren, aparte routebediening of operationele tripgrenzen. De gekozen kandidaat-trip kan een hele heen/terug-lus zijn, en de afstandsfilter kan echte haltes missen. De 20 reeds gevonden SIU-haltevolgordes blijven **onveranderd**. De nieuwe voorgestelde basis-route_id voor A/B is gelijk per officiële lijn, maar de historische gtfs/routes.txt met meerdere A/B-rijen is in deze onderzoeksstap **nog niet genormaliseerd**. Pas na beoordeling van haltebediening, rijrichting, tripsegmentatie en latere tijdcalibratie komen de concepten in definitieve GTFS.
+
+
 ## Update 3 november 2026 — trip-sjablonen, gedeelde haltes en model-stop_times
 
 De [geslaagde GitHub Action voor stop_times-staging](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41622390506) zet de **20 bestaande voorlopig aan AMB gekoppelde SIU-itineraries** om in [20 GTFS-achtige trip-sjablonen](../sources/amb/gtfs_trip_timing_staging/trips_MODEL_ONLY_NOT_FOR_PUBLICATION.txt) en [3.981 gemodelleerde haltepassages](../sources/amb/gtfs_trip_timing_staging/stop_times_MODEL_ONLY_NOT_FOR_PUBLICATION.txt). **Dit zijn geen officiële passage-/vertrektijden of publiceerbare GTFS-bestanden.** De SIU-volgorde is behouden; alle stop_id-waarden verwijzen naar de al gededupliceerde fysieke haltecatalogus. **2.394** unieke SIU-stop-ID's komen in deze sjablonen voor.
