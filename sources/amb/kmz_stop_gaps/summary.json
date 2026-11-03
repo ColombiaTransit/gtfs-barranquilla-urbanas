@@ -1,0 +1,19 @@
+{
+  "kmz_route_variant_records": 93,
+  "siu_itineraries_regular": 33,
+  "source_siu_candidate_stop_locations": 3117,
+  "source_osm_unclassified_boarding_candidates": 34,
+  "coverage_counts": {
+    "siu_staged_strong_candidate": 12,
+    "no_siu_route_stop_candidate": 60,
+    "siu_link_ambiguous": 13,
+    "siu_staged_provisional_candidate": 8
+  },
+  "uncovered_route_variant_records": 60,
+  "uncovered_variants_with_osm_candidate_30m": 38,
+  "uncovered_variants_with_siu_candidate_30m": 60,
+  "nearby_50m_route_stop_candidates": 16623,
+  "legal_mapping_final_confirmed": 0,
+  "tpc_route_stops_confirmed_from_geographic_proximity": 0,
+  "no_stop_times_or_gtfs_shapes_generated": true
+}
