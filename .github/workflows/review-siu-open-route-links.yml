@@ -1,0 +1,50 @@
+name: Review all unresolved SIU to AMB route links
+on:
+  push:
+    paths:
+      - scripts/review_siu_open_route_links.py
+      - .github/workflows/review-siu-open-route-links.yml
+      - sources/amb/details/resolucion_256-2026.csv
+      - sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv
+      - sources/siu/public_extract/siu_route_stop_sequences.csv
+      - gtfs/routes.txt
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: siu-open-crosswalk-research
+  cancel-in-progress: false
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Review all 21 open SIU→AMB route base and variant mappings
+        run: python scripts/review_siu_open_route_links.py --out build/siu-open-route-review
+      - name: Summarize progress
+        run: cat build/siu-open-route-review/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve the research review in GitHub (not the GTFS feed)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/siu/open_route_review
+          cp build/siu-open-route-review/* sources/siu/open_route_review/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/siu/open_route_review/
+          if ! git diff --cached --quiet; then
+            git commit -m "research(siu): review all 21 unresolved route links including PT4/PT5 A/B"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Upload review matrix and ordered stop comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-21-open-route-links-review
+          path: build/siu-open-route-review/
+          if-no-files-found: warn
+          retention-days: 45
