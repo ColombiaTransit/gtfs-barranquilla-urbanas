@@ -17,6 +17,8 @@ De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke ana
 
 **Geen GTFS-RT nodig** om de officiële statische frequentie te gebruiken. Real-time afwijkingen zijn een ander product.
 
+**Voortgang bronkandidaten:** in de gecombineerde GTFS-frequentietabel staan **44 regels**, waarvan **38** complete officiële spits-/dalintervalparen hebben. De overige **6** missen ten minste één interval; deze zijn nog geen bruikbare frequentie-invoer. **4** van de 38 complete intervalparen betreffen een effectief interval op een gedeeld traject: hiervoor ontbreken nog afzonderlijke patroonspecifieke vertrektijden. `headway_secs` is voor de 38 volledige waarden exact uit minuten × 60 vastgelegd. Dit is **bronacceptatie**, nog geen volledig genereerbare `frequencies.txt` omdat begin-/eindtijden ontbreken.
+
 ## Afbakening GTFS — voertuigcapaciteit uitgesloten (besluit 2 november 2026)
 
 **Voertuigcapaciteit / vlootomvang (minimaal/maximaal aantal bussen, bustypen, padrónverdeling) valt buiten de scope van deze GTFS-opbouw.** Verschillen zoals *50–60 versus 56–68 voertuigen* zijn daarom **geen GTFS-blokkade** en hoeven niet apart te worden opgelost. Ook voertuigklasse is niet nodig voor de gekozen GTFS-datalevering. De bestaande cijfers blijven in de oorspronkelijke dossiers en CSV's staan **uitsluitend als bronarchief**, maar worden niet meegenomen bij prioritering, validatie, routefrequentieberekening of het genereren van GTFS.
