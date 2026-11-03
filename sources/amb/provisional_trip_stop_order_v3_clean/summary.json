@@ -1,0 +1,19 @@
+{
+  "baseline_existing_original_stop_visits_preserved": 9000,
+  "v2_added_GH_visits": 65,
+  "review_alerts_total": 39,
+  "review_alerts_repeated_stop_id": 26,
+  "review_alerts_short_adjacent_candidate_pairs": 13,
+  "GH_visits_in_close_pairs": 26,
+  "GH_visits_flagged_both_repeat_and_close": 7,
+  "distinct_GH_candidate_visits_excluded_from_v3": 45,
+  "v3_GH_candidate_visits_remaining": 20,
+  "v3_all_concept_stop_visits": 9020,
+  "v3_route_patterns": 70,
+  "affected_route_variants": 14,
+  "number_of_physical_stop_records_deleted": 0,
+  "original_source_staging_modified": false,
+  "production_gtfs_modified": false,
+  "trips_or_stop_times_produced": false,
+  "real_stop_service_proven_or_disproven": false
+}
