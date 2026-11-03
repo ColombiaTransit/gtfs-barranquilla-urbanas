@@ -1,5 +1,11 @@
 # SIU → AMB-routekoppeling en voorlopige GTFS-haltes (3 november 2026)
 
+## Update — open 21 routes verder onderzocht
+
+De [vervolgreview van alle 21 SIU-itineraries](siu_remaining_21_route_links_review_2026-11-03.md) heeft **acht extra, één-op-één voorlopige AMB-basisroutekoppelingen** opgeleverd, met **1.620** geordende SIU-halteregels. Samen met de 12 bestaande sterke routekandidaten zijn er nu **20 voorlopige routekoppelingen en 3.981 geordende route-haltebezoeken** in [één gecombineerd onderzoeksbestand](../sources/siu/open_route_review/combined_20_route_stop_candidates_NO_TIMES.csv), met **2.394 kandidaat-stop-ID's**. De 13 overige SIU-itineraries betreffen 8 operator-/samenwerkingsvragen, 3 A/B-varianten en 2 PT4/PT5-conflicten. Alle 21 zijn beoordeeld maar **nul nieuwe definitief juridisch bevestigd**.
+
+Het oorspronkelijke officiële [AMB-pilotbesluit 256-2026](https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf) is ondertussen teruggevonden: vier PT4/PT5-A/B-routebeschrijvingen, inclusief 9/14 min per variant. [PT4/PT5-onderzoek](../sources/siu/coolitoral_256_street_audit/pt4_pt5_street_sequence_review.csv) toont dat de SIU-routenaam en de eerste SIU-stop verschillende wettelijke basiscodes suggereren; **geen geforceerde codekoppeling**.
+
 ## Update — gecontroleerde spellingsnormalisatie
 
 Twee duidelijke bronfouten zijn via een [kleine, expliciete correctietabel](../sources/siu/stop_name_spelling_corrections_2026-11-03.csv) opgelost: `LOS MANATIALES` → `LOS MANANTIALES` en `COLEGIO LA ENSE?ANZA` → `COLEGIO LA ENSEÑANZA`. De bron-`stop_name` uit SIU wordt niet aangepast; per betrokken UUID bewaren we [de oorspronkelijke en de gestandaardiseerde naam](../sources/siu/gtfs_staging/stop_name_correction_audit.csv). De normalisatie wordt ook toegepast op de concept-`stops.txt` en de geordende haltevermeldingen.
