@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - scripts/build_siu_gtfs_stop_staging.py
+      - sources/siu/stop_name_spelling_corrections_2026-11-03.csv
+      - tests/test_siu_stop_name_normalization.py
       - .github/workflows/stage-siu-gtfs-stops.yml
       - sources/siu/public_extract/siu_itineraries.csv
       - sources/siu/public_extract/siu_route_stop_sequences.csv
@@ -20,6 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Verify reviewed spellings and direction safety
+        run: python -m unittest discover -s tests -p 'test_siu_stop_name_normalization.py' -v
       - name: Build conservative candidate stop IDs and route links
         run: python scripts/build_siu_gtfs_stop_staging.py --out build/siu-gtfs-staging
       - name: Publish staging report
