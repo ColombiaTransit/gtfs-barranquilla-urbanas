@@ -5,6 +5,7 @@ on:
     paths:
       - scripts/retry_amb_mobilitydata_stop_shape_warnings.py
       - scripts/compare_amb_gtfs_geometry_validator_reports.py
+      - scripts/guard_amb_gh_shape_fixes_against_validator_order.py
       - .github/workflows/fix-amb-mobilitydata-stop-shapes.yml
 permissions:
   contents: write
@@ -30,7 +31,8 @@ jobs:
         run: |
           python -m py_compile scripts/build_amb_gtfs_geometry_validation_pilot.py \
             scripts/retry_amb_mobilitydata_stop_shape_warnings.py \
-            scripts/compare_amb_gtfs_geometry_validator_reports.py
+            scripts/compare_amb_gtfs_geometry_validator_reports.py \
+            scripts/guard_amb_gh_shape_fixes_against_validator_order.py
       - name: Download official MobilityData validator 8.0.1 and verify known SHA-256
         run: |
           curl --fail --location --retry 3 --silent --show-error \
@@ -72,8 +74,28 @@ jobs:
             -c co -t 2 \
             > build/amb-gtfs-mobilitydata-STOP-AWARE-NOT-PUBLISHABLE/validator_stdout.log 2>&1
           test -s build/amb-gtfs-mobilitydata-STOP-AWARE-NOT-PUBLISHABLE/validator/report.json
-      - name: Compare actual MobilityData notices and identify remaining stop/order cases
-        run: python scripts/compare_amb_gtfs_geometry_validator_reports.py
+      - name: Restore source roads for any trip with NEW validator stop-order errors
+        run: |
+          python scripts/guard_amb_gh_shape_fixes_against_validator_order.py \
+            --jar /tmp/gtfs-validator-8.0.1-cli.jar --max-probes 100
+      - name: Build final nonpublishing GTFS with distance AND order-safe GH routes
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-gtfs-geometry-stop-aware-SAFE \
+            --out build/amb-gtfs-mobilitydata-ORDER-GUARDED
+      - name: Run final MobilityData 8.0.1 validator on order-guarded GH geometry
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-gtfs-mobilitydata-ORDER-GUARDED/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-gtfs-mobilitydata-ORDER-GUARDED/validator \
+            -c co -t 2 \
+            > build/amb-gtfs-mobilitydata-ORDER-GUARDED/validator_stdout.log 2>&1
+          test -s build/amb-gtfs-mobilitydata-ORDER-GUARDED/validator/report.json
+      - name: Compare ACTUAL MobilityData notices with final safe shapes
+        run: |
+          python scripts/compare_amb_gtfs_geometry_validator_reports.py \
+            --new build/amb-gtfs-mobilitydata-ORDER-GUARDED/validator/report.json \
+            --retry build/amb-gtfs-geometry-stop-aware-SAFE/summary.json
       - name: Write geographic QA summary to GitHub Action
         if: always()
         run: |
@@ -91,11 +113,12 @@ jobs:
             git reset --hard origin/main
             mkdir -p sources/amb/GTFS_shape_validator_recheck/
             cp -a build/amb-GTFS-MobilityData-geography-comparison/. sources/amb/GTFS_shape_validator_recheck/
-            cp build/amb-gtfs-geometry-stop-aware-retry/summary.json sources/amb/GTFS_shape_validator_recheck/targeted_GH_retry_summary.json
+            cp build/amb-gtfs-geometry-stop-aware-SAFE/summary.json sources/amb/GTFS_shape_validator_recheck/targeted_GH_retry_summary.json
             cp build/amb-gtfs-geometry-stop-aware-retry/section_targeted_GH_bus_retry_review.csv sources/amb/GTFS_shape_validator_recheck/
             cp build/amb-gtfs-geometry-stop-aware-retry/MobilityData_249_stop_shape_issues_before_after.csv sources/amb/GTFS_shape_validator_recheck/
             cp build/amb-gtfs-geometry-stop-aware-retry/MobilityData_4_source_stop_order_warnings_REVIEW_ONLY.csv sources/amb/GTFS_shape_validator_recheck/
-            cp build/amb-gtfs-geometry-stop-aware-retry/GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson sources/amb/GTFS_shape_validator_recheck/
+            cp build/amb-gtfs-geometry-stop-aware-SAFE/GH_reintroduced_road_candidates_under_order_guard.csv sources/amb/GTFS_shape_validator_recheck/
+            cp build/amb-gtfs-geometry-stop-aware-SAFE/GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson sources/amb/GTFS_shape_validator_recheck/
             git add sources/amb/GTFS_shape_validator_recheck/
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "data: compare real MobilityData notices after safer bus road geometry repair"
@@ -113,5 +136,7 @@ jobs:
             build/amb-gtfs-geometry-stop-aware-retry/
             build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/
             build/amb-gtfs-mobilitydata-STOP-AWARE-NOT-PUBLISHABLE/
+            build/amb-gtfs-geometry-stop-aware-SAFE/
+            build/amb-gtfs-mobilitydata-ORDER-GUARDED/
           if-no-files-found: warn
           retention-days: 60
