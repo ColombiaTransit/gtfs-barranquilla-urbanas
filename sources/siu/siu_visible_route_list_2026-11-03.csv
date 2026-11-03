@@ -1,0 +1,8 @@
+capture_file,route_display_name,company_display_name,siu_route_uuid,visible_list_offset_px,visible_list_row_height_px,gtfs_route_code,route_code_verified,source_page
+SIU.mht,1234,PRUEBAS AMB,f9b72492-b757-411e-b1eb-c116e80532d2,0,130,,no,https://siu.ambq.gov.co/siu/schedule-mng/schedules
+SIU.mht,ALAMEDA DEL RIO,FLOTA ANGULO,6948fedb-74b6-4a1f-9c33-dcac379a736b,130,130,,no,https://siu.ambq.gov.co/siu/schedule-mng/schedules
+SIU.mht,CALLE 17,LA CAROLINA,a1091edb-327c-4cc5-be74-72e378ccb4bb,260,130,,no,https://siu.ambq.gov.co/siu/schedule-mng/schedules
+SIU.mht,CALLE 30,LA CAROLINA,4cc2ed1d-9fcd-440c-8373-84e51f9fc04a,390,130,,no,https://siu.ambq.gov.co/siu/schedule-mng/schedules
+SIU.mht,CALLE 72 VIA 40,COOLITORAL,34a1ac7c-aa2f-485f-a706-398a2d994d88,520,130,,no,https://siu.ambq.gov.co/siu/schedule-mng/schedules
+SIU.mht,CENTRO CIRCUNVALAR,TRANSURBAR,1db9b442-5cb5-4de9-a1ee-4ae5faae9485,650,130,,no,https://siu.ambq.gov.co/siu/schedule-mng/schedules
+SIU.mht,CENTRO PUEBLO SAN PABLO,COOLITORAL,d9f4ff62-7d83-4a57-ae23-a04a845008f3,780,130,,no,https://siu.ambq.gov.co/siu/schedule-mng/schedules
