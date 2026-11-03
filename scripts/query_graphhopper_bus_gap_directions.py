@@ -192,7 +192,7 @@ def main():
     parser.add_argument("--output",type=Path,default=DEFAULT_OUT)
     parser.add_argument("--max-gaps",type=int,default=10)
     parser.add_argument("--max-via-queries",type=int,default=30)
-    parser.add_argument("--max-curbside-checks",type=int,default=5)
+    parser.add_argument("--max-curbside-checks",type=int,default=0)
     parser.add_argument("--timeout",type=int,default=25)
     args=parser.parse_args()
     if not(1<=args.max_gaps<=73 and 0<=args.max_via_queries<=125 and 0<=args.max_curbside_checks<=125):
@@ -395,16 +395,19 @@ def main():
         "required_profile":"bus","bus_profile_present":True,
         "version_reported":str(data.get("version",""))[:64],
         "OSM_import_date_reported":str(data.get("import_date",""))[:64],
-        "private_GraphHopper_URL_logged_or_committed":False,
+        "private_GraphHopper_URL_exported_to_research_files":False,
         "public_GraphHopper_API_docs":"https://github.com/graphhopper/graphhopper/blob/master/docs/web/api-doc.md",
         "input_gap_count":len(gaps),"input_candidate_links":sum(len(x) for x in bykey.values()),
         "gap_bus_routes_tested":len(chosen),"bus_baseline_success":sum(x["GH_baseline_A_to_B_status"]=="ok" for x in diagnostics),
         "bus_reverse_success":sum(x["GH_reverse_B_to_A_status"]=="ok" for x in diagnostics),
+        "KMZ_anchor_constrained_bus_success":sum(x["GH_constrained_bus_status"]=="ok" for x in diagnostics),
+        "direct_bus_shortcuts_under_half_KMZ_distance":sum(x["GH_shortest_bus_distance_less_than_half_KMZ_length"]=="yes" for x in diagnostics),
         "gaps_with_observed_bus_directional_asymmetry":sum(x["possible_oneway_or_routing_asymmetry"]=="yes" for x in diagnostics),
         "candidates_in_tested_gaps":len(rows),
         "bus_via_queries_attempted":via_calls,
         "bus_via_status_counts":dict(statuses),
         "curbside_queries_attempted":curbside_calls,
+        "KMZ_constrained_via_candidate_success":sum(x["bus_KMZ_constrained_via_candidate_status"]=="ok" for x in rows),
         "successful_right_curbside_tests":sum(x["GH_right_curbside_status"]=="right_access_routable" for x in rows),
         "total_route_queries":client.route_queries,
         "total_info_queries":client.info_queries,
@@ -416,19 +419,22 @@ def main():
     (args.output/"summary.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     lines=["# Busprofiel GraphHopper: wegrichting en bereikbaarheid voor SIU-haltegaten","",
            "**Gebruikt uitsluitend ColombiaTransit organisatievariabele GRAPHHOPPER_URL.** "
-           "Er is geen privé-adres, token of querystring naar documentatie, GitHub of console geschreven.","",
+           "Geen privé-adres, token of querystring wordt door het Python-script geprint of opgeslagen. "
+           "GitHub organisatievariabelen zijn geen geheimen: gebruik een Organization Secret als het adres zelf vertrouwelijk moet blijven.","",
+           "De test vergelijkt de kortste busroute met een via KMZ-tussenpunten begrensde busroute om "
+           "te voorkomen dat een korte weg een officieel omwegtraject overslaat. "
            "De test is uitsluitend onderzoek naar bus-toegankelijke wegtrajecten, rijrichtingsasymmetrie "
            "en de omweg bij rijden via een bestaande SIU-/OSM-haltekandidaat. "
            "Een route kan een juridisch andere corridor volgen dan de kortste GraphHopper-busroute. "
            "Curbside werkt alleen bij edge-based turn-cost routing en een ondersteund busprofiel.","",
            "## Resultaat",""]
     for k,v in summary.items():
-        if k not in ("private_GraphHopper_URL_logged_or_committed","public_GraphHopper_API_docs"):
+        if k not in ("private_GraphHopper_URL_exported_to_research_files","public_GraphHopper_API_docs"):
             if isinstance(v,(int,str)):
                 lines.append("- "+k+": **"+str(v)+"**")
     lines+=["","## Bestanden","",
-            "- bus_route_gap_direction_checks.csv — A→B versus B→A routeafstanden en vergelijking met officiële KMZ-corridor",
-            "- bus_candidate_access_and_oneway_review.csv — bus via stop-kandidaat en eventueel curbside-check; route-stop-service blijft onbevestigd",
+            "- bus_route_gap_direction_checks.csv — kortste A→B/B→A en KMZ-tussenpunt-begrensde busroute, met shortcut-status",
+            "- bus_candidate_access_and_oneway_review.csv — kortste en KMZ-begrensde routes via halte-kandidaat; haltebediening onbevestigd",
             "- GraphHopper_bus_paths_for_KMZ_comparison.geojson — gegenereerde busweg-geometrie voor vergelijking met officiële bronlijnen",
             "",
             "## Bronnen en vervolg","",
