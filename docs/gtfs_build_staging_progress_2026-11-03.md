@@ -1,3 +1,14 @@
+## Update 3 november 2026 — alle 125 GraphHopper-busroute-haltealternatieven geclassificeerd
+
+De [geslaagde classificatie-Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41636303001) heeft de bestaande 125 halte-kandidaten uit de 73 GraphHopper-busroutegaten in **65 toevoegkandidaten**, **24 mogelijke rijrichtings-/toegangsconflicten** en **36 onzekere kandidaten** ingedeeld. **47 van de 80 kandidaten die door de SIU-naamsrichting niet pasten, zijn weer toevoegkandidaat** omdat GraphHopper een route langs de officiële KMZ-corridor met geringe omweg vindt. Zonder curbside- of juridische stopbedieningscontrole zijn dit geen definitieve haltes.
+
+De berekening gebruikt de opgeslagen **KMZ-waypoint-begrensde GraphHopper-busroutes**, niet alleen de kortste A-B-route, want die kan de officiële corridor overslaan. Voor toevoegkandidaten gebruiken we maximaal 300 meter extra, omwegfactor maximaal 1,12, minstens 70% van de berekende route op maximaal 50 meter van de KMZ, een road snap van maximaal 15 meter en een bestaande SIU-fysieke stop-ID. Onbetrouwbare brongeometrie (historische ArcGIS-fallback en officiële A/B-labelconflicten) blijft apart gemarkeerd. Grote omwegen geven alleen **een mogelijk richtingsconflict**, niet het bewijs van eenrichtingsverkeer.
+
+Bestanden: [volledige GH-kandidaatbeoordeling](../sources/amb/graphhopper_stop_classification/GH_bus_stop_candidate_decisions_125.csv), [voorlopige plaats binnen de bestaande trip-haltevolgorde](../sources/amb/graphhopper_stop_classification/proposed_insertion_order_NO_TIMES_REVIEW_ONLY.csv), [resultaten per routevariant](../sources/amb/graphhopper_stop_classification/GH_bus_stop_classification_by_route.csv) en [methodologie en tellingen](../sources/amb/graphhopper_stop_classification/summary.md).
+
+De resultaten bestrijken **29 routevarianten met haltekandidaten**; ze verklaren dus niet automatisch alle routehiaten. Er zijn **geen nieuwe GraphHopper- of Overpass-aanvragen** uitgevoerd. Er zijn **nul nieuwe fysieke haltes, nul automatische stop_sequence-wijzigingen en nul publiceerbare GTFS-ritpatronen** gemaakt.
+
+
 ## Update 3 november 2026 — geen nieuwe OSM-query; bestaande haltes bewaren voor GraphHopper-richtingstoets
 
 De [geslaagde staging Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41627896318) gebruikt uitsluitend de reeds ontvangen OSM-export en bestaande SIU-haltepunten. **0 nieuwe Overpass-query's.** De 73 eerder ontdekte route-haltegaten bevatten 38 segmenten zonder SIU-alternatief. Uit de bestaande 34 niet-geclassificeerde OSM-instapkandidaten komen **14 route-gap-kandidaatverwijzingen** naar voren, verdeeld over **9 van die 38 SIU-lege gaten**. De overige **29 gaten** hebben in beide reeds aanwezige bronnen geen kandidaat.
