@@ -37,7 +37,19 @@ def main():
         if err.stat().st_size>0:
             payload=err.read_text(encoding="utf-8").strip()
             if payload not in ("[]","{}","null",""):
-                raise SystemExit("Validator reports unexpected system errors: see artifact")
+                obj=json.loads(payload)
+                if isinstance(obj,dict):
+                    # MobilityData stores the empty list in a wrapper object.
+                    errors=obj.get("systemErrors",obj.get("errors"))
+                    if errors is None:
+                        raise SystemExit("Unknown MobilityData system error JSON schema; inspect artifact")
+                    if errors:
+                        raise SystemExit("Validator has system errors; inspect artifact")
+                elif isinstance(obj,list):
+                    if obj:
+                        raise SystemExit("Validator has system errors; inspect artifact")
+                elif obj is not None:
+                    raise SystemExit("Unexpected validator system errors payload")
     with (OUT/"notice_counts.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.DictWriter(f,fieldnames=["code","severity","count"])
         w.writeheader()
