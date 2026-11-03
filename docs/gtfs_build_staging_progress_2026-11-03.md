@@ -1,3 +1,23 @@
+## Update 3 november 2026 — officiële KMZ-first-shapes met GraphHopper-fallback door MobilityData
+
+[Geslaagde tweeledige MobilityData 8.0.1-Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41699328357). De vergelijking wijzigde **uitsluitend shapes.txt**: agency, routes, stops, trips, stop_times en calendar waren byte-identiek in beide proef-ZIP's met **59 routes, 67 synthetische ritten en 8.867 haltebezoeken**.
+
+| MobilityData-code | Veilige GraphHopper-busshapes | AMB-KMZ 2026-first, GH fallback |
+|---|---:|---:|
+| ERROR | 0 | 0 |
+| stop_too_far_from_shape | 64 | **1** |
+| stops_match_shape_out_of_order | 4 | **0** |
+| alle WARNING | 2.433 | **2.381** |
+
+De onderzoeksbron omvat **63 patronen met officiële KMZ 2026 (340 deeltrajecten)** en **7 zonder bruikbare KMZ (12 deeltrajecten)** waarvoor de bestaande GH-buswegroute is hergebruikt. De 7 zijn **COOLITORAL PT2-4102** (3 onderzoekscomponenten zonder corresponderende route-ID, niet in test-GTFS opgenomen) en **LOLAYA D8-4165** (4 componenten gebouwd vanaf oudere ArcGIS-/GH-onderzoeksgegevens, wél in de test-GTFS). Dus de **67 daadwerkelijk gevalideerde demo-trips** gebruiken **63 KMZ-shapes en 4 GH-fallback-shapes**. De fallback is geen bewezen actuele concessieroute.
+
+**Enige resterende stop-afstandsmelding:** LOLAYA D8-4165, HOMECENTER CALLE 30 (SN), stop-ID SIU_2ace23a6-7511-43ce-b421-36400dc6728f, afstand tot bestaande GH-fallback-shape circa **105,24 meter**. Alle zeven eerder onderzochte P1-afwijkingen boven 250 meter veroorzaken nu geen MobilityData-afstandsmelding meer.
+
+**Geometriekwaliteit apart controleren:** in **144 van de 340 KMZ-routedelen** is er ten minste één afstand tussen opeenvolgende bron-shapepunten van meer dan **400 meter**. Dat kan een rechte verbinding voorstellen waar de weg in werkelijkheid buigt. De betere MobilityData-meldingen bewijzen dus halte-shape-nabijheid, niet dat KMZ op kaartniveau de hele echte weg volgt. Eventueel bronconform verfijnen langs het wegennet zonder bronroute of haltevolgorde te veranderen.
+
+[Bronkeuze per patroon](../sources/amb/KMZ_first_GH_fallback_validation/source_shape_source_by_pattern.csv), [validatorverschillen](../sources/amb/KMZ_first_GH_fallback_validation/MobilityData_notice_comparison_by_code.csv), [review per route](../sources/amb/KMZ_first_GH_fallback_validation/MobilityData_geometry_validation_per_pattern.csv), [de zeven oorspronkelijke P1-haltes](../sources/amb/KMZ_first_GH_fallback_validation/seven_P1_stop_warnings_KMZ_vs_GH.csv) en [KMZ met grote sprongen](../sources/amb/KMZ_first_GH_fallback_validation/source_shape_sparse_vertex_or_connector_QA.csv) zijn gecommit. Beide proef-ZIP's en volledige MobilityData-validatorreports staan in het Action-artifact. Geen productie-GTFS aangepast en nog steeds geen echte tripgrenzen of tijden.
+
+
 ## Update 3 november 2026 — MobilityData GTFS-afstands- en volgordeproblemen gericht gecorrigeerd
 
 De [geslaagde GraphHopper/MobilityData-correctie-Action](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41648106866) heeft **alle 122 GraphHopper-routeonderdelen die de 249 oorspronkelijke stop-to-shape-waarschuwingen veroorzaken** opnieuw via het ColombiaTransit-profiel `bus` gerouteerd, met circa 240 meter tussen KMZ-tussenpunten (GH /route). De eerste GIS-afstandsselectie nam 110 verbeterde trajecten over: de MobilityData-validator zag daarna slechts 13 afstandswaarschuwingen, maar wel **32 in plaats van 4** volgordewaarschuwingen. Deze onveilige tussenuitkomst is **niet als eindresultaat overgenomen**.
