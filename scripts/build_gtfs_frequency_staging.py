@@ -126,6 +126,20 @@ def build_sources():
         "sources/amb/flota_angulo_route_frequency_history_2026-11-03.csv")
     push(data,"EMBUSA","B9-4125","010-2026",4,6,
         "docs/embusa_010_2026_validatie.md")
+    # Per-itinerary licensed headways explicitly printed in route decisions.
+    # Combined overlap headways from the 44-route research file must never
+    # be copied onto both patterns.
+    for agency,code,res,variant,peak,off,ref in [
+        ("SOBUSA","B18-4175","082-2026","A",10,12,"082-2026 p6"),
+        ("SOBUSA","B18-4175","082-2026","B",10,12,"082-2026 p6"),
+        ("SOBUSA","C12-4169","466-2025","A",6,9,"466-2025 p11"),
+        ("SOBUSA","C12-4169","466-2025","B",3,6,"466-2025 p11"),
+        ("TRANSDIAZ","A10-4114","501-2025","A",8,10,"501-2025 p5"),
+        ("TRANSDIAZ","A10-4114","501-2025","B",4,6,"501-2025 p5"),
+    ]:
+        push(data,agency,code,res,peak,off,
+            "docs/amb_bedrijven/"+agency.lower()+"_route_frequencies_2026-11-02.md",
+            "per_itinerary",variant,"Original route table "+ref)
     # COOTRANSCO 098-2026 pilot has A/B each 5/7 and common 2.5/3.5.
     # Permit says six months after 2026-03-02; on 2026-11-03 extension
     # has not been established, so do not silently use pilot or superseded
