@@ -1,3 +1,9 @@
+## Aanvulling — review van alle 21 open SIU→AMB routecodes
+
+De [volledige 21-dossiersreview](siu_remaining_21_route_links_review_2026-11-03.md) heeft **acht nieuwe, strikt voorlopige één-op-één basisroutevoorstellen** en **1.620 extra haltevermeldingen** in staging gezet. Inclusief de eerdere 12 sterke geografie-kandidaten is nu een [gecombineerd 20-routebestand met **3.981** haltevolgorderegels en **2.394** afzonderlijke stop-ID's](../sources/siu/open_route_review/combined_20_route_stop_candidates_NO_TIMES.csv) beschikbaar. Voor de overige 13 itineraries blijven 8 gedeelde exploitatiegevallen, 3 A/B-gevallen en 2 PT4/PT5-conflicten open.
+
+De [oorspronkelijke AMB-resolutie 256-2026](https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf) is geverifieerd; de A/B-straattracés zijn geëxtraheerd en tegen 256 geordende SIU-haltevermeldingen afgezet. Ondanks de oorspronkelijke PDF blijven SIU→PT4/PT5-basiscodes en A/B-varianten **onbeslist** door tegenstrijdige naam/terminal-aanwijzingen. **Geen productietrip of stop_times.txt is verzonnen of aangemaakt.**
+
 ## Aanvulling 3 november 2026 — GTFS-halte- en routecrosswalk-staging
 
 **Latere normalisatie:** twee duidelijke SIU-naamfouten zijn hersteld; daardoor zijn er **3.117 fysieke concept-haltes** en **53 nog open verschillende-naam-op-dezelfde-GPS-conflicten**. Eén samengevoegde halte heeft een expliciete historische `stop_id`-alias. Zie [het correctieregister](../sources/siu/stop_name_spelling_corrections_2026-11-03.csv) en [het auditbestand](../sources/siu/gtfs_staging/stop_name_correction_audit.csv). Er zijn geen rijrichtingen, straatnummers of GPS-coördinaten gewijzigd.
