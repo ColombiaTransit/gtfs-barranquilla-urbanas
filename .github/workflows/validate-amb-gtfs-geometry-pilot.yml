@@ -1,0 +1,95 @@
+name: Build Barranquilla GTFS demo shapes and run MobilityData validator
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/build_amb_gtfs_geometry_validation_pilot.py
+      - scripts/summarize_amb_gtfs_mobilitydata_validation.py
+      - .github/workflows/validate-amb-gtfs-geometry-pilot.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-gtfs-geometry-validation-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  demo-shapes-gtfs-validator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install coordinate geometry helpers
+        run: python -m pip install --disable-pip-version-check "pyproj>=3.5,<4"
+      - name: Compile pilot generator and report parser
+        run: python -m py_compile scripts/build_amb_gtfs_geometry_validation_pilot.py scripts/summarize_amb_gtfs_mobilitydata_validation.py
+      - name: Generate GH-road shapes and all valid demo GTFS text files
+        run: python scripts/build_amb_gtfs_geometry_validation_pilot.py
+      - name: Download pinned official MobilityData CLI validator 8.0.1 and verify SHA256
+        run: |
+          curl --fail --location --retry 3 --silent --show-error \
+            https://github.com/MobilityData/gtfs-validator/releases/download/v8.0.1/gtfs-validator-8.0.1-cli.jar \
+            -o /tmp/gtfs-validator-8.0.1-cli.jar
+          echo "19293ddd9b6f954f216d4f12054bd8a3232921751c4484339e339764a91000e2  /tmp/gtfs-validator-8.0.1-cli.jar" | sha256sum -c -
+      - name: Run actual MobilityData GTFS Schedule validator against demo zip
+        run: |
+          set +e
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validator \
+            -c co -t 2 \
+            > build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validator_stdout.log 2>&1
+          status=$?
+          set -e
+          echo "MobilityData validator process status: $status"
+          tail -n 45 build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validator_stdout.log
+          echo "$status" > build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validator_exit_code.txt
+          test -f build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validator/report.json
+          test -f build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validator/system_errors.json
+      - name: Analyze MobilityData report JSON and summarize validation warnings
+        run: python scripts/summarize_amb_gtfs_mobilitydata_validation.py
+      - name: Show validator and build results
+        if: always()
+        run: |
+          if [ -f build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validation_summary.md ]; then
+            cat build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validation_summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit summary and source crosswalk only - never demo GTFS or fake timetable
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [ ! -f build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validation_summary.json ]; then
+            echo "::error::No real MobilityData validation summary; no validation claims allowed"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/GTFS_geometry_validator_pilot/
+            for name in build_summary.json validation_summary.json validation_summary.md README_NOT_FOR_PUBLICATION.md pattern_to_real_gtfs_route_crosswalk.csv excluded_patterns_missing_real_route_id.csv trial_trip_and_shape_provenance.csv notice_counts.csv; do
+              cp "build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/$name" "sources/amb/GTFS_geometry_validator_pilot/$name"
+            done
+            if [ -f build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/road_and_shape_gaps_unverified.csv ]; then
+              cp build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/road_and_shape_gaps_unverified.csv sources/amb/GTFS_geometry_validator_pilot/
+            fi
+            git add sources/amb/GTFS_geometry_validator_pilot/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: summarize MobilityData-validated nonpublishing AMB GTFS geometry demo"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Archive the DEMO ONLY GTFS zip, all txt and complete validator report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Barranquilla-GTFS-GH-Shapes-MobilityData-QA-NOT-PUBLISHABLE
+          path: build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/
+          if-no-files-found: warn
+          retention-days: 60
