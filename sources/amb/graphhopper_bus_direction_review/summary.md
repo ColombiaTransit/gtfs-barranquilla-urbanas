@@ -1,8 +1,8 @@
 # Busprofiel GraphHopper: wegrichting en bereikbaarheid voor SIU-haltegaten
 
-**Gebruikt uitsluitend ColombiaTransit organisatievariabele GRAPHHOPPER_URL.** Er is geen privé-adres, token of querystring naar documentatie, GitHub of console geschreven.
+**Gebruikt uitsluitend ColombiaTransit organisatievariabele GRAPHHOPPER_URL.** Geen privé-adres, token of querystring wordt door het Python-script geprint of opgeslagen. GitHub organisatievariabelen zijn geen geheimen: gebruik een Organization Secret als het adres zelf vertrouwelijk moet blijven.
 
-De test is uitsluitend onderzoek naar bus-toegankelijke wegtrajecten, rijrichtingsasymmetrie en de omweg bij rijden via een bestaande SIU-/OSM-haltekandidaat. Een route kan een juridisch andere corridor volgen dan de kortste GraphHopper-busroute. Curbside werkt alleen bij edge-based turn-cost routing en een ondersteund busprofiel.
+De test vergelijkt de kortste busroute met een via KMZ-tussenpunten begrensde busroute om te voorkomen dat een korte weg een officieel omwegtraject overslaat. De test is uitsluitend onderzoek naar bus-toegankelijke wegtrajecten, rijrichtingsasymmetrie en de omweg bij rijden via een bestaande SIU-/OSM-haltekandidaat. Een route kan een juridisch andere corridor volgen dan de kortste GraphHopper-busroute. Curbside werkt alleen bij edge-based turn-cost routing en een ondersteund busprofiel.
 
 ## Resultaat
 
@@ -16,10 +16,13 @@ De test is uitsluitend onderzoek naar bus-toegankelijke wegtrajecten, rijrichtin
 - gap_bus_routes_tested: **10**
 - bus_baseline_success: **10**
 - bus_reverse_success: **10**
+- KMZ_anchor_constrained_bus_success: **10**
+- direct_bus_shortcuts_under_half_KMZ_distance: **4**
 - gaps_with_observed_bus_directional_asymmetry: **2**
 - candidates_in_tested_gaps: **22**
 - bus_via_queries_attempted: **22**
 - curbside_queries_attempted: **5**
+- KMZ_constrained_via_candidate_success: **22**
 - successful_right_curbside_tests: **0**
 - total_route_queries: **79**
 - total_info_queries: **1**
@@ -30,8 +33,8 @@ De test is uitsluitend onderzoek naar bus-toegankelijke wegtrajecten, rijrichtin
 
 ## Bestanden
 
-- bus_route_gap_direction_checks.csv — A→B versus B→A routeafstanden en vergelijking met officiële KMZ-corridor
-- bus_candidate_access_and_oneway_review.csv — bus via stop-kandidaat en eventueel curbside-check; route-stop-service blijft onbevestigd
+- bus_route_gap_direction_checks.csv — kortste A→B/B→A en KMZ-tussenpunt-begrensde busroute, met shortcut-status
+- bus_candidate_access_and_oneway_review.csv — kortste en KMZ-begrensde routes via halte-kandidaat; haltebediening onbevestigd
 - GraphHopper_bus_paths_for_KMZ_comparison.geojson — gegenereerde busweg-geometrie voor vergelijking met officiële bronlijnen
 
 ## Bronnen en vervolg
