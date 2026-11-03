@@ -91,7 +91,7 @@ def build_crosswalk(itins,gis,routes):
         top=ranked[0]
         second=ranked[1]
         delta=round(top[3]-second[3],1)
-        multi_operator=len(companies)!=1
+        multi_operator=len([x for x in str(item["siu_company_names"]).split(";") if x.strip()])!=1
         status="needs_route_resolution_review"
         if not top[4]:
             status="top_gis_code_absent_in_gtfs_routes"
