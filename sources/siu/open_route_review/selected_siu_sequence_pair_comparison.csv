@@ -1,0 +1,6 @@
+siu_name_a,siu_name_b,siu_itinerary_uuid_a,siu_itinerary_uuid_b,same_gps_rounded_6_decimals,gps_jaccard_pct,same_normalized_stop_names,name_jaccard_pct,shared_gps_adjacent_same_order,shared_gps_adjacent_reverse_order,route_a_stop_count,route_b_stop_count,decision
+CIRCUNVALAR VIA 40,VIA 40 CIRCUNVALAR,f03a4855-48b9-47e5-a7e1-b1bea56e0445,5d8f6b5f-4e34-43cc-b08b-cf42e26b4ccc,0,0.0,1,0.4,0,0,132,124,distinct_SIU_ordered_itineraries_not_evidence_of_legal_A_B_mapping
+MIRAMAR ALAMEDA DEL RIO,LAS GAVIOTAS CALLE 76,9cf147dd-baec-4c78-bc8f-65d663b2e028,19bbd43c-6779-4888-84fd-815f2b8f5011,116,61.7,116,62.0,114,1,156,148,distinct_SIU_ordered_itineraries_not_evidence_of_legal_A_B_mapping
+CENTRO CIRCUNVALAR,CIRCUNVALAR CENTRO,1db9b442-5cb5-4de9-a1ee-4ae5faae9485,e5d0c488-0326-4c45-aa32-d5710d1cd296,57,14.8,56,14.4,55,1,216,230,distinct_SIU_ordered_itineraries_not_evidence_of_legal_A_B_mapping
+CALLE 30,CALLE 17,4cc2ed1d-9fcd-440c-8373-84e51f9fc04a,a1091edb-327c-4cc5-be74-72e378ccb4bb,167,30.8,168,30.9,164,2,353,358,distinct_SIU_ordered_itineraries_not_evidence_of_legal_A_B_mapping
+LAS PALMAS,LAS NIEVES,9850d5a6-2a3c-4f38-851c-cd4660864662,959c9f39-27af-42b8-aa0b-01fbcf9aac4a,42,14.4,56,20.2,40,1,159,174,distinct_SIU_ordered_itineraries_not_evidence_of_legal_A_B_mapping
