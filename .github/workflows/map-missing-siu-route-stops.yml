@@ -22,7 +22,7 @@ jobs:
         run: python -m py_compile scripts/map_missing_siu_route_stops_to_trips.py
       - name: Retrieve older ArcGIS route shapes solely for wrongly labeled KMZ fallback
         run: |
-          python scripts/harvest_amb_arcgis_route_shapes.py --output build/amb-arcgis-fallback
+          python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
       - name: Map already known physical SIU stop IDs to 60 missing KMZ route variants
         run: |
           python scripts/map_missing_siu_route_stops_to_trips.py \
