@@ -1,0 +1,20 @@
+{
+  "original_high_priority_stop_offsets_over_250m": 7,
+  "source_route_patterns_with_high_priority_offsets": 5,
+  "GH_road_sections_implicated": 6,
+  "GH_bus_routing_alternative_profiles": 2,
+  "GH_bus_route_queries": 48,
+  "full_MobilityData_validation_trials": 11,
+  "GH_alternative_route_sections_accepted_under_full_validator": 1,
+  "MobilityData_baseline_off_shape_warnings": 64,
+  "MobilityData_final_off_shape_warnings": 64,
+  "MobilityData_baseline_out_of_order_warnings": 4,
+  "MobilityData_final_out_of_order_warnings": 4,
+  "seven_original_stops_resolved_from_GTFS_test_warnings": 2,
+  "seven_stops_remaining_unresolved": 5,
+  "each_seven_SIU_stop_within_15m_of_AMB_official_KMZ": true,
+  "canonical_SIU_stop_ids_or_coordinates_modified": false,
+  "GTFS_production_files_modified": false,
+  "GTFS_demo_still_nonpublishing": true,
+  "real_operator_boarding_stop_service_verified": false
+}
