@@ -1,0 +1,49 @@
+name: Match SIU itineraries to AMB GIS route candidates
+on:
+  push:
+    paths:
+      - scripts/match_siu_itineraries_to_amb_shapes.py
+      - .github/workflows/match-siu-amb-gis.yml
+      - sources/siu/public_extract/siu_route_stop_sequences.csv
+      - sources/siu/public_extract/siu_itineraries.csv
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install GIS libraries
+        run: python -m pip install --disable-pip-version-check requests shapely pyproj numpy
+      - name: Download original AMB historical GIS lines
+        run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-shapes
+      - name: Calculate SIU-to-route spatial comparison
+        run: python scripts/match_siu_itineraries_to_amb_shapes.py
+      - name: Publish report
+        run: cat build/siu-to-amb-gis/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit small candidate crosswalk (not GTFS routes)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/siu/analysis
+          cp build/siu-to-amb-gis/* sources/siu/analysis/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/siu/analysis/
+          if ! git diff --cached --quiet; then
+            git commit -m "research(siu): update geographic itinerary-to-AMB-route candidate crosswalk"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Upload geographic match research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-to-amb-route-candidate-audit
+          path: build/siu-to-amb-gis/
+          if-no-files-found: warn
+          retention-days: 45
