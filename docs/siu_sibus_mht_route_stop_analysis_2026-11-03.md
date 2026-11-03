@@ -83,3 +83,28 @@ De eerste [anonieme Playwright-proef](https://github.com/ColombiaTransit/gtfs-ba
 
 De experimenten gebruiken **geen account, geen opgeslagen inlogcookies en geen geraden geauthenticeerde verzoeken**. Het resultaat zijn publieke webinteracties en geanonimiseerde endpointpaden/veldstructuren. De eerdere browserproeven konden de kaart `ALAMEDA DEL RIO` nog niet volledig openen en zijn inhoudelijk dus **partieel**, ondanks een technisch geslaagde GitHub Action.
 
+
+## 6. Volledige publieke route-haltebron gevonden op 3 november 2026
+
+**De beperking van de twee MHT-bestanden is inmiddels opgelost voor de itineraries die SIU publiek toont.** Door de anonieme browser-GraphQL-response `data.ServiceMngCompressedItineraryListing.compressedModsBase64` met **Base64 + zlib** te decoderen, is het volledige, publiek getoonde geordende haltebestand geëxtraheerd.
+
+De [geslaagde GitHub Action **41596454251**](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41596454251) heeft om **2026-11-03 07:28:14 UTC** de volgende gegevens veilig naar GitHub geschreven:
+
+- [**36 SIU-itineraries**, met 3 testitineraries gemarkeerd](../sources/siu/public_extract/siu_itineraries.csv); alle 36 hebben een `active=true`-veld, maar de testgegevens zijn **geen productieroutes**.
+- [**6.873 route-halteregels**, elk met SIU-halte-UUID, naam, GPS en geordende haltepositie](../sources/siu/public_extract/siu_route_stop_sequences.csv).
+- [SIU-UUID-catalogus](../sources/siu/public_extract/siu_unique_stops.csv), **6.873 unieke SIU-stop-UUID's**. Let op: dit betekent **niet** 6.873 verschillende fysieke haltes.
+- [Bron- en extractiestatistiek](../sources/siu/public_extract/summary.json).
+- [Herhaalbaar anoniem script](../scripts/extract_siu_public_itinerary_stops.py) met browser via het publieke SIU-portaal. De workflow slaat **geen credentials, cookies, geauthenticeerde responses, volledige GraphQL-payload of voertuigcapaciteit** op.
+
+**Zonder drie testitineraries:** **33 reguliere SIU-itineraries, 6.407 route-haltevermeldingen** met geldige GPS. Alle 6.873 oorspronkelijke haltevermeldingen hebben geldige breedte- en lengtegraden. De 6.407 niet-test-vermeldingen vertegenwoordigen **3.612 verschillende exact opgeslagen coördinaten** en **2.961 verschillende haltenamen**. Sommige verschillende SIU-UUID's delen dezelfde fysieke locatie en naam; deduplicatie moet rekening houden met rijrichting en niet blind op namen of nabijheid plaatsvinden.
+
+### Controle met de twee gebruikersopnamen
+
+De route `ALAMEDA DEL RIO` van `FLOTA ANGULO` heeft in de API-response **127 geordende haltevermeldingen**. Het oorspronkelijke SIU-itinerary-UUID `6948fedb-74b6-4a1f-9c33-dcac379a736b` is identiek aan de route in de tweede MHT. **Alle tien stop-UUID's** uit die opname komen **exact terug op posities 75–84**, in precies dezelfde volgorde. Dat is een onafhankelijke kruiscontrole op de extractie; de eerdere ~110-halte-inschatting uit virtuele scrollhoogte was alleen indicatief en wordt vervangen door de **exacte API-lijst van 127**.
+
+### Belangrijke GTFS-gevolgen
+
+De SIU-extractie levert ons voor **33 SIU-itineraries** feitelijke officiële portaaldata voor `stop_name`, `stop_lat`, `stop_lon` en **stopvolgorde**. Daarmee is het fundamentele TPC-haltegat voor dit deel van de routes grotendeels opgelost, zonder OSM-haltes te hoeven verzinnen.
+
+**Nog nodig:** route-ID-crosswalk naar de 97 vergunningsroutes, goede samenvoeging van gedeelde fysieke haltes (SIU-UUID is per itinerary kennelijk niet gedeeld), rijrichtings-/A/B-check, reistijdmodel en kalender. De [SIU→AMB GIS-kandidaatkoppeling](../sources/siu/analysis/siu_to_amb_routecode_candidates.csv) vergelijkt de beschikbare stoplocaties met oude routelijnen, maar kan op zichzelf geen juridische route-identiteit bewijzen. **Hergebruik-/publicatierechten van SIU-data zijn nog niet bevestigd**: geef de bron aan en controleer die vóór distributie van een afgeleide publieke GTFS.
+
