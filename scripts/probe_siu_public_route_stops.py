@@ -44,6 +44,16 @@ async def main():
                 item={"endpoint_path":parsed.path,"status":response.status,
                       "method":response.request.method,
                       "resource_type":response.request.resource_type}
+                if "/graphql/" in parsed.path:
+                    try:
+                        post = response.request.post_data_json or {}
+                        if isinstance(post,dict):
+                            item["graphql_operation_name"] = str(post.get("operationName") or "")
+                            query = str(post.get("query") or "")
+                            field_match = __import__("re").search(r"\\b(?:query|mutation)\\s+(\\w+)",query)
+                            item["graphql_query_operation"] = field_match.group(1) if field_match else ""
+                            item["graphql_variable_names"] = ";".join((post.get("variables") or {}).keys())
+                    except Exception: pass
                 ctype=(response.headers.get("content-type") or "").lower()
                 if "json" in ctype:
                     try:
@@ -51,6 +61,12 @@ async def main():
                         if isinstance(data,dict):
                             item["json_type"]="object"
                             item["top_level_keys"]=";".join(str(k) for k in list(data)[:25])
+                            payload=data.get("data")
+                            if isinstance(payload,dict):
+                                item["data_keys"]=";".join(str(k) for k in list(payload)[:25])
+                                item["data_shapes"]=";".join(
+                                    f"{k}:{'list_'+str(len(v)) if isinstance(v,list) else 'object' if isinstance(v,dict) else type(v).__name__}"
+                                    for k,v in list(payload.items())[:16])
                         elif isinstance(data,list):
                             item["json_type"]="array"
                             item["root_array_length"]=len(data)
@@ -64,7 +80,10 @@ async def main():
             summary["page_http_status"]=nav.status if nav else None
             await page.get_by_text(TARGET,exact=True).first.wait_for(timeout=50000)
             summary["status"]="route_listing_loaded"
-            await page.get_by_text(TARGET,exact=True).first.click(timeout=12000)
+            # Virtualized Material-UI cards can be obstructed by an animation;
+            # activate React's real li onClick via DOM instead of coordinates.
+            label=page.get_by_text(TARGET,exact=True).first
+            await label.evaluate("(el)=>{const li=el.closest('li'); if(li)li.click();else el.click();}")
             await page.wait_for_timeout(1600)
             await page.locator(".l-card__inner .title").first.wait_for(timeout=20000)
             summary["detail_title"]=await page.locator(".l-card__inner .title").first.inner_text()
@@ -129,7 +148,7 @@ async def main():
         # response JSON, HTTP headers or credentials.
         unique=list({(r["endpoint_path"],r["method"],r["status"]):r for r in responses}.values())
         with (OUT/"public_xhr_endpoint_metadata.csv").open("w",newline="",encoding="utf-8") as f:
-            keys=["endpoint_path","method","status","resource_type","json_type","top_level_keys","root_array_length"]
+            keys=["endpoint_path","method","status","resource_type","json_type","top_level_keys","root_array_length","data_keys","data_shapes","graphql_operation_name","graphql_query_operation","graphql_variable_names"]
             w=csv.DictWriter(f,fieldnames=keys,extrasaction="ignore");w.writeheader();w.writerows(unique)
     (OUT/"summary.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
     (OUT/"summary.md").write_text(
