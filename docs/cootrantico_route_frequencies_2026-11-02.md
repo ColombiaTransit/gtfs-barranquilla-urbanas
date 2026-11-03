@@ -1,6 +1,6 @@
 # COOTRANTICO — frequenties, vlootverdeling, trajectwijzigingen en juridische keten
 
-**Peildatum:** 2 november 2026. **Gebruikte bronnen:** oorspronkelijke 19 PDF-extracties van `amb-pdf-COOTRANTICO` (GitHub Actions-run `41480204032`, artifact `13158924438`), plus **ontbrekende resolutie 108-2023**, opgespoord via de officiële AMB-website. De 19 geregistreerde extracties omvatten **18 unieke PDF's**: manifestregel `025-2011` downloadt *byte-identiek* de PDF van `331-2010`. Sinds deze controle zijn **20 manifestregels** geregistreerd, waarvan de nieuwe 108-2023 nog opnieuw door de GitHub-extractie-Action moet worden opgehaald.
+**Peildatum:** 2 november 2026. **Gebruikte bronnen:** oorspronkelijke 19 PDF-extracties van `amb-pdf-COOTRANTICO` (GitHub Actions-run `41480204032`, artifact `13158924438`), plus **ontbrekende resolutie 108-2023**, opgespoord via de officiële AMB-website. De 19 geregistreerde extracties omvatten **18 unieke PDF's**: manifestregel `025-2011` downloadt *byte-identiek* de PDF van `331-2010`. Sinds deze controle zijn **20 manifestregels** geregistreerd, en de nieuwe **108-2023 is op 3 november 2026 in een geslaagde Action-run opnieuw geëxtraheerd**.
 
 **Uitkomst:** acht routecodes in de recentste officiële vergunningswijziging **462-2025 van 27 november 2025**, individuele routefrequenties en voertuigcapaciteiten bronmatig aan de juiste PDF-pagina gekoppeld. Alle acht technische tabellen op p. 6, 8, 10, 12, 14, 16, 18, 20 zijn **visueel op de PDF-scans gecontroleerd**. De p. 10/max 28 versus p. 20/max 18 tegenstrijdigheid is **werkelijk aanwezig** en **geen OCR-fout**.
 
@@ -56,10 +56,17 @@ De 388-2018-vergunning heeft een **expliciete tijdelijke status**: artikel 3 p. 
 - Het manifestlabel **025-2011** wijst naar precies **dezelfde PDF-bytes** als **331-2010** (beiden SHA-256 prefix `7d1f47ba99930a14`). Er is **geen afzonderlijke resolutie 025-2011** uit die manifestregel onderzocht. Deze bronfout is afzonderlijk vastgelegd.
 - **309-2014**, artikelen 1–3 pp. 13–20: herstructureert zes eerdere routes, vloot **121–148**. Artikel 3 koppelt de invoering aan de gefaseerde Transmetro-vlootinstroom. Oude intervallen en capaciteit zijn geen actuele dienstregeling.
 
+
+### Controle afgerond op 3 november 2026: resolutie 108-2023
+
+De [Action-run 41523797737](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41523797737) heeft **8 van 8 pagina's met Spaanse OCR verwerkt**. De originele PDF-scans **p. 6 (B4)** en **p. 7 (B7)** zijn vervolgens visueel gecontroleerd. **B4-4120 = 7 min spits / 9 min dal / 48 km; B7-4123 = 7/9 min / 53 km.** B4 (art. 1 p5–6) heeft in 2023 een route richting Galapa en Villa Olímpica; B7 (art. 1 p6–7) via Sourdis/El Bosque/Buenavista. Beide zijn historische parameters; latere besluiten uit 2024 en 2025 blijven bepalend voor de nieuwste vergunningen.
+
+[Machineleesbare 2023-routegegevens](../sources/amb/cootrantico_108_2023_historical_route_parameters.csv). **Geen voertuigcapaciteit in GTFS-analyse.**
+
 ## 3. Audit van alle resoluties en nieuwe bron
 Het bestand `sources/amb/cootrantico_resolution_legal_index_2026-11-02.csv` heeft **20 regels**:
 - **19** oorspronkelijk geregistreerde en geëxtraheerde resolutie-items, waarvan **18** unieke PDF's;
-- **1** extra officiële resolutie **108-2023**, die eerder ontbrak, toegevoegd aan `sources/amb/pdf_manifest.csv`, en via web-PDF gelezen. **GitHub OCR-artifact van 108-2023 is nog niet gegenereerd**.
+- **1** extra officiële resolutie **108-2023**, die eerder ontbrak, toegevoegd aan `sources/amb/pdf_manifest.csv`, en via web-PDF gelezen. **GitHub OCR-artifact 13178511921 van run 41523797737 is nu gegenereerd: alle 8/8 pagina's met Spaanse OCR**.
 
 De andere juridische ketens: **243/450-2010** (B4+B7, gedeeltelijk bevestigde bezwaren), **245/449-2010** (B5-routewijziging), **244-2010 + 149-2011** (B6-routewijziging, behoud oude capaciteit), **150-2015 en 324-2016** (B7), **212-2016** (B6), en **259/284-2024** (B4) zijn geclassificeerd inclusief artikellocaties en OCR-aandachtspunten. Niet alle oude 2010-straatsegmenten zijn visueel overgetekend; voor historische GTFS blijft dat gericht vervolgwerk.
 
@@ -68,7 +75,7 @@ De andere juridische ketens: **243/450-2010** (B4+B7, gedeeltelijk bevestigde be
 | ID | Prioriteit | Open taak | Afsluitcriterium |
 |---|---|---|---|
 | **CT-01** | **Blokkerend** | **B5-4121 462-2025: max. 28 in artikel 1 p. 10 vs 18 in paragraaf 1 p. 20.** Vraag formele correctie/interpretatie bij AMB na; niet één waarde verzinnen. | Officiële rectificatie of voldoende juridisch bewijs welke capaciteit bindend is |
-| **CT-02** | Hoog | Nieuw gevonden **108-2023** via GitHub Action downloaden en pagina-OCR + PDF-scans archiveren. | Nieuwe extraction `report.json` en p. 1–laatste pagina in artifact |
+| **CT-02** | Hoog | **108-2023 afgerond op 3-11-2026:** OCR-artifact 13178511921, 8/8 pagina's; B4 p6 en B7 p7 visueel geverifieerd. | Nieuwe extraction `report.json` en p. 1–laatste pagina in artifact |
 | **CT-03** | Hoog | **025-2011**: onjuiste PDF-link in manifest vervangen door echte originele PDF of item markeren als ontbrekende bron; huidige download is duplicaat van 331-2010. | Correcte officiële 025-2011 of expliciet `missing_original` |
 | **CT-04** | Hoog | Feitelijke dienstregeling in 2026 en *hora pico / hora valle*-kloktijden voor alle 8 routes vinden. | Onafhankelijke week-/feestdagkalender en rit/intervalbewijs |
 | **CT-05** | Hoog | Routegeometrie uit 462-2025 p. 5–20 sequentieel naar OSM, haltes en rijrichting vertalen. | Controleerbare `shapes`, `stop_sequence` en halteplaatsen |
