@@ -14,7 +14,7 @@ Onderzoeksrepository voor een **statische GTFS-feed van het traditionele collect
 | Weekdagperiodeblokken | 245 kandidaten voor een latere `frequencies.txt` |
 | Nog te onderzoeken | 34 route-/variantregistraties |
 | GIS-geometry | 93 bronfeatures, 97/97 **routecodekoppelingen** (geen gevalideerde shapes) |
-| Stops, stopvolgorde, trips en rijtijden | 599 OSM-objecten geïnventariseerd; 0 bevestigde TPC-haltes; blokkeert complete GTFS |
+| Haltes en haltevolgorde | **6.407 SIU-route-halteregels** met naam/GPS/volgorde voor **33 reguliere itineraries**; nog niet op alle 97 AMB-route-ID's gekoppeld |
 
 De officiële AMB-resoluties gelden als onze leidende bron voor de **spits-/dalfrequenties**. De [eerste/laatste vertrekuren uit AMB-kaarten van juli 2020](sources/amb/amb_dispatch_window_assumptions_2026-11-03.csv) en de indeling 07:00–09:00 / 17:00–20:00 spits maandag–vrijdag vormen **expliciete, vervangbare modelaannames**, niet officieel bevestigde 2026-rijtijden. **Voertuigcapaciteit telt niet mee.**
 
@@ -29,7 +29,8 @@ De officiële AMB-resoluties gelden als onze leidende bron voor de **spits-/dalf
 
 - [Onderzoeksrapport GTFS-bouwketen](docs/gtfs_build_staging_progress_2026-11-03.md)
 - [Inventaris haltebronnen en nog ontbrekende TPC-stopdata](docs/stop_data_inventory_2026-11-03.md)
-- [**SIU-route- en halteonderzoek:** tien zichtbare FLOTA ÁNGULO-haltenamen met interne SIU-ID’s](docs/siu_sibus_mht_route_stop_analysis_2026-11-03.md)
+- [**SIU-route- en halteonderzoek:** 36 itineraries, 6.873 route-halteregels, inclusief 33 reguliere itineraries](docs/siu_sibus_mht_route_stop_analysis_2026-11-03.md)
+- [SIU-routehaltelijst met naam, GPS en volgorde](sources/siu/public_extract/siu_route_stop_sequences.csv)
 - [OSM/Overpass-resultaten: 599 bushalteobjecten, 34 mogelijke instapplaatsen en 16 GIS-prioriteitslocaties](sources/osm/README.md)
 - [Frequentiebron per GTFS-route](sources/amb/gtfs_staging/route_headway_candidates.csv)
 - [Voorgestelde weekdagperiodeblokken](sources/amb/gtfs_staging/weekday_period_staging.csv)
@@ -40,6 +41,6 @@ De officiële AMB-resoluties gelden als onze leidende bron voor de **spits-/dalf
 
 ## Vervolg: haltegegevens en ritpatronen
 
-Voor een echte GTFS moeten we nog `stops.txt`, `trips.txt`, `stop_times.txt`, een dagkalender en gecontroleerde `shapes.txt` maken. **We maken geen fictieve halteposities of rijtijden.** De ArcGIS-lijnen stammen hoofdzakelijk uit een 2019-collectie, laatste GIS-bewerking december 2023. Recentere resolutiegeometrie uit 2025/2026 kan daarvan afwijken; A/B-varianten die één lijn delen zijn nog geen afzonderlijk gecontroleerde ritgeometrieën.
+De SIU-bron heeft nu **33 reguliere geordende itineraries met 6.407 GPS-stopvermeldingen** (plus drie testitineraries). Voor een echte GTFS moeten we nog haltes correct dedupliceren, de SIU-itineraries aan de AMB-routecodes koppelen en `stops.txt`, `trips.txt`, `stop_times.txt`, een kalender en geverifieerde `shapes.txt` genereren. **We maken geen fictieve halteposities of rijtijden.** De ArcGIS-lijnen stammen hoofdzakelijk uit een 2019-collectie, laatste GIS-bewerking december 2023. Recentere resolutiegeometrie uit 2025/2026 kan daarvan afwijken; A/B-varianten die één lijn delen zijn nog geen afzonderlijk gecontroleerde ritgeometrieën.
 
 Vaste officiële bron: https://www.ambq.gov.co/transporte/transporte-publico-colectivo/
