@@ -1,5 +1,13 @@
 # AMB TPC — afhandeling per bedrijf en vervolgwerk
 
+## Projectbesluit 3 november 2026 — frequenties uit resoluties zijn gezaghebbend
+
+Voor de statische GTFS accepteren we de spits- en dalintervallen van het **toepasselijke officiële AMB-routebesluit als waarheid voor de geplande dienst**. Er is voor dit type vervoerder geen bruikbare GTFS-RT-feed beschikbaar; het ontbreken van realtime-waarnemingen is **geen GTFS-blokkade**. Een veldstudie, SIBUS-meting of andere observatie is niet vereist om de vergunde `headway_secs` te gebruiken.
+
+**Nog wel nodig:** de chronologische geldigheid van de resolutie (waaronder afloop van pilots), expliciete routevariant / gedeelde trajecten, de exacte spits- en dalperiodegrenzen en dienstkalenders, routegeometrie, haltes en voldoende gegevens voor trips en stop_times. Als een dienstvenster niet bekend is, mag dat niet als feit aan AMB worden toegeschreven; houd het ontbrekend of documenteer een gekozen *modelaanname* apart. De voorwaardelijke formulering `00:00–24:00 afhankelijk van de vraag` is geen officieel bevestigd nachtrooster.
+
+**Voertuigcapaciteit blijft uitgesloten.** Oude rapporten met 'real-world operation confirmation required before using headways' zijn door dit beleid achterhaald; hun officiële getallen blijven geldig als bronwaarden, zonder een extra waarnemingscontrole. `GTFS_READY=no` kan blijven zolang andere noodzakelijke GTFS-invoer ontbreekt.
+
 ## Werkwijze
 Per bedrijf: (1) controleer alle PDF's uit het manifest, (2) lees de beschikkende artikelen en technische tabellen, (3) leg per route vast welke besluiten wijzigingen, intrekkingen, verlengingen of pilots betreffen, (4) vergelijk besluiten chronologisch, (5) documenteer routesegmenten, haltes, frequenties en diensttijden met pagina en bron, (6) maak pas daarna GTFS-voorstellen. OCR-extractie is **geen** juridische of operationele verificatie.
 
@@ -10,8 +18,8 @@ Per gebruikersbesluit zijn **vloot-/voertuigcapaciteit**, het aantal minimaal/ma
 
 - **Niet** gebruiken als GTFS-acceptatiecriterium of reden om verwerking te blokkeren.
 - Geen afzonderlijke werkzaamheden meer uitvoeren om tegenstrijdige wagenparkaantallen of wagenparkklassen op te lossen.
-- Niet meenemen bij het afleiden van ritfrequenties; gebruik expliciete intervallen per route-/itinerary en werkelijke dienstvensters.
-- Routecodeconflicten, juridische geldigheidsduur, ontbrekende bronbesluiten, routegeometrie, haltes en werkelijke dienstregeling **blijven relevant**.
+- Niet meenemen bij het afleiden van ritfrequenties; gebruik expliciete intervallen per route-/itinerary en formeel beschreven of afzonderlijk aangenomen dienstvensters.
+- Routecodeconflicten, juridische geldigheidsduur, ontbrekende bronbesluiten, routegeometrie, haltes, periodegrenzen en dienstkalender **blijven relevant**.
 
 De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GTFS; de getallen worden **niet uit het bronarchief gewist**.
 
@@ -21,7 +29,7 @@ De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GT
 - **AMB-003 afgerond:** alle vijf ontbrekende FLOTA ÁNGULO-PDF's via herstelde Ninja Tables-AJAX-extractie opgehaald; A7-4112 laatste besluit **232-2025 3/5 min en 31,4 km**.
 - **COOTRANTICO 108-2023 afgerond:** 8/8 pagina's met Spaanse OCR, B4 en B7 7/9 op scans bevestigd.
 - **Openstaande bronlacunes:** COOLITORAL 256-2026 PILOTO en de onjuiste bron voor COOTRANTICO 025-2011. Pilot 448-2025 moet nog op specifieke route-impact worden gecontroleerd.
-- Voertuigcapaciteit blijft buiten de GTFS-scope. **Alle vergunde intervallen blijven onder voorbehoud van feitelijke diensttijden**.
+- Voertuigcapaciteit blijft buiten de GTFS-scope. **De vergunde intervallen gelden als GTFS-bronwaarheid; alleen periodegrenzen en weekkalenders moeten nog worden vastgesteld of verantwoord gemodelleerd**.
 
 ## Voortgang
 - 23 bedrijven en 274 manifestdocumenten in `sources/amb/company_completion_backlog_2026-11-02.csv`.
@@ -40,7 +48,7 @@ De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GT
 | AMB-005 | hoog | COOLITORAL | 256-2026 (pilot), 210-2026, 192-2025, 199-2025 en 264-2024 vergelijken | Per route juridisch effect + eventuele einddatum pilot |
 | AMB-006 | hoog | SOBUSA | 082-2026, 466-2025, 225-2025 en eerdere wijzigingen vergelijken | Per route actuele vergunningsstatus |
 | AMB-007 | normaal | alle 23 | Volledige artikelen/tabelrijen met PDF-paginaverwijzing in dossier per bedrijf | Iedere manifestresolutie heeft controleerbare conclusie of expliciete blokkade |
-| AMB-008 | normaal | alle 23 | Dienstregeling/actualiteit los van vergunningsfrequentie verifiëren | Onderbouwde `calendar`, `stop_times`, `frequencies` of expliciet onbekend |
+| AMB-008 | normaal | alle 23 | Officiële spits-/dalinterval rechtstreeks gebruiken; nog ontbrekende start-/eindtijden en kalenderdagen vaststellen of expliciet als modelaanname vastleggen | `headway_secs` uit resolutie plus herleidbare periodegrenzen voor `frequencies` / `calendar` |
 | AMB-009 | normaal | alle 23 | Straattrajecten georefereren en aan haltes koppelen | Gecontroleerde richting, stopvolgorde en `shapes` |
 | AMB-010 | normaal | alle 23 | Verschillen tussen OCR en scans gericht opnieuw controleren | Gemarkeerde twijfelgevallen met geverifieerde tabellen |
 
@@ -48,7 +56,8 @@ De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GT
 - **EXTRACTED**: PDF leesbaar gemaakt; géén inhoudelijke goedkeuring.
 - **REVIEWED**: beschikkende artikelen en tabellen gelezen en met bron/pagina vastgelegd.
 - **LEGAL_CHAIN_CHECKED**: oudere en nieuwere besluiten vergeleken, incl. intrekkingen/pilots.
-- **OPERATION_CONFIRMED**: onafhankelijk bewijs voor huidige exploitatie en tijden.
+- **FREQUENCY_AUTHORIZED**: frequentie rechtstreeks uit juridisch toepasselijke AMB-resolutie, geen onafhankelijk realtime-bewijs vereist.
+- **SERVICE_PERIOD_DEFINED**: begin/einde spits/dal en toepasselijke kalender zijn officieel vastgesteld of transparant als modelaanname beschreven.
 - **GTFS_READY**: benodigde GTFS-velden herleidbaar en intern consistent; **vloot/capaciteit telt niet mee**.
 
 Bedrijven worden niet als voltooid gemarkeerd voordat de vereiste stappen aantoonbaar zijn uitgevoerd. Werk aan ontbrekende scans, URL's en routegegevens wordt afzonderlijk bijgehouden zodat het onderzoek aan de overige bedrijven kan doorgaan.
