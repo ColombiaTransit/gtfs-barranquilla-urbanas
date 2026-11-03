@@ -1,0 +1,9 @@
+source_name_exact
+canonical_name
+correction_type
+evidence
+example_lat
+example_lon
+review_status
+LOS MANATIALES - GIRASOL (CARRERA 12 - OE),LOS MANANTIALES - GIRASOL (CARRERA 12 - OE),missing_n,Exact same GPS and direction; corrected name independently occurs in SIU,10.9029438,-74.8112695,approved_clear_typo
+COLEGIO LA ENSE?ANZA (CALLE 87 -SN),COLEGIO LA ENSEÑANZA (CALLE 87 -SN),damaged_character,Same coordinates as Colegio La Enseñanza source; retain -SN direction suffix,11.0080993,-74.8203543,approved_clear_typo
