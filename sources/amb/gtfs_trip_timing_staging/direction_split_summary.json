@@ -1,0 +1,8 @@
+{
+  "SIU_itineraries_checked": 20,
+  "possible_closed_itineraries": 13,
+  "itineraries_with_both_compass_direction_markers": 20,
+  "unverified_midpoint_turning_candidates": 13,
+  "auto_direction_split": 0,
+  "all_direction_assignments_require_review": true
+}
