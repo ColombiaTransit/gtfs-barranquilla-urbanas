@@ -1,0 +1,26 @@
+{
+  "GH_profile": "bus",
+  "GH_version": "11.1",
+  "GH_OSM_import_date": "2026-10-25T13:53:41Z",
+  "patterns_selected": 70,
+  "total_v3_patterns_available": 70,
+  "GH_segment_route_requests": 352,
+  "GH_sequential_sections": 352,
+  "GH_segments_succeeded": 352,
+  "GH_road_segments_with_source_alignment": 310,
+  "candidate_road_shapes_geojson_features": 352,
+  "v3_source_stop_visits_audited": 9020,
+  "GH_stops_over_45m_from_bus_road": 852,
+  "GH_stop_order_backwards_over_120m": 144,
+  "route_pattern_statuses": {
+    "road_geometry_or_stop_order_needs_review": 66,
+    "road_geometry_candidate_with_order_review": 4
+  },
+  "GH_bus_oneway_compliant_road_net_hypothesis": true,
+  "actual_2026_legal_bus_tracings_confirmed": false,
+  "GTFS_trip_stop_sequences_changed": false,
+  "new_stop_ids_created": 0,
+  "times_generated": 0,
+  "OSM_Overpass_queries": 0,
+  "endpoint_or_token_in_output": false
+}
