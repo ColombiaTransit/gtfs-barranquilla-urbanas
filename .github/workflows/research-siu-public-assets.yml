@@ -1,0 +1,36 @@
+name: Investigate SIU public route and stop assets
+on:
+  push:
+    paths:
+      - scripts/research_siu_public_assets.py
+      - .github/workflows/research-siu-public-assets.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public asset parsing dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4
+      - name: Inspect public SIU HTML and JavaScript assets only
+        run: python scripts/research_siu_public_assets.py
+      - name: Summarize
+        if: always()
+        run: |
+          if [ -f build/siu-public-asset-audit/summary.md ]; then
+            cat build/siu-public-asset-audit/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload sanitized findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-public-asset-audit
+          path: build/siu-public-asset-audit/
+          if-no-files-found: warn
+          retention-days: 45
