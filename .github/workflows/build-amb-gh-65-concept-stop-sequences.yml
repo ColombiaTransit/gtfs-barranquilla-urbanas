@@ -1,0 +1,61 @@
+name: Build concept trip stop sequences with 65 GraphHopper SIU candidates
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/build_gh_65_expanded_trip_stop_order.py
+      - .github/workflows/build-amb-gh-65-concept-stop-sequences.yml
+      - sources/amb/graphhopper_stop_classification/GH_bus_stop_candidate_decisions_125.csv
+permissions:
+  contents: write
+concurrency:
+  group: amb-concept-GH-stops-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  concept:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify script syntax
+        run: python -m py_compile scripts/build_gh_65_expanded_trip_stop_order.py
+      - name: Merge GraphHopper 65 add candidates into research-only stop orders
+        run: python scripts/build_gh_65_expanded_trip_stop_order.py
+      - name: Show source preservation and concept QA
+        if: always()
+        run: |
+          if [ -f build/amb-expanded-GH-stop-concept/summary.md ]; then
+            cat build/amb-expanded-GH-stop-concept/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Save derived concept research without changing source or live GTFS
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [ ! -f build/amb-expanded-GH-stop-concept/summary.json ]; then
+            echo "No validated concept result to save"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/gh_expanded_stop_concept
+            cp -a build/amb-expanded-GH-stop-concept/. sources/amb/gh_expanded_stop_concept/
+            git add sources/amb/gh_expanded_stop_concept/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: stage 65 GH add-candidate SIU stops in concept trip orders without times"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Upload concept stop orders and audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gh-65-expanded-concept-stop-sequences-no-times
+          path: build/amb-expanded-GH-stop-concept/
+          if-no-files-found: warn
+          retention-days: 45
