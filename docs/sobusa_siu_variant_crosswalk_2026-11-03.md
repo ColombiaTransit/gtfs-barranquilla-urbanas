@@ -13,6 +13,20 @@ Vraag: komen de officiële A/B-itinerarios van SOBUSA **C12-4169 en C16-4167** a
 
 De SIU-GraphQL-oproep gebruikt `ServiceMngCompressedItineraryListing`. Het bestaande script kijkt naar de automatisch door de publieke webpagina opgevraagde lijst, niet naar alle mogelijke organisatie-specifieke datasets of interne SIBUS-gegevens. We mogen dus niet concluderen dat de echte SIU-backend nergens SOBUSA bevat.
 
+## SIU-datamodel: afzonderlijke itineraryrecords per basisroute zijn mogelijk
+
+**Nieuwe controle:** de huidige SIU-extractie bevat **31 verschillende `siu_base_route_uuid`-waarden over 36 records**, waarvan **30 verschillende reguliere basisroutes over 33 reguliere itineraryrecords**. Precies **drie reguliere basisroutes** hebben **twee verschillende `siu_itinerary_uuid`-waarden** onder één gedeelde `siu_base_route_uuid`:
+
+| Voorbeeld | SIU-itinerary 1 | SIU-itinerary 2 |
+|---|---|---|
+| LA CAROLINA | MIRAMAR ALAMEDA DEL RIO | LAS GAVIOTAS CALLE 76 |
+| COOLITORAL/TRANSDIAZ/SODETRANS | JUAN MINA | VILLA SAN PABLO |
+| SODETRANS/TRANSDIAZ | SOLEDAD CALLE 84 | SOLEDAD CALLE 84 VILLA CAROLINA |
+
+[Zes betreffende SIU-itineraryregels met hun gedeelde basisroute-UUID](../sources/siu/analysis/siu_multi_itinerary_base_route_examples_2026-11-03.csv).
+
+**Interpretatie:** SIU ondersteunt dus technisch een model met **één basisroute en meerdere afzonderlijke itineraryrecords**; de namen van de varianten kunnen geheel verschillen. Voor SOBUSA kunnen we die structuur pas opzoeken als de bedrijfslijsten beschikbaar zijn. Dit bewijs is **niet** hetzelfde als een sluitende juridische AMB A/B-toewijzing van bovengenoemde voorbeelden.
+
 ## Welke verschillen zijn in het AMB-besluit wél bevestigd?
 
 [Resolutie 466-2025](https://www.ambq.gov.co/wp-content/uploads/2026/03/Permiso-de-operacion-subusa-2.pdf), oorspronkelijke pagina's 9–11 en 16–18, vermeldt bij **beide lijnen twee afzonderlijk voorgeschreven volledige itinerarios**. Ze gebruiken dezelfde terminal (Calle 63 #3-75), maar de vertrekken lopen via **verschillende toegangsstraten**:
