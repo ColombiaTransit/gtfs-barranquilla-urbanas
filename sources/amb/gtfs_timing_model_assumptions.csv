@@ -1,0 +1,2 @@
+timing_model_id,avg_moving_speed_kmh,distance_factor_for_between_stop_straight_lines,dwell_seconds_per_stop,minimum_stop_to_stop_seconds,unusual_straight_line_gap_m,description,method_status
+AMB_RESEARCH_SPEED20_FACTOR1_25_DWELL10_V1,20,1.25,10,15,2500,Exploratory interpolation from source SIU consecutive stop GPS only; not official journey times and requires route-specific calibration,NOT_FOR_PUBLICATION
