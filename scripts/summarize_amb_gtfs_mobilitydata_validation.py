@@ -40,7 +40,7 @@ def main():
                 obj=json.loads(payload)
                 if isinstance(obj,dict):
                     # MobilityData stores the empty list in a wrapper object.
-                    errors=obj.get("systemErrors",obj.get("errors"))
+                    errors=obj.get("notices",obj.get("systemErrors",obj.get("errors")))
                     if errors is None:
                         raise SystemExit("Unknown MobilityData system error JSON schema; inspect artifact")
                     if errors:
