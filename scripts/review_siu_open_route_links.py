@@ -20,6 +20,7 @@ ROOT=Path(__file__).resolve().parents[1]
 SIU=ROOT/"sources/siu"
 REV=SIU/"gtfs_staging/siu_amb_route_crosswalk_review.csv"
 STOPS=SIU/"public_extract/siu_route_stop_sequences.csv"
+STAGED_OCCURRENCES=SIU/"gtfs_staging/siu_stop_occurrence_crosswalk.csv"
 ROUTES=ROOT/"gtfs/routes.txt"
 PILOT=ROOT/"sources/amb/details/resolucion_256-2026.csv"
 PT_TERMINALS=ROOT/"sources/amb/details/coolitoral_192_2025_pt4_pt5_terminals_verified_2026-11-03.csv"
@@ -239,6 +240,40 @@ def run(out):
     writeout("open_21_route_crosswalk_review.csv",open_rows)
     writeout("provisional_base_route_code_candidates.csv",proposals)
     writeout("provisional_base_route_stop_sequences_NO_TIMES.csv",proposals_stop_orders)
+    # Preserve SIU candidate_stop_id from the 5m clustered staging.
+    existing_stops=read(STAGED_OCCURRENCES)
+    assert len(existing_stops)==6407,len(existing_stops)
+    new_route_by_uuid={r["siu_itinerary_uuid"]:r["possible_gtfs_route_ids"] for r in proposals}
+    strong_route_by_uuid={r["siu_itinerary_uuid"]:r["suggested_gtfs_route_id"]
+                          for r in reviews if r["route_match_status"]=="high_confidence_provisional"}
+    assert len(strong_route_by_uuid)==12 and len(new_route_by_uuid)==8
+    assert not(set(strong_route_by_uuid)&set(new_route_by_uuid))
+    combined=[]
+    for row in existing_stops:
+        uid=row["siu_itinerary_uuid"]
+        is_strong=uid in strong_route_by_uuid
+        is_new=uid in new_route_by_uuid
+        if not(is_strong or is_new):continue
+        gtfs_id=strong_route_by_uuid[uid] if is_strong else new_route_by_uuid[uid]
+        if not gtfs_id or ";" in gtfs_id:
+            raise ValueError("A/B ambiguous route leaked into provisional preview")
+        combined.append({
+            "siu_itinerary_uuid":uid,
+            "gtfs_route_id_candidate":gtfs_id,
+            "confidence_tier":"original_12_strong_geo" if is_strong else "new_8_single_operator_proposal",
+            "siu_stop_sequence":row["stop_sequence"],
+            "candidate_stop_id":row["candidate_stop_id"],
+            "siu_stop_uuid":row["siu_stop_uuid"],
+            "siu_original_name":row["stop_name_source"],
+            "siu_canonical_name":row.get("stop_name_normalized") or row["stop_name_source"],
+            "legal_route_match_confirmed":"no",
+            "arrival_time":"","departure_time":"","trip_id":"",
+            "gtfs_publication_allowed":"no"
+        })
+    combined.sort(key=lambda r:(r["siu_itinerary_uuid"],int(r["siu_stop_sequence"])))
+    assert len(combined)==2361+len(proposals_stop_orders),len(combined)
+    assert len({r["siu_itinerary_uuid"] for r in combined})==20
+    writeout("combined_20_route_stop_candidates_NO_TIMES.csv",combined)
     writeout("selected_siu_sequence_pair_comparison.csv",comparisons)
     fields=["siu_itinerary_uuid","siu_name","proposed_amb_base_code","possible_gtfs_route_ids",
             "source_amb_resolution","title_based_candidate","terminal_based_candidate",
@@ -272,6 +307,9 @@ def run(out):
        "PT4_PT5_AB_assignments_verified":0,
        "single_operator_single_route_base_proposals":len(proposals),
        "stop_occurrences_in_new_single_route_proposals":len(proposals_stop_orders),
+       "combined_strong_and_provisional_itineraries":20,
+       "combined_research_only_stop_occurrences":len(combined),
+       "combined_candidate_stops_distinct":len({r["candidate_stop_id"] for r in combined}),
        "shared_operator_or_AB_or_uncertain_remaining":len(open_rows)-len(proposals),
        "legally_confirmed_new_route_matches":0,
        "prior_high_confidence_geographic_candidates_untouched":12,
@@ -302,7 +340,8 @@ def run(out):
         if x in tp:continue
         lines.append(f'- {x["siu_name"]} ({x["siu_companies"]}): '
                      f'{x["proposed_amb_base_code"] or "unknown"} — {x["crosswalk_review_status"]}')
-    lines+=["","No timetable, stop_times, approved direction or final mapping added to GTFS.",
+    lines+=["","The combined 20-route research table has candidate stop IDs with two confidence tiers; not legal confirmations.",
+            "No timetable, stop_times, approved direction or final mapping added to GTFS.",
             "Original 256-2026 verified and compared; pilot starts 22 June 2026 for six months with possible extension. "
             "Continued legal applicability and SIU-to-licensed A/B ID assignment remain separate checks."]
     (out/"summary.md").write_text("\n".join(lines)+"\n",encoding="utf-8")
