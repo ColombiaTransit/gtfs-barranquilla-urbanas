@@ -74,3 +74,12 @@ Voor een volledige GTFS-extractie ontbreken op dit moment:
 De nieuwe SIU-stopnamen en UUID's zijn **veel sterker bewijs voor echte routegebonden TPC-haltevolgorde** dan de ongeclassificeerde OSM-punten. Gebruik ze daarom als eerste keuze voor een toekomstig bronregister. Daarna GPS-coördinaten aan dezelfde interne stop-ID koppelen en de stopvolgorde tegen de actuele vergunning en GIS-route beoordelen.
 
 Nog **geen `gtfs/stops.txt` of `stop_times.txt` genereren** uit deze twee onvolledige snapshots, en de interne SIU-UUID niet als bevestigde AMB-routecode presenteren.
+
+## 5. Nieuwe technische ontdekking: publieke GraphQL-transportlaag
+
+De [GitHub Action voor openbare SIU-assets](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41594790510) heeft **43 openbaar bediende JavaScriptbestanden** passief uitgelezen (ca. 5,96 MB). De assetstrings alleen tonen nog niet met zekerheid de gebruikte servicepaden.
+
+De eerste [anonieme Playwright-proef](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41595215068) heeft echter een **werkelijke HTTP 200 POST** van de openbare SIU-webapp waargenomen naar `https://siu.ambq.gov.co/api/pis-gateway/graphql/http`. Een latere proef heeft via uitsluitend metadata het GraphQL-resultaatveld **`data.ServiceMngCompressedItineraryListing`** en request-variabele **`organizationId`** bevestigd. Dit bewijst dat de webapp een dynamische itinerarylijst ophaalt, maar **nog niet** dat we via deze aanroep haltes, coördinaten of de complete lijst beschikbaar hebben.
+
+De experimenten gebruiken **geen account, geen opgeslagen inlogcookies en geen geraden geauthenticeerde verzoeken**. Het resultaat zijn publieke webinteracties en geanonimiseerde endpointpaden/veldstructuren. De eerdere browserproeven konden de kaart `ALAMEDA DEL RIO` nog niet volledig openen en zijn inhoudelijk dus **partieel**, ondanks een technisch geslaagde GitHub Action.
+
