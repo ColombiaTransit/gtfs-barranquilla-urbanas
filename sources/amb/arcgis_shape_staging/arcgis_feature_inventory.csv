@@ -1,0 +1,94 @@
+OBJECTID,Name,FolderPath,route_code_tokens,geometry_type
+1,C1-4132,Rutas Transporte Publico 2019/RS_AMB_2019/Cooasoatlan,C14132,MultiLineString
+2,C1-B-4186,Rutas Transporte Publico 2019/RS_AMB_2019/Cooasoatlan,C1B4186,LineString
+3,C20-4181,Rutas Transporte Publico 2019/RS_AMB_2019/Cooasoatlan,C204181,MultiLineString
+4,C20-B-4187,Rutas Transporte Publico 2019/RS_AMB_2019/Cooasoatlan,C20B4187,LineString
+5,C2-4133,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C24133,MultiLineString
+6,C2-B-4187,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C2B4187,LineString
+7,C18- 4141,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C184141,MultiLineString
+8,C9-4140,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C94140,MultiLineString
+9,A15-4159,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,A154159,MultiLineString
+10,C3-4134,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C34134,MultiLineString
+11,C4-4135,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C44135,MultiLineString
+12,D20-4185,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,D204185,MultiLineString
+13,A1-4106,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,A14106,MultiLineString
+14,A2-4107,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,A24107,MultiLineString
+15,A3-4108,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,A34108,MultiLineString
+16,A4-4109,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,A44109,MultiLineString
+17,B1-4117,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,B14117,LineString
+18,B17-4163,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,B174163,MultiLineString
+19,B2A-4177,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,B2A4177,MultiLineString
+20,B3-4119,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,B34119,MultiLineString
+21,C19-4178,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,C194178,LineString
+22,PT1-4101,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT14101,MultiLineString
+23,PT2-4102,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT24102,MultiLineString
+24,PT3-4103,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT34103,MultiLineString
+25,PT4-4104,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT44104,LineString
+26,PT5-4105,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT54105,LineString
+27,C5-4136 2019,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrab,,LineString
+28,C6-4137 2019,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrab,C64137,LineString
+29,D1-4145,Rutas Transporte Publico 2019/RS_AMB_2019/Cootracolsur,,LineString
+30,D2-4146,Rutas Transporte Publico 2019/RS_AMB_2019/Cootracolsur,,LineString
+31,C7-4138,Rutas Transporte Publico 2019/RS_AMB_2019/Cootransco,C74138,MultiLineString
+32,Circular Desvío N° 0069-17,Rutas Transporte Publico 2019/RS_AMB_2019/Cootransco,,LineString
+33,A5-4110,Rutas Transporte Publico 2019/RS_AMB_2019/Cootransnorte,A54110,MultiLineString
+34,A6-4111,Rutas Transporte Publico 2019/RS_AMB_2019/Cootransnorte,A64111,LineString
+35,Ruta sin título,Rutas Transporte Publico 2019/RS_AMB_2019/Cootransnorte,,LineString
+36,C8-4139,Rutas Transporte Publico 2019/RS_AMB_2019/Cootransporcar,C84139,LineString
+37,A18-4183,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,A184183,MultiLineString
+38,B20-4180,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,B204180,MultiLineString
+39,B20-B-4191,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,B20B4191,LineString
+40,B4-4120,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,B44120,MultiLineString
+41,B5-4121,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,B54121,MultiLineString
+42,B5-B-4190,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,B5B4190,LineString
+43,B6-4122,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,B64122,LineString
+44,B7-4123,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrantico,B74123,MultiLineString
+45,D3-4147,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrasol,D34147,MultiLineString
+46,D4-4148,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrasol,D44148,MultiLineString
+47,D5-4149,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrasol,D54149,LineString
+48,C10-4142,Rutas Transporte Publico 2019/RS_AMB_2019/Cootratlantico,,MultiLineString
+49,C15-4144,Rutas Transporte Publico 2019/RS_AMB_2019/Cootratlantico,,MultiLineString
+50,B9-4125,Rutas Transporte Publico 2019/RS_AMB_2019/Embusa,B94125,MultiLineString
+51,A7-4112,Rutas Transporte Publico 2019/RS_AMB_2019/Flota Angulo,A74112,MultiLineString
+52,A16-4161,Rutas Transporte Publico 2019/RS_AMB_2019/La Carolina,A164161,MultiLineString
+53,D6-4150,Rutas Transporte Publico 2019/RS_AMB_2019/La Carolina,D64150,LineString
+54,D7-4151,Rutas Transporte Publico 2019/RS_AMB_2019/La Carolina,D74151,LineString
+55,Ruta sin título,Rutas Transporte Publico 2019/RS_AMB_2019/La Carolina,,LineString
+56,A8-4113,Rutas Transporte Publico 2019/RS_AMB_2019/Flota Roja,A84113,MultiLineString
+57,B10-4126,Rutas Transporte Publico 2019/RS_AMB_2019/Lolaya,B104126,MultiLineString
+58,B10-B-4193,Rutas Transporte Publico 2019/RS_AMB_2019/Lolaya,B10B4193,MultiLineString
+59,D8-4165,Rutas Transporte Publico 2019/RS_AMB_2019/Lolaya,D84165,MultiLineString
+60,B8-4124,Rutas Transporte Publico 2019/RS_AMB_2019/Monterrey,B84124,MultiLineString
+61,B11-4166,Rutas Transporte Publico 2019/RS_AMB_2019/Monterrey,B114166,MultiLineString
+62,B11-B-4192,Rutas Transporte Publico 2019/RS_AMB_2019/Monterrey,B11B4192,MultiLineString
+63,B12-4127,Rutas Transporte Publico 2019/RS_AMB_2019/Monterrey,B124127,MultiLineString
+64,B18-4175,Rutas Transporte Publico 2019/RS_AMB_2019/Sobusa,B184175,MultiLineString
+65,C11-4168,Rutas Transporte Publico 2019/RS_AMB_2019/Sobusa,C114168,MultiLineString
+66,C12-4169,Rutas Transporte Publico 2019/RS_AMB_2019/Sobusa,C124169,LineString
+67,C13-4143,Rutas Transporte Publico 2019/RS_AMB_2019/Sobusa,C134143,LineString
+68,C14-4170,Rutas Transporte Publico 2019/RS_AMB_2019/Sobusa,C144170,MultiLineString
+69,C16-4167,Rutas Transporte Publico 2019/RS_AMB_2019/Sobusa,C164167,MultiLineString
+70,B13-4128,Rutas Transporte Publico 2019/RS_AMB_2019/Sodetrans,B134128,MultiLineString
+71,B13B-4189,Rutas Transporte Publico 2019/RS_AMB_2019/Sodetrans,B13B4189,MultiLineString
+72,B14-4174,Rutas Transporte Publico 2019/RS_AMB_2019/Sodetrans,B144174,MultiLineString
+73,B15-4129,Rutas Transporte Publico 2019/RS_AMB_2019/Sodetrans,B154129,MultiLineString
+74,C21-4182,Rutas Transporte Publico 2019/RS_AMB_2019/Sodetrans,C214182,MultiLineString
+75,A13-4162,Rutas Transporte Publico 2019/RS_AMB_2019/T_Atlantico,,MultiLineString
+76,A10-4114,Rutas Transporte Publico 2019/RS_AMB_2019/Transdiaz,A104114,MultiLineString
+77,A11-4115,Rutas Transporte Publico 2019/RS_AMB_2019/Transdiaz,A114115,MultiLineString
+78,B16-4130,Rutas Transporte Publico 2019/RS_AMB_2019/Transdiaz,B164130,MultiLineString
+79,C17-4160,Rutas Transporte Publico 2019/RS_AMB_2019/Transmecar,C174160,MultiLineString
+80,D11-4153,Rutas Transporte Publico 2019/RS_AMB_2019/Transmecar,D114153,MultiLineString
+81,D10-4172,Rutas Transporte Publico 2019/RS_AMB_2019/Transmecar,D104172,MultiLineString
+82,D9-4152,Rutas Transporte Publico 2019/RS_AMB_2019/Transmecar,D94152,MultiLineString
+83,D13-4155,Rutas Transporte Publico 2019/RS_AMB_2019/Transoledad,D134155,MultiLineString
+84,A14-4116 NUEVA,Rutas Transporte Publico 2019/RS_AMB_2019/Transurbar,A144116,LineString
+85,D16-4173 NUEVA,Rutas Transporte Publico 2019/RS_AMB_2019/Transurbar,D164173,LineString
+86,D19-4184,Rutas Transporte Publico 2019/RS_AMB_2019/Transurbar,D194184,LineString
+87,B2B-4118,Rutas Transporte Publico 2019/RS_AMB_2019/Trasalfa,B2B4118,MultiLineString
+88,D14-4156,Rutas Transporte Publico 2019/RS_AMB_2019/Trasalfa,D144156,MultiLineString
+89,D15-4157,Rutas Transporte Publico 2019/RS_AMB_2019/Trasalfa,D154157,MultiLineString
+90,B19-4176,Rutas Transporte Publico 2019/RS_AMB_2019/Trasalianco,B194176,MultiLineString
+91,D12-4154,Rutas Transporte Publico 2019/RS_AMB_2019/Trasalianco,D124154,MultiLineString
+92,D17-4158,Rutas Transporte Publico 2019/RS_AMB_2019/Trasalianco,D174158,MultiLineString
+93,D18-4179,Rutas Transporte Publico 2019/RS_AMB_2019/Trasalianco,D184179,MultiLineString
