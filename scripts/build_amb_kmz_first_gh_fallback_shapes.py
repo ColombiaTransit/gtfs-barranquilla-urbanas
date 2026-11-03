@@ -62,9 +62,16 @@ def main():
     args.out.mkdir(parents=True,exist_ok=True)
 
     source_manifest=read_csv(PATTERNS)
-    patterns={r["trip_pattern_id"]:r for r in source_manifest}
-    if len(patterns)!=70:
-        raise ValueError(f"Unexpected source patterns: {len(patterns)}")
+    # The source manifest contains 74 upstream components, but the accepted
+    # v3 stop-order pilot contains precisely 70; four source fragments are not
+    # in the identical comparison population. Use EXACTLY the current GH
+    # shape pattern IDs instead of silently extending the fixture.
+    original_geo=json.loads(SHAPES.read_text(encoding="utf-8"))
+    selected_uids={f["properties"]["trip_pattern_id"] for f in original_geo["features"]}
+    patterns={r["trip_pattern_id"]:r for r in source_manifest
+              if r["trip_pattern_id"] in selected_uids}
+    if len(patterns)!=70 or len(selected_uids)!=70:
+        raise ValueError(f"Unexpected accepted stop-pattern scope: {len(patterns)}/{len(selected_uids)}")
     source_lines,source_details=load_geometries(patterns)
     metadata=read_csv(META)
     if len(metadata)!=352:
