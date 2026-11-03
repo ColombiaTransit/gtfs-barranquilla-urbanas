@@ -16,7 +16,7 @@ on:
       - gtfs/agency.txt
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   build-staging:
     runs-on: ubuntu-latest
@@ -32,6 +32,18 @@ jobs:
         run: python scripts/build_gtfs_frequency_staging.py --out build/gtfs-frequency-staging
       - name: Write GitHub summary
         run: cat build/gtfs-frequency-staging/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Persist validated staging reports in repository (not gtfs/)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/amb/gtfs_staging
+          cp build/gtfs-frequency-staging/* sources/amb/gtfs_staging/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/amb/gtfs_staging/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: refresh AMB staged frequency periods and unresolved route report"
+            git push origin HEAD:main
+          fi
       - name: Upload staged GTFS inputs (not a GTFS feed)
         if: always()
         uses: actions/upload-artifact@v4
