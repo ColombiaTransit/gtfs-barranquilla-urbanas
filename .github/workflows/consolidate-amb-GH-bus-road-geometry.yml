@@ -1,0 +1,75 @@
+name: Consolidate GH bus road geometry and revalidate SIU stop order
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/consolidate_amb_GH_bus_road_geometry_candidates.py
+      - .github/workflows/consolidate-amb-GH-bus-road-geometry.yml
+      - sources/amb/GH_dense_KMZ_shape_retry/summary.json
+permissions:
+  contents: write
+concurrency:
+  group: amb-GH-road-consolidation-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  consolidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install GIS dependencies
+        run: python -m pip install --disable-pip-version-check "shapely>=2.0,<3" "pyproj>=3.5,<4"
+      - name: Compile scripts
+        run: python -m py_compile scripts/consolidate_amb_GH_bus_road_geometry_candidates.py scripts/refine_amb_GH_road_passage_stop_order.py
+      - name: Consolidate 352 road segments with only 21 improved reliable candidates
+        run: python scripts/consolidate_amb_GH_bus_road_geometry_candidates.py
+      - name: Reconcile all 9020 SIU stop passes against selected road geometry
+        run: |
+          python scripts/refine_amb_GH_road_passage_stop_order.py \
+            --source build/amb-GH-best-geometry \
+            --out build/amb-GH-best-refined
+      - name: Show road geometry and stop order final research QA
+        if: always()
+        run: |
+          if [ -f build/amb-GH-best-geometry/summary.md ]; then
+            cat build/amb-GH-best-geometry/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f build/amb-GH-best-refined/summary.md ]; then
+            cat build/amb-GH-best-refined/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit independent research geometry and refined stops
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [ ! -f build/amb-GH-best-refined/summary.json ]; then
+            echo "Incomplete road / stop-order research output"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/GH_combined_bus_road_geometry/
+            mkdir -p sources/amb/GH_combined_stop_order_QA/
+            cp -a build/amb-GH-best-geometry/. sources/amb/GH_combined_bus_road_geometry/
+            cp -a build/amb-GH-best-refined/. sources/amb/GH_combined_stop_order_QA/
+            git add sources/amb/GH_combined_bus_road_geometry/ sources/amb/GH_combined_stop_order_QA/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: retain only KMZ-aligned GH bus road candidates and reassess 9020 SIU visits"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Archive combined bus road and stop sequence QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-GH-best-road-and-SIU-stop-order
+          path: |
+            build/amb-GH-best-geometry/
+            build/amb-GH-best-refined/
+          if-no-files-found: warn
+          retention-days: 45
