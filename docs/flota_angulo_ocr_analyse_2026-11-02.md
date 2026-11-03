@@ -1,5 +1,7 @@
 # FLOTA ÁNGULO — analyse OCR-run 41488216079 (2 november 2026)
 
+> **Historisch verslag van de OCR-run 2 november 2026.** De conclusie hieronder dat vijf PDF's nog ontbreken is **achterhaald**. Op **3 november 2026** heeft [run 41582220020](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41582220020) via de dynamische Ninja Tables-AJAX-tabel **alle zes FLOTA ÁNGULO-resoluties** gedownload en geëxtraheerd. Gebruik het [bijgewerkte volledige onderzoeksrapport](flota_angulo_route_frequencies_2026-11-02.md) en het [historische frequentie-CSV](../sources/amb/flota_angulo_route_frequency_history_2026-11-03.csv) als huidige bronregisters.
+
 ## Technische extractie
 
 - Run: https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41488216079
