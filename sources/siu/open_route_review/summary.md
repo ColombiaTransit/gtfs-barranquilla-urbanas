@@ -14,16 +14,17 @@
 - legally_confirmed_new_route_matches: 0
 - prior_high_confidence_geographic_candidates_untouched: 12
 - pairwise_stop_sequence_comparisons: 5
-- source_legal_table: sources/amb/details/resolucion_256-2026.csv
+- source_legal_table: sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv
+- original_256_PDF_verified: True
 - warning: No legal A/B assignments, no TPC GTFS route_id modifications or stop_times; proposals only.
 
 ## PT4/PT5 (source 256-2026)
 
-- SIU **CIRCUNVALAR VIA 40** (132 stops): **title suggests PT5-4105** while **old terminal suggests PT4-4104**. This contradiction blocks any base or A/B confirmation.
-- SIU **VIA 40 CIRCUNVALAR** (124 stops): **title suggests PT4-4104** while **old terminal suggests PT5-4105**. This contradiction blocks any base or A/B confirmation.
+- SIU **CIRCUNVALAR VIA 40** (132 stops): **title suggests PT5-4105** while **2026 legal terminal street suggests PT4-4104**. This contradiction blocks any base or A/B confirmation.
+- SIU **VIA 40 CIRCUNVALAR** (124 stops): **title suggests PT4-4104** while **2026 legal terminal street suggests PT5-4105**. This contradiction blocks any base or A/B confirmation.
 
 For PT4 and PT5, each of A and B has **9 min peak / 14 min offpeak** according to the curated resolution table. A/B refers to a licensed pattern, not automatically the SIU route's outbound/return half. A 2019 GIS line that matches at 100% to both routes does not disambiguate direction.
-**The primary 192-2025 PDF has now been checked:** PT4 starts by Calle 17/Carrera 30 and PT5 by Vía 40 No. 51-310. The original 256-2026 pilot PDF is needed to know whether these starting points changed.
+**Both original 192-2025 and 256-2026 PDFs have been checked:** PT4 A/B starts at Calle 17/Carrera 30 and PT5 A/B at Vía 40 No. 51-310. In 256 the B variants use distinct side-street branches; exact SIU A/B crosswalk still cannot be proven from available names.
 
 ## Other unresolved links
 
@@ -48,4 +49,4 @@ For PT4 and PT5, each of A and B has **9 min peak / 14 min offpeak** according t
 - SOLEDAD CALLE 84 (SODETRANS;TRANSDIAZ): B17-4163 — shared_operator_route_pattern_not_allocatable
 
 No timetable, stop_times, approved direction or final mapping added to GTFS.
-The original 256-2026 pilot PDF remains to be retrieved and compared before release. The pilot was recorded as starting 22 June 2026 for six months with possible renewal; continued application is a separate legal check.
+Original 256-2026 verified and compared; pilot starts 22 June 2026 for six months with possible extension. Continued legal applicability and SIU-to-licensed A/B ID assignment remain separate checks.

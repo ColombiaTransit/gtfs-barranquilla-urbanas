@@ -12,9 +12,10 @@
     "provisional_base_candidate_legal_review_required": 8,
     "shared_operator_route_pattern_not_allocatable": 8,
     "base_code_plausible_but_AB_pattern_unresolved": 3,
-    "title_vs_2025_terminal_conflict_requires_256_pdf": 2
+    "primary_256_title_vs_first_siu_street_conflict": 2
   },
   "pairwise_stop_sequence_comparisons": 5,
-  "source_legal_table": "sources/amb/details/resolucion_256-2026.csv",
+  "source_legal_table": "sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv",
+  "original_256_PDF_verified": true,
   "warning": "No legal A/B assignments, no TPC GTFS route_id modifications or stop_times; proposals only."
 }
