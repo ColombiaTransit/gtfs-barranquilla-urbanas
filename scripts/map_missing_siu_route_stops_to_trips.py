@@ -106,34 +106,44 @@ def load_arcgis(path):
     return result
 
 def source_selection(record,arcgis_features,inventory):
-    """Prefer KMZ. If the website points a route to another route's file, use historic GIS."""
-    label=record["kmz_route_label"]
+    """Prefer KMZ, except wrong file aliases or severely fragmented unordered KMZ."""
     original_path=unquote(urlsplit(record["source_kmz_url"]).path)
     filename=Path(original_path).stem
     base=record["kmz_base_route_code"]
-    if norm(filename).startswith(norm(base)):
-        # Do not conflate a full route code with a shorter prefix (PT1 vs PT11).
-        stem_code = re.sub(r"[\s-][AB]$","",filename.upper()).strip()
-        accurate = norm(stem_code)==norm(base)
-    else:
-        accurate=False
+    stem_code=re.sub(r"[\s-][AB]$","",filename.upper()).strip()
+    accurate=norm(stem_code)==norm(base)
     source_file=KMZ_DIR/record["source_geojson_path"]
+    kmz_lines=[]
     if accurate and source_file.is_file():
         line_data=json.loads(source_file.read_text(encoding="utf-8"))
-        lines=input_lines(line_data)
-        if lines:
-            return ("AMB_KMZ_2026",lines,record["source_kmz_url"],
-                    "source_url_shared_with_other_route_label" if record["source_url_collision"]=="yes" else "")
-    # ArcGIS fallback for missing / mislabeled route KMZ, NOT assumed current.
+        kmz_lines=input_lines(line_data)
+    fragmented=(len(kmz_lines)>12 and
+                sum(line.length<800 for line in kmz_lines)>=len(kmz_lines)/2)
+    if kmz_lines and not fragmented:
+        return ("AMB_KMZ_2026",kmz_lines,record["source_kmz_url"],
+                "source_url_shared_with_other_route_label" if record["source_url_collision"]=="yes" else "")
+    # ArcGIS fallback for mislabeled or fragmented KMZ; NOT assumed current.
     possible=[row for row in inventory if norm(row["route_code_tokens"])==norm(base)
               and company_norm(record["company"]) in company_norm(row["FolderPath"])]
     candidates=[arcgis_features[x["OBJECTID"]] for x in possible if x["OBJECTID"] in arcgis_features]
     if len(candidates)==1:
         lines=input_lines(candidates[0])
+        if len(lines)>12:
+            # Historic feature sometimes contains cartographic connector fragments,
+            # not independent bus trips. Keep only major continuous paths.
+            lines=[line for line in lines if line.length>=1500]
         if lines:
+            reason=("AMB_KMZ_many_unordered_micro_fragments;older_GIS_shape_not_legally_verified"
+                    if fragmented else
+                    "AMB_KMZ_filename_does_not_match_route_code;older_GIS_shape_not_legally_verified")
             return ("ARCGIS_2019_2023_FALLBACK",lines,
                     "https://services3.arcgis.com/oGYAc07w6wsvgUYr/ArcGIS/rest/services/Movilidad_Transito_WFL1/FeatureServer/6",
-                    "AMB_KMZ_filename_does_not_match_route_code;older_GIS_shape_not_legally_verified")
+                    reason)
+    # If 100 unordered micro-segments are all that exist, don't claim they form
+    # 100 valid trips. Keep the record as an explicitly missing coherent shape.
+    if fragmented:
+        return ("KMZ_UNORDERED_FRAGMENTS_NO_TRIP_ORDER",[],"",
+                "KMZ_has_many_unordered_sub_km_fragments;ArcGIS_coherent_fallback_unavailable")
     return ("NO_VALIDATED_SOURCE_SHAPE",[],"",
             "AMB_KMZ_label_filename_mismatch_or_missing;arcgis_fallback_unavailable")
 
@@ -402,12 +412,17 @@ def main():
         "source_KMZ_route_variants_missing_SIU":len(missing),
         "route_variants_with_at_least_one_shape":len({(p["company"],p["official_route_label"]) for p in patterns}),
         "generated_provisional_trip_patterns":len(patterns),
+        "route_variants_with_at_least_five_stop_candidates":len({
+            (p["company"],p["official_route_label"]) for p in patterns
+            if p["physical_SIU_stop_candidates_in_order"]>=5}),
         "trip_patterns_with_at_least_five_candidate_stops":sum(r["physical_SIU_stop_candidates_in_order"]>=5 for r in patterns),
         "distinct_company_base_routes_in_patterns":len(all_base_route_codes),
         "provisional_route_stop_visits":len(selected_rows),
         "distinct_existing_physical_SIU_stop_ids_reused":len(unique_linked),
         "total_route_stop_projection_candidates_within_35m":len(all_candidates),
         "arcgis_fallback_pattern_components":sum(p["source_geometry"].startswith("ARCGIS") for p in patterns),
+        "route_variants_requiring_fragment_or_source_review":len({
+            (r["company"],r["route_label"]) for r in quality if r["geometry_warning"]}),
         "missing_route_variants_with_no_geometry":len(missing)-len({(p["company"],p["official_route_label"]) for p in patterns}),
         "new_physical_stop_ids_created":0,
         "arrival_departure_times_generated":0,
