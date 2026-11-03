@@ -15,14 +15,13 @@
 ## Validator 8.0.1
 
 - ERROR notices: **0**
-- WARNING notices: **6291**
+- WARNING notices: **2615**
 - INFO notices: **1**
 
 ## Meest voorkomende codes
 
 | Severity | Code | Aantal |
 |---|---|---:|
-| WARNING | stop_too_far_from_shape_using_user_distance | 3676 |
 | WARNING | mixed_case_recommended_field | 2354 |
 | WARNING | stop_too_far_from_shape | 249 |
 | WARNING | equal_shape_distance_diff_coordinates_distance_below_threshold | 5 |

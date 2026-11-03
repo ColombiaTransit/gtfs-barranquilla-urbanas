@@ -33,7 +33,7 @@ zijn NIET uit juridische exploitatiegegevens bevestigd.
 ## Technische methode
 
 - shapes.txt: wegenvolgende GH-buswegsegementen in KMZ-volgorde; 21 bronafwijkingen blijven gemarkeerd.
-- stop_times.shape_dist_traveled: bron-KMZ-afgelegde afstand lineair omgerekend binnen het overeenkomstige GH-routedeel; uitsluitend voor testconsistente referenties.
+- stop_times.shape_dist_traveled bewust weggelaten: de huidige relatieve KMZ-/GraphHopper-projectie is niet precies genoeg voor een correcte per-halte wegafstand. shapes.txt bevat wel echte GH-wegafstanden.
 - Werkelijke route_id: exacte combinatie agency_id en route_short_name uit bestaande gtfs/routes.txt; geen nieuwe fictieve routes.
 - COOLITORAL PT2 niet opgenomen omdat de bestaande gtfs/routes.txt geen overeenkomende officiële route_id heeft.
 - Onbevestigde SIU-haltebediening en bron-A/B-routeprovenance blijven QA-risico.

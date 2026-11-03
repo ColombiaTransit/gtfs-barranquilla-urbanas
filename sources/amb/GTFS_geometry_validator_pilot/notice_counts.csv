@@ -1,5 +1,4 @@
 code,severity,count
-stop_too_far_from_shape_using_user_distance,WARNING,3676
 mixed_case_recommended_field,WARNING,2354
 stop_too_far_from_shape,WARNING,249
 equal_shape_distance_diff_coordinates_distance_below_threshold,WARNING,5

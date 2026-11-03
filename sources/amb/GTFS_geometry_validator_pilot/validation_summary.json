@@ -3,23 +3,18 @@
   "validation_engine": "MobilityData canonical GTFS Schedule validator",
   "synthetic_demo_feed_only": true,
   "full_json_and_html_in_artifact_only": true,
-  "notice_group_count": 9,
+  "notice_group_count": 8,
   "notices_by_severity": {
-    "WARNING": 6291,
+    "WARNING": 2615,
     "INFO": 1
   },
   "error_count": 0,
-  "warning_count": 6291,
+  "warning_count": 2615,
   "info_count": 1,
   "zero_validation_errors": true,
   "feed_publishable": false,
   "source_operators_service_and_schedules_confirmed": false,
   "top_20_notice_codes": [
-    {
-      "code": "stop_too_far_from_shape_using_user_distance",
-      "severity": "WARNING",
-      "count": 3676
-    },
     {
       "code": "mixed_case_recommended_field",
       "severity": "WARNING",
