@@ -1,0 +1,63 @@
+name: Refine GH bus road stop order with repeated-pass matching
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/refine_amb_GH_road_passage_stop_order.py
+      - .github/workflows/refine-amb-GH-stop-order.yml
+      - sources/amb/full_GH_bus_geometry_quality/summary.json
+permissions:
+  contents: write
+concurrency:
+  group: amb-GH-stop-order-refine-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install local GIS analysis libraries
+        run: python -m pip install --disable-pip-version-check "shapely>=2.0,<3" "pyproj>=3.5,<4"
+      - name: Compile Python
+        run: python -m py_compile scripts/refine_amb_GH_road_passage_stop_order.py
+      - name: Reconcile repeated GH road passages and preserve source SIU sequence
+        run: python scripts/refine_amb_GH_road_passage_stop_order.py
+      - name: Report refined geometry and stop order QA
+        if: always()
+        run: |
+          if [ -f build/amb-full-route-refined-GH-order/summary.md ]; then
+            cat build/amb-full-route-refined-GH-order/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit only research stop-order validation results
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [ ! -f build/amb-full-route-refined-GH-order/summary.json ]; then
+            echo "No QA results to publish"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/full_GH_refined_stop_order_QA/
+            cp -a build/amb-full-route-refined-GH-order/. sources/amb/full_GH_refined_stop_order_QA/
+            git add sources/amb/full_GH_refined_stop_order_QA/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: refine GH road stop passage projections across repeated streets"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Archive research metrics and priority route list
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-GH-stop-passages-refined
+          path: build/amb-full-route-refined-GH-order/
+          if-no-files-found: warn
+          retention-days: 45
