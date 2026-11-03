@@ -139,8 +139,9 @@ def main():
         base_validation=validator_trial(accepted,"",args.jar,Path(d))
     if base_validation["errors"]!=0:
         raise ValueError("Current GH seven-stop baseline already has GTFS errors")
-    current_far=base_validation["far_count_by_route"]
-    current_order=base_validation["order_count_by_route"]
+    current_far=Counter(base_validation["far_count_by_route"])
+    current_order=Counter(base_validation["order_count_by_route"])
+    current_far_ids=set(base_validation["far_ids"])
     selected_ids={(e["trip_pattern_id"],e["physical_SIU_stop_id"]) for e in flagged}
     if not selected_ids.issubset(base_validation["far_ids"]):
         raise ValueError("Seven source P1 flags no longer present in actual validator baseline")
@@ -281,12 +282,16 @@ def main():
                     real["far_count_by_route"][uid]<current_far[uid] and
                     real["order_count_by_route"][uid]<=orig_order[uid] and
                     resolved_here>=1 and
+                    # Never trade one resolved SIU stop for a NEW offroute
+                    # warning at another stop (especially at route loops).
+                    real["far_ids"].issubset(current_far_ids) and
                     all(real["order_count_by_route"][x]<=current_order[x]
                         for x in real["order_count_by_route"])
                 )
                 if candidate_ok:
                     current_far[uid]=real["far_count_by_route"][uid]
                     current_order[uid]=real["order_count_by_route"][uid]
+                    current_far_ids=set(real["far_ids"])
                     selected_repaired.add(key)
                     decision="accepted_by_real_validator_no_order_regression"
                     road_features.append(updated)
@@ -313,6 +318,8 @@ def main():
                 "MobilityData_distance_warnings_for_route":real["far_count_by_route"][uid] if real else "",
                 "MobilityData_order_warnings_for_route":real["order_count_by_route"][uid] if real else "",
                 "candidate_accepted":"yes" if candidate_ok else "no",
+                "new_offroute_stop_IDs_created_during_validator_trial":(
+                    len(real["far_ids"]-current_far_ids) if real and not candidate_ok else 0),
                 "decision":decision,
             })
             print("7-P1 "+uid+"#"+str(segno)+
@@ -328,9 +335,10 @@ def main():
     if (final_validation["errors"]!=0 or
         any(final_validation["order_count_by_route"][x]>base_validation["order_count_by_route"][x]
             for x in set(base_validation["order_count_by_route"])|set(final_validation["order_count_by_route"])) or
+        not final_validation["far_ids"].issubset(base_validation["far_ids"]) or
         sum(final_validation["far_count_by_route"].values())>
         sum(base_validation["far_count_by_route"].values())):
-        raise ValueError("Seven stop research candidates regress the full feed; do not promote")
+        raise ValueError("Seven stop research candidates introduce new offroute or order warnings")
     remaining=set(selected_ids)&final_validation["far_ids"]
     for c in case_records:
         is_remaining=(c["trip_pattern_id"],c["physical_SIU_stop_id"]) in remaining
@@ -339,7 +347,15 @@ def main():
             "GH_bus_vs_source_KMZ_discrepancy_remains_unverified"
         )
     save(args.out/"seven_priority_stops_source_road_comparison.csv",case_records)
-    save(args.out/"seven_GH_alternative_candidates_MobilityData_decisions.csv",checks)
+    # Include validator-specific fields from later trials even when the
+    # first tested road candidate never became routable.
+    if checks:
+        cols=list(dict.fromkeys(k for r in checks for k in r))
+        with (args.out/"seven_GH_alternative_candidates_MobilityData_decisions.csv").open(
+                "w",newline="",encoding="utf-8") as h:
+            w=csv.DictWriter(h,fieldnames=cols,extrasaction="ignore")
+            w.writeheader()
+            w.writerows(checks)
     collection={"type":"FeatureCollection","features":list(accepted.values())}
     (args.out/"GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson").write_text(
         json.dumps(collection,ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
@@ -363,6 +379,8 @@ def main():
         "MobilityData_final_off_shape_warnings":sum(final_validation["far_count_by_route"].values()),
         "MobilityData_baseline_out_of_order_warnings":sum(base_validation["order_count_by_route"].values()),
         "MobilityData_final_out_of_order_warnings":sum(final_validation["order_count_by_route"].values()),
+        "new_MobilityData_far_offroute_stop_IDs_created":len(
+            final_validation["far_ids"]-base_validation["far_ids"]),
         "seven_original_stops_resolved_from_GTFS_test_warnings":7-len(remaining),
         "seven_stops_remaining_unresolved":len(remaining),
         "each_seven_SIU_stop_within_15m_of_AMB_official_KMZ":True,
