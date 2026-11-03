@@ -1,0 +1,17 @@
+{
+  "source_GH_full_route_sections": 352,
+  "previously_mismatching_sections": 42,
+  "sections_retried": 42,
+  "GraphHopper_profile": "bus",
+  "GH_version": "11.1",
+  "GH_route_queries": 42,
+  "new_road_candidates_consistent_with_KMZ_after_dense_waypoints": 21,
+  "alignment_improved_but_still_inconsistent": 7,
+  "still_inconsistent_or_unroutable": 14,
+  "additional_stop_visits_close_to_retried_GH_road_net": 127,
+  "road_candidates_mapped": 42,
+  "no_OSM_requests": true,
+  "GTFS_stops_or_sequences_changed": false,
+  "reached_legal_source_route_certainty": false,
+  "private_endpoint_in_outputs": false
+}
