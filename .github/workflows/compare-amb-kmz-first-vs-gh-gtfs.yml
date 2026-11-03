@@ -43,6 +43,25 @@ jobs:
           python scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-kmz-first-GH-fallback-research \
             --out build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE
+      - name: Hold fictional stop times exactly equal across both geometries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          gh=Path("build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE")
+          kmz=Path("build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE")
+          # Demo times are calculated from the current SHAPE lengths in the
+          # general-purpose fixture generator, so they naturally differ.
+          # For this fair geometry-only validation hold every GTFS file
+          # except shapes.txt byte-for-byte identical, including demo times.
+          (kmz/"gtfs_demo/stop_times.txt").write_bytes(
+              (gh/"gtfs_demo/stop_times.txt").read_bytes())
+          zpath=kmz/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip"
+          with ZipFile(zpath,"w",ZIP_DEFLATED,compresslevel=6) as zout:
+              for p in sorted((kmz/"gtfs_demo").glob("*.txt")):
+                  zout.write(p,arcname=p.name)
+          print("Synthetic stop_times held constant. Only shapes.txt changes.")
+          PY
       - name: Verify same routes, trips, stops and stop_times for fair shape-only comparison
         run: |
           python - <<'PY'
