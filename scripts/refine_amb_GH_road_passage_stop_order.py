@@ -10,6 +10,7 @@ A forced backwards jump is evidence for review, not an auto stop reorder.
 No rerouting, no GTFS publication, no removal of SIU stops.
 """
 from __future__ import annotations
+import argparse
 import csv
 import json
 import math
@@ -119,6 +120,13 @@ def choose_monotone(groups):
     return decisions
 
 def main():
+    global SOURCE, OUT
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--source",type=Path,default=SOURCE)
+    parser.add_argument("--out",type=Path,default=OUT)
+    args=parser.parse_args()
+    SOURCE=args.source
+    OUT=args.out
     OUT.mkdir(parents=True,exist_ok=True)
     previous=read(SOURCE/"GH_stop_sequence_and_road_access_audit.csv")
     segments=read(SOURCE/"GH_full_route_bus_segment_alignment.csv")
