@@ -1,0 +1,27 @@
+{
+  "full_route_patterns_audited": 70,
+  "graphhopper_road_segments_reused_without_new_queries": 352,
+  "physical_SIU_stop_visits_preserved": 9020,
+  "old_nearest_projection_backtrack_signals": 139,
+  "refined_unresolved_backwards_signals": 49,
+  "old_backtrack_signals_resolved_or_softened": 113,
+  "stops_with_multiple_graphhopper_road_passages": 4927,
+  "refined_stop_assessment_counts": {
+    "multiple_road_passages_order_resolved_tentative": 4570,
+    "road_order_compatible_tentative": 3272,
+    "no_GH_bus_road_pass_within_75m": 554,
+    "stop_45_to_75m_from_GH_road": 177,
+    "road_order_backwards_unresolved": 49,
+    "road_route_deviates_from_KMZ_review": 398
+  },
+  "road_order_compatible_tentative": 7842,
+  "route_patterns_needing_priority_1_review": 43,
+  "stop_review_point_features": 1178,
+  "unresolved_stop_order_point_features": 49,
+  "GH_bus_road_mismatch_sections_geojson": 21,
+  "graphhopper_new_queries": 0,
+  "stop_times_or_trip_splitting_generated": false,
+  "SIU_stops_created_or_removed": 0,
+  "GTFS_stop_sequence_changed": false,
+  "actual_route_or_legal_stop_service_verified": false
+}

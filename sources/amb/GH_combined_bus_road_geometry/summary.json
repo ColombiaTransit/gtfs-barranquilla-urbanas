@@ -1,0 +1,15 @@
+{
+  "GH_road_segments_total": 352,
+  "GH_improved_450m_route_sections_selected": 21,
+  "GH_road_sections_aligned_after_merge": 331,
+  "GH_source_geometry_sections_still_unresolved": 21,
+  "SIU_stops_audited_against_selected_roads": 9020,
+  "SIU_stops_over_45m_from_best_candidate_road": 739,
+  "old_first_pass_SIU_stops_over_45m": 852,
+  "selected_geometries_count": 352,
+  "OSM_queries": 0,
+  "additional_GH_requests": 0,
+  "SIU_physical_stop_ids_changed": false,
+  "GTFS_stop_sequence_changed": false,
+  "actual_AMB_operator_road_service_verified": false
+}
