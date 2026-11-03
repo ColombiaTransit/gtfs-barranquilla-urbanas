@@ -13,12 +13,14 @@ De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke ana
 Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor **GTFS** worden gelezen met **dit scopebesluit als override**. Er worden geen bestaande brongetallen verwijderd.
 
 
-## Bronaudit 2 november 2026 — nog ontbrekende resoluties
+## Bronaudit bijgewerkt op 3 november 2026
 
-- [**Geverifieerd resolutie-gatenregister**](../../sources/amb/resolution_gap_audit_2026-11-02.csv): **7** oorspronkelijke PDF-lacunes (FLOTA ÁNGULO **5**, COOLITORAL **256-2026** en COOTRANTICO **025-2011** met foutieve link), **2** te herextracteren reeds teruggevonden bronnen (SOBUSA **307-2014** en COOTRANTICO **108-2023**), plus **1** algemene pilotresolutie (**448-2025**) waarvan route-impact nog moet worden vastgesteld.
-- [**GTFS-routedekkingsgaten**](../../sources/amb/route_coverage_gaps_2026-11-02.csv): extra routes/itinerarios in de AMB-visor, waarvoor nog geen apart gevalideerd frequentie- en routepatroon bestaat. Dit betekent **niet automatisch** dat er een ontbrekende resolutie is.
-- De oorspronkelijke SOBUSA 307-2014-PDF (**20 pagina's**) is teruggevonden: https://www.ambq.gov.co/wp-content/uploads/2018/09/RESOLUCION_307-14-SOBUSA.pdf en de onjuiste URL is in het manifest vervangen. De nieuwe extractie is nog niet bevestigd.
-- Voertuigcapaciteit is **buiten GTFS-scope** en wordt niet opgevoerd als bronblokkade.
+- [**Gatenregister met actuele status**](../../sources/amb/resolution_gap_audit_2026-11-02.csv): van de **zeven oorspronkelijk ontbrekende documenten zijn de vijf van FLOTA ÁNGULO volledig teruggevonden**. De twee resterende bekende oorspronkelijke PDF-lacunes zijn **COOLITORAL 256-2026 PILOTO** en de verkeerde bronverwijzing voor **COOTRANTICO 025-2011**.
+- **SOBUSA 307-2014**: [volledige 20-pagina-analyse](../sobusa_307_2014_analysis_2026-11-03.md), zes historische route-intervallen; Action-run **41523701666** geslaagd.
+- **COOTRANTICO 108-2023**: Action-run **41523797737** geslaagd, acht OCR-pagina's en twee routebladen geverifieerd. De routewijzigingen blijven historisch en zijn later door 2024/2025-besluiten opgevolgd.
+- **FLOTA ÁNGULO 6/6**: na ontdekking van de WordPress Ninja Tables-AJAX-bron zijn alle zes originele PDF's uitgepakt in [run 41582220020](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41582220020). De nieuwste **232-2025** geeft voor **A7-4112** **3 minuten spits, 5 minuten dal, 31,4 km**, met een route via Miramar en Alameda del Río. Zie [bijgewerkt bedrijfsrapport](../flota_angulo_route_frequencies_2026-11-02.md).
+- [**GTFS-routedekkingsgaten**](../../sources/amb/route_coverage_gaps_2026-11-02.csv): routes en itinerarios in de AMB-routeviewer waarvoor nog geen afzonderlijk geverifieerd interval en geometrie bestaan. Geen automatische ontbrekende PDF-claim.
+- Algemene pilot **448-2025**: betekenis voor specifieke routes nog uitzoeken. **Voertuigcapaciteit is buiten GTFS-scope**.
 
 ## De 13 laatst behandelde bedrijven
 
@@ -66,7 +68,7 @@ Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor
 
 **Klaar:** De officiële PDF's van alle 13 overgebleven bedrijven zijn systematisch doorzocht en de laatst gevonden beschikbare routefrequenties, routecodes en bronpaginanummers zijn opgenomen, met scancontrole van bepalende tabellen waar OCR fouten had. Bij COOCHOFAL zijn alle acht 2025-tabellen tegen de originele pagina's gecontroleerd.
 
-**Nog niet klaar:** volledige rechtsgeldigheidscontrole van **iedere** historische resolutie, onvindbare PDF's (bijvoorbeeld FLOTA ÁNGULO 2025/2019 en SOBUSA 307-2014), interne tegenstrijdigheden binnen besluiten, 2026-actuele dienstregelingen, haltevolgordes en GPS-geometrie. Geen bedrijf krijgt een onvoorwaardelijke `GTFS_READY=yes` op basis van alleen deze vergunningen.
+**Nog niet klaar:** volledige rechtsgeldigheidscontrole van **iedere** historische resolutie, nog ontbrekende PDF's (vooral COOLITORAL 256-2026 en de correcte COOTRANTICO 025-2011), interne tegenstrijdigheden binnen besluiten, 2026-actuele dienstregelingen, haltevolgordes en GPS-geometrie. Geen bedrijf krijgt een onvoorwaardelijke `GTFS_READY=yes` op basis van alleen deze vergunningen.
 
 **Let op:** Een interval op een overlappend traject (bijv. B18-SOBUSA, A10-TRANSDIAZ) is niet gelijk aan de vertrekken van een individuele itinerary. Een voorwaardelijk dienstvenster `00:00–24:00 afhankelijk van vraag` is geen bewijs voor 24-uursbediening.
 
