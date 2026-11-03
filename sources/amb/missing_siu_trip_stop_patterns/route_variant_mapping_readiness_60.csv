@@ -1,0 +1,61 @@
+company,official_route_label,base_route_id_candidate,KMZ_ArcGIS_geometry_components,components_with_5plus_existing_SIU_stops,provisional_stop_visits_all_components,distinct_physical_SIU_stops_all_components,largest_gap_between_selected_stops_m,geometry_sources,base_route_id_exists_in_current_gtfs_routes,review_priority,qa_flags,SIU_route_to_stop_link_directly_available,route_stop_assignment_authoritatively_confirmed,GTFS_trip_segment_confirmed,arrival_and_departure_times_assigned,GraphHopper_routing_status
+COOASOATLAN,C1-4132,AMB_COOASOATLAN_C1_4132,1,1,159,158,3952.7,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOASOATLAN,C1-B-4186,AMB_COOASOATLAN_C1_B_4186,1,1,136,133,2602.2,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOASOATLAN,C20-4181,AMB_COOASOATLAN_C20_4181,1,1,144,144,2626.7,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOASOATLAN,C20-B-4187,AMB_COOASOATLAN_C20_B_4187,1,1,166,164,1587.0,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOCHOFAL,A15-4159,AMB_COOCHOFAL_A15_4159,1,1,175,174,1332.6,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOCHOFAL,C2-4133,AMB_COOCHOFAL_C2_4133,1,1,133,133,3553.1,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOCHOFAL,C3-4134,AMB_COOCHOFAL_C3_4134,1,1,136,134,3634.0,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOCHOFAL,C9-4140,AMB_COOCHOFAL_C9_4140,1,1,138,136,1363.3,AMB_KMZ_2026,yes,single_line_candidate,source_geometry_mismatch_or_collision,no,no,no,no,not_run
+COOCHOFAL,D20-4185,AMB_COOCHOFAL_D20_4185,1,1,137,136,1303.2,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOLITORAL,A1-4106 A,AMB_COOLITORAL_A1_4106,1,1,204,204,1163.8,AMB_KMZ_2026,no,single_line_candidate,proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+COOLITORAL,A1-4106 B,AMB_COOLITORAL_A1_4106,1,1,218,216,2045.6,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+COOLITORAL,A2-4107,AMB_COOLITORAL_A2_4107,1,1,199,198,1940.0,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOLITORAL,A3-4108,AMB_COOLITORAL_A3_4108,1,1,115,114,2421.1,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOLITORAL,A4-4109,AMB_COOLITORAL_A4_4109,6,6,206,177,991.3,AMB_KMZ_2026,yes,fragmented_geometry,disconnected_shape_fragments_not_separate_legal_trips,no,no,no,no,not_run
+COOLITORAL,B1-4117,AMB_COOLITORAL_B1_4117,1,1,115,115,2134.5,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOLITORAL,PT2-4102,AMB_COOLITORAL_PT2_4102,4,3,153,152,2360.3,ARCGIS_2019_2023_FALLBACK,no,fragmented_geometry,disconnected_shape_fragments_not_separate_legal_trips;long_corridor_gap_over_2km;older_arcgis_fallback;proposed_base_route_id_not_yet_in_existing_gtfs_routes;source_geometry_mismatch_or_collision,no,no,no,no,not_run
+COOTRANSCO,C7-4138,AMB_COOTRANSCO_C7_4138,1,1,112,109,1953.7,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOTRANSNORTE,A5-4110,AMB_COOTRANSNORTE_A5_4110,1,1,136,130,4282.7,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRANSNORTE,A6-4111,AMB_COOTRANSNORTE_A6_4111,1,1,96,91,868.4,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOTRANSPORCAR,C8-4139,AMB_COOTRANSPORCAR_C8_4139,1,1,135,132,2781.8,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRANTICO,A18-4183,AMB_COOTRANTICO_A18_4183,1,1,98,98,1841.0,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOTRANTICO,B20-4180,AMB_COOTRANTICO_B20_4180,1,1,81,79,2123.7,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRANTICO,B20-B-4191,AMB_COOTRANTICO_B20_B_4191,1,1,84,84,2478.3,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRANTICO,B4-4120,AMB_COOTRANTICO_B4_4120,1,1,95,94,22363.0,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRANTICO,B5-4121,AMB_COOTRANTICO_B5_4121,1,1,140,140,686.6,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOTRANTICO,B5-B-4190,AMB_COOTRANTICO_B5_B_4190,1,1,74,74,2704.6,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRANTICO,B6-4122,AMB_COOTRANTICO_B6_4122,1,1,174,173,955.3,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOTRANTICO,B7-4123,AMB_COOTRANTICO_B7_4123,1,1,148,145,2177.9,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRASOL,D3-4147,AMB_COOTRASOL_D3_4147,1,1,145,144,1953.7,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+COOTRASOL,D4-4148,AMB_COOTRASOL_D4_4148,1,1,110,110,3595.6,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+COOTRASOL,D5-4149,AMB_COOTRASOL_D5_4149,1,1,148,148,2156.0,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+FLOTA-ROJA,A8-4113,AMB_FLOTA_ROJA_A8_4113,1,1,120,120,1497.9,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+LOLAYA,B10-4126,AMB_LOLAYA_B10_4126,1,1,188,187,11254.1,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+LOLAYA,B10-B-4193,AMB_LOLAYA_B10_B_4193,1,1,156,154,4195.4,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+LOLAYA,D8-4165,AMB_LOLAYA_D8_4165,7,4,86,86,648.1,ARCGIS_2019_2023_FALLBACK,yes,fragmented_geometry,disconnected_shape_fragments_not_separate_legal_trips;older_arcgis_fallback;source_geometry_mismatch_or_collision,no,no,no,no,not_run
+MONTERREY,B11-4166,AMB_MONTERREY_B11_4166,1,1,202,202,4058.3,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+SOBUSA,B18-4175 A,AMB_SOBUSA_B18_4175,1,1,236,234,5769.2,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;official_AB_label_length_discrepancy;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+SOBUSA,B18-4175 B,AMB_SOBUSA_B18_4175,1,1,207,207,8223.9,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;official_AB_label_length_discrepancy;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+SOBUSA,C11-4168,AMB_SOBUSA_C11_4168,1,1,195,193,5954.9,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+SOBUSA,C12-4169 A,AMB_SOBUSA_C12_4169,1,1,155,154,3155.8,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+SOBUSA,C12-4169 B,AMB_SOBUSA_C12_4169,1,1,155,154,3163.1,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+SOBUSA,C13-4143,AMB_SOBUSA_C13_4143,1,1,157,156,2512.9,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+SOBUSA,C14-4170,AMB_SOBUSA_C14_4170,1,1,192,191,5973.2,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+SOBUSA,C16-4167 A,AMB_SOBUSA_C16_4167,1,1,207,207,5965.4,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+SOBUSA,C16-4167 B,AMB_SOBUSA_C16_4167,1,1,210,209,5981.1,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+SODETRANS,B14-4174,AMB_SODETRANS_B14_4174,1,1,209,209,504.2,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+SODETRANS,B15-4129 A,AMB_SODETRANS_B15_4129,1,1,145,144,1678.9,AMB_KMZ_2026,no,single_line_candidate,proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+SODETRANS,B15-4129 B,AMB_SODETRANS_B15_4129,1,1,124,114,2139.6,AMB_KMZ_2026,no,large_gap,long_corridor_gap_over_2km;proposed_base_route_id_not_yet_in_existing_gtfs_routes,no,no,no,no,not_run
+TRANSDIAZ,A11-4115,AMB_TRANSDIAZ_A11_4115,1,1,243,241,2807.5,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+TRANSDIAZ,B16-4130,AMB_TRANSDIAZ_B16_4130,1,1,174,172,3383.8,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+TRANSMECAR,C17-4160,AMB_TRANSMECAR_C17_4160,1,1,218,203,2766.1,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+TRANSMECAR,D10-4172,AMB_TRANSMECAR_D10_4172,1,1,146,144,1526.7,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+TRANSMECAR,D11-4153,AMB_TRANSMECAR_D11_4153,1,1,83,83,3257.6,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+TRANSMECAR,D9-4152,AMB_TRANSMECAR_D9_4152,1,1,133,132,1264.8,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+TRANSOLEDAD,D13-4155,AMB_TRANSOLEDAD_D13_4155,1,1,135,134,2854.0,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+TRASALFA,B2-B-4118,AMB_TRASALFA_B2_B_4118,1,1,65,62,2303.7,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+TRASALIANCO,B19-4176,AMB_TRASALIANCO_B19_4176,1,1,90,88,2333.8,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run
+TRASALIANCO,D12-4154,AMB_TRASALIANCO_D12_4154,1,1,185,178,1591.4,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+TRASALIANCO,D17-4158,AMB_TRASALIANCO_D17_4158,1,1,127,124,1688.8,AMB_KMZ_2026,yes,single_line_candidate,,no,no,no,no,not_run
+TRASALIANCO,D18-4179,AMB_TRASALIANCO_D18_4179,1,1,147,147,8433.5,AMB_KMZ_2026,yes,large_gap,long_corridor_gap_over_2km,no,no,no,no,not_run

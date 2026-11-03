@@ -1,0 +1,13 @@
+{
+  "route_variants_with_geometry": 60,
+  "single_component_route_variants": 57,
+  "multiple_component_route_variants": 3,
+  "extremely_fragmented_route_variants_10plus_parts": 0,
+  "route_variants_with_5plus_stop_candidates_in_a_component": 60,
+  "route_variants_with_gaps_over_2km": 39,
+  "ordered_stop_visits_prepared_for_future_GraphHopper": 9000,
+  "source_SIU_physical_stop_ids_reused": 2368,
+  "new_physical_stop_ids_created": 0,
+  "GTFS_stop_times_published": false,
+  "stop_service_verified": false
+}
