@@ -33,7 +33,7 @@ def val(x):
     except (ValueError, TypeError):
         return None
 
-def k(x):
+def gap_key(x):
     return x["trip_pattern_id"], str(x["gap_index"])
 
 def main():
@@ -45,8 +45,8 @@ def main():
     route_qa=load(ROUTES/"route_variant_mapping_readiness_60.csv")
     existing=load(ROUTES/"candidate_stop_order_per_trip_NO_TIMES.csv")
     sr={(s["trip_pattern_id"],s["gap_index"],s["candidate_source_id"]):s for s in source}
-    g={k(x):x for x in gaps}
-    gg={k(x):x for x in gh_gaps}
+    g={gap_key(x):x for x in gaps}
+    gg={gap_key(x):x for x in gh_gaps}
     qa={(x["company"],x["official_route_label"]):x for x in route_qa}
     already=defaultdict(set)
     for s in existing:
@@ -61,8 +61,8 @@ def main():
     for r in raw:
         identity=(r["trip_pattern_id"],r["gap_index"],r["candidate_id"])
         s=sr[identity]
-        gap=g[k(r)]
-        gh=gg[k(r)]
+        gap=g[gap_key(r)]
+        gh=gg[gap_key(r)]
         q=qa[(r["company"],r["route_label"])]
         if r["GraphHopper_profile"]!="bus":
             raise ValueError("Expected bus routing for all classifications")
