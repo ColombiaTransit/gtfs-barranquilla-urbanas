@@ -1,0 +1,127 @@
+name: Compare official AMB KMZ-first shapes vs GraphHopper bus fallback in MobilityData
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/build_amb_kmz_first_gh_fallback_shapes.py
+      - scripts/compare_amb_kmz_first_gtfs_mobilitydata.py
+      - .github/workflows/compare-amb-kmz-first-vs-gh-gtfs.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-kmz-first-versus-GH-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate-two-geometries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install GIS analysis dependencies
+        run: python -m pip install --disable-pip-version-check requests "shapely>=2,<3" "pyproj>=3.5,<4"
+      - name: Compile new comparison and base generator
+        run: |
+          python -m py_compile scripts/build_amb_kmz_first_gh_fallback_shapes.py \
+             scripts/compare_amb_kmz_first_gtfs_mobilitydata.py \
+             scripts/build_amb_gtfs_geometry_validation_pilot.py
+      - name: Reconstruct read-only older ArcGIS sources for missing official AMB KMZ
+        run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
+      - name: Build KMZ-first with existing GH bus fallback, 352 source sections
+        run: python scripts/build_amb_kmz_first_gh_fallback_shapes.py
+      - name: Build two equal-population GTFS pilot ZIP files
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir sources/amb/GTFS_7_largest_shape_offset_review \
+            --out build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-kmz-first-GH-fallback-research \
+            --out build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE
+      - name: Verify same routes, trips, stops and stop_times for fair shape-only comparison
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          a=Path("build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE/gtfs_demo")
+          b=Path("build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE/gtfs_demo")
+          for file in ["agency.txt","routes.txt","stops.txt","trips.txt","stop_times.txt","calendar.txt"]:
+              left=(a/file).read_bytes()
+              right=(b/file).read_bytes()
+              if left!=right:
+                  raise ValueError("Comparison would change "+file+"; only shapes may differ")
+              print(file+": IDENTICAL "+hashlib.sha256(left).hexdigest()[:12])
+          if (a/"shapes.txt").read_bytes()==(b/"shapes.txt").read_bytes():
+              raise ValueError("No shape geometry variation in experiment")
+          PY
+      - name: Download checksum-pinned official MobilityData GTFS Validator 8.0.1
+        run: |
+          curl --fail --location --retry 3 --silent --show-error \
+            https://github.com/MobilityData/gtfs-validator/releases/download/v8.0.1/gtfs-validator-8.0.1-cli.jar \
+            -o /tmp/gtfs-validator-8.0.1-cli.jar
+          echo "19293ddd9b6f954f216d4f12054bd8a3232921751c4484339e339764a91000e2  /tmp/gtfs-validator-8.0.1-cli.jar" | sha256sum -c -
+      - name: Validate reviewed GraphHopper pilot reference
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE/validator \
+            -c co -t 2 \
+            > build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE/validator_stdout.log 2>&1
+          test -s build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE/validator/report.json
+      - name: Validate KMZ-first pilot with GH bus fallback
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE/validator \
+            -c co -t 2 \
+            > build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE/validator_stdout.log 2>&1
+          test -s build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE/validator/report.json
+      - name: Compare real validator notices and seven >250m SIU stop offsets
+        run: python scripts/compare_amb_kmz_first_gtfs_mobilitydata.py
+      - name: Publish compact grounded comparisons
+        if: always()
+        run: |
+          if [ -f build/amb-KMZ-first-vs-GH-MobilityData-QA/summary.md ]; then
+            cat build/amb-KMZ-first-vs-GH-MobilityData-QA/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit source shape choice audit and real validator comparison only
+        if: github.ref == 'refs/heads/main'
+        run: |
+          test -s build/amb-KMZ-first-vs-GH-MobilityData-QA/summary.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/KMZ_first_GH_fallback_validation/
+            cp -a build/amb-KMZ-first-vs-GH-MobilityData-QA/. sources/amb/KMZ_first_GH_fallback_validation/
+            for name in summary.json shape_source_by_pattern.csv shape_source_by_section.csv; do
+              cp "build/amb-kmz-first-GH-fallback-research/$name" "sources/amb/KMZ_first_GH_fallback_validation/source_$name"
+            done
+            if [ -f build/amb-kmz-first-GH-fallback-research/source_shape_sparse_vertex_or_connector_QA.csv ]; then
+              cp build/amb-kmz-first-GH-fallback-research/source_shape_sparse_vertex_or_connector_QA.csv sources/amb/KMZ_first_GH_fallback_validation/
+            fi
+            git add sources/amb/KMZ_first_GH_fallback_validation/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: compare actual KMZ-first vs GH GTFS MobilityData errors and warnings"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Store both nonpublishing GTFS ZIPs and both full MobilityData reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-GTFS-KMZ-first-GH-fallback-compared-MobilityData-NOT-PUBLISHABLE
+          path: |
+            build/amb-kmz-first-GH-fallback-research/
+            build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE/
+            build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE/
+            build/amb-KMZ-first-vs-GH-MobilityData-QA/
+          if-no-files-found: warn
+          retention-days: 60
