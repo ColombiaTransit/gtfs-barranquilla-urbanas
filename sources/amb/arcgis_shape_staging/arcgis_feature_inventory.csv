@@ -25,7 +25,7 @@ OBJECTID,Name,FolderPath,route_code_tokens,geometry_type
 24,PT3-4103,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT34103,MultiLineString
 25,PT4-4104,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT44104,LineString
 26,PT5-4105,Rutas Transporte Publico 2019/RS_AMB_2019/Coolitoral,PT54105,LineString
-27,C5-4136 2019,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrab,,LineString
+27,C5-4136 2019,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrab,C54136,LineString
 28,C6-4137 2019,Rutas Transporte Publico 2019/RS_AMB_2019/Cootrab,C64137,LineString
 29,D1-4145,Rutas Transporte Publico 2019/RS_AMB_2019/Cootracolsur,,LineString
 30,D2-4146,Rutas Transporte Publico 2019/RS_AMB_2019/Cootracolsur,,LineString
