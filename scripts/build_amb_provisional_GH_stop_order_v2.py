@@ -303,7 +303,7 @@ def main():
         "existing_route_stop_visits_preserved":len(base),
         "new_GH_addition_candidate_visits":len(changes),
         "concept_route_stop_visits_total":len(final),
-        "unique_existing_SIU_physical_stop_ids_newly_referenced":unique_add_ids,
+        "distinct_existing_SIU_stop_ids_among_65_added_visits":unique_add_ids,
         "affected_trip_patterns":len(affected),
         "affected_route_variants":len(byroute),
         "trip_patterns_with_existing_sequence":len(QA),
