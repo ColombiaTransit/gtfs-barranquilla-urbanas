@@ -1,0 +1,38 @@
+name: Inspect SIU public compressed itinerary listing
+on:
+  push:
+    paths:
+      - scripts/probe_siu_compressed_itinerary.py
+      - .github/workflows/probe-siu-compressed-itinerary.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install anonymous headless browser
+        run: |
+          python -m pip install --disable-pip-version-check playwright
+          python -m playwright install --with-deps chromium
+      - name: Inspect only public GraphQL compressed data structure
+        run: python scripts/probe_siu_compressed_itinerary.py
+      - name: Show findings
+        if: always()
+        run: |
+          if [ -f build/siu-public-compressed-listing/summary.md ]; then
+            cat build/siu-public-compressed-listing/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload sanitized schema observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-anonymous-itinerary-response-structure
+          path: build/siu-public-compressed-listing/
+          if-no-files-found: warn
+          retention-days: 45
