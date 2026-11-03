@@ -6,6 +6,7 @@ on:
       - .github/workflows/review-siu-open-route-links.yml
       - sources/amb/details/resolucion_256-2026.csv
       - sources/amb/details/coolitoral_192_2025_pt4_pt5_terminals_verified_2026-11-03.csv
+      - sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv
       - sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv
       - sources/siu/public_extract/siu_route_stop_sequences.csv
       - gtfs/routes.txt
