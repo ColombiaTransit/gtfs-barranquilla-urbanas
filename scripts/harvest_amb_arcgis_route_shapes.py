@@ -88,8 +88,8 @@ def main(out):
         rec={"gtfs_route_id":gtfs["route_id"],"route_short_name":route,
              "agency_id":gtfs["agency_id"],"arcgis_feature_count":len(possible),
              "matching_objectids":";".join(str((x.get("properties") or {}).get("OBJECTID","")) for x in possible),
-             "pattern_variant":re.search(r"[\\s-][AB]$",route,re.I).group(0).strip(" -") if re.search(r"[\\s-][AB]$",route,re.I) else "",
-             "variant_specific_geometry_qualified":"no" if re.search(r"[\\s-][AB]$",route,re.I) else "not_applicable",
+             "pattern_variant":re.search(r"[\s-][AB]$",route,re.I).group(0).strip(" -") if re.search(r"[\s-][AB]$",route,re.I) else "",
+             "variant_specific_geometry_qualified":"no" if re.search(r"[\s-][AB]$",route,re.I) else "not_applicable",
              "geometry_status":"exact_code_candidate_review_required" if len(possible)==1 else
                  "ambiguous_multiple_shape_candidates" if possible else "no_exact_code_match",
              "source_last_edit":"2023-12-27","source_url":LAYER}
