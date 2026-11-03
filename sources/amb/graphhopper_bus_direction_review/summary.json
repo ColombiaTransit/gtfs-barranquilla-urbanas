@@ -1,0 +1,28 @@
+{
+  "GraphHopper_connection": "responded_to_info",
+  "required_profile": "bus",
+  "bus_profile_present": true,
+  "version_reported": "11.1",
+  "OSM_import_date_reported": "2026-10-25T13:53:41Z",
+  "private_GraphHopper_URL_logged_or_committed": false,
+  "public_GraphHopper_API_docs": "https://github.com/graphhopper/graphhopper/blob/master/docs/web/api-doc.md",
+  "input_gap_count": 73,
+  "input_candidate_links": 125,
+  "gap_bus_routes_tested": 10,
+  "bus_baseline_success": 10,
+  "bus_reverse_success": 10,
+  "gaps_with_observed_bus_directional_asymmetry": 2,
+  "candidates_in_tested_gaps": 22,
+  "bus_via_queries_attempted": 22,
+  "bus_via_status_counts": {
+    "ok": 22
+  },
+  "curbside_queries_attempted": 5,
+  "successful_right_curbside_tests": 0,
+  "total_route_queries": 47,
+  "total_info_queries": 1,
+  "GTFS_stops_created": 0,
+  "GTFS_trip_sequences_modified": false,
+  "new_OSM_queries": 0,
+  "route_operator_boarding_proven": false
+}
