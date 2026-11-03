@@ -3,7 +3,7 @@
 
 Evidence separation:
 - SIU supplied actual route names, provider(s), and ordered GPS visits.
-- AMB 256-2026 curated table supplied PT4/PT5 route *title order* + A/B acts.
+- AMB 256-2026 ORIGINAL PDF and curated table supplied PT4/PT5 titles, A/B street sequences, terminals and headways.
 - GIS 2019/2023 supplied only geographic top/second candidates.
 - No SIU itinerary contains a legal AMB route code or explicit A/B.
 Never turn geographic/route-name candidates into confirmed legal matches.
@@ -23,6 +23,7 @@ STOPS=SIU/"public_extract/siu_route_stop_sequences.csv"
 ROUTES=ROOT/"gtfs/routes.txt"
 PILOT=ROOT/"sources/amb/details/resolucion_256-2026.csv"
 PT_TERMINALS=ROOT/"sources/amb/details/coolitoral_192_2025_pt4_pt5_terminals_verified_2026-11-03.csv"
+PILOT_STREETS=ROOT/"sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv"
 
 def read(path):
     with path.open(newline="",encoding="utf-8-sig") as f:return list(csv.DictReader(f))
@@ -70,7 +71,7 @@ def pairwise_metrics(a,b):
 
 def run(out):
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
-    reviews=read(REV);routes=read(ROUTES);itinerary_stops=read(STOPS);legal=read(PILOT);verified_terminal_rows=read(PT_TERMINALS)
+    reviews=read(REV);routes=read(ROUTES);itinerary_stops=read(STOPS);legal=read(PILOT);verified_terminal_rows=read(PT_TERMINALS);legal_street_rows=read(PILOT_STREETS)
     assert len(reviews)==33,len(reviews)
     grouped=defaultdict(list)
     for s in itinerary_stops:
@@ -90,18 +91,21 @@ def run(out):
     terminal_bybase={r["route_code"]:r for r in verified_terminal_rows}
     assert set(terminal_bybase)=={"PT4-4104","PT5-4105"}
     assert all({r["itinerario"] for r in rs}=={"A","B"} for rs in pilot_bybase.values())
+    street_bybase=defaultdict(dict)
+    for row in legal_street_rows:street_bybase[row["route_code"]][row["itinerary"]]=row
+    assert set(street_bybase)=={"PT4-4104","PT5-4105"}
+    assert all(set(it)=={"A","B"} for it in street_bybase.values())
 
     # This is not inferred from GIS proximity: the *order of the terms* in
     # the SIU display name matches that of the curated resolution 256-2026
     # PT4 and PT5 'nombre_ruta'. A/B remains unknown for BOTH.
     title_order={
-       "VIA 40 CIRCUNVALAR":("PT4-4104","route_title_matches_192_2025_and_curated_256_2026"),
+       "VIA 40 CIRCUNVALAR":("PT4-4104","route_title_matches_primary_192_2025_and_primary_256_2026"),
        "CIRCUNVALAR VIA 40":("PT5-4105","route_title_matches_192_2025_and_curated_256_2026")
     }
-    # Independent 192-2025 PDF terminal evidence points the OPPOSITE way:
-    # 'CIRCUNVALAR VIA 40' starts Calle 17, like 2025 PT4; 'VIA 40
-    # CIRCUNVALAR' starts Vía 40 like 2025 PT5. This is contradictory
-    # evidence, NOT a justified swap; pilot 256-2026 may change itineraries.
+    # Verified terminal descriptions of BOTH original 192-2025 and 256-2026
+    # PDFs point to the opposite route from SIU display-name order.
+    # SIU first stop is not itself proven to be an official terminal.
     terminal_order={
         "VIA 40 CIRCUNVALAR":"PT5-4105",
         "CIRCUNVALAR VIA 40":"PT4-4104"
@@ -126,8 +130,8 @@ def run(out):
         one_company=len(company)==1
         status=it["route_match_status"]
         if special:
-            verdict="title_vs_2025_terminal_conflict_requires_256_pdf"
-            next_action="SIU name matches 192/curated 256 title, but SIU first stop matches the opposite route's 192-2025 terminal. Read full 256-2026 pilot PDF to resolve base route first; then its A/B street sequences."
+            verdict="primary_256_title_vs_first_siu_street_conflict"
+            next_action="Original 256-2026 PDF inspected: SIU name matches one legal title while SIU first stop is on the street of the opposite legal dispatch terminal. A/B branch named stops were also compared; none provides proof. Inspect original 256 street path against complete SIU GPS route or clarify SIU naming conventions."
         elif not one_company:
             verdict="shared_operator_route_pattern_not_allocatable"
             next_action="Resolve operator-specific licensing and pattern/frequency shares; do not replicate one stop list to multiple companies."
@@ -155,7 +159,9 @@ def run(out):
           "proposed_amb_base_code":base,
           "base_code_evidence":evidence,
           "alternative_amb_base_by_2025_terminal":terminal_order.get(norm(name),""),
+          "alternative_amb_base_by_2026_terminal":terminal_order.get(norm(name),""),
           "independent_2025_terminal_evidence":terminal_bybase[terminal_order[norm(name)]]["official_dispatch_terminal"] if special else "",
+          "verified_2026_terminal_evidence":street_bybase[terminal_order[norm(name)]]["A"]["dispatch_terminal"] if special else "",
           "base_route_hypotheses_conflict":str(bool(special)).lower(),
           "possible_gtfs_route_ids":";".join(options),
           "resolved_amb_AB_itinerary":"",
@@ -169,7 +175,7 @@ def run(out):
           "last_siu_lon":stopdata[-1]["stop_lon"] if stopdata else "",
           "source_siu_snapshot_utc":it["source_siu_snapshot_utc"],
           "source_amb_resolution":"256-2026" if special else "",
-          "source_legal_review_status":"192_2025_primary_pdf_title_and_terminal_verified;256_2026_original_missing" if special else "no_specific_legal_text_verified",
+          "source_legal_review_status":"192_2025_and_256_2026_primary_PDF_titles_terminals_and_AB_routes_verified;SIU_mapping_ambiguous" if special else "no_specific_legal_text_verified",
           "next_manual_evidence":next_action,
           "final_legal_route_match_confirmed":"no",
         }
@@ -236,7 +242,7 @@ def run(out):
     writeout("selected_siu_sequence_pair_comparison.csv",comparisons)
     fields=["siu_itinerary_uuid","siu_name","proposed_amb_base_code","possible_gtfs_route_ids",
             "source_amb_resolution","title_based_candidate","terminal_based_candidate",
-            "official_192_terminal","legal_A_B_itinerary",
+            "official_192_terminal","official_256_terminal","legal_A_B_itinerary",
             "peak_minutes_each_AB","offpeak_minutes_each_AB","SIU_stop_count","review_status"]
     pt_rows=[]
     for r in tp:
@@ -246,10 +252,11 @@ def run(out):
             "siu_name":r["siu_name"],
             "proposed_amb_base_code":r["proposed_amb_base_code"],
             "possible_gtfs_route_ids":r["possible_gtfs_route_ids"],
-            "source_amb_resolution":"256-2026 (curated);192-2025 (original PDF)",
+            "source_amb_resolution":"256-2026 (verified original PDF);192-2025 (verified original PDF)",
             "title_based_candidate":r["proposed_amb_base_code"],
             "terminal_based_candidate":r["alternative_amb_base_by_2025_terminal"],
             "official_192_terminal":r["independent_2025_terminal_evidence"],
+            "official_256_terminal":r["verified_2026_terminal_evidence"],
             "legal_A_B_itinerary":"",
             "peak_minutes_each_AB":";".join(f'{x["itinerario"]}:{x["intervalo_pico_min"]}' for x in related),
             "offpeak_minutes_each_AB":";".join(f'{x["itinerario"]}:{x["intervalo_valle_min"]}' for x in related),
@@ -270,7 +277,8 @@ def run(out):
        "prior_high_confidence_geographic_candidates_untouched":12,
        "open_issue_statuses":statuses,
        "pairwise_stop_sequence_comparisons":len(comparisons),
-       "source_legal_table":"sources/amb/details/resolucion_256-2026.csv",
+       "source_legal_table":"sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv",
+       "original_256_PDF_verified":True,
        "warning":"No legal A/B assignments, no TPC GTFS route_id modifications or stop_times; proposals only."
     }
     (out/"summary.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
@@ -282,22 +290,21 @@ def run(out):
     for x in tp:
         lines.append(f'- SIU **{x["siu_name"]}** ({x["siu_stop_count"]} stops): '
                      f'**title suggests {x["proposed_amb_base_code"]}** while '
-                     f'**old terminal suggests {x["alternative_amb_base_by_2025_terminal"]}**. '
+                     f'**2026 legal terminal street suggests {x["alternative_amb_base_by_2026_terminal"]}**. '
                      'This contradiction blocks any base or A/B confirmation.')
     lines+=["","For PT4 and PT5, each of A and B has **9 min peak / 14 min offpeak** according to the curated resolution table. "
             "A/B refers to a licensed pattern, not automatically the SIU route's outbound/return half. "
             "A 2019 GIS line that matches at 100% to both routes does not disambiguate direction.",
-            "**The primary 192-2025 PDF has now been checked:** PT4 starts by Calle 17/Carrera 30 and PT5 by Vía 40 No. 51-310. "
-            "The original 256-2026 pilot PDF is needed to know whether these starting points changed.",
+            "**Both original 192-2025 and 256-2026 PDFs have been checked:** PT4 A/B starts at Calle 17/Carrera 30 and PT5 A/B at Vía 40 No. 51-310. "
+            "In 256 the B variants use distinct side-street branches; exact SIU A/B crosswalk still cannot be proven from available names.",
             "","## Other unresolved links",""]
     for x in open_rows:
         if x in tp:continue
         lines.append(f'- {x["siu_name"]} ({x["siu_companies"]}): '
                      f'{x["proposed_amb_base_code"] or "unknown"} — {x["crosswalk_review_status"]}')
     lines+=["","No timetable, stop_times, approved direction or final mapping added to GTFS.",
-            "The original 256-2026 pilot PDF remains to be retrieved and compared before release. "
-            "The pilot was recorded as starting 22 June 2026 for six months with possible renewal; "
-            "continued application is a separate legal check."]
+            "Original 256-2026 verified and compared; pilot starts 22 June 2026 for six months with possible extension. "
+            "Continued legal applicability and SIU-to-licensed A/B ID assignment remain separate checks."]
     (out/"summary.md").write_text("\n".join(lines)+"\n",encoding="utf-8")
     print(json.dumps(summary,ensure_ascii=False,indent=2))
 
