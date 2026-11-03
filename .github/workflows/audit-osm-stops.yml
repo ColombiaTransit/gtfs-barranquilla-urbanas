@@ -1,0 +1,53 @@
+name: Audit OSM bus stops against AMB routes
+on:
+  push:
+    paths:
+      - scripts/audit_osm_stops.py
+      - scripts/harvest_amb_arcgis_route_shapes.py
+      - sources/osm/overpass_barranquilla_bus_stops_2026-11-03.json
+      - .github/workflows/audit-osm-stops.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit-stops:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geographic tools
+        run: python -m pip install --disable-pip-version-check requests shapely pyproj
+      - name: Fetch source ArcGIS route lines
+        run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-shapes
+      - name: Audit uploaded OSM stops against route geometry
+        run: |
+          python scripts/audit_osm_stops.py \
+            --osm sources/osm/overpass_barranquilla_bus_stops_2026-11-03.json \
+            --shapes build/amb-arcgis-shapes/arcgis_routes_original.geojson \
+            --out build/amb-osm-stops
+      - name: Summarize OSM stop data
+        run: cat build/amb-osm-stops/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit stop research outputs (never gtfs/stops.txt)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p sources/osm/analysis
+          cp build/amb-osm-stops/* sources/osm/analysis/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/osm/analysis/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: audit 599 OSM stops against historic AMB routes"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Upload OSM audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: barranquilla-osm-stop-audit
+          path: build/amb-osm-stops/
+          if-no-files-found: warn
+          retention-days: 45
