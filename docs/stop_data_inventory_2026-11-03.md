@@ -1,3 +1,15 @@
+## Nieuwe stap: concept-`stops.txt` en routecode-review (3 november 2026)
+
+Uit de 6.407 niet-test-SIU-halteregels zijn **3.118 fysieke halte-kandidaten** opgebouwd. Hierbij zijn alleen dezelfde genormaliseerde, richtingbehoudende namen binnen **maximaal 5 m tussen alle leden** van een cluster samengevoegd. **54 identieke berekende GPS-posities met verschillende namen/richtingsaanduidingen** staan afzonderlijk in de reviewqueue, niet automatisch samengevoegd.
+
+De koppeling aan de 97 AMB-routedefinities geeft **12 sterke voorlopige route-ID-kandidaten**, met **2.361 geordende stopvermeldingen** op **1.802 kandidaat-haltes**. Voor **21 SIU-itineraries** moet de officiële route- of A/B-variantidentiteit nog worden vastgesteld. Deze beoordeling is gebaseerd op bedrijf + oude GIS-geometry + SIU-route en bevestigt **nog geen juridische 2026-routecode**.
+
+- [Uitgebreid onderzoeks- en voortgangsrapport](siu_gtfs_stop_crosswalk_staging_2026-11-03.md)
+- [3.118 halte-kandidaten en samenvoegingsregels](../sources/siu/gtfs_staging/candidate_stops.csv)
+- [Draft met GTFS-standaard stopvelden — niet publiceren](../sources/siu/gtfs_staging/stops_draft_NOT_FOR_PUBLICATION.txt)
+- [2.361 route-stopvolgorderegels zonder reistijden](../sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv)
+- [12 sterke kandidaten en 21 gemarkeerde onduidelijke SIU→AMB-koppelingen](../sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv)
+
 ## Belangrijkste actualisering 3 november 2026 — SIU-stopdata nu compleet voor 33 reguliere itineraries
 
 De eerder genoemde haltegegevenslacune is **gedeeltelijk opgelost**: de officiële SIU-webapp levert op de publieke routelijst via **GraphQL Base64/zlib** **36 itineraries, waarvan 3 test**, met **6.873 GPS-haltevermeldingen**. Voor de **33 reguliere itineraries** zijn het **6.407 geordende haltevermeldingen**, met geldige GPS, **3.612 exact verschillende coördinaten** en **2.961 verschiedenen haltenamen**. Iedere haltevermelding heeft een SIU-UUID; die UUID's zijn per vermelding uniek en mogen niet worden verward met unieke fysieke haltes.
