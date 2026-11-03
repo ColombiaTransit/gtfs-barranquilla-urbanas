@@ -6,6 +6,7 @@
 
 - siu_open_records_reviewed: 21
 - PT4_PT5_base_route_title_matches: 2
+- PT4_PT5_terminal_conflicts_to_reconcile: 2
 - PT4_PT5_AB_assignments_verified: 0
 - single_operator_single_route_base_proposals: 8
 - stop_occurrences_in_new_single_route_proposals: 1620
@@ -18,10 +19,11 @@
 
 ## PT4/PT5 (source 256-2026)
 
-- SIU **CIRCUNVALAR VIA 40** (132 stops) → provisional legal **base route PT5-4105** (matching sequence of place names in the resolution title), **NOT** itinerary A/B and not fully source-verified.
-- SIU **VIA 40 CIRCUNVALAR** (124 stops) → provisional legal **base route PT4-4104** (matching sequence of place names in the resolution title), **NOT** itinerary A/B and not fully source-verified.
+- SIU **CIRCUNVALAR VIA 40** (132 stops): **title suggests PT5-4105** while **old terminal suggests PT4-4104**. This contradiction blocks any base or A/B confirmation.
+- SIU **VIA 40 CIRCUNVALAR** (124 stops): **title suggests PT4-4104** while **old terminal suggests PT5-4105**. This contradiction blocks any base or A/B confirmation.
 
 For PT4 and PT5, each of A and B has **9 min peak / 14 min offpeak** according to the curated resolution table. A/B refers to a licensed pattern, not automatically the SIU route's outbound/return half. A 2019 GIS line that matches at 100% to both routes does not disambiguate direction.
+**The primary 192-2025 PDF has now been checked:** PT4 starts by Calle 17/Carrera 30 and PT5 by Vía 40 No. 51-310. The original 256-2026 pilot PDF is needed to know whether these starting points changed.
 
 ## Other unresolved links
 
