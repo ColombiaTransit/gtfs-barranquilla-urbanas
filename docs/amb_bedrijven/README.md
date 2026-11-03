@@ -4,6 +4,14 @@
 
 De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke analyse** van routebesluiten, routevarianten, frequenties en geldigheidsperioden, vervolgens expliciete vervolgacties zonder fictieve waarden.
 
+## Vastgesteld model voor werkdagspits en -dal (3 november 2026)
+
+We hanteren voortaan voor **maandag t/m vrijdag, lokale tijd Barranquilla**: **07:00–09:00 spits**, **09:00–17:00 dal**, **17:00–20:00 spits**; voor overige uren geldt **dal uitsluitend binnen de diensturen van de route**. Dit is een **expliciete ColombiaTransit-modelaanname**, geen AMB-bepaling. Weekend/feestdagroosters, eerste en laatste vertrek blijven apart te bepalen. Een resolutie met specifieke afwijkende tijdvakken gaat voor.
+
+- [Modelafspraken met voorbeeld en voorwaarden](../amb_peak_offpeak_model_2026-11-03.md)
+- [Machineleesbare periodegrenzen](../../sources/amb/gtfs_peak_offpeak_period_model_2026-11-03.csv)
+- De [44 GTFS-routekandidaten](../../sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv) verwijzen nu naar model `AMB_WEEKDAY_0709_1720_V1` en blijven **niet** automatisch goedgekeurd als volledige feed zonder halte- en dienstvensterdata.
+
 ## Frequentiebeleid voor GTFS — officiële AMB-intervallen zijn leidend (3 november 2026)
 
 **Projectbesluit:** neem de spits- en dalfrequenties die in de **toepasselijke AMB-resolutie** staan als de te gebruiken GTFS-bronwaarden. Een onafhankelijke controle met GPS, SIBUS, voertuigmetingen of GTFS-Realtime is **niet vereist en geen blokkade**. We claimen daarmee niet dat iedere bus in de praktijk precies op tijd rijdt; we publiceren de **officieel vergunde/geplande dienst**.
@@ -11,13 +19,13 @@ De hybridemethode: **GitHub Actions** voor bron-PDF's en OCR, **inhoudelijke ana
 - **Controleer wel welk besluit geldt** per route (latere wijziging, ingetrokken vergunning, tijdelijke pilot met einddatum, gedeelde exploitatie). Gebruik niet automatisch het hoogste resolutienummer of de meest recente PDF als de rechtsgeldigheid onduidelijk is.
 - **Gebruik exact het interval uit de oorspronkelijke tabel**, na controle van OCR/scan als de tekstlezing twijfelachtig is. Geen handmatige correctie om het aan waargenomen realiteit aan te passen.
 - **Houd aparte itinerarios en gedeelde corridors uit elkaar.** Een effectief 5-minuteninterval op een overlap is niet noodzakelijk de 5-minutenfrequentie van elk individueel patroon.
-- **Frequentie ≠ diensturen:** `frequencies.txt` vereist nog `start_time`, `end_time` en `headway_secs`. Als een besluit geen spits-/dal-kloktijden noemt, zijn die periodegrenzen nog **onbekend** en mogen ze niet als officiële bronfeit worden verzonnen. Een expliciete, als *aanname* gemarkeerde modelkalender kan later separaat worden gekozen.
+- **Frequentie ≠ diensturen:** `frequencies.txt` vereist nog `start_time`, `end_time` en `headway_secs`. Als een besluit geen spits-/dal-kloktijden noemt, gebruiken we de aangenomen **werkdagmodelgrenzen 07:00–09:00 en 17:00–20:00**, met dal daartussen en daarbuiten alleen binnen feitelijke/afzonderlijk vastgelegde servicediensturen. Dit is geen officieel AMB-feit; het model is apart gedocumenteerd.
 - Routegeometrie, haltevolgorde, feestdagen/werkdagpatroon, juridisch relevante pilotstatus en ontbrekende geldige besluitinformatie blijven aparte werkzaamheden. **Voertuigcapaciteit blijft buiten scope.**
 - `GTFS_READY=no` in bestaande bronregisters betekent daarom **niet dat de vermelde frequentie onbetrouwbaar is**: het betekent dat andere GTFS-velden of de toepasselijke vergunningsstatus nog ontbreken.
 
 **Geen GTFS-RT nodig** om de officiële statische frequentie te gebruiken. Real-time afwijkingen zijn een ander product.
 
-**Voortgang bronkandidaten:** in de gecombineerde GTFS-frequentietabel staan **44 regels**, waarvan **38** complete officiële spits-/dalintervalparen hebben. De overige **6** missen ten minste één interval; deze zijn nog geen bruikbare frequentie-invoer. **4** van de 38 complete intervalparen betreffen een effectief interval op een gedeeld traject: hiervoor ontbreken nog afzonderlijke patroonspecifieke vertrektijden. `headway_secs` is voor de 38 volledige waarden exact uit minuten × 60 vastgelegd. Dit is **bronacceptatie**, nog geen volledig genereerbare `frequencies.txt` omdat begin-/eindtijden ontbreken.
+**Voortgang bronkandidaten:** in de gecombineerde GTFS-frequentietabel staan **44 regels**, waarvan **38** complete officiële spits-/dalintervalparen hebben. De overige **6** missen ten minste één interval; deze zijn nog geen bruikbare frequentie-invoer. **4** van de 38 complete intervalparen betreffen een effectief interval op een gedeeld traject: hiervoor ontbreken nog afzonderlijke patroonspecifieke vertrektijden. `headway_secs` is voor de 38 volledige waarden exact uit minuten × 60 vastgelegd. Dit is **bronacceptatie**, nog geen volledig genereerbare `frequencies.txt` omdat de **eerste/laatste diensttijden per route** ontbreken (de algemene spits-/dalmodelgrenzen zijn nu wel gekozen).
 
 ## Afbakening GTFS — voertuigcapaciteit uitgesloten (besluit 2 november 2026)
 
