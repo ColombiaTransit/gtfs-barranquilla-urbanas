@@ -14,7 +14,7 @@ Onderzoeksrepository voor een **statische GTFS-feed van het traditionele collect
 | Weekdagperiodeblokken | 245 kandidaten voor een latere `frequencies.txt` |
 | Nog te onderzoeken | 34 route-/variantregistraties |
 | GIS-geometry | 93 bronfeatures, 97/97 **routecodekoppelingen** (geen gevalideerde shapes) |
-| Stops, stopvolgorde, trips en rijtijden | Nog niet aanwezig; blokkeert een complete GTFS |
+| Stops, stopvolgorde, trips en rijtijden | 599 OSM-objecten geïnventariseerd; 0 bevestigde TPC-haltes; blokkeert complete GTFS |
 
 De officiële AMB-resoluties gelden als onze leidende bron voor de **spits-/dalfrequenties**. De [eerste/laatste vertrekuren uit AMB-kaarten van juli 2020](sources/amb/amb_dispatch_window_assumptions_2026-11-03.csv) en de indeling 07:00–09:00 / 17:00–20:00 spits maandag–vrijdag vormen **expliciete, vervangbare modelaannames**, niet officieel bevestigde 2026-rijtijden. **Voertuigcapaciteit telt niet mee.**
 
@@ -29,6 +29,7 @@ De officiële AMB-resoluties gelden als onze leidende bron voor de **spits-/dalf
 
 - [Onderzoeksrapport GTFS-bouwketen](docs/gtfs_build_staging_progress_2026-11-03.md)
 - [Inventaris haltebronnen en nog ontbrekende TPC-stopdata](docs/stop_data_inventory_2026-11-03.md)
+- [OSM/Overpass-resultaten: 599 bushalteobjecten, 34 mogelijke instapplaatsen en 16 GIS-prioriteitslocaties](sources/osm/README.md)
 - [Frequentiebron per GTFS-route](sources/amb/gtfs_staging/route_headway_candidates.csv)
 - [Voorgestelde weekdagperiodeblokken](sources/amb/gtfs_staging/weekday_period_staging.csv)
 - [34 routes met open punten](sources/amb/gtfs_staging/unresolved_route_issues.csv)
