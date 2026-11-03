@@ -1,0 +1,62 @@
+name: Clean noisy GraphHopper additions from provisional stop order v3
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/clean_amb_GH_trip_stop_order_v3.py
+      - .github/workflows/clean-amb-GH-stop-order-v3.yml
+      - sources/amb/provisional_trip_stop_order_v2/close_adjacent_stop_visits_REVIEW_ONLY.csv
+      - sources/amb/provisional_trip_stop_order_v2/new_GH_addition_candidates_65_with_concept_position.csv
+permissions:
+  contents: write
+concurrency:
+  group: amb-GH-stop-order-v3-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile cleanup script
+        run: python -m py_compile scripts/clean_amb_GH_trip_stop_order_v3.py
+      - name: Remove 26 repeated and all 13 close-pair GH candidate visits from a new draft
+        run: python scripts/clean_amb_GH_trip_stop_order_v3.py
+      - name: Show review report
+        if: always()
+        run: |
+          if [ -f build/amb-provisional-trip-stop-order-v3-clean/summary.md ]; then
+            cat build/amb-provisional-trip-stop-order-v3-clean/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit independent v3 staging only
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/provisional_trip_stop_order_v3_clean/
+            cp -a build/amb-provisional-trip-stop-order-v3-clean/. sources/amb/provisional_trip_stop_order_v3_clean/
+            git add sources/amb/provisional_trip_stop_order_v3_clean/
+            if git diff --cached --quiet; then
+              exit 0
+            fi
+            git commit -m "data: retain only unflagged GH candidate visits in research stop sequence v3"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+      - name: Archive v3 cleaned stop order and excluded candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clean-v3-AMB-trip-stop-order-review
+          path: build/amb-provisional-trip-stop-order-v3-clean/
+          if-no-files-found: warn
+          retention-days: 45
