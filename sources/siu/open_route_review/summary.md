@@ -10,6 +10,9 @@
 - PT4_PT5_AB_assignments_verified: 0
 - single_operator_single_route_base_proposals: 8
 - stop_occurrences_in_new_single_route_proposals: 1620
+- combined_strong_and_provisional_itineraries: 20
+- combined_research_only_stop_occurrences: 3981
+- combined_candidate_stops_distinct: 2394
 - shared_operator_or_AB_or_uncertain_remaining: 13
 - legally_confirmed_new_route_matches: 0
 - prior_high_confidence_geographic_candidates_untouched: 12
@@ -48,5 +51,6 @@ For PT4 and PT5, each of A and B has **9 min peak / 14 min offpeak** according t
 - LAS GAVIOTAS CALLE 76 (LA CAROLINA): A16-4161 — base_code_plausible_but_AB_pattern_unresolved
 - SOLEDAD CALLE 84 (SODETRANS;TRANSDIAZ): B17-4163 — shared_operator_route_pattern_not_allocatable
 
+The combined 20-route research table has candidate stop IDs with two confidence tiers; not legal confirmations.
 No timetable, stop_times, approved direction or final mapping added to GTFS.
 Original 256-2026 verified and compared; pilot starts 22 June 2026 for six months with possible extension. Continued legal applicability and SIU-to-licensed A/B ID assignment remain separate checks.
