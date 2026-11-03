@@ -33,7 +33,7 @@ De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GT
 ## Open acties (blijven open tot bewijs is opgeslagen)
 | ID | Prioriteit | Bedrijf | Werk | Afsluitcriterium |
 |---|---|---|---|---|
-| AMB-001 | **afgerond 3-11-2026** | SOBUSA | 307-2014 originele PDF hersteld en 20 pagina's geëxtraheerd; zes routes geanalyseerd | [Bolanalyse](sobusa_307_2014_analysis_2026-11-03.md) |
+| AMB-001 | **afgerond 3-11-2026** | SOBUSA | 307-2014 originele PDF hersteld en 20 pagina's geëxtraheerd; zes routes geanalyseerd | [Bronanalyse](sobusa_307_2014_analysis_2026-11-03.md) |
 | AMB-002 | hoog | COOLITORAL | Resolutie 256-2026 PILOTO op officiële bedrijfsarchiefpagina: directe PDF-URL achterhalen, manifest aanvullen, extraheren en juridische status pilot bepalen | PDF + bron-URL + artikelanalyse |
 | AMB-003 | **afgerond 3-11-2026** | FLOTA_ANGULO | Vijf PDF's gevonden, zes totaal geëxtraheerd via Ninja Tables-AJAX | [Volledige analyse](flota_angulo_route_frequencies_2026-11-02.md) |
 | AMB-004 | hoog | EMBUSA | 010-2026 tegenover 231-2025 en 113-2012 vergelijken | Artikel-voor-artikel chronologie voor B9-4125 |
