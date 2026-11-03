@@ -1,45 +1,45 @@
-agency,route_id,source_resolution,peak_minutes,offpeak_minutes,length_km,pdf_pages,evidence_note,gtfs_approved
-COOCHOFAL,A15-4159,242-2025,2.5,4,45.6,242-2025 p6 / p20,Original scan verifies 2.5/4 min 59-70 and 45.6 km; code A15-4129 in other parts of act; code conflict,no
-COOCHOFAL,C2-4133,242-2025,6,9,43,242-2025 p8,Original scan verified,no
-COOCHOFAL,C2-B-4187,242-2025,4.5,7,26.3,242-2025 p10 / p20,Original scan confirms 21 minimum per-route on p10 but 20 in summary p20; 4187 per-route vs 4188 summary; both unresolved,no
-COOCHOFAL,C3-4134,242-2025,7,10,38,242-2025 p12,Original scan verified 7/10,no
-COOCHOFAL,C4-4135,242-2025,3,5,40,242-2025 p14,Original scan verified 3/5,no
-COOCHOFAL,C9-4140,242-2025,7,10,32.2,242-2025 p16,Original scan verified 7/10,no
-COOCHOFAL,C18-4141,242-2025,7,10,33.2,242-2025 p18,Original scan verified 7/10,no
-COOCHOFAL,D20-4185,242-2025,2.5,4,33.2,242-2025 p20,Original scan verified 2.5/4,no
-FLOTA_ROJA,A8-4113,260-2024,3,5,33.74,5,"scan p5 gecontroleerd, besluit 30-09-2024",no
-LA_CAROLINA,D6-4150,404-2023,6,8,77.7,7,scan bevestigd; Terminal–Centro–Base Naval–Villa Carolina–Alameda del Río,no
-LA_CAROLINA,D7-4151,404-2023,6,8,79.3,9,scan bevestigd; Terminal–Centro–Base Naval–Corredor Universitario,no
-LA_CAROLINA,A16-4161,404-2023,3.5,5,52.9,199-2019 p10,"historische aparte A16-vergunning, latere actuele status niet bepaald",no
-LOLAYA,B10-4126,068-2025,4.5,6,64.8,6,scan bevestigd,no
-LOLAYA,B10-B-4193,068-2025,4,6,54.9,8,scan bevestigd,no
-LOLAYA,D8-4165,068-2025,4,6,47.9,10,scan bevestigd,no
-MONTERREY,B8-4124,390-2018,7,9,56.5,9,scan bevestigd,no
-MONTERREY,B11-4166,390-2018,4,6,59,10,scan bevestigd,no
-MONTERREY,B11-B-4192,390-2018,7,9,53.8,11,scan bevestigd,no
-MONTERREY,B12-4127,390-2018,4,6,,12,"scan bevestigd, lengte niet betrouwbaar uit scan",no
-SOBUSA,B18-4175,"082-2026 (B18), 466-2025 (zes routes)",5,6,,082-2026 p6,"gecombineerd drukste traject; itinerary A/B elk 10/12; lengte A 73.6, B 75.6 km",no
-SOBUSA,C11-4168,"082-2026 (B18), 466-2025 (zes routes)",3.5,5,62.7,466-2025 p8,scan gecontroleerd,no
-SOBUSA,C12-4169,"082-2026 (B18), 466-2025 (zes routes)",3,5,,466-2025 p11,"effectief gedeeld; A 6/9 (47.8 km), B 3/6 (48.6 km)",no
-SOBUSA,C13-4143,"082-2026 (B18), 466-2025 (zes routes)",3,5,48,466-2025 p13,scan gecontroleerd,no
-SOBUSA,C14-4170,"082-2026 (B18), 466-2025 (zes routes)",2,4,56.3,466-2025 p15,scan gecontroleerd,no
-SOBUSA,C16-4167,"082-2026 (B18), 466-2025 (zes routes)",3.5,6,,466-2025 p18,effectief drukste traject; aparte itinerarios niet volledig gecontroleerd,no
-SODETRANS,B13-4128,719-2018,5,7,73.2,719-2018 p8,beschikkend routeblad,no
-SODETRANS,B14-4174,719-2018,5,7,67.4,719-2018 p9,beschikkend routeblad,no
-SODETRANS,C21-4182,719-2018,4,6,72.7,719-2018 p10,beschikkend routeblad,no
-SODETRANS,B15-4129,719-2018,,,,719-2018 p7,"alleen bedrijfsvlootmatrix, frequentie afzonderlijk bepalen",no
-SODETRANS,B17-4163,719-2018,,,,719-2018 p7,2018 bedrijfsvlootmatrix; Coolitoral 192-2025 noemt 35–42 per partij; cross-operator reconciliatie nodig,no
-TRANSDIAZ,A10-4114,501-2025,3,5,,501-2025 p5,"gecombineerd drukste traject; itinerary A 8/10, 65.7 km; B 4/6, 48.3 km",no
-TRANSDIAZ,A11-4115,501-2025,6,8,43,501-2025 p7,scan gecontroleerd,no
-TRANSDIAZ,B16-4130,501-2025,9,11,50.6,501-2025 p9,p9 technisch blad,no
-TRANSDIAZ,PT1-4101,501-2025,10,14,55.4,501-2025 p11,TRANSDIAZ-aandeel 17-20; gezamenlijke vloot met COOLITORAL 34-40; scan gecontroleerd,no
-TRANSMECAR,C17-4160,324/325-2010 (beide 2010),4,6,,324-2010 p8–9,2010-vergunning; daadwerkelijke inwerkingtreding onbekend,no
-TRANSMECAR,D10,324/325-2010 (beide 2010),,,,325-2010 p7–8,"aangepaste historische Malambo–Vía Caracolí–Centro, parameters niet afleidbaar uit deze bezwaarpagina",no
-TRANSOLEDAD,D13-4155,188-2024,5,7,46,188-2024 p6,scan p6 bevestigd; p4 OCR 32-87 is fout,no
-TRANSURBAR,A14-4116,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),4,6,57.4,051-2017 p8,route gewijzigd; 241-2015 gaf 4/7,no
-TRANSURBAR,D16-4173,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),4,6,58,051-2017 p9,route gewijzigd,no
-TRANSURBAR,D19-4184,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),6,8,68,051-2017 p10,route gewijzigd,no
-TRASALFA,B2-B-4118,139-2013,,,,139-2013 p20,"vloot in artikel 2, interval niet als definitieve 2013-vergunning bewezen",no
-TRASALFA,D14-4156,139-2013,,,53,"139-2013 p15,19–20",route in art1 gewijzigd; ontwerp bevat spits 5 min; niet automatisch actueel,no
-TRASALFA,D15-4157,139-2013,,,55,"139-2013 p15,19–20","vloot art2, ontwerp noemt 3/5, maar juridisch operationeel toepasbaarheid niet bewezen",no
-TRASALIANCO,D18-4179,408-2013,7,10,,408-2013 p10–11,artikel 1 routeblad; geen bewijs van actuele 2026-bediening,no
+agency,route_id,source_resolution,peak_minutes,offpeak_minutes,length_km,pdf_pages,evidence_note,gtfs_approved,official_headway_accepted,headway_scope,peak_headway_secs,offpeak_headway_secs,outstanding_fields
+COOCHOFAL,A15-4159,242-2025,2.5,4,45.6,242-2025 p6 / p20,Original scan verifies 2.5/4 min 59-70 and 45.6 km; code A15-4129 in other parts of act; code conflict,no,yes_official_resolution,per_route,150,240,start_end_times;calendar;stops;shapes;legal_applicability
+COOCHOFAL,C2-4133,242-2025,6,9,43,242-2025 p8,Original scan verified,no,yes_official_resolution,per_route,360,540,start_end_times;calendar;stops;shapes;legal_applicability
+COOCHOFAL,C2-B-4187,242-2025,4.5,7,26.3,242-2025 p10 / p20,Original scan confirms 21 minimum per-route on p10 but 20 in summary p20; 4187 per-route vs 4188 summary; both unresolved,no,yes_official_resolution,per_route,270,420,start_end_times;calendar;stops;shapes;legal_applicability
+COOCHOFAL,C3-4134,242-2025,7,10,38,242-2025 p12,Original scan verified 7/10,no,yes_official_resolution,per_route,420,600,start_end_times;calendar;stops;shapes;legal_applicability
+COOCHOFAL,C4-4135,242-2025,3,5,40,242-2025 p14,Original scan verified 3/5,no,yes_official_resolution,per_route,180,300,start_end_times;calendar;stops;shapes;legal_applicability
+COOCHOFAL,C9-4140,242-2025,7,10,32.2,242-2025 p16,Original scan verified 7/10,no,yes_official_resolution,per_route,420,600,start_end_times;calendar;stops;shapes;legal_applicability
+COOCHOFAL,C18-4141,242-2025,7,10,33.2,242-2025 p18,Original scan verified 7/10,no,yes_official_resolution,per_route,420,600,start_end_times;calendar;stops;shapes;legal_applicability
+COOCHOFAL,D20-4185,242-2025,2.5,4,33.2,242-2025 p20,Original scan verified 2.5/4,no,yes_official_resolution,per_route,150,240,start_end_times;calendar;stops;shapes;legal_applicability
+FLOTA_ROJA,A8-4113,260-2024,3,5,33.74,5,"scan p5 gecontroleerd, besluit 30-09-2024",no,yes_official_resolution,per_route,180,300,start_end_times;calendar;stops;shapes;legal_applicability
+LA_CAROLINA,D6-4150,404-2023,6,8,77.7,7,scan bevestigd; Terminal–Centro–Base Naval–Villa Carolina–Alameda del Río,no,yes_official_resolution,per_route,360,480,start_end_times;calendar;stops;shapes;legal_applicability
+LA_CAROLINA,D7-4151,404-2023,6,8,79.3,9,scan bevestigd; Terminal–Centro–Base Naval–Corredor Universitario,no,yes_official_resolution,per_route,360,480,start_end_times;calendar;stops;shapes;legal_applicability
+LA_CAROLINA,A16-4161,199-2019,3.5,5,52.9,199-2019 p10,"historische aparte A16-vergunning, latere actuele status niet bepaald",no,yes_official_resolution,per_route,210,300,start_end_times;calendar;stops;shapes;legal_applicability
+LOLAYA,B10-4126,068-2025,4.5,6,64.8,6,scan bevestigd,no,yes_official_resolution,per_route,270,360,start_end_times;calendar;stops;shapes;legal_applicability
+LOLAYA,B10-B-4193,068-2025,4,6,54.9,8,scan bevestigd,no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+LOLAYA,D8-4165,068-2025,4,6,47.9,10,scan bevestigd,no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+MONTERREY,B8-4124,390-2018,7,9,56.5,9,scan bevestigd,no,yes_official_resolution,per_route,420,540,start_end_times;calendar;stops;shapes;legal_applicability
+MONTERREY,B11-4166,390-2018,4,6,59,10,scan bevestigd,no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+MONTERREY,B11-B-4192,390-2018,7,9,53.8,11,scan bevestigd,no,yes_official_resolution,per_route,420,540,start_end_times;calendar;stops;shapes;legal_applicability
+MONTERREY,B12-4127,390-2018,4,6,,12,"scan bevestigd, lengte niet betrouwbaar uit scan",no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+SOBUSA,B18-4175,"082-2026 (B18), 466-2025 (zes routes)",5,6,,082-2026 p6,"gecombineerd drukste traject; itinerary A/B elk 10/12; lengte A 73.6, B 75.6 km",no,yes_official_resolution,shared_corridor_effective_not_per_itinerary,300,360,itinerary_pattern_headways;start_end_times;calendar;stops;shapes;legal_applicability
+SOBUSA,C11-4168,"082-2026 (B18), 466-2025 (zes routes)",3.5,5,62.7,466-2025 p8,scan gecontroleerd,no,yes_official_resolution,per_route,210,300,start_end_times;calendar;stops;shapes;legal_applicability
+SOBUSA,C12-4169,"082-2026 (B18), 466-2025 (zes routes)",3,5,,466-2025 p11,"effectief gedeeld; A 6/9 (47.8 km), B 3/6 (48.6 km)",no,yes_official_resolution,shared_corridor_effective_not_per_itinerary,180,300,itinerary_pattern_headways;start_end_times;calendar;stops;shapes;legal_applicability
+SOBUSA,C13-4143,"082-2026 (B18), 466-2025 (zes routes)",3,5,48,466-2025 p13,scan gecontroleerd,no,yes_official_resolution,per_route,180,300,start_end_times;calendar;stops;shapes;legal_applicability
+SOBUSA,C14-4170,"082-2026 (B18), 466-2025 (zes routes)",2,4,56.3,466-2025 p15,scan gecontroleerd,no,yes_official_resolution,per_route,120,240,start_end_times;calendar;stops;shapes;legal_applicability
+SOBUSA,C16-4167,"082-2026 (B18), 466-2025 (zes routes)",3.5,6,,466-2025 p18,effectief drukste traject; aparte itinerarios niet volledig gecontroleerd,no,yes_official_resolution,shared_corridor_effective_not_per_itinerary,210,360,itinerary_pattern_headways;start_end_times;calendar;stops;shapes;legal_applicability
+SODETRANS,B13-4128,719-2018,5,7,73.2,719-2018 p8,beschikkend routeblad,no,yes_official_resolution,per_route,300,420,start_end_times;calendar;stops;shapes;legal_applicability
+SODETRANS,B14-4174,719-2018,5,7,67.4,719-2018 p9,beschikkend routeblad,no,yes_official_resolution,per_route,300,420,start_end_times;calendar;stops;shapes;legal_applicability
+SODETRANS,C21-4182,719-2018,4,6,72.7,719-2018 p10,beschikkend routeblad,no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+SODETRANS,B15-4129,719-2018,,,,719-2018 p7,"alleen bedrijfsvlootmatrix, frequentie afzonderlijk bepalen",no,no_missing_interval,missing_or_incomplete_interval,,,official_interval;start_end_times;calendar;stops;shapes;legal_applicability
+SODETRANS,B17-4163,719-2018,,,,719-2018 p7,2018 bedrijfsvlootmatrix; Coolitoral 192-2025 noemt 35–42 per partij; cross-operator reconciliatie nodig,no,no_missing_interval,missing_or_incomplete_interval,,,official_interval;start_end_times;calendar;stops;shapes;legal_applicability
+TRANSDIAZ,A10-4114,501-2025,3,5,,501-2025 p5,"gecombineerd drukste traject; itinerary A 8/10, 65.7 km; B 4/6, 48.3 km",no,yes_official_resolution,shared_corridor_effective_not_per_itinerary,180,300,itinerary_pattern_headways;start_end_times;calendar;stops;shapes;legal_applicability
+TRANSDIAZ,A11-4115,501-2025,6,8,43,501-2025 p7,scan gecontroleerd,no,yes_official_resolution,per_route,360,480,start_end_times;calendar;stops;shapes;legal_applicability
+TRANSDIAZ,B16-4130,501-2025,9,11,50.6,501-2025 p9,p9 technisch blad,no,yes_official_resolution,per_route,540,660,start_end_times;calendar;stops;shapes;legal_applicability
+TRANSDIAZ,PT1-4101,501-2025,10,14,55.4,501-2025 p11,TRANSDIAZ-aandeel 17-20; gezamenlijke vloot met COOLITORAL 34-40; scan gecontroleerd,no,yes_official_resolution,per_route,600,840,start_end_times;calendar;stops;shapes;legal_applicability
+TRANSMECAR,C17-4160,324/325-2010 (beide 2010),4,6,,324-2010 p8–9,2010-vergunning; daadwerkelijke inwerkingtreding onbekend,no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+TRANSMECAR,D10,324/325-2010 (beide 2010),,,,325-2010 p7–8,"aangepaste historische Malambo–Vía Caracolí–Centro, parameters niet afleidbaar uit deze bezwaarpagina",no,no_missing_interval,missing_or_incomplete_interval,,,official_interval;start_end_times;calendar;stops;shapes;legal_applicability
+TRANSOLEDAD,D13-4155,188-2024,5,7,46,188-2024 p6,scan p6 bevestigd; p4 OCR 32-87 is fout,no,yes_official_resolution,per_route,300,420,start_end_times;calendar;stops;shapes;legal_applicability
+TRANSURBAR,A14-4116,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),4,6,57.4,051-2017 p8,route gewijzigd; 241-2015 gaf 4/7,no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+TRANSURBAR,D16-4173,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),4,6,58,051-2017 p9,route gewijzigd,no,yes_official_resolution,per_route,240,360,start_end_times;calendar;stops;shapes;legal_applicability
+TRANSURBAR,D19-4184,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),6,8,68,051-2017 p10,route gewijzigd,no,yes_official_resolution,per_route,360,480,start_end_times;calendar;stops;shapes;legal_applicability
+TRASALFA,B2-B-4118,139-2013,,,,139-2013 p20,"vloot in artikel 2, interval niet als definitieve 2013-vergunning bewezen",no,no_missing_interval,missing_or_incomplete_interval,,,official_interval;start_end_times;calendar;stops;shapes;legal_applicability
+TRASALFA,D14-4156,139-2013,,,53,"139-2013 p15,19–20",route in art1 gewijzigd; ontwerp bevat spits 5 min; niet automatisch actueel,no,no_missing_interval,missing_or_incomplete_interval,,,official_interval;start_end_times;calendar;stops;shapes;legal_applicability
+TRASALFA,D15-4157,139-2013,,,55,"139-2013 p15,19–20","vloot art2, ontwerp noemt 3/5, maar juridisch operationeel toepasbaarheid niet bewezen",no,no_missing_interval,missing_or_incomplete_interval,,,official_interval;start_end_times;calendar;stops;shapes;legal_applicability
+TRASALIANCO,D18-4179,408-2013,7,10,,408-2013 p10–11,artikel 1 routeblad; geen bewijs van actuele 2026-bediening,no,yes_official_resolution,per_route,420,600,start_end_times;calendar;stops;shapes;legal_applicability
