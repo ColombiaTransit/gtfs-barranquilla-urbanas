@@ -13,7 +13,7 @@ on:
       max_curbside_checks:
         description: Maximum right-curbside tests (0-125)
         required: false
-        default: '25'
+        default: '0'
   push:
     paths:
       - scripts/query_graphhopper_bus_gap_directions.py
@@ -42,9 +42,9 @@ jobs:
         # mask the value immediately before invoking the script.
         env:
           GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
-          MAX_GAPS: ${{ github.event.inputs.max_gaps || '10' }}
-          MAX_VIA_QUERIES: ${{ github.event.inputs.max_via_queries || '30' }}
-          MAX_CURBSIDE_CHECKS: ${{ github.event.inputs.max_curbside_checks || '5' }}
+          MAX_GAPS: ${{ github.event.inputs.max_gaps || '73' }}
+          MAX_VIA_QUERIES: ${{ github.event.inputs.max_via_queries || '125' }}
+          MAX_CURBSIDE_CHECKS: ${{ github.event.inputs.max_curbside_checks || '0' }}
         run: |
           if [ -z "$GRAPHHOPPER_URL" ]; then
             echo "::error::ColombiaTransit organization variable GRAPHHOPPER_URL is not available to this repository"
