@@ -93,10 +93,16 @@ def main():
         (out/"article-fetch-error.txt").write_text(str(exc),encoding="utf-8")
     # The gallery has 24 ordered entries. The stable fallback guarantees coverage
     # when the WordPress page exposes only lazy placeholders.
-    cards=[];summary=[];links=gallery[:]
+    cards=[];summary=[];links=[]
+    # WordPress may supply both http:// and https:// links for the same poster.
+    # Deduplicate by canonical path, not complete URL scheme.
+    seen=set()
     fallback=[BASE+x for x in FILES]
-    for u in fallback:
-        if not any(full_url(x)==full_url(u) for x in links):links.append(u)
+    for u in [*gallery,*fallback]:
+        canonical_path=urlsplit(full_url(u)).path.lower()
+        if canonical_path in seen:continue
+        seen.add(canonical_path)
+        links.append(u)
     for idx, thumbnail in enumerate(links,1):
         canonical=full_url(thumbnail)
         url,img,attempts=try_get_image(http,[canonical,thumbnail])
