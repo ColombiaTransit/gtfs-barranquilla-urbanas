@@ -74,7 +74,7 @@ def main():
         for k,pattern in PATTERNS.items():
             hit=[r for r in stoprows if re.search(pattern,norm(r["stop_name"]))]
             count[k]={"n_stopnames":len(hit),"sequence_numbers":[int(r["siu_stop_sequence"]) for r in hit]}
-        uniqueB=bylegal[base]["B"]["exclusive_branch_streets"].split("; ")
+        uniqueB=[norm(x.strip()) for x in bylegal[base]["B"]["exclusive_branch_streets"].split(";") if x.strip()]
         Bcount=sum(count[x]["n_stopnames"]>0 for x in uniqueB)
         notes=(
             "First visible SIU stop lies on the same main street as the 2026 pilot's dispatch terminal, "
