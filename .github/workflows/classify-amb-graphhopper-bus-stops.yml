@@ -1,0 +1,56 @@
+name: Classify GraphHopper bus stop candidates without changing GTFS
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/classify_graphhopper_bus_stop_candidates.py
+      - .github/workflows/classify-amb-graphhopper-bus-stops.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-GH-stop-classify-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile script
+        run: python -m py_compile scripts/classify_graphhopper_bus_stop_candidates.py
+      - name: Classify 125 existing GraphHopper candidates using KMZ-constrained bus detours
+        run: python scripts/classify_graphhopper_bus_stop_candidates.py
+      - name: Show classification results
+        if: always()
+        run: |
+          if [ -f build/amb-GH-bus-stop-classification/summary.md ]; then
+            cat build/amb-GH-bus-stop-classification/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit research classifications only (no GTFS updates)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/graphhopper_stop_classification
+            cp -a build/amb-GH-bus-stop-classification/. sources/amb/graphhopper_stop_classification/
+            git add sources/amb/graphhopper_stop_classification/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: classify GH bus stop candidates and tentative insertion order for review"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Upload classification artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: graphhopper-125-stop-candidate-classes
+          path: build/amb-GH-bus-stop-classification/
+          if-no-files-found: warn
+          retention-days: 45
