@@ -154,6 +154,17 @@ def build_sources():
     push(data,"COOTRANSCO","C7-4138","258-2024",3,5,
         "sources/amb/cootransco_route_parameters_2026-11-02.csv",
         "route",status="permanent_backup_pending_pilot_expiry_check")
+    # Reviewed route-wide tables from 462-2025 and 242-2025.
+    # Canonical route aliases are applied here, without creating duplicate trips.
+    alias_rows=load(BASE/"legal_validity_ocr_review/coochofal_242_route_code_aliases.csv")
+    aliases={r["source_route_code"]:r["canonical_route_code"] for r in alias_rows}
+    legal_source="sources/amb/legal_validity_ocr_review/verified_462_242_route_headways_2026-11-04.csv"
+    for row in load(BASE/"legal_validity_ocr_review/verified_462_242_route_headways_2026-11-04.csv"):
+        code=aliases.get(row["route_code"],row["route_code"])
+        push(data,row["agency"],code,row["resolution"],
+            row["peak_min"],row["offpeak_min"],legal_source,
+            "route",note="Visually reviewed legal headway; whole-route/variant scope and legal effect remain unverified",
+            status="legal_table_reviewed_scope_pending")
     return data
 
 def find(records,agency,base,variant):
@@ -174,7 +185,7 @@ def find(records,agency,base,variant):
 def select(records):
     # Dedicated precedence only where newer amendments are explicitly known.
     priorities={"256-2026":10,"210-2026":9,"232-2025":9,
-                "010-2026":9,"098-2026":8,"258-2024":7}
+                "010-2026":9,"462-2025":10,"242-2025":10,"098-2026":8,"258-2024":7}
     # Other inputs are latest per-company tables as pre-reviewed.
     return sorted(records,key=lambda r:(priorities.get(r["resolution"],6),
        int(bool(r["peak"] and r["offpeak"])),r["source"]),reverse=True)[0]
