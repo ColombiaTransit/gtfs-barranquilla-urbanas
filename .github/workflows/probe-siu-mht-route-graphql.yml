@@ -1,0 +1,36 @@
+name: Probe SIU MHT route and stop GraphQL
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Chromium
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Observe public route and stop interaction
+        run: python scripts/probe_siu_mht_route_graphql.py
+      - name: Publish summary
+        if: always()
+        run: |
+          if [ -f build/siu-mht-route-graphql/report.md ]; then
+            cat build/siu-mht-route-graphql/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siu-mht-route-graphql-metadata
+          path: build/siu-mht-route-graphql/
+          if-no-files-found: warn
+          retention-days: 30
