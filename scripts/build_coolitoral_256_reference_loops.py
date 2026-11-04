@@ -60,7 +60,8 @@ def main():
    item["status"]="anchor_too_far";summary[code]=item;continue
   if not url:
    item["status"]="awaiting_graphhopper_secret";summary[code]=item;continue
-  headers={"Content-Type":"application/json"}
+  headers={"Content-Type":"application/json","Accept":"application/json",
+           "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"}
   client_id=os.getenv("CF_ACCESS_CLIENT_ID","")
   client_secret=os.getenv("CF_ACCESS_CLIENT_SECRET","")
   if client_id and client_secret:
