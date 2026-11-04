@@ -33,3 +33,12 @@ Deze status is gebaseerd op eerdere originele AMB-PDF-controles en een nieuwe ve
 - **COOCHOFAL C2-B:** GTFS-code **C2-B-4188** aanhouden; **C2-B-4187** uitsluitend als afwijkende bronvermelding/alias registreren. De eerdere keuze 4187 is na aanvullend officieel bewijs vervangen door 4188.
 - Geen extra routes, trips of frequenties voor deze aliassen genereren. Een verschil in een oudere resolutietabel is **geen nieuwe routecodeblokkade**. De juridische geldigheid, variantreikwijdte en latere werking van 242-2025 blijven afzonderlijke onderzoekspunten.
 - Bij latere verwerking van `verified_462_242_route_headways_2026-11-04.csv` moet `C2-B-4187` expliciet naar canonieke `C2-B-4188` worden gekoppeld, met behoud van de originele broncode.
+
+## Primaire PDF-verificatie 242-2025 en 462-2025 (4 november 2026)
+
+Bronnen: [242-2025](https://www.ambq.gov.co/wp-content/uploads/2026/03/RES-M-242-2025-2.pdf) en [462-2025](https://www.ambq.gov.co/wp-content/uploads/2025/12/RESOLUCION-METROPOLITANA-No-462-2025-COOTRANTICO.pdf), beide 21 pagina's.
+
+- **242-2025**: ondertekend op **4 juli 2025** (p.21). Titel en artikel 1 betreffen wijziging van de exploitatievergunning van acht COOCHOFAL-routes; artikel 2 schrijft persoonlijke kennisgeving voor en artikel 3 biedt bezwaar binnen tien dagen na kennisgeving (p.21). De originele p.20 noemt zowel A15-4129/C2-B-4187 in lopende tekst als A15-4159/C2-B-4188 in de capaciteitstabel. Eerder vastgelegde canonieke GTFS-codes **A15-4159** en **C2-B-4188** blijven staan.
+- **462-2025**: ondertekend op **27 november 2025** (p.21). Titel en artikel 1 betreffen wijziging van de exploitatievergunning van acht COOTRANTICO-routes; artikel 2 schrijft persoonlijke kennisgeving voor en artikel 3 biedt bezwaar binnen tien dagen na kennisgeving (p.21). P.20 noemt de acht routes afzonderlijk in de capaciteitstabel.
+- Beide besluiten bevatten op de gecontroleerde slotpagina's **geen vastgestelde datum van kennisgeving of bewijs van onherroepelijkheid**. Ondertekening is geen bewijs van actuele exploitatie in 2026. Er is geen vrijgave van staging-blokkades op grond van alleen deze controles.
+- Nog afzonderlijk te controleren: precieze wijzigingen ten opzichte van eerdere vergunningen, latere besluiten/rectificaties, datum van kennisgeving en bezwaarafhandeling. De 00:00–24:00-formulering in de routetabellen is vraagafhankelijk en bewijst geen feitelijke 24-uursdienst.
