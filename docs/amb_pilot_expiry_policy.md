@@ -11,6 +11,6 @@
 - Een nieuwe verlenging mag later met terugwerkende kracht in het register worden verwerkt zodra de bron is geverifieerd.
 
 ## COOLITORAL 256-2026 — PT4/PT5
-Het bestaande dossier registreert een pilot van **zes maanden vanaf 22 juni 2026**. Voor de werkadministratie is de **voorlopige eindgrens 22 december 2026 (exclusief)**, mits de zesmaandentermijn inderdaad op 22 juni aanvangt en het besluit geen andere einddagregel bevat. Op **4 november 2026** is deze termijn nog niet verstreken. Status: `active_pending_end_date_article_confirmation`. Als na afloop geen officieel verlengingsbesluit is aangetroffen: `ended_no_extension_found`; gebruik de tijdelijke PT4/PT5-parameters niet voor latere GTFS-datums.
+Het bestaande dossier registreert een pilot van **zes maanden vanaf 22 juni 2026**. Voor de werkadministratie is de **geverifieerde eindgrens 22 december 2026 (exclusief)** volgens artikel 2 van het originele besluit 256-2026. Op **4 november 2026** is deze termijn nog niet verstreken. Status: `active_under_recorded_period`; feitelijke exploitatie en latere verlenging zijn niet bewezen. Als na afloop geen officieel verlengingsbesluit is aangetroffen: `ended_no_extension_found`; gebruik de tijdelijke PT4/PT5-parameters niet voor latere GTFS-datums.
 
-De exacte juridische daggrens en eventuele ingangsvoorwaarden blijven te toetsen aan het originele artikel.
+Artikel 2 en de zesmaandentermijn zijn visueel gecontroleerd; kennisgeving, feitelijke activering en latere verlengingen blijven afzonderlijke open vragen.
