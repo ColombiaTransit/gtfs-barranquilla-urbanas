@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate provisional A/B shapes via GraphHopper from reviewed via-points.
 
-Requires a GraphHopper API key and explicit --approved flag. Never promotes
+Uses the private ColombiaTransit GraphHopper server and explicit --approved flag. Never promotes
 unreviewed candidate junctions to production GTFS shapes.
 """
 import argparse,json,os,urllib.request,urllib.parse
@@ -15,8 +15,8 @@ def main():
  ap.add_argument("--output-dir",type=Path,default=ROOT/"sources/amb/kmz/graphhopper_candidates")
  args=ap.parse_args()
  if not args.approved:raise SystemExit("Refusing to route unreviewed OSM junctions; supply --approved only after review.")
- key=os.getenv("GRAPHHOPPER_API_KEY")
- if not key:raise SystemExit("GRAPHHOPPER_API_KEY is required")
+ base_url=os.getenv("GRAPHHOPPER_URL","").rstrip("/")
+ if not base_url:raise SystemExit("GRAPHHOPPER_URL organization variable is required")
  manifest=json.loads(args.manifest.read_text())
  item=manifest["routes"][args.route]
  if not item["complete"]:raise SystemExit("Missing junctions: route cannot be reconstructed safely")
@@ -24,8 +24,8 @@ def main():
  # Junctions are intermediate points; close circular route at first point.
  if len(points)<3:raise SystemExit("Insufficient waypoints")
  points.append(points[0])
- payload={"profile":"car","points":points,"points_encoded":False,"instructions":False,"calc_points":True}
- url="https://graphhopper.com/api/1/route?"+urllib.parse.urlencode({"key":key})
+ payload={"profile":"bus","points":points,"points_encoded":False,"instructions":False,"calc_points":True}
+ url=base_url if base_url.endswith("/route") else base_url+"/route"
  req=urllib.request.Request(url,data=json.dumps(payload).encode(),headers={"Content-Type":"application/json"},method="POST")
  with urllib.request.urlopen(req,timeout=90) as resp:res=json.load(resp)
  path=res["paths"][0]
