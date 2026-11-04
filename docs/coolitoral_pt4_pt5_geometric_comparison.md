@@ -30,3 +30,14 @@ Koppel een KMZ/SIU-geometrie niet automatisch aan A of B op grond van een routen
 - `sources/amb/details/coolitoral_256_2026_pilot_street_variants_verified.csv`
 - `sources/siu/public_extract/siu_route_stop_sequences.csv`
 - Gebruikersupload `export (7).json` (Overpass API, 2026-11-04; nog niet in repository).
+
+## Berekende KMZ-vergelijking (2026-11-04)
+
+- PT4 en PT5 bevatten elk 467 GPS-vertices en zijn **exact elkaars omgekeerde** (alle 467 coördinaten matchen na omkeren).
+- Beide vormen dezelfde gesloten lijn; de gemeten haversine-polyline-lengte is **35,529 km**.
+- Deze KMZ-data toont dus één fysieke lus in twee rijrichtingen, niet afzonderlijke A/B-omwegen.
+- De nominale lengtes in 256-2026 zijn PT4-A/B 34,5 km, PT5-A 35,5 km, PT5-B 35,3 km. Lengteverschillen alleen bewijzen geen variant.
+- De SIU-halte **CALLE 30 CON CARRERA 44** ligt circa 5–8 m van de KMZ-lus; **AV. SIMON BOLIVAR CON CARRERA 44** circa 34 m; **ENTRADA CARRERA 43 (CIRCUNVALAR)** circa 5 m. Dit zijn *kruispunt-/halte-nabijheidsmetingen*, geen bewijs dat de KMZ de exclusieve B-zijstraten afrijdt.
+- Er zijn in de bestaande landmarksteekproef geen herkenbare haltes met de naam Carrera 41B, Calle 8 of Calle 10. Afwezigheid van een straatnaam in haltebenamingen bewijst niet dat de bus die straat niet gebruikt.
+
+**Conclusie:** de KMZ-geometrie bevestigt het tegengestelde luspatroon van PT4/PT5, maar de A/B-variant is nog **niet bewezen**. De beslissende toets is een geometrische overlay van de volledige KMZ-lijn op OSM-wegsegmenten voor Carrera 44 / Calle 10 / Carrera 41B / Calle 8 (PT4-B) en Calle 8 / Carrera 41B / Calle 10 / Carrera 43 (PT5-B), met aaneengesloten segmentlengtes en rijrichting. De door de gebruiker aangeleverde Overpass-export is hiervoor geschikt, maar is nog niet in deze repository opgenomen.
