@@ -24,8 +24,8 @@ jobs:
             --overpass sources/osm/overpass/coolitoral_pt4_pt5_20261104.json
       - name: Inspect nearby OSM ways for unresolved transitions
         run: |
-          python scripts/audit_coolitoral_256_gaps.py \\
-            --overpass sources/osm/overpass/coolitoral_pt4_pt5_20261104.json \\
+          python scripts/audit_coolitoral_256_gaps.py \
+            --overpass sources/osm/overpass/coolitoral_pt4_pt5_20261104.json \
             --manifest sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json
       - name: Publish unresolved street transitions in job summary
         run: |
