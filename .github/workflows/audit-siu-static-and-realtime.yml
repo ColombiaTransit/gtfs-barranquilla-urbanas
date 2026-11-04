@@ -33,7 +33,7 @@ jobs:
           python -m pip install playwright
           python -m playwright install --with-deps chromium
       - name: Audit public SIU GraphQL source
-        run: python scripts/audit_siu_static_and_realtime.py --samples "${{ inputs.samples }}" --interval-seconds "${{ inputs.interval_seconds }}"
+        run: python scripts/audit_siu_static_and_realtime.py --samples "${{ inputs.samples || '3' }}" --interval-seconds "${{ inputs.interval_seconds || '60' }}"
       - name: Publish report
         if: always()
         run: |
