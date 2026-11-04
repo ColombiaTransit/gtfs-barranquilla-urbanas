@@ -1,0 +1,33 @@
+name: Reassess held GTFS routes with existing evidence
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/reassess_multisource_held_routes.py
+      - .github/workflows/reassess-held-gtfs-routes.yml
+      - sources/amb/gtfs_staging/unresolved_route_issues.csv
+permissions:
+  contents: read
+jobs:
+  reassess:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reuse existing SIU KMZ ArcGIS and resolution tables
+        run: python scripts/reassess_multisource_held_routes.py
+      - name: Report
+        if: always()
+        run: |
+          if [ -f build/multisource-route-reassessment/summary.md ]; then
+            cat build/multisource-route-reassessment/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: multisource-held-route-reassessment
+          path: build/multisource-route-reassessment/
+          retention-days: 45
