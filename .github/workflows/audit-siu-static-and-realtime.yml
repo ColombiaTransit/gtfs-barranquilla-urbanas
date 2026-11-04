@@ -1,5 +1,8 @@
 name: Audit SIU static source and probe GTFS-RT potential
-on:
+'on':
+  push:
+    paths:
+      - '.github/workflows/audit-siu-static-and-realtime.yml'
   workflow_dispatch:
     inputs:
       samples:
