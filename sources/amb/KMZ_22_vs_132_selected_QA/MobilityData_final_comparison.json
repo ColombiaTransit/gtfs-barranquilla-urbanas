@@ -1,0 +1,21 @@
+{
+  "validator_version": "8.0.1",
+  "22_baseline_gtfs_errors": 0,
+  "132_candidate_gtfs_errors": 0,
+  "final_gtfs_errors": 0,
+  "22_baseline_total_warnings": 2378,
+  "132_candidate_total_warnings": 2379,
+  "final_gtfs_warnings": 2374,
+  "22_baseline_offroute_stops": 1,
+  "132_candidate_offroute_stops": 1,
+  "final_offroute_stops": 1,
+  "22_baseline_out_of_order_stops": 0,
+  "132_candidate_out_of_order_stops": 0,
+  "final_out_of_order_stops": 0,
+  "all_132_section_candidates_reverted_if_new_warning": false,
+  "no_new_validator_warnings": true,
+  "no_new_geometry_notice_instances": true,
+  "unchanged_67_synthetic_test_trips_and_SIU_stop_sequence": true,
+  "production_GTFS_modified": false,
+  "approved_for_real_timetable_publication": false
+}

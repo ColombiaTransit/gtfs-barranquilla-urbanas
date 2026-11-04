@@ -1,0 +1,22 @@
+{
+  "comparison_scope_sections": 352,
+  "official_KMZ_sections": 340,
+  "GH_fallback_sections": 12,
+  "22_changed_sections_vs_official": 22,
+  "132_changed_sections_vs_official": 132,
+  "132_candidate_sections_selected_by_geometry_and_route_validator": 101,
+  "additional_vs_22_sections_in_candidate": 101,
+  "candidate_patterns_with_132_selection": 31,
+  "patterns_denied_132_due_to_new_route_warnings": 4,
+  "22_baseline_total_errors": 0,
+  "132_standalone_total_errors": 0,
+  "22_baseline_total_warnings": 2378,
+  "132_standalone_total_warnings": 2379,
+  "original_KMZ_sparse_chords_400m": 478,
+  "remaining_22_sparse_chords_400m": 443,
+  "remaining_132_sparse_chords_400m": 167,
+  "proposed_selection_only_not_production": true,
+  "full_assembled_candidate_needs_independent_validator": true,
+  "actual_bus_operator_route_confirmed": false,
+  "unchanged_SIU_stop_ids_stop_order_trips": true
+}
