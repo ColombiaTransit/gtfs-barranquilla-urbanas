@@ -11,7 +11,7 @@ SOBUSA,C16-4167,A,466-2025,,,,7,9,per_variant,dates_unverified,Legal headways on
 SOBUSA,C16-4167,B,466-2025,,,,7,9,per_variant,dates_unverified,Legal headways only
 COOTRAB;COOLITORAL,A1-4106,A,358-2024,192-2025,,,8.5,11,per_variant,dates_unverified,Shared operation; check later 192-2025 effects
 COOTRAB;COOLITORAL,A1-4106,B,358-2024,192-2025,,,8.5,11,per_variant,dates_unverified,Shared operation; check later 192-2025 effects
-EMBUSA,B9-4125,unspecified,010-2026,231-2025,,,4,6,whole_route_unverified,dates_unverified,00-24 authorization conditional on demand
+EMBUSA,B9-4125,unspecified,010-2026,231-2025,,,4,6,whole_route_unverified,dates_unverified,PDF p5 verified 4/6; preceding 231-2025 has 3/5; supersession scoped to overlapping B9; A/B and notice unknown; 00-24 conditional
 COOTRAB,C5-4136,unspecified,358-2024,378-2023,,,8,10,whole_route_unverified,route_code_conflict,C5-4135 appears in other AMB publications
 COOTRAB,C6-4137,unspecified,358-2024,378-2023,,,8,10,whole_route_unverified,dates_unverified,Legal headways only
 LA_CAROLINA,A16-4161,unspecified,199-2019,204-2012,,,3.5,5,whole_route_unverified,AB_allocation_unverified,Do not duplicate frequency over A/B
