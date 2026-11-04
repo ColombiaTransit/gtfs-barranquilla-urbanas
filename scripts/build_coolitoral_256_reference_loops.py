@@ -77,8 +77,15 @@ def main():
    # Never print HTTP errors: error strings can contain private endpoint URLs.
    item["status"]="graphhopper_request_failed"
    item["error_type"]=type(exc).__name__
+   if isinstance(exc,urllib.error.HTTPError):
+    item["http_status"]=exc.code
+    # Never log response body or exception text: may contain private endpoints.
+   elif isinstance(exc,urllib.error.URLError):
+    item["network_error_category"]=type(exc.reason).__name__
+   elif isinstance(exc,(KeyError,IndexError)):
+    item["response_structure_error"]=True
   summary[code]=item
-  print(code,item["status"],"distance_m",item.get("distance_m","n/a"),flush=True)
+  print(code,item["status"],"http_status",item.get("http_status","n/a"),"error_type",item.get("error_type","n/a"),"network_category",item.get("network_error_category","n/a"),"distance_m",item.get("distance_m","n/a"),flush=True)
  a.output_dir.mkdir(parents=True,exist_ok=True)
  (a.output_dir/"coolitoral_256_loop_report.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2)+"\n")
  for code,item in summary.items():print(code,item["status"],"delta_pct",item.get("distance_difference_pct","n/a"))
