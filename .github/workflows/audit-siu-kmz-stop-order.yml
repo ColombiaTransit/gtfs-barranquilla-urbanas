@@ -1,0 +1,49 @@
+name: Audit SIU ordered stops against all AMB KMZ routes
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geometry dependencies
+        run: python -m pip install --disable-pip-version-check shapely pyproj
+      - name: Check KMZ geometry availability
+        run: |
+          test -f sources/amb/kmz/manifest.csv
+          test -f sources/siu/public_extract/siu_route_stop_sequences.csv
+          test -f sources/amb/kmz_stop_research/siu_crosswalk/all_siu_kmz_spatial_scores_NOT_CONFIRMED.csv
+          python - <<'PY'
+          import csv,pathlib
+          root=pathlib.Path('sources/amb/kmz')
+          m=list(csv.DictReader((root/'manifest.csv').open()))
+          available=sum(bool(x['geojson_path']) and (root/x['geojson_path']).is_file() for x in m)
+          print(f'KMZ geometries locally available: {available}/{len(m)}')
+          if not available: raise SystemExit('No local KMZ geometries; run harvest workflow first')
+          PY
+      - name: Audit all SIU/KMZ candidates
+        run: python scripts/audit_siu_kmz_stop_order.py --repo . --out build/siu-kmz-ordered-audit.csv
+      - name: Preserve full ordered-stop audit
+        run: |
+          mkdir -p sources/amb/kmz_stop_research/siu_crosswalk
+          cp build/siu-kmz-ordered-audit.csv sources/amb/kmz_stop_research/siu_crosswalk/siu_kmz_ordered_stop_audit_DIAGNOSTIC.csv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/amb/kmz_stop_research/siu_crosswalk/siu_kmz_ordered_stop_audit_DIAGNOSTIC.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research(siu): audit ordered stops against AMB KMZ candidates"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siu-kmz-ordered-stop-audit
+          path: build/siu-kmz-ordered-audit.csv
+          if-no-files-found: warn
