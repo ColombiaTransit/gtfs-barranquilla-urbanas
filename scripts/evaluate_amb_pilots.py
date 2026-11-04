@@ -34,8 +34,9 @@ def evaluate(row, date):
         "pilot_end_exclusive": row["pilot_end_exclusive"],
         "extension_resolution": extension or None,
         "base_resolution_to_reassess": row["base_resolution"],
-        "legal_finalized": row["end_date_confidence"] == "verified" and (
-            status != "extension_requires_article_review"),
+        "pilot_duration_article_verified": row["end_date_confidence"] == "verified",
+        "legal_finalized": False,
+        "current_operation_verified": False,
         "route_cancelled": False,
     }
 
