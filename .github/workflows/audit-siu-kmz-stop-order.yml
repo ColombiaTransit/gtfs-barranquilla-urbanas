@@ -1,6 +1,10 @@
 name: Audit SIU ordered stops against all AMB KMZ routes
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/audit-siu-kmz-stop-order.yml
+      - scripts/audit_siu_kmz_stop_order.py
 permissions:
   contents: write
 jobs:
