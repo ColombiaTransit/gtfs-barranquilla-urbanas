@@ -10,8 +10,7 @@ TARGETS=[
 ("TRASALIANCO","267-2010"),("TRASALIANCO","411-2010"),
 ("LA_CAROLINA","173-2010"),("LA_CAROLINA","204-2012"),("LA_CAROLINA","199-2019"),
 ("COOLITORAL","137-2011"),("COOLITORAL","192-2025"),
-("COOTRAB","358-2024"),("COOTRANTICO","025-2011"),
-("ALL_OPERATORS","448-2025")]
+("COOTRAB","358-2024"),("COOTRANTICO","025-2011")]
 def main():
  OUT.mkdir(parents=True,exist_ok=True)
  with MANIFEST.open(encoding="utf-8-sig",newline="") as f: rows=list(csv.DictReader(f))
