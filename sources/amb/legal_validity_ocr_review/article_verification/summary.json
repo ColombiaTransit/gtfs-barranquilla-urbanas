@@ -1,0 +1,10 @@
+{
+  "documents": 9,
+  "sha256_matches": 9,
+  "cover_number_candidates": 7,
+  "article_candidates": 85,
+  "human_visual_review_complete": false,
+  "legal_effect_verified": false,
+  "current_service_verified": false,
+  "gtfs_approved": false
+}

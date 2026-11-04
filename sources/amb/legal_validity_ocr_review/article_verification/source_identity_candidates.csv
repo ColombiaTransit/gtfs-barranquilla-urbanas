@@ -1,0 +1,10 @@
+agency,resolution,pdf_sha256,sha256_matches_ocr_index,ocr_cover_mentions_resolution_number,pdf_identity_manual_verified,legal_effect_verified,current_service_verified,gtfs_approved
+TRASALIANCO,267-2010,68be067e6e308d2db9f83cd7dc611d9aaf52083591bd842fe8aad714b4fed226,true,true,no,no,no,no
+TRASALIANCO,411-2010,c39f71127fd2c986bf7ec68f39cc1cdd8a6ed5212f722f7f6012d782622496e6,true,true,no,no,no,no
+LA_CAROLINA,173-2010,f8811672229bd8dd7b151ed732dffabe0a185a3e55506abfc8751a4bd78d53ca,true,true,no,no,no,no
+LA_CAROLINA,204-2012,f6e7098bac42b77b05f149f7a0982d79fe930be40cc9f6ddebbd13d480050470,true,true,no,no,no,no
+LA_CAROLINA,199-2019,fd2b541b36abfbe6959bf6a6c853145f46395b9c3a9e065f9d9f767b194e2283,true,false,no,no,no,no
+COOLITORAL,137-2011,4b89d6a821152fcb653302310e1a054f848c9203a348e54ced3f6657b77486fe,true,true,no,no,no,no
+COOLITORAL,192-2025,d238364d60275d7ac446b14ac1ee38dde5acf56f982db72258de3fc194df3a06,true,true,no,no,no,no
+COOTRAB,358-2024,889a3d86a841762bbb68ca1083e4ce20c40b6533b4461dba1bef20ffbaf05ca9,true,false,no,no,no,no
+COOTRANTICO,025-2011,078f769c3b858eddb1a292ae613fd53d4ef60a46b405fbfe2244b7e34abbf60b,true,true,no,no,no,no
