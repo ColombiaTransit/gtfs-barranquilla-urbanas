@@ -78,7 +78,7 @@ def main():
   "pages":sum(r["pdf_pages"] for r in rows),"ocr_pages":sum(r["ocr_pages"] for r in rows),
   "review_images":sum(r["review_images"] for r in rows),
   "legal_validity_approved":False,"gtfs_release_approved":False,
-  "still_missing_original":["ALL_OPERATORS 448-2025"]}
+  "still_missing_original":[]}
  (OUT/"summary.json").write_text(json.dumps(summary,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
  lines=["# Negen aanvullende AMB-resoluties — OCR en beeldcontrole","",
  "Technische extractie, **geen juridische goedkeuring**.","",
@@ -86,7 +86,7 @@ def main():
  "|---|---|---|---:|---:|---:|"]
  for r in rows:lines.append(f'| {r["agency"]} | {r["resolution"]} | {r["status"]} | {r["pdf_pages"]} | {r["ocr_pages"]} | {r["review_images"]} |')
  lines+=["","Controleer de oorspronkelijke artikelen en eventuele latere wijzigingen voordat GTFS-waarden worden vrijgegeven.",
- "448-2025 heeft nog geen geverifieerde bron-URL.",""]
+ "Geen aanvullende resolutie zonder geverifieerde bron opgenomen.",""]
  (OUT/"summary.md").write_text("\n".join(lines),encoding="utf-8")
  print(json.dumps(summary,indent=2))
  if summary["extracted"]!=len(TARGETS):raise SystemExit("One or more resolution OCR cases failed; inspect artifact")
