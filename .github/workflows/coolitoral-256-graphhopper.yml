@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fetch complete roads from organization Overpass
         env:
-          API_OVERPASS: ${{ vars.API_OVERPASS }}
+          API_OVERPASS: ${{ secrets.API_OVERPASS }}
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
           CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: |
@@ -50,7 +50,7 @@ jobs:
       - name: Optional GraphHopper candidate routing (reviewed only)
         if: ${{ inputs.route_approved }}
         env:
-          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
+          GRAPHHOPPER_URL: ${{ secrets.GRAPHHOPPER_URL }}
           ROUTE: ${{ inputs.route }}
         run: |
           python scripts/route_coolitoral_256_graphhopper.py \
