@@ -54,7 +54,7 @@ def operation_name(request):
 
 async def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    events, pending = [], []
+    events, pending, listing_labels = [], [], []
     state = {"phase": "initial", "clicked": False, "click_target": "none", "route_cards_seen": 0}
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, args=["--no-sandbox"])
@@ -73,6 +73,21 @@ async def main():
             if response.status == 200:
                 try:
                     body = await response.json()
+                    if event["operation_name"] == "ServiceMngCompressedItineraryListing":
+                        def collect_labels(value, depth=0):
+                            if depth > 7 or len(listing_labels) >= 30:
+                                return
+                            if isinstance(value, dict):
+                                for k, v in value.items():
+                                    if k.lower() in ("routecode", "routename", "shortname", "itineraryname", "description", "code", "label") and isinstance(v, str) and 2 <= len(v) <= 75:
+                                        if v not in listing_labels:
+                                            listing_labels.append(v)
+                                    elif isinstance(v, (dict, list)):
+                                        collect_labels(v, depth + 1)
+                            elif isinstance(value, list):
+                                for v in value[:100]:
+                                    collect_labels(v, depth + 1)
+                        collect_labels(body)
                     fields = sorted(set(names_only(body)))
                     event["response_field_names"] = fields[:100]
                     event["relevant_field_names"] = [x for x in fields if RELEVANT.search(x)][:60]
@@ -106,6 +121,18 @@ async def main():
                             break
                 except Exception:
                     continue
+            if not state["clicked"] and listing_labels:
+                # Use route names observed in the public listing; no IDs or values are persisted.
+                for label in listing_labels[:20]:
+                    try:
+                        target = page.get_by_text(label, exact=False)
+                        if await target.count() and await target.first.is_visible():
+                            await target.first.click(timeout=3500)
+                            state["clicked"] = True
+                            state["click_target"] = "graphql_listing_matched_visible_route"
+                            break
+                    except Exception:
+                        continue
             if not state["clicked"]:
                 # Fallback: visible route heading or link, not arbitrary controls.
                 for selector in [page.get_by_text("VILLA CAROLINA ZOOLOGICO", exact=False),
@@ -134,6 +161,7 @@ async def main():
         "public_page": PAGE, "graphql_path": ENDPOINT,
         "clicked": state["clicked"], "click_target": state["click_target"],
         "route_cards_seen": state["route_cards_seen"],
+        "graphql_listing_candidate_count": len(listing_labels),
         "initial_graphql_responses": len(initial),
         "after_click_graphql_responses": len(after),
         "new_operation_or_schema_responses": len(new),
@@ -160,6 +188,7 @@ async def main():
         *["- " + x for x in summary["new_relevant_schema_fields"]],
         "", "## Grenzen", "",
         "- Alleen browser-veroorzaakte openbare requests; geen direct geconstrueerde GraphQL-query.",
+        "- Openbare listinglabels worden uitsluitend tijdelijk gebruikt voor UI-matching, niet opgeslagen.",
         "- Geen requestvariabelen, ruwe responses, kentekens, voertuig-ID's, cookies of tokens opgeslagen.",
         "- Een mislukte klik of lege capture betekent **onbeslist**, niet dat het endpoint ontbreekt.",
         "- Geen gevolgtrekking over feitelijke ritten of dienstregeling zonder semantische validatie.",
