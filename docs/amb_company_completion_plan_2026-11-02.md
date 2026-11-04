@@ -1,3 +1,11 @@
+## Start 4 november 2026 — juridische besluitketens en beeldanalyse/OCR
+
+De officiële AMB-PDF's zijn gescheiden van de juridische conclusies: automatische OCR en chronologische nummering leveren geen bewijs van rechtsgeldigheid. Een reproduceerbare [GitHub Action](../.github/workflows/audit-amb-legal-and-ocr-review.yml) bouwt een prioriteitenregister voor **13 juridische besluitenketens** en de **6 afzonderlijke OCR-/beeldanalysedossiers**. Zie de gegenereerde resultaten onder `sources/amb/legal_validity_ocr_review/` na geslaagde uitvoering.
+
+**Nieuwe primaire juridische vergelijking:** [EMBUSA 231-2025 en 010-2026](amb_embusa_231_2025_vs_010_2026_legal_chain.md). De oudere 231-2025-periode mag voor B9 niet zonder voorbehoud naast de latere 010-2026-intervallen worden gepubliceerd. **Pilot COOLITORAL 256-2026** heeft inmiddels een teruggevonden en gecontroleerde originele PDF; alleen de eventuele verlenging en actuele geldigheidsstatus blijven open.
+
+**Geen productie-GTFS gewijzigd.** Vlootgegevens blijven buiten scope. De OCR-actielijst blijft onafhankelijk van de reguliere bronketen.
+
 # AMB TPC — afhandeling per bedrijf en vervolgwerk
 
 ## Projectbesluit 3 november 2026 — aangenomen eerste/laatste vertrekken
@@ -51,13 +59,13 @@ De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GT
 - **AMB-001 afgerond:** SOBUSA 307-2014 officiële PDF (20 p.) hersteld, geanalyseerd en aan manifest gekoppeld.
 - **AMB-003 afgerond:** alle vijf ontbrekende FLOTA ÁNGULO-PDF's via herstelde Ninja Tables-AJAX-extractie opgehaald; A7-4112 laatste besluit **232-2025 3/5 min en 31,4 km**.
 - **COOTRANTICO 108-2023 afgerond:** 8/8 pagina's met Spaanse OCR, B4 en B7 7/9 op scans bevestigd.
-- **Openstaande bronlacunes:** COOLITORAL 256-2026 PILOTO en de onjuiste bron voor COOTRANTICO 025-2011. Pilot 448-2025 moet nog op specifieke route-impact worden gecontroleerd.
+- **Bijgewerkt 4-11-2026:** COOLITORAL 256-2026 PILOTO is inmiddels teruggevonden en inhoudelijk gecontroleerd; **eventuele verlenging/eindwerking** blijft open. COOTRANTICO 025-2011 heeft nog een verkeerde PDF-link (verwijst naar 331-2010). Pilot 448-2025 moet nog op specifieke route-impact worden gecontroleerd.
 - Voertuigcapaciteit blijft buiten de GTFS-scope. **De vergunde intervallen gelden als GTFS-bronwaarheid; de algemene werkdagperiodegrenzen zijn nu als model gekozen; routegebonden eerste/laatste vertrekken en weekend/feestdagkalenders moeten nog worden bepaald**.
 
 ## Voortgang
 - 23 bedrijven en 274 manifestdocumenten in `sources/amb/company_completion_backlog_2026-11-02.csv`.
 - 273 extracties geslaagd, 1 fout (SOBUSA 307-2014); dit zijn technische resultaten, geen gevalideerde routevergunningen.
-- EMBUSA 010-2026 heeft een afzonderlijk inhoudelijk rapport in `docs/embusa_010_2026_validatie.md`; vergelijk nog met EMBUSA 231-2025 en eerdere besluiten.
+- **EMBUSA B9-4125 bijgewerkt 4-11-2026:** artikelen 231-2025 en 010-2026 zijn op originele paginabeelden vergeleken: 231-2025 had 3/5 min en 42,5 km, 010-2026 wijzigt de route naar 4/6 min en 53,9 km. Zie [juridische ketencontrole](amb_embusa_231_2025_vs_010_2026_legal_chain.md). Historisch besluit 113-2012, actuele inwerkingtreding en eventuele nog latere besluiten blijven open.
 - TRASALFA, TRANSURBAR en FLOTA_ANGULO hebben voorlopige extractie-/OCR-analyses in `docs/`. Andere bedrijven hebben een voorlopige batchinventarisatie; geen volledig artikelregister.
 - Geen enkele route mag alleen op basis van dit register als actueel geëxploiteerd worden beschouwd.
 
@@ -65,9 +73,9 @@ De prioriteit van eerdere capaciteits-only issues in de dossiers vervalt voor GT
 | ID | Prioriteit | Bedrijf | Werk | Afsluitcriterium |
 |---|---|---|---|---|
 | AMB-001 | **afgerond 3-11-2026** | SOBUSA | 307-2014 originele PDF hersteld en 20 pagina's geëxtraheerd; zes routes geanalyseerd | [Bronanalyse](sobusa_307_2014_analysis_2026-11-03.md) |
-| AMB-002 | hoog | COOLITORAL | Resolutie 256-2026 PILOTO op officiële bedrijfsarchiefpagina: directe PDF-URL achterhalen, manifest aanvullen, extraheren en juridische status pilot bepalen | PDF + bron-URL + artikelanalyse |
+| AMB-002 | **bronherstel afgerond 3-11-2026** | COOLITORAL | Originele PDF 256-2026 gevonden; vier pilottrajecten PT4/PT5 A/B en 9/14-minutenintervallen gecontroleerd. Open: feitelijke geldigheidsduur na zes maanden / eventuele verlenging. | [Pilot-controle](siu_remaining_21_route_links_review_2026-11-03.md) en AMB-005 voor verlenging |
 | AMB-003 | **afgerond 3-11-2026** | FLOTA_ANGULO | Vijf PDF's gevonden, zes totaal geëxtraheerd via Ninja Tables-AJAX | [Volledige analyse](flota_angulo_route_frequencies_2026-11-02.md) |
-| AMB-004 | hoog | EMBUSA | 010-2026 tegenover 231-2025 en 113-2012 vergelijken | Artikel-voor-artikel chronologie voor B9-4125 |
+| AMB-004 | **deels afgerond 4-11-2026** | EMBUSA | De artikelen 231-2025 versus 010-2026 zijn op originele scans vergeleken (3/5 → 4/6 min; 42,5 → 53,9 km); 113-2012 en effectieve actuele werking blijven open. | [B9-besluitvergelijking](amb_embusa_231_2025_vs_010_2026_legal_chain.md) |
 | AMB-005 | hoog | COOLITORAL | 256-2026 (pilot), 210-2026, 192-2025, 199-2025 en 264-2024 vergelijken | Per route juridisch effect + eventuele einddatum pilot |
 | AMB-006 | hoog | SOBUSA | 082-2026, 466-2025, 225-2025 en eerdere wijzigingen vergelijken | Per route actuele vergunningsstatus |
 | AMB-007 | normaal | alle 23 | Volledige artikelen/tabelrijen met PDF-paginaverwijzing in dossier per bedrijf | Iedere manifestresolutie heeft controleerbare conclusie of expliciete blokkade |
