@@ -79,12 +79,8 @@ def main():
     # Try a bounded set of common shapes; record GraphQL validation errors instead
     # of treating any rejected shape as a working pagination contract.
     pagination_attempts = [
-        {"page": 0, "pageSize": 100},
-        {"page": 1, "pageSize": 100},
-        {"page": 0, "limit": 100},
-        {"page": 1, "limit": 100},
-        {"skip": 0, "limit": 100},
-        {"offset": 0, "limit": 100},
+        {"page": 0, "count": 100},
+        {"page": 1, "count": 100},
     ]
     successful_pagination = None
     for pg in pagination_attempts:
