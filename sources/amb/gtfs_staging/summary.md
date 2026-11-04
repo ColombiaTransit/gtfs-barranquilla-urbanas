@@ -1,9 +1,9 @@
 # AMB GTFS headway staging — preliminary, NOT a GTFS ZIP
 
 - routes_in_routes_txt: **97**
-- routes_ready_to_stage: **51**
-- routes_held_for_review: **46**
-- staged_weekday_periods: **199**
+- routes_ready_to_stage: **62**
+- routes_held_for_review: **35**
+- staged_weekday_periods: **243**
 - source_records_considered: **133**
 
 ## Reasons routes were held
@@ -16,7 +16,6 @@
 - official_interval_missing: 3
 - permanent_backup_pending_pilot_expiry_check: 1
 - pilot_A_B_not_in_routes_txt: 1
-- route_variant_scope_and_legal_effect_unverified: 16
 
 No stops.txt, trips.txt, stop_times.txt or route geometry was invented.
 The 2020 first/last departures are a reversible model assumption and
