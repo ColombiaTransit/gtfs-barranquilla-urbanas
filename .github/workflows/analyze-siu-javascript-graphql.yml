@@ -15,6 +15,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install anonymous Chromium browser
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
       - name: Inspect public SIU JavaScript bundles
         run: python scripts/analyze_siu_public_javascript.py
       - name: Show findings
