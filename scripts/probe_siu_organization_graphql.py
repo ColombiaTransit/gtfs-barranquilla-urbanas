@@ -127,7 +127,7 @@ def main():
             "source": "User-supplied SIU JavaScript bundles", "results": reports,
             "organization_rows": len(rows), "organization_ids": sorted(seen),
             "pagination_confirmed": successful_pagination}
-    (OUT / "results.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    (OUT / "results.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = ["# SIU organization GraphQL probe", "",
              f"Unique organizations: {len(rows)}", f"Known org IDs: {', '.join(sorted(seen)) or 'none'}",
              f"Working pagination: {successful_pagination or 'not established'}", "",
@@ -138,7 +138,7 @@ def main():
             lines.append(f"  - GraphQL error: {msg}")
     lines.extend(["", "Company lookup requires an independently verified company ID.",
                   "Only read-only queries are executed."])
-    (OUT / "report.md").write_text("\\n".join(lines) + "\\n", encoding="utf-8")
+    (OUT / "report.md").write_text("\\n".join(lines) + "\n", encoding="utf-8")
     print("\\n".join(lines))
     if initial["status"] == "network_error":
         raise SystemExit("Public organization query failed at network level")
