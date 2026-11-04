@@ -110,7 +110,7 @@ def main():
                     page_text = folder / "text.txt"
                     native = folder / "native.txt"
                     subprocess.run(["pdftotext", "-layout", str(pdf), str(native)], check=True, timeout=60)
-                    native_pages = native.read_text(encoding="utf-8", errors="replace").split("\\f")
+                    native_pages = native.read_text(encoding="utf-8", errors="replace").split("\f")
                     # Mixed text/scanned PDFs can contain a cover-page text layer
                     # while all operative articles remain images. OCR every
                     # image-only page, even if the PDF has some native text.
@@ -121,7 +121,7 @@ def main():
                     subprocess.run(["pdftotext", "-layout", str(folder / "ocr.pdf"), str(page_text)],
                                    check=True, timeout=60)
                     extracted = page_text.read_text(encoding="utf-8", errors="replace")
-                    effective_pages = [p for p in extracted.split("\\f") if p.strip()]
+                    effective_pages = [p for p in extracted.split("\f") if p.strip()]
                     record["text_characters"] = str(len(extracted.strip()))
                     record["native_characters"] = str(len(native.read_text(encoding="utf-8", errors="replace").strip()))
                     record["article_hits"] = ""
@@ -132,7 +132,7 @@ def main():
                         rows.append(record)
                         print(agency, resolution, record["status"], flush=True)
                         continue
-                    record["pages"] = str(extracted.count("\f") or 1)
+                    record["pages"] = str(len(effective_pages))
                     hits = []
                     for page, text in enumerate(extracted.split("\f"), 1):
                         if re.search(r"ART[IÍ]CULO\s+(?:PRIMERO|SEGUNDO|TERCERO|CUARTO|QUINTO|SEXTO|\d+)", text, re.I):
