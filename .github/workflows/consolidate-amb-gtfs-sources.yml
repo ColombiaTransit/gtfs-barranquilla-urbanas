@@ -7,6 +7,7 @@ name: Consolidate AMB GTFS sources
       - scripts/consolidate_amb_gtfs_sources.py
       - scripts/select_amb_gtfs_first_seven.py
       - scripts/build_full_siu_gtfs_crosswalk.py
+      - scripts/audit_siu_route_names_and_families.py
       - sources/siu/public_extract/siu_itineraries.csv
       - sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv
       - gtfs/routes.txt
@@ -43,6 +44,14 @@ jobs:
         with:
           name: SIU-GTFS-full-crosswalk-QA
           path: build/siu-gtfs-crosswalk/
+          if-no-files-found: error
+      - name: Audit SIU route names and base UUID families
+        run: python scripts/audit_siu_route_names_and_families.py --out build/siu-gtfs-name-audit
+      - name: Upload SIU name and family audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: SIU-route-names-and-families-QA
+          path: build/siu-gtfs-name-audit/
           if-no-files-found: error
       - name: Upload route source consolidation and summary
         uses: actions/upload-artifact@v4
