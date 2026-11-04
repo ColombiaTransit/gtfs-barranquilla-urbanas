@@ -63,12 +63,14 @@ async def main():
             # Inspect each public Material UI listbox and its options before choosing.
             # A menu inspection is not evidence that an itinerary was selected.
             selects = page.locator('[role="button"][aria-haspopup="listbox"]')
+            ui.append({"stage": "select_inventory", "controls": await selects.evaluate_all(
+                """els => els.slice(0, 12).map((e,i) => ({index:i, text:(e.innerText||'').trim().slice(0,90), visible:!!(e.offsetWidth||e.offsetHeight||e.getClientRects().length), disabled:e.getAttribute('aria-disabled'), outer_tag:e.tagName.toLowerCase()}))""")})
             for index in range(min(await selects.count(), 8)):
                 item = selects.nth(index)
                 try:
                     if not await item.is_visible():
                         continue
-                    await item.click(timeout=3000)
+                    await item.click(timeout=1800)
                     await page.wait_for_timeout(350)
                     options = page.locator('[role="option"]')
                     labels = await options.all_text_contents()
@@ -89,7 +91,7 @@ async def main():
                     item = selects.nth(index)
                     if not await item.is_visible():
                         continue
-                    await item.click(timeout=3000)
+                    await item.click(timeout=1800)
                     options = page.locator('[role="option"]')
                     match = options.filter(has_text=re.compile(re.escape(ROUTE), re.I))
                     if await match.count():
