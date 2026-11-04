@@ -47,6 +47,8 @@ jobs:
         env:
           GRAPHHOPPER_URL: ${{ secrets.GRAPHHOPPER_URL }}
           GRAPHHOPPER_PROFILE: ${{ vars.GRAPHHOPPER_PROFILE || 'bus' }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: |
           python scripts/build_coolitoral_256_reference_loops.py \
             --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json \
