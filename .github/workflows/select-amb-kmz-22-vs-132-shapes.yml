@@ -218,6 +218,10 @@ jobs:
             for file in per_section_22_vs_132_road_fidelity.csv per_route_22_vs_132_quality.csv selection_summary.json MobilityData_final_comparison.json GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson GH_full_route_bus_segment_alignment.csv; do
               cp "build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/$file" "sources/amb/KMZ_22_vs_132_selected_QA/$file"
             done
+            # Archive the validated final research shapes.txt as a standalone
+            # source artifact: NOT /gtfs/shapes.txt and no fictional stop_times.
+            cp build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE/gtfs_demo/shapes.txt \
+               sources/amb/KMZ_22_vs_132_selected_QA/shapes_RESEARCH_ONLY_NOT_FOR_PUBLICATION.txt
             git add sources/amb/KMZ_22_vs_132_selected_QA/
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "data: select MobilityData-safe KMZ road shapes using per-section 22-vs-132 fidelity audit"
