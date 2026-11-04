@@ -1,8 +1,8 @@
 {
   "routes_in_routes_txt": 97,
-  "routes_ready_to_stage": 62,
-  "routes_held_for_review": 35,
-  "staged_weekday_periods": 243,
+  "routes_ready_to_stage": 70,
+  "routes_held_for_review": 27,
+  "staged_weekday_periods": 273,
   "source_records_considered": 133,
   "blocker_counts": {
     "missing_headway_source": 7,
@@ -10,7 +10,7 @@
     "historic_last_dispatch_invalid": 5,
     "official_interval_missing": 3,
     "conflicting_official_extractions": 2,
-    "legal_effective_period_and_operational_activation_unverified": 12,
+    "pilot_SIU_to_legal_AB_mapping_unresolved": 4,
     "permanent_backup_pending_pilot_expiry_check": 1,
     "pilot_A_B_not_in_routes_txt": 1
   }
