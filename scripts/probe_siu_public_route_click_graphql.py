@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 from playwright.async_api import async_playwright
+from extract_siu_public_itinerary_stops import unpack
 
 PAGE = "https://siu.ambq.gov.co/siu/schedule-mng/schedules"
 ENDPOINT = "/api/pis-gateway/graphql/http"
@@ -74,30 +75,28 @@ async def main():
                 try:
                     body = await response.json()
                     if event["operation_name"] == "ServiceMngCompressedItineraryListing":
-                        def collect_labels(value, depth=0):
-                            if depth > 7 or len(listing_labels) >= 30:
-                                return
-                            if isinstance(value, dict):
-                                for k, v in value.items():
-                                    if k.lower() in ("routecode", "routename", "shortname", "itineraryname", "description", "code", "label") and isinstance(v, str) and 2 <= len(v) <= 75:
-                                        if v not in listing_labels:
-                                            listing_labels.append(v)
-                                    elif isinstance(v, (dict, list)):
-                                        collect_labels(v, depth + 1)
-                            elif isinstance(value, list):
-                                for v in value[:100]:
-                                    collect_labels(v, depth + 1)
-                        collect_labels(body)
+                        record = (body.get("data") or {}).get("ServiceMngCompressedItineraryListing") if isinstance(body, dict) else None
+                        if isinstance(record, dict) and isinstance(record.get("compressedModsBase64"), str):
+                            itineraries, _, _ = unpack(record)
+                            for item in itineraries:
+                                if not isinstance(item, dict):
+                                    continue
+                                label = item.get("n")
+                                if isinstance(label, str) and 2 <= len(label) <= 75 and label not in listing_labels:
+                                    listing_labels.append(label)
+                            event["decoded_itinerary_count"] = len(itineraries)
+                            event["decoded_route_labels_count"] = len(listing_labels)
                     fields = sorted(set(names_only(body)))
                     event["response_field_names"] = fields[:100]
                     event["relevant_field_names"] = [x for x in fields if RELEVANT.search(x)][:60]
-                except Exception:
-                    event["response_parse"] = "not_json_or_unreadable"
+                except Exception as exc:
+                    event["response_parse"] = "decode_or_parse_failed"
+                    event["parse_error_type"] = type(exc).__name__
             events.append(event)
         page.on("response", lambda r: pending.append(asyncio.create_task(capture(r))))
         try:
             await page.goto(PAGE, wait_until="domcontentloaded", timeout=60000)
-            await page.wait_for_timeout(9000)
+            await page.wait_for_timeout(10000)
             state["phase"] = "route_click"
             # User confirms the vehicle display appears after clicking a route.
             # Prefer visible route cards; do not click login, maps, or vehicle buttons.
@@ -162,6 +161,7 @@ async def main():
         "clicked": state["clicked"], "click_target": state["click_target"],
         "route_cards_seen": state["route_cards_seen"],
         "graphql_listing_candidate_count": len(listing_labels),
+        "decoded_itinerary_count": max((e.get("decoded_itinerary_count", 0) for e in events), default=0),
         "initial_graphql_responses": len(initial),
         "after_click_graphql_responses": len(after),
         "new_operation_or_schema_responses": len(new),
