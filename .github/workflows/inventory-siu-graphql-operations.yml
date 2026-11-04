@@ -1,0 +1,30 @@
+name: Inventory SIU GraphQL operations from JavaScript bundles
+'on':
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/inventory-siu-graphql-operations.yml
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Extract GraphQL operations from public bundles
+        run: python scripts/inventory_siu_graphql_operations.py
+      - name: Publish summary
+        if: always()
+        run: |
+          if [ -f build/siu-graphql-operations/report.md ]; then
+            cat build/siu-graphql-operations/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siu-graphql-operation-inventory
+          path: build/siu-graphql-operations/
+          retention-days: 30
