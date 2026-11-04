@@ -8,6 +8,7 @@ name: Consolidate AMB GTFS sources
       - scripts/select_amb_gtfs_first_seven.py
       - scripts/build_full_siu_gtfs_crosswalk.py
       - scripts/audit_siu_route_names_and_families.py
+      - scripts/validate_siu_family_stops_against_shapes.py
       - sources/siu/public_extract/siu_itineraries.csv
       - sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv
       - gtfs/routes.txt
@@ -52,6 +53,14 @@ jobs:
         with:
           name: SIU-route-names-and-families-QA
           path: build/siu-gtfs-name-audit/
+          if-no-files-found: error
+      - name: Validate SIU family stops against available geometry proxy
+        run: python scripts/validate_siu_family_stops_against_shapes.py --out build/siu-family-shape-validation
+      - name: Upload SIU family stop-to-shape spatial QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: SIU-family-stop-to-shape-QA
+          path: build/siu-family-shape-validation/
           if-no-files-found: error
       - name: Upload route source consolidation and summary
         uses: actions/upload-artifact@v4
