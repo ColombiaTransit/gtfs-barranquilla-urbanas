@@ -141,6 +141,15 @@ def build_sources():
         push(data,agency,code,res,peak,off,
             "docs/amb_bedrijven/"+agency.lower()+"_route_frequencies_2026-11-02.md",
             "per_itinerary",variant,"Original route table "+ref)
+    # LA CAROLINA A16-4161: Resolucion 199-2019 gives combined
+    # route headways 3.5 min peak and 5 min offpeak. Model an even
+    # alternating A/B split, not independently authorized intervals.
+    for variant in ("A","B"):
+        push(data,"LA_CAROLINA","A16-4161","199-2019",7,10,
+             "sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv",
+             "per_itinerary",variant,
+             "50/50 split of 199-2019 route-wide 3.5/5-minute headways; not a verified per-variant timetable",
+             "model_assumption_50_50_split")
     # B15-4129: 458-2010 p7 existing OCR: peak 4 minutes,
     # offpeak '5 mido' (OCR typo; digit 5 legible). This is a historical
     # route-wide headway, split evenly across A/B for research GTFS.
