@@ -5,6 +5,7 @@ name: Consolidate AMB GTFS sources
   push:
     paths:
       - scripts/consolidate_amb_gtfs_sources.py
+      - scripts/select_amb_gtfs_first_seven.py
       - gtfs/routes.txt
       - sources/amb/gtfs_staging/route_headway_candidates.csv
       - sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv
@@ -26,6 +27,10 @@ jobs:
         run: |
           python -m py_compile scripts/consolidate_amb_gtfs_sources.py
           python scripts/consolidate_amb_gtfs_sources.py --out build/gtfs-source-consolidation
+      - name: Select first seven GTFS patterns for review
+        run: python scripts/select_amb_gtfs_first_seven.py --input build/gtfs-source-consolidation/route_source_consolidation.csv --out build/gtfs-source-consolidation
+      - name: Publish shortlist summary
+        run: cat build/gtfs-source-consolidation/first_seven_summary.md >> "$GITHUB_STEP_SUMMARY"
       - name: Upload route source consolidation and summary
         uses: actions/upload-artifact@v4
         with:
