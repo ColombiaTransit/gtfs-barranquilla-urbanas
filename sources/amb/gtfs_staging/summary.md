@@ -1,9 +1,9 @@
 # AMB GTFS headway staging — preliminary, NOT a GTFS ZIP
 
 - routes_in_routes_txt: **97**
-- routes_ready_to_stage: **56**
-- routes_held_for_review: **41**
-- staged_weekday_periods: **219**
+- routes_ready_to_stage: **45**
+- routes_held_for_review: **52**
+- staged_weekday_periods: **175**
 - source_records_considered: **125**
 
 ## Reasons routes were held
@@ -16,6 +16,7 @@
 - official_interval_missing: 3
 - permanent_backup_pending_pilot_expiry_check: 1
 - pilot_A_B_not_in_routes_txt: 1
+- route_variant_scope_and_legal_effect_unverified: 16
 - variant_headway_not_documented: 8
 
 No stops.txt, trips.txt, stop_times.txt or route geometry was invented.
