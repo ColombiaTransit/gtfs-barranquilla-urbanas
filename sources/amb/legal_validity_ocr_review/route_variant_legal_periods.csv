@@ -17,5 +17,5 @@ COOTRAB,C6-4137,unspecified,358-2024,378-2023,,,8,10,whole_route_unverified,date
 LA_CAROLINA,A16-4161,unspecified,199-2019,204-2012,,,3.5,5,whole_route_unverified,AB_allocation_unverified,Do not duplicate frequency over A/B
 COOLITORAL,PT2-4102,A,210-2026,192-2025,,,10,12,per_variant,article_verified_effective_date_unverified,Article 1; combined corridor 5/6 is not a separate service
 COOLITORAL,PT2-4102,B,210-2026,192-2025,,,10,12,per_variant,article_verified_effective_date_unverified,Article 1; combined corridor 5/6 is not a separate service
-COOLITORAL,PT3-4103,A,210-2026,192-2025,,,10.5,13,per_variant,article_verified_ocr_table_review,Article 1; verify OCR-distorted PT3 table against scan; corridor 5.5/6.5 not a service
-COOLITORAL,PT3-4103,B,210-2026,192-2025,,,10.5,13,per_variant,article_verified_ocr_table_review,Article 1; verify OCR-distorted PT3 table against scan; corridor 5.5/6.5 not a service
+COOLITORAL,PT3-4103,A,210-2026,192-2025,,,10.5,13,per_variant,article_verified_effective_date_unverified,Article 1; PT3 table visually verified PDF p7; corridor 5.5/6.5 not a service
+COOLITORAL,PT3-4103,B,210-2026,192-2025,,,10.5,13,per_variant,article_verified_effective_date_unverified,Article 1; PT3 table visually verified PDF p7; corridor 5.5/6.5 not a service
