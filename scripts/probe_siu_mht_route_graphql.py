@@ -60,6 +60,47 @@ async def main():
             ui.append({"stage": "initial", "route_titles": await page.locator(".l-card__inner .title").count(),
                        "stop_cards": await page.locator(".stops-card").count(),
                        "mui_selects": await page.locator('[role="button"][aria-haspopup="listbox"]').count()})
+            # Inspect each public Material UI listbox and its options before choosing.
+            # A menu inspection is not evidence that an itinerary was selected.
+            selects = page.locator('[role="button"][aria-haspopup="listbox"]')
+            for index in range(min(await selects.count(), 8)):
+                item = selects.nth(index)
+                try:
+                    if not await item.is_visible():
+                        continue
+                    await item.click(timeout=3000)
+                    await page.wait_for_timeout(350)
+                    options = page.locator('[role="option"]')
+                    labels = await options.all_text_contents()
+                    labels = [" ".join(x.split())[:90] for x in labels[:60]]
+                    ui.append({"stage": "select_inspect", "index": index,
+                               "option_count": await options.count(),
+                               "option_labels": labels,
+                               "route_match": [x for x in labels if ROUTE.casefold() in x.casefold()]})
+                    await page.keyboard.press("Escape")
+                except Exception as exc:
+                    ui.append({"stage": "select_inspect", "index": index, "error_type": type(exc).__name__})
+                    await page.keyboard.press("Escape")
+            # Select only an exact public route match; never guess organization filters.
+            for index in range(min(await selects.count(), 8)):
+                if any(x.get("stage") == "route_select" and x.get("outcome") == "selected_mui_option" for x in ui):
+                    break
+                try:
+                    item = selects.nth(index)
+                    if not await item.is_visible():
+                        continue
+                    await item.click(timeout=3000)
+                    options = page.locator('[role="option"]')
+                    match = options.filter(has_text=re.compile(re.escape(ROUTE), re.I))
+                    if await match.count():
+                        await match.first.click(timeout=3000)
+                        ui.append({"stage": "route_select", "outcome": "selected_mui_option", "index": index})
+                        await page.wait_for_timeout(2500)
+                        break
+                    await page.keyboard.press("Escape")
+                except Exception as exc:
+                    ui.append({"stage": "select_attempt", "index": index, "error_type": type(exc).__name__})
+                    await page.keyboard.press("Escape")
             phase["value"] = "route_select"
             # The user-supplied MHT identifies the route title and rendered stop card.
             title = page.locator(".l-card__inner .title").filter(has_text=ROUTE)
