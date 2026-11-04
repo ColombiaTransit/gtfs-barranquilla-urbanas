@@ -234,9 +234,9 @@ def run(output):
             if source["status"]=="pilot_256_primary_pdf_verified_pattern_link_pending":
                 blockers.append("pilot_SIU_to_legal_AB_mapping_unresolved")
         if source and source["scope"] in ("shared_corridor_effective_not_per_itinerary","effective_combined_section"):
-            raise ValueError("Combined corridor interval must never generate trips: "+gid)
+            blockers.append("combined_corridor_not_per_itinerary")
         if source and source["variant"] and source["variant"]!=variant:
-            raise ValueError("A/B itinerary mismatch: "+gid)
+            blockers.append("itinerary_mismatch")
         if source and source["status"]=="legal_period_checked_staging_only":
             blockers.append("legal_effective_period_and_operational_activation_unverified")
         if not window:blockers.append(wstatus)
