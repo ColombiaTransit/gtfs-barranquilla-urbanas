@@ -1,0 +1,39 @@
+name: Audit static GTFS for SIU TripUpdates
+'on':
+  workflow_dispatch:
+    inputs:
+      gtfs_zip:
+        description: 'Path to an existing GTFS zip in the repository (e.g. build/gtfs.zip)'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify requested static GTFS exists
+        env:
+          GTFS_ZIP: ${{ inputs.gtfs_zip }}
+        run: |
+          test -f "$GTFS_ZIP" || { echo "GTFS zip not found: $GTFS_ZIP"; exit 1; }
+      - name: Audit static feed and build unresolved SIU matching register
+        env:
+          GTFS_ZIP: ${{ inputs.gtfs_zip }}
+        run: python scripts/audit_gtfs_tripupdates_readiness.py --gtfs "$GTFS_ZIP"
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f build/gtfs-tripupdates-readiness/report.md ]; then
+            cat build/gtfs-tripupdates-readiness/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gtfs-tripupdates-readiness
+          path: build/gtfs-tripupdates-readiness/
+          retention-days: 45
