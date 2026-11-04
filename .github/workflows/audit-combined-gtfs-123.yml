@@ -1,0 +1,37 @@
+name: Audit combined GTFS route geometry stops and frequencies
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/audit_combined_gtfs_123.py
+      - .github/workflows/audit-combined-gtfs-123.yml
+      - gtfs/routes.txt
+      - sources/amb/legal_validity_ocr_review/coochofal_242_route_code_aliases.csv
+      - sources/amb/gtfs_staging/route_headway_candidates.csv
+      - sources/amb/arcgis_shape_staging/route_shape_matches.csv
+      - sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit crosswalk of canonical route codes GIS SIU and headways
+        run: python scripts/audit_combined_gtfs_123.py
+      - name: Report
+        if: always()
+        run: |
+          if [ -f build/combined-gtfs-123/summary.md ]; then
+            cat build/combined-gtfs-123/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: combined-gtfs-123-route-audit
+          path: build/combined-gtfs-123/
+          retention-days: 45
