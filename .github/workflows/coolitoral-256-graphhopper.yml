@@ -45,11 +45,12 @@ jobs:
             --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
       - name: Build provisional KMZ-anchored GraphHopper loops
         env:
-          GRAPHHOPPER_URL: ${{ secrets.GRAPHHOPPER_URL }}
+          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
           GRAPHHOPPER_PROFILE: ${{ vars.GRAPHHOPPER_PROFILE || 'bus' }}
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
           CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: |
+          echo "::add-mask::$GRAPHHOPPER_URL"
           python scripts/build_coolitoral_256_reference_loops.py \
             --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json \
             --witness sources/amb/kmz/coolitoral_256_ordered_network.json
@@ -75,9 +76,10 @@ jobs:
       - name: Optional GraphHopper candidate routing (reviewed only)
         if: ${{ inputs.route_approved }}
         env:
-          GRAPHHOPPER_URL: ${{ secrets.GRAPHHOPPER_URL }}
+          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
           ROUTE: ${{ inputs.route }}
         run: |
+          echo "::add-mask::$GRAPHHOPPER_URL"
           python scripts/route_coolitoral_256_graphhopper.py \
             --manifest sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json \
             --route "$ROUTE" --approved
