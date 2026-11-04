@@ -56,7 +56,7 @@ def fetch(url):
 def match_resolution(label, resolution):
     number, year = resolution.split("-")
     shortyear = year[-2:]
-    return bool(re.search(r"(?<!\\d)0*"+str(int(number))+r"\\s*[-–/]\\s*(?:"+year+"|"+shortyear+r")(?!\\d)", label, re.I))
+    return bool(re.search(r"(?<!\d)0*"+str(int(number))+r"\s*[-–/]\s*(?:"+year+"|"+shortyear+r")(?!\d)", label, re.I))
 
 def main():
     parser = argparse.ArgumentParser()
@@ -103,10 +103,10 @@ def main():
                         subprocess.run(["pdftotext", "-layout", str(folder / "ocr.pdf"), str(page_text)],
                                        check=True, timeout=60)
                         extracted = page_text.read_text(encoding="utf-8", errors="replace")
-                    record["pages"] = str(extracted.count("\\f") or 1)
+                    record["pages"] = str(extracted.count("\f") or 1)
                     hits = []
-                    for page, text in enumerate(extracted.split("\\f"), 1):
-                        if re.search(r"ART[IÍ]CULO\\s+(?:PRIMERO|SEGUNDO|TERCERO|CUARTO|QUINTO|SEXTO|\\d+)", text, re.I):
+                    for page, text in enumerate(extracted.split("\f"), 1):
+                        if re.search(r"ART[IÍ]CULO\s+(?:PRIMERO|SEGUNDO|TERCERO|CUARTO|QUINTO|SEXTO|\d+)", text, re.I):
                             hits.append(page)
                     record["article_hits"] = ";".join(map(str, hits))
                     record["status"] = "ocr_staged_review_pending"
