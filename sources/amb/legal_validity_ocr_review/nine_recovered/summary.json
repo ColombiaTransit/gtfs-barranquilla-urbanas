@@ -7,7 +7,5 @@
   "review_images": 72,
   "legal_validity_approved": false,
   "gtfs_release_approved": false,
-  "still_missing_original": [
-    "ALL_OPERATORS 448-2025"
-  ]
+  "still_missing_original": []
 }

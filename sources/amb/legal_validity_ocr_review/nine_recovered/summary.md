@@ -15,4 +15,4 @@ Technische extractie, **geen juridische goedkeuring**.
 | COOTRANTICO | 025-2011 | extracted_requires_review | 17 | 17 | 8 |
 
 Controleer de oorspronkelijke artikelen en eventuele latere wijzigingen voordat GTFS-waarden worden vrijgegeven.
-448-2025 heeft nog geen geverifieerde bron-URL.
+Geen aanvullende resolutie zonder geverifieerde bron opgenomen.
