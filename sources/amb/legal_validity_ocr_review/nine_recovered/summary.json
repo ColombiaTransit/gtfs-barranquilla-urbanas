@@ -1,0 +1,13 @@
+{
+  "targeted": 9,
+  "extracted": 9,
+  "failed": 0,
+  "pages": 121,
+  "ocr_pages": 121,
+  "review_images": 72,
+  "legal_validity_approved": false,
+  "gtfs_release_approved": false,
+  "still_missing_original": [
+    "ALL_OPERATORS 448-2025"
+  ]
+}
