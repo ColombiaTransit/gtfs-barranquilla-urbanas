@@ -35,6 +35,50 @@ jobs:
         run: |
           python scripts/collect_amb_resolution_ocr_visual_evidence.py \
             --max-review-images 8
+      - name: Extract MONTERREY 437-2016 original PDF and Spanish OCR
+        run: |
+          python scripts/extract_amb_pdfs.py \
+            --agency MONTERREY --resolution 437-2016 \
+            --out build/amb-monterrey-437-2016
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import subprocess
+          root=Path("build/amb-monterrey-437-2016")
+          reports=json.loads((root/"report.json").read_text(encoding="utf-8"))
+          matches=[r for r in reports if r.get("agency")=="MONTERREY" and r.get("resolution")=="437-2016"]
+          if len(matches)!=1 or matches[0].get("status")!="extracted_requires_review":
+              raise SystemExit("MONTERREY 437-2016 extraction unsuccessful")
+          rec=matches[0]
+          doc=root/"monterrey_437-2016"
+          if not (doc/"source.pdf").exists() or not rec.get("pages"):
+              raise SystemExit("Original PDF or OCR page text missing")
+          images=root/"original_page_images"
+          images.mkdir(exist_ok=True)
+          for page in rec["pages"]:
+              n=int(page["page"])
+              prefix=images/f"page_{n:03d}"
+              subprocess.run(["pdftoppm","-f",str(n),"-l",str(n),
+                              "-r","135","-singlefile","-jpeg",
+                              "-jpegopt","quality=75",str(doc/"source.pdf"),str(prefix)],
+                             check=True,timeout=120)
+              if not prefix.with_suffix(".jpg").exists():
+                  raise SystemExit(f"Missing original image page {n}")
+          summary={"agency":"MONTERREY","resolution":"437-2016",
+                   "source_url":rec["url"],"sha256":rec["sha256"],
+                   "pages":len(rec["pages"]),
+                   "ocr_pages":sum(p["method"]=="ocr" for p in rec["pages"]),
+                   "original_images":len(list(images.glob("*.jpg"))),
+                   "legal_conclusions_verified":False,
+                   "note":"OCR and original images for manual article and route-table review; existing GTFS unchanged"}
+          (root/"monterrey_437_2016_summary.json").write_text(
+              json.dumps(summary,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print(json.dumps({k:v for k,v in summary.items() if k!="source_url"},ensure_ascii=False))
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f:
+              f.write("\n## MONTERREY 437-2016 — originele PDF en OCR\n\n")
+              f.write(f"- Pagina's: {summary['pages']}; OCR: {summary['ocr_pages']}; originele controlebeelden: {summary['original_images']}\n")
+              f.write("- Originele PDF, OCR-tekst en alle paginabeelden in de workflow-artifact. Geen automatische juridische goedkeuring.\n")
+          PY
       - name: Publish review progress with no legal claims inferred by OCR
         if: always()
         run: |
@@ -72,9 +116,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: AMB-legal-validity-and-six-OCR-source-PDF-visual-review-NOT-APPROVED
+          name: AMB-legal-OCR-six-plus-MONTERREY-437-2016-NOT-APPROVED
           path: |
             build/amb-legal-ocr-priority/
             build/amb-ocr-image-evidence/
+            build/amb-monterrey-437-2016/
           if-no-files-found: warn
           retention-days: 60
