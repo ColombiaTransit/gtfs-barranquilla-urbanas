@@ -201,8 +201,8 @@ def build_sources():
         code=aliases.get(row["route_code"],row["route_code"])
         push(data,row["agency"],code,row["resolution"],
             row["peak_min"],row["offpeak_min"],legal_source,
-            "route",note="Visually reviewed legal headway; whole-route/variant scope and legal effect remain unverified",
-            status="legal_table_reviewed_scope_pending")
+            "route",note="Official route-wide headway; 242/462 presumed current authorization for provisional GTFS staging (not proof of finality or actual operation)",
+            status="presumed_current_authorization")
     return data
 
 def find(records,agency,base,variant):
