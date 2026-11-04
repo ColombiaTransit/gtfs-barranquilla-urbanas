@@ -3,6 +3,7 @@
 
 No API requests, credentials, cookies or raw bundles are archived.
 """
+import asyncio
 import hashlib
 import html.parser
 import json
@@ -14,7 +15,7 @@ from pathlib import Path
 
 PAGE = "https://siu.ambq.gov.co/siu/schedule-mng/schedules"
 OUT = Path("build/siu-javascript-research")
-MAX_BUNDLES = 30
+MAX_BUNDLES = 120
 MAX_BYTES = 12_000_000
 TERMS = re.compile(r"ServiceMngCompressedItineraryListing|OrganizationMngOrganizationWithoutAuthListing|graphql|itinerary|routeId|orgId|schedule|departure|frequency|arrival|vehicle", re.I)
 OPERATIONS = re.compile(r"\b(?:query|mutation|subscription)\s+([A-Za-z][A-Za-z0-9_]{2,90})\b")
@@ -39,6 +40,21 @@ def get(url, limit):
             raise ValueError("download_size_limit")
         return content
 
+async def browser_scripts():
+    from playwright.async_api import async_playwright
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True, args=["--no-sandbox"])
+        page = await browser.new_page()
+        observed = set()
+        page.on("response", lambda response: observed.add(response.url) if ".js" in urllib.parse.urlsplit(response.url).path else None)
+        try:
+            await page.goto(PAGE, wait_until="domcontentloaded", timeout=60000)
+            await page.wait_for_timeout(10000)
+            observed.update(await page.eval_on_selector_all("script[src]", "(els) => els.map(x => x.src)"))
+        finally:
+            await browser.close()
+        return sorted(observed)
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     page = get(PAGE, 2_000_000).decode("utf-8", "replace")
@@ -51,13 +67,28 @@ def main():
         parsed = urllib.parse.urlsplit(url)
         if parsed.scheme == "https" and parsed.netloc == origin.netloc and url not in urls:
             urls.append(url)
+    browser_error = None
+    try:
+        discovered = asyncio.run(browser_scripts())
+        urls.extend(u for u in discovered if u not in urls and urllib.parse.urlsplit(u).netloc == origin.netloc and urllib.parse.urlsplit(u).scheme == "https")
+    except Exception as exc:
+        browser_error = type(exc).__name__
     findings = []
     errors = []
     operation_names = set()
-    for url in urls[:MAX_BUNDLES]:
+    cursor = 0
+    while cursor < len(urls) and cursor < MAX_BUNDLES:
+        url = urls[cursor]
+        cursor += 1
         try:
             payload = get(url, MAX_BYTES)
             content = payload.decode("utf-8", "replace")
+            # Discover literal JS chunk references from webpack/runtime code.
+            for chunk in re.findall(r'["\x27]([^"\x27]{1,160}\.js(?:\?[^"\x27]{0,80})?)["\x27]', content):
+                candidate = urllib.parse.urljoin(url, chunk)
+                parsed = urllib.parse.urlsplit(candidate)
+                if parsed.scheme == "https" and parsed.netloc == origin.netloc and candidate not in urls:
+                    urls.append(candidate)
             names = sorted(set(OPERATIONS.findall(content)) | set(GRAPHQL_NAMES.findall(content)))
             operation_names.update(names)
             hits = []
@@ -76,6 +107,8 @@ def main():
         "operation_candidates": sorted(operation_names),
         "bundles": findings,
         "errors": errors,
+        "browser_discovery_error": browser_error,
+        "script_limit": MAX_BUNDLES,
         "limitations": "Minified bundles may use persisted queries, dynamically loaded chunks or encoded strings; names are candidates, not confirmed callable operations.",
     }
     (OUT / "report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
