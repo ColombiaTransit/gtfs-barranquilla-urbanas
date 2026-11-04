@@ -1,0 +1,40 @@
+name: COOLITORAL 256 GraphHopper waypoint preparation
+on:
+  workflow_dispatch:
+    inputs:
+      route:
+        description: "Route for optional GraphHopper routing"
+        type: choice
+        options: [PT4-4104-A, PT4-4104-B, PT5-4105-A, PT5-4105-B]
+        default: PT4-4104-B
+      route_approved:
+        description: "I reviewed every candidate junction and its sequence (required for GraphHopper)"
+        type: boolean
+        default: false
+jobs:
+  candidates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Derive all legal A/B junction candidates from uploaded OSM JSON
+        run: |
+          python scripts/prepare_coolitoral_256_graphhopper.py \
+            --overpass sources/osm/overpass/coolitoral_pt4_pt5_20261104.json
+      - name: Optional GraphHopper candidate routing (reviewed only)
+        if: ${{ inputs.route_approved }}
+        env:
+          GRAPHHOPPER_API_KEY: ${{ secrets.GRAPHHOPPER_API_KEY }}
+          ROUTE: ${{ inputs.route }}
+        run: |
+          python scripts/route_coolitoral_256_graphhopper.py \
+            --manifest sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json \
+            --route "$ROUTE" --approved
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coolitoral-256-waypoint-candidates
+          path: |
+            sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json
+            sources/amb/kmz/graphhopper_candidates/*.geojson
