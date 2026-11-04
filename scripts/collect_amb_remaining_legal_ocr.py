@@ -82,6 +82,14 @@ def main():
                       "pages": "", "article_hits": "", "error": index_error}
             matches = [(label, urljoin(index, href)) for label, href in links
                        if match_resolution(label+" "+href, resolution)]
+            # Some AMB pages use link labels without the numeric resolution.
+            # Persist the full anchor inventory to diagnose missing matches.
+            inventory = out / "link_inventories"
+            inventory.mkdir(parents=True, exist_ok=True)
+            (inventory / (agency + ".json")).write_text(
+                json.dumps([{"label": label, "url": urljoin(index, href)}
+                            for label, href in links], ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8")
             if matches:
                 record["source_url"] = matches[0][1]
                 try:
