@@ -141,6 +141,16 @@ def build_sources():
         push(data,agency,code,res,peak,off,
             "docs/amb_bedrijven/"+agency.lower()+"_route_frequencies_2026-11-02.md",
             "per_itinerary",variant,"Original route table "+ref)
+    # SOBUSA C16-4167 A/B is already recorded in the legal period register.
+    # This source has an explicit per-variant scope (not a combined corridor).
+    for row in load(BASE/"legal_validity_ocr_review/route_variant_legal_periods.csv"):
+        if row["agency"]=="SOBUSA" and row["route"]=="C16-4167" and row["variant"] in ("A","B"):
+            push(data,"SOBUSA","C16-4167",row["source_resolution"],
+                 row["peak_headway_min"],row["offpeak_headway_min"],
+                 "sources/amb/legal_validity_ocr_review/route_variant_legal_periods.csv",
+                 "per_itinerary",row["variant"],
+                 "Previously researched per-variant resolution table; operational dates modelled",
+                 "legal_period_checked_staging_only")
     # COOTRANSCO 098-2026 pilot has A/B each 5/7 and common 2.5/3.5.
     # Permit says six months after 2026-03-02; on 2026-11-03 extension
     # has not been established, so do not silently use pilot or superseded
