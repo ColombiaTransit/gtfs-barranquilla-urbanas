@@ -1,0 +1,74 @@
+[
+  {
+    "siu_name": "CIRCUNVALAR VIA 40",
+    "legal_base": "PT4-4104",
+    "legal_variant": "A",
+    "score": null,
+    "matched": 0,
+    "total": 8,
+    "reason": "unknown_legal_street"
+  },
+  {
+    "siu_name": "CIRCUNVALAR VIA 40",
+    "legal_base": "PT4-4104",
+    "legal_variant": "B",
+    "score": null,
+    "matched": 0,
+    "total": 12,
+    "reason": "unknown_legal_street"
+  },
+  {
+    "siu_name": "CIRCUNVALAR VIA 40",
+    "legal_base": "PT5-4105",
+    "legal_variant": "A",
+    "score": null,
+    "matched": 0,
+    "total": 10,
+    "reason": "unknown_legal_street"
+  },
+  {
+    "siu_name": "CIRCUNVALAR VIA 40",
+    "legal_base": "PT5-4105",
+    "legal_variant": "B",
+    "score": null,
+    "matched": 0,
+    "total": 14,
+    "reason": "unknown_legal_street"
+  },
+  {
+    "siu_name": "VIA 40 CIRCUNVALAR",
+    "legal_base": "PT4-4104",
+    "legal_variant": "A",
+    "score": null,
+    "matched": 0,
+    "total": 8,
+    "reason": "unknown_legal_street"
+  },
+  {
+    "siu_name": "VIA 40 CIRCUNVALAR",
+    "legal_base": "PT4-4104",
+    "legal_variant": "B",
+    "score": null,
+    "matched": 0,
+    "total": 12,
+    "reason": "unknown_legal_street"
+  },
+  {
+    "siu_name": "VIA 40 CIRCUNVALAR",
+    "legal_base": "PT5-4105",
+    "legal_variant": "A",
+    "score": null,
+    "matched": 0,
+    "total": 10,
+    "reason": "unknown_legal_street"
+  },
+  {
+    "siu_name": "VIA 40 CIRCUNVALAR",
+    "legal_base": "PT5-4105",
+    "legal_variant": "B",
+    "score": null,
+    "matched": 0,
+    "total": 14,
+    "reason": "unknown_legal_street"
+  }
+]\n
