@@ -52,7 +52,7 @@ def main():
         "anchor_to_witness_min_distance_m":round(nearest,1),
         "waypoint_count":len(pts),"witness_length_m":w["distance_m"],
         "official_length_m":OFFICIAL[code],
-        "kmz_reference":KMZ[code],"kmz_legal_variant_verified":False,
+        "kmz_reference":KMZ[code[:3]],"kmz_legal_variant_verified":False,
         "warnings":["KMZ anchor is a reference, not verified route terminal",
                     "GraphHopper path may deviate from OSM witness and official street order",
                     "SIU stop order and turn restrictions have not been independently validated"]}
