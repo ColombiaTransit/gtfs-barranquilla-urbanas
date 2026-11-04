@@ -9,6 +9,7 @@ on:
   push:
     paths:
       - scripts/evaluate_amb_pilots.py
+      - tests/test_amb_pilot_expiry.py
       - sources/amb/legal_validity_ocr_review/amb_pilots.csv
       - .github/workflows/evaluate-amb-pilots.yml
 permissions:
@@ -21,6 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Run regression tests
+        run: python -m unittest discover -s tests -p 'test_amb_pilot_expiry.py' -v
       - name: Test pilot date boundaries
         run: |
           python scripts/evaluate_amb_pilots.py --date 2026-06-21 > /tmp/before.json
