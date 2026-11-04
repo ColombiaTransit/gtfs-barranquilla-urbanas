@@ -1,0 +1,65 @@
+name: OCR and visual review of nine recovered AMB resolutions
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/collect_amb_nine_resolution_ocr.py
+      - scripts/extract_amb_pdfs.py
+      - sources/amb/pdf_manifest.csv
+      - .github/workflows/ocr-nine-recovered-amb-resolutions.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-nine-resolution-ocr-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  nine-originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PDF tools and Spanish OCR
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils tesseract-ocr tesseract-ocr-spa
+      - name: Compile and run nine-resolution extraction
+        run: |
+          python -m py_compile scripts/collect_amb_nine_resolution_ocr.py scripts/extract_amb_pdfs.py
+          python scripts/collect_amb_nine_resolution_ocr.py
+      - name: Publish review summary
+        if: always()
+        run: |
+          if [ -f build/amb-nine-resolution-ocr/summary.md ]; then
+            cat build/amb-nine-resolution-ocr/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit review indexes only
+        if: github.ref == 'refs/heads/main'
+        run: |
+          test -s build/amb-nine-resolution-ocr/summary.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/legal_validity_ocr_review/nine_recovered
+            cp build/amb-nine-resolution-ocr/*.csv sources/amb/legal_validity_ocr_review/nine_recovered/
+            cp build/amb-nine-resolution-ocr/summary.json sources/amb/legal_validity_ocr_review/nine_recovered/
+            cp build/amb-nine-resolution-ocr/summary.md sources/amb/legal_validity_ocr_review/nine_recovered/
+            git add sources/amb/legal_validity_ocr_review/nine_recovered/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: index nine recovered AMB PDFs and OCR review evidence (not legally approved)"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Upload original PDFs, OCR texts, and page images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-nine-recovered-resolutions-OCR-NOT-LEGALLY-APPROVED
+          path: build/amb-nine-resolution-ocr/
+          if-no-files-found: warn
+          retention-days: 60
