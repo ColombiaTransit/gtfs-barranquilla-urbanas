@@ -1,0 +1,55 @@
+name: Evaluate AMB pilot validity
+on:
+  workflow_dispatch:
+    inputs:
+      service_date:
+        description: GTFS service date (YYYY-MM-DD); blank means UTC today
+        required: false
+        type: string
+  push:
+    paths:
+      - scripts/evaluate_amb_pilots.py
+      - sources/amb/legal_validity_ocr_review/amb_pilots.csv
+      - .github/workflows/evaluate-amb-pilots.yml
+permissions:
+  contents: read
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test pilot date boundaries
+        run: |
+          python scripts/evaluate_amb_pilots.py --date 2026-06-21 > /tmp/before.json
+          python scripts/evaluate_amb_pilots.py --date 2026-06-22 > /tmp/start.json
+          python scripts/evaluate_amb_pilots.py --date 2026-12-21 > /tmp/last.json
+          python scripts/evaluate_amb_pilots.py --date 2026-12-22 > /tmp/after.json
+          python - <<'PY'
+          import json
+          for path, expected in [
+              ('/tmp/before.json','scheduled'),
+              ('/tmp/start.json','active_under_recorded_period'),
+              ('/tmp/last.json','active_under_recorded_period'),
+              ('/tmp/after.json','ended_no_extension_found'),
+          ]:
+              row=json.load(open(path))['pilots'][0]
+              assert row['pilot_status']==expected, (path,row)
+              assert row['route_cancelled'] is False
+              assert row['legal_finalized'] is False
+          PY
+      - name: Evaluate requested date
+        env:
+          SERVICE_DATE: ${{ inputs.service_date }}
+        run: |
+          if [ -n "$SERVICE_DATE" ]; then
+            python scripts/evaluate_amb_pilots.py --date "$SERVICE_DATE" --output amb-pilot-status.json
+          else
+            python scripts/evaluate_amb_pilots.py --output amb-pilot-status.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: amb-pilot-status
+          path: amb-pilot-status.json
