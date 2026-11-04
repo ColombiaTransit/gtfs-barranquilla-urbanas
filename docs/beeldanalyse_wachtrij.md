@@ -1,5 +1,12 @@
 # Beeldanalyse — wachtrij (2026-11-02)
 
+## Uitvoering 4 november 2026
+
+Alle **6** originele PDF's uit deze wachtrij zijn via [Action 41786660704](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41786660704) opgehaald (61/61 pagina's Spaanse OCR, 48 originele controlegegevens als afbeeldingen). De resterende taken betreffen **inhoudelijke bronbeeld-/artikelverificatie**, niet meer het vinden of OCR'en van de bron-PDF.
+
+De eerste visuele beoordeling is vastgelegd in [broncontrole per besluit](amb_ocr_first_visual_verification_2026-11-04.md): LA CAROLINA 067-2011 heeft uitsluitend het traject A16 gewijzigd en verwijst voor technische parameters naar 173-2010; TRANSMECAR 324-2010 is een gefaseerde herstructurering, waarvoor het toenmalige AMB-uitvoeringsbericht nog niet is teruggevonden. Niet als bewezen actuele 2026-exploitatie gebruiken.
+
+
 Niet via automatische tekstextractie volledig verwerkt; handmatige inspectie van pagina-afbeeldingen vereist.
 
 | Prioriteit | Bedrijf | Resolutie | Route | Actie |
