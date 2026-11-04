@@ -1,0 +1,55 @@
+name: Inspect existing SODETRANS 458-2010 extraction
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/inspect-sodetrans-b15-extraction.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download previous SODETRANS PDF extraction (no new OCR)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p build/sodetrans-b15/source build/sodetrans-b15/report
+          gh api repos/${{ github.repository }}/actions/artifacts/13161071307/zip > build/sodetrans-b15/source.zip
+          unzip -q build/sodetrans-b15/source.zip -d build/sodetrans-b15/source
+          find build/sodetrans-b15/source -type f | sed 's#^#FILE #'
+      - name: Inspect only 458-2010 existing text
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          base=Path("build/sodetrans-b15")
+          files=list((base/"source").rglob("*"))
+          candidates=[p for p in files if p.is_file() and re.search(r"458|B15",str(p),re.I)]
+          lines=["# Existing SODETRANS 458-2010 text review","",f"Candidate files: {len(candidates)}",""]
+          for p in candidates:
+              lines.append("## "+str(p.relative_to(base/"source")))
+              if p.suffix.lower() not in (".txt",".md",".json",".csv",".tsv"):
+                  lines.append("Non-text source; no OCR performed.")
+                  continue
+              raw=p.read_text(encoding="utf-8",errors="replace")
+              arr=raw.splitlines()
+              hits=[i for i,x in enumerate(arr) if re.search(r"frecuencia|intervalo|despacho|hora pico|hora valle|minutos|B15.?4129",x,re.I)]
+              lines.append(f"Text lines: {len(arr)}; keyword hits: {len(hits)}")
+              for i in hits[:100]:
+                  lines.append(f"### Line {i+1}")
+                  lines.extend(f"{j+1}: {arr[j][:350]}" for j in range(max(0,i-2),min(len(arr),i+3)))
+          if not candidates:
+              lines.append("No file name containing 458 or B15 found; inspect artifact structure manually.")
+          (base/"report"/"review.md").write_text("\n".join(lines)+"\n",encoding="utf-8")
+          print("\n".join(lines)[:18000])
+          PY
+      - name: Summary
+        run: cat build/sodetrans-b15/report/review.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sodetrans-458-2010-existing-text-review
+          path: build/sodetrans-b15/report/
+          retention-days: 45
