@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - scripts/extract_siu_public_itinerary_stops.py
+      - scripts/probe_siu_public_route_click_graphql.py
       - .github/workflows/extract-siu-public-itinerary-stops.yml
   workflow_dispatch:
 permissions:
@@ -45,3 +46,22 @@ jobs:
           path: build/siu-gtfs-stops/
           if-no-files-found: warn
           retention-days: 45
+      - name: Probe anonymous public route-click GraphQL metadata
+        if: always()
+        run: |
+          python -m py_compile scripts/probe_siu_public_route_click_graphql.py
+          python scripts/probe_siu_public_route_click_graphql.py
+      - name: Summarize route-click observations
+        if: always()
+        run: |
+          if [ -f build/siu-route-click-graphql/summary.md ]; then
+            cat build/siu-route-click-graphql/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Archive route-click GraphQL metadata (no vehicle values)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-public-route-click-graphql-metadata
+          path: build/siu-route-click-graphql/
+          if-no-files-found: warn
+          retention-days: 30
