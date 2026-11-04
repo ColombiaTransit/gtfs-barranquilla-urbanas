@@ -23,7 +23,7 @@ TARGETS = {
     "EMBUSA": ("231-2025", "010-2026"),
     "COOTRAB": ("358-2024", "378-2023"),
     "COOCHOFAL": ("242-2025",),
-    "LA-CAROLINA": ("067-2011", "199-2019"),
+    "LA_CAROLINA": ("067-2011", "199-2019"),
     "TRASALIANCO": ("408-2013", "411-2010"),
     "TRANSMECAR": ("324-2010",),
 }
@@ -64,6 +64,9 @@ def main():
     args = parser.parse_args()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
+    manifest_path = Path("sources/amb/pdf_manifest.csv")
+    with manifest_path.open(encoding="utf-8-sig", newline="") as f:
+        manifest = list(csv.DictReader(f))
     rows = []
     for agency, resolutions in TARGETS.items():
         index = BASE.format(agency.lower())
@@ -90,6 +93,9 @@ def main():
                 json.dumps([{"label": label, "url": urljoin(index, href)}
                             for label, href in links], ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8")
+            exact = [m for m in manifest if m["agency"] == agency and m["resolution"] == resolution and m["url"].startswith("https://www.ambq.gov.co/")]
+            if exact:
+                matches = [("verified repository manifest", exact[0]["url"])] + matches
             if matches:
                 record["source_url"] = matches[0][1]
                 try:
@@ -135,6 +141,8 @@ def main():
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
     print(json.dumps({"total": summary["total"], "ocr_staged": summary["ocr_staged"],
                       "missing_or_failed_count": len(summary["missing_or_failed"])}, indent=2))
+    if summary["ocr_staged"] == 0:
+        raise SystemExit("No PDFs recovered; check manifest and official source URLs")
 
 if __name__ == "__main__":
     main()
