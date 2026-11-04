@@ -1,0 +1,33 @@
+name: Analyze SIU JavaScript and GraphQL
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect public SIU JavaScript bundles
+        run: python scripts/analyze_siu_public_javascript.py
+      - name: Show findings
+        if: always()
+        run: |
+          if [ -f build/siu-javascript-research/report.md ]; then
+            cat build/siu-javascript-research/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Archive static research report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-public-javascript-graphql-research
+          path: build/siu-javascript-research/
+          if-no-files-found: warn
+          retention-days: 30
