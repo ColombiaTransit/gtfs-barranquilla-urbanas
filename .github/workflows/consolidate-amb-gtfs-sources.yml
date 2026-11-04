@@ -6,6 +6,9 @@ name: Consolidate AMB GTFS sources
     paths:
       - scripts/consolidate_amb_gtfs_sources.py
       - scripts/select_amb_gtfs_first_seven.py
+      - scripts/build_full_siu_gtfs_crosswalk.py
+      - sources/siu/public_extract/siu_itineraries.csv
+      - sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv
       - gtfs/routes.txt
       - sources/amb/gtfs_staging/route_headway_candidates.csv
       - sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv
@@ -31,6 +34,16 @@ jobs:
         run: python scripts/select_amb_gtfs_first_seven.py --input build/gtfs-source-consolidation/route_source_consolidation.csv --out build/gtfs-source-consolidation
       - name: Publish shortlist summary
         run: cat build/gtfs-source-consolidation/first_seven_summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Build complete SIU to GTFS candidate crosswalk
+        run: |
+          python scripts/build_full_siu_gtfs_crosswalk.py --out build/siu-gtfs-crosswalk
+          cat build/siu-gtfs-crosswalk/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload complete SIU crosswalk
+        uses: actions/upload-artifact@v4
+        with:
+          name: SIU-GTFS-full-crosswalk-QA
+          path: build/siu-gtfs-crosswalk/
+          if-no-files-found: error
       - name: Upload route source consolidation and summary
         uses: actions/upload-artifact@v4
         with:
