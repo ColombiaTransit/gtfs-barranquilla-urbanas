@@ -1,0 +1,12 @@
+{
+  "original_GTFS_ERRORS": 0,
+  "refined_GTFS_ERRORS": 0,
+  "original_stop_too_far": 1,
+  "refined_stop_too_far": 1,
+  "original_stop_out_of_order": 0,
+  "refined_stop_out_of_order": 0,
+  "no_new_offroute_stop_warnings": true,
+  "no_new_order_warnings": true,
+  "only_shapefile_changed": true,
+  "production_GTFS_modified": false
+}

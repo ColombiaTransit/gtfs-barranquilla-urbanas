@@ -1,0 +1,13 @@
+{
+  "total_official_KMZ_chords_over_400m": 457,
+  "long_chords_with_GH_road_vertices_accepted": 338,
+  "long_chords_rejected_and_original_KMZ_retained": 119,
+  "distinct_official_KMZ_sections_refined": 132,
+  "distinct_route_patterns_refined": 44,
+  "official_KMZ_sections_total": 340,
+  "fallback_GH_sections_untouched": 12,
+  "source_SIU_stops_or_order_modified": false,
+  "GTFS_production_modified": false,
+  "actual_bus_road_service_verified": false,
+  "requires_full_MobilityData_validator_and_geometry_comparison": true
+}
