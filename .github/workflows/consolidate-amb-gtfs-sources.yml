@@ -1,6 +1,6 @@
 name: Consolidate AMB GTFS sources
 
-on:
+'on':
   workflow_dispatch:
   push:
     paths:
