@@ -63,6 +63,8 @@ jobs:
         run: |
           python scripts/export_coolitoral_visual_review.py \
             --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
+      - name: Export original AMB KMZ browser map
+        run: python scripts/export_coolitoral_kmz_visual_review.py
       - name: Publish unresolved street transitions in job summary
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
@@ -114,3 +116,5 @@ jobs:
             sources/amb/kmz/graphhopper_candidates/coolitoral_256_street_audit.json
             sources/amb/kmz/graphhopper_candidates/coolitoral_256_visual_review.geojson
             sources/amb/kmz/graphhopper_candidates/coolitoral_256_visual_review.html
+            sources/amb/kmz/graphhopper_candidates/coolitoral_256_kmz_visual_review.html
+            sources/amb/kmz/graphhopper_candidates/coolitoral_256_kmz_visual_review.geojson
