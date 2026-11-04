@@ -4,7 +4,7 @@
 Only consecutive named-street junctions are used; missing junctions are flagged,
 not invented. Output is a planning manifest, NOT a validated GTFS shape.
 """
-import argparse,csv,json,math,unicodedata
+import argparse,csv,json,math,unicodedata,collections
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 def norm(s):
@@ -52,13 +52,18 @@ def main():
    distance,p,q=best
    ok=distance<=args.max_junction_distance_m
    junctions.append({"from":a,"to":b,"status":"candidate" if ok else "missing_or_distant",
+                     "diagnosis":("missing_both_named_streets" if not left and not right else "missing_first_named_street" if not left else "missing_second_named_street" if not right else "named_segments_too_far_apart" if not ok else "candidate_only_not_topology_verified"),
+                     "nearest_pair_lon_lat":[[round(v,7) for v in p],[round(v,7) for v in q]] if p and q else None,
                      "distance_m":round(distance,1) if math.isfinite(distance) else None,
                      "point_lon_lat":[round((p[0]+q[0])/2,7),round((p[1]+q[1])/2,7)] if ok else None,
                      "ways_a":len(left),"ways_b":len(right)})
   result["routes"][code]={"junctions":junctions,"complete":all(j["status"]=="candidate" for j in junctions),
                            "warning":"Junction candidates require route-order and one-way review before GraphHopper routing."}
+ result["unresolved_unique_pairs"]=list({(norm(j["from"]),norm(j["to"])):{"from":j["from"],"to":j["to"],"diagnosis":j["diagnosis"],"distance_m":j["distance_m"],"nearest_pair_lon_lat":j["nearest_pair_lon_lat"],"routes":[code for code,route in result["routes"].items() if any(norm(x["from"])==norm(j["from"]) and norm(x["to"])==norm(j["to"]) for x in route["junctions"])]} for route in result["routes"].values() for j in route["junctions"] if j["status"]!="candidate"}.values())
  args.output.parent.mkdir(parents=True,exist_ok=True)
  args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n")
  for code,route in result["routes"].items():
   print(code, "candidate junctions:",sum(j["status"]=="candidate" for j in route["junctions"]),"/",len(route["junctions"]))
+  for j in route["junctions"]:
+   if j["status"]!="candidate":print("  UNRESOLVED:",j["from"],">",j["to"],j["diagnosis"],"distance_m=",j["distance_m"])
 if __name__=="__main__":main()
