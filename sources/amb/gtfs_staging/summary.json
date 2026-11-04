@@ -3,9 +3,9 @@
   "routes_ready_to_stage": 56,
   "routes_held_for_review": 41,
   "staged_weekday_periods": 219,
-  "source_records_considered": 109,
+  "source_records_considered": 125,
   "blocker_counts": {
-    "missing_headway_source": 8,
+    "missing_headway_source": 7,
     "variant_headway_not_documented": 8,
     "historic_window_not_found": 8,
     "historic_last_dispatch_invalid": 5,
