@@ -1,0 +1,34 @@
+name: Consolidate AMB GTFS sources
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/consolidate_amb_gtfs_sources.py
+      - gtfs/routes.txt
+      - sources/amb/gtfs_staging/route_headway_candidates.csv
+      - sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv
+      - sources/amb/KMZ_first_GH_fallback_validation/source_shape_source_by_pattern.csv
+      - sources/amb/research_closure_and_gtfs_handoff_2026-11-04.csv
+
+permissions:
+  contents: read
+
+jobs:
+  consolidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and consolidate existing sources
+        run: |
+          python -m py_compile scripts/consolidate_amb_gtfs_sources.py
+          python scripts/consolidate_amb_gtfs_sources.py --out build/gtfs-source-consolidation
+      - name: Upload route source consolidation and summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-GTFS-source-consolidation-QA
+          path: build/gtfs-source-consolidation/
+          if-no-files-found: error
