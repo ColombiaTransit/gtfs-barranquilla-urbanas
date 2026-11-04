@@ -59,7 +59,7 @@ Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor
 
 ## Bronaudit bijgewerkt op 3 november 2026
 
-- [**Gatenregister met actuele status**](../../sources/amb/resolution_gap_audit_2026-11-02.csv): van de **zeven oorspronkelijk ontbrekende documenten zijn de vijf van FLOTA ÁNGULO volledig teruggevonden**. De twee resterende bekende oorspronkelijke PDF-lacunes zijn **COOLITORAL 256-2026 PILOTO** en de verkeerde bronverwijzing voor **COOTRANTICO 025-2011**.
+- [**Gatenregister met actuele status**](../../sources/amb/resolution_gap_audit_2026-11-02.csv): van de **zeven oorspronkelijk ontbrekende documenten zijn de vijf van FLOTA ÁNGULO volledig teruggevonden**. **Update 4 november 2026:** COOLITORAL 256-2026 PILOTO is na deze historische inventaris alsnog als originele PDF teruggevonden en gecontroleerd; alleen de originele PDF-link bij COOTRANTICO 025-2011 is nog aantoonbaar onjuist. De bronperiode en juridische verlengingsvraag van 256 blijven afzonderlijk open.
 - **SOBUSA 307-2014**: [volledige 20-pagina-analyse](../sobusa_307_2014_analysis_2026-11-03.md), zes historische route-intervallen; Action-run **41523701666** geslaagd.
 - **COOTRANTICO 108-2023**: Action-run **41523797737** geslaagd, acht OCR-pagina's en twee routebladen geverifieerd. De routewijzigingen blijven historisch en zijn later door 2024/2025-besluiten opgevolgd.
 - **FLOTA ÁNGULO 6/6**: na ontdekking van de WordPress Ninja Tables-AJAX-bron zijn alle zes originele PDF's uitgepakt in [run 41582220020](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41582220020). De nieuwste **232-2025** geeft voor **A7-4112** **3 minuten spits, 5 minuten dal, 31,4 km**, met een route via Miramar en Alameda del Río. Zie [bijgewerkt bedrijfsrapport](../flota_angulo_route_frequencies_2026-11-02.md).
@@ -113,7 +113,7 @@ Bestaande rapporten die voertuigconflicten als 'blokkerend' markeren moeten voor
 
 **Klaar:** De officiële PDF's van alle 13 overgebleven bedrijven zijn systematisch doorzocht en de laatst gevonden beschikbare routefrequenties, routecodes en bronpaginanummers zijn opgenomen, met scancontrole van bepalende tabellen waar OCR fouten had. Bij COOCHOFAL zijn alle acht 2025-tabellen tegen de originele pagina's gecontroleerd.
 
-**Nog niet klaar:** volledige rechtsgeldigheidscontrole van **iedere** historische resolutie, nog ontbrekende PDF's (vooral COOLITORAL 256-2026 en de correcte COOTRANTICO 025-2011), interne tegenstrijdigheden binnen besluiten, dienstvensters, kalenderdagen, haltevolgordes en GPS-geometrie. De vergunde frequenties zijn als normbron voldoende; `GTFS_READY` vereist daarnaast dienstvensters, kalender, routepatroon en haltes.
+**Nog niet klaar:** volledige rechtsgeldigheidscontrole van **iedere** historische resolutie, nog ontbrekende correcte originele PDF voor COOTRANTICO 025-2011 en de nog onvolledig gecontroleerde technische/juridische details van overige besluiten (COOLITORAL 256-2026-PDF is inmiddels hersteld), interne tegenstrijdigheden binnen besluiten, dienstvensters, kalenderdagen, haltevolgordes en GPS-geometrie. De vergunde frequenties zijn als normbron voldoende; `GTFS_READY` vereist daarnaast dienstvensters, kalender, routepatroon en haltes.
 
 **Let op:** Een interval op een overlappend traject (bijv. B18-SOBUSA, A10-TRANSDIAZ) is niet gelijk aan de vertrekken van een individuele itinerary. Een voorwaardelijk dienstvenster `00:00–24:00 afhankelijk van vraag` is geen bewijs voor 24-uursbediening.
 
