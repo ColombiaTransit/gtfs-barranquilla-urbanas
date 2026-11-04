@@ -27,7 +27,7 @@ jobs:
           import re
           base=Path("build/sodetrans-b15")
           files=list((base/"source").rglob("*"))
-          candidates=[p for p in files if p.is_file() and re.search(r"458|B15",str(p),re.I)]
+          candidates=[p for p in files if p.is_file() and p.parent.name.lower()=="sodetrans_458-2010"]
           lines=["# Existing SODETRANS 458-2010 text review","",f"Candidate files: {len(candidates)}",""]
           for p in candidates:
               lines.append("## "+str(p.relative_to(base/"source")))
