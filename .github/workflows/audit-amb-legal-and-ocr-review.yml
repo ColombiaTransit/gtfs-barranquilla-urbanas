@@ -1,0 +1,80 @@
+name: Audit AMB legal resolution chains and six OCR image-review cases
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/audit_amb_legal_ocr_priority.py
+      - scripts/collect_amb_resolution_ocr_visual_evidence.py
+      - .github/workflows/audit-amb-legal-and-ocr-review.yml
+permissions:
+  contents: write
+concurrency:
+  group: amb-legal-ocr-evidence-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-pdf-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Spanish OCR, PDF extraction and page rendering
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils tesseract-ocr tesseract-ocr-spa
+      - name: Check both legal and OCR study programs compile
+        run: |
+          python -m py_compile scripts/audit_amb_legal_ocr_priority.py \
+            scripts/collect_amb_resolution_ocr_visual_evidence.py \
+            scripts/extract_amb_pdfs.py
+      - name: Assemble legal decision chains and six-item visual review worklist
+        run: python scripts/audit_amb_legal_ocr_priority.py
+      - name: Download listed originals, collect Spanish OCR and original page images
+        run: |
+          python scripts/collect_amb_resolution_ocr_visual_evidence.py \
+            --max-review-images 8
+      - name: Publish review progress with no legal claims inferred by OCR
+        if: always()
+        run: |
+          if [ -f build/amb-legal-ocr-priority/summary.md ]; then
+            cat build/amb-legal-ocr-priority/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f build/amb-ocr-image-evidence/summary.md ]; then
+            cat build/amb-ocr-image-evidence/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit legal and source extraction indices only
+        if: github.ref == 'refs/heads/main'
+        run: |
+          test -s build/amb-legal-ocr-priority/summary.json
+          test -s build/amb-ocr-image-evidence/summary.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/legal_validity_ocr_review
+            cp build/amb-legal-ocr-priority/*.csv sources/amb/legal_validity_ocr_review/
+            cp build/amb-legal-ocr-priority/summary.json sources/amb/legal_validity_ocr_review/legal_register_summary.json
+            cp build/amb-legal-ocr-priority/summary.md sources/amb/legal_validity_ocr_review/legal_register_summary.md
+            cp build/amb-ocr-image-evidence/*csv sources/amb/legal_validity_ocr_review/
+            cp build/amb-ocr-image-evidence/summary.json sources/amb/legal_validity_ocr_review/ocr_extract_summary.json
+            cp build/amb-ocr-image-evidence/summary.md sources/amb/legal_validity_ocr_review/ocr_extract_summary.md
+            git add sources/amb/legal_validity_ocr_review/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: stage legally cautious AMB decision chain and six scanned-resolution OCR/page-review results"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Keep source PDFs, texts and visual page images in artifacts not Git
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-legal-validity-and-six-OCR-source-PDF-visual-review-NOT-APPROVED
+          path: |
+            build/amb-legal-ocr-priority/
+            build/amb-ocr-image-evidence/
+          if-no-files-found: warn
+          retention-days: 60
