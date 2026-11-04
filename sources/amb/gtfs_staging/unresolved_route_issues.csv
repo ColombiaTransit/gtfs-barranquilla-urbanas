@@ -4,6 +4,7 @@ AMB_TRANSMECAR_D11_4153,TRANSMECAR,D11-4153,,missing_headway_source,Check cited 
 AMB_TRANSMECAR_D9_4152,TRANSMECAR,D9-4152,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_LA_CAROLINA_A16_4161_A,LA_CAROLINA,A16-4161,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_LA_CAROLINA_A16_4161_B,LA_CAROLINA,A16-4161,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOCHOFAL_C2_B_4188,COOCHOFAL,C2-B-4188,,missing_headway_source;historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C3_4134,COOCHOFAL,C3-4134,242-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C9_4140,COOCHOFAL,C9-4140,242-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C18_4141,COOCHOFAL,C18-4141,242-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
@@ -14,6 +15,8 @@ AMB_COOLITORAL_A1_4106_A,COOLITORAL,A1-4106,192-2025,conflicting_official_extrac
 AMB_COOLITORAL_A1_4106_B,COOLITORAL,A1-4106,192-2025,conflicting_official_extractions,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT2_4102_A,COOLITORAL,PT2-4102,210-2026,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT2_4102_B,COOLITORAL,PT2-4102,210-2026,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_PT3_4103_A,COOLITORAL,PT3-4103,210-2026,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_PT3_4103_B,COOLITORAL,PT3-4103,210-2026,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT4_4104_A,COOLITORAL,PT4-4104,256-2026,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT4_4104_B,COOLITORAL,PT4-4104,256-2026,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT5_4105_A,COOLITORAL,PT5-4105,256-2026,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.

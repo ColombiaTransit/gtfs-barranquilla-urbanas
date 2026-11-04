@@ -1,18 +1,18 @@
 # AMB GTFS headway staging — preliminary, NOT a GTFS ZIP
 
 - routes_in_routes_txt: **97**
-- routes_ready_to_stage: **59**
-- routes_held_for_review: **38**
-- staged_weekday_periods: **231**
-- source_records_considered: **107**
+- routes_ready_to_stage: **56**
+- routes_held_for_review: **41**
+- staged_weekday_periods: **219**
+- source_records_considered: **109**
 
 ## Reasons routes were held
 
 - conflicting_official_extractions: 2
 - historic_last_dispatch_invalid: 5
-- historic_window_not_found: 7
-- legal_effective_period_and_operational_activation_unverified: 8
-- missing_headway_source: 7
+- historic_window_not_found: 8
+- legal_effective_period_and_operational_activation_unverified: 10
+- missing_headway_source: 8
 - official_interval_missing: 3
 - permanent_backup_pending_pilot_expiry_check: 1
 - pilot_A_B_not_in_routes_txt: 1
