@@ -36,7 +36,7 @@ PRIORITY=[
 OVERRIDES={
  ("COOLITORAL","256-2026"):{"url":"https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf","evidence":"docs/siu_remaining_21_route_links_review_2026-11-03.md","status":"verified_original_pdf_not_missing"},
  ("COOTRANTICO","025-2011"):{"status":"manifest_wrong_pdf_original_recovered_articles_visually_checked","evidence":"sources/amb/legal_validity_ocr_review/priority_legal_decision_chains.csv"},
- ("MONTERREY","437-2016"):{"status":"manifest_link_corrected_original_pdf_identified","url":"https://www.ambq.gov.co/wp-content/uploads/2017/01/REOLUCION-437-16-MONTERREY..pdf","evidence":"sources/amb/details/resolucion_437-2016_monterrey.csv"},
+ ("MONTERREY","437-2016"):{"status":"original_15_pages_verified_source_identity_closed","url":"https://www.ambq.gov.co/wp-content/uploads/2017/01/REOLUCION-437-16-MONTERREY..pdf","evidence":"docs/amb_monterrey_437_2016_original_review_2026-11-04.md"},
 }
 def records(p):
     with p.open("r",newline="",encoding="utf-8-sig") as f:
@@ -114,7 +114,7 @@ def main():
                 "evidence":correction["evidence"],
                 "next_action":(
                     "replace_stale_document_gap_label_with_verified_article_source" if res=="256-2026" else
-                    "original_page_review_pending_for_monterrey" if agency=="MONTERREY" else
+                    "original_pages_verified_research_closed" if agency=="MONTERREY" else
                     "original_025_articles_checked_current_effect_separate"),
                 "gtfs_legal_status":"still_requires_current_validity_check",
             })
