@@ -18,14 +18,22 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch complete roads from organization Overpass
+        env:
+          API_OVERPASS: ${{ vars.API_OVERPASS }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: |
+          python scripts/fetch_coolitoral_overpass_roads.py \
+            --output sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
       - name: Derive all legal A/B junction candidates from uploaded OSM JSON
         run: |
           python scripts/prepare_coolitoral_256_graphhopper.py \
-            --overpass sources/osm/overpass/coolitoral_pt4_pt5_20261104.json
+            --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
       - name: Inspect nearby OSM ways for unresolved transitions
         run: |
           python scripts/audit_coolitoral_256_gaps.py \
-            --overpass sources/osm/overpass/coolitoral_pt4_pt5_20261104.json \
+            --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json \
             --manifest sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json
       - name: Publish unresolved street transitions in job summary
         run: |
@@ -55,4 +63,5 @@ jobs:
           path: |
             sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json
             sources/amb/kmz/coolitoral_256_gap_audit.json
+            sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
             sources/amb/kmz/graphhopper_candidates/*.geojson
