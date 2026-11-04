@@ -12,9 +12,9 @@ LA_CAROLINA,"LC-03 spits-/daltijdvakken, haltes en recentere besluiten.",review_
 LOLAYA,"LOL-01 2018 versus 2025 straattrajecten",review_required,company_dossier,open
 LOLAYA,"LOL-02 tijdelijke besluiten en eventuele opvolging",review_required,company_dossier,open
 LOLAYA,"LOL-03 dienstvensters, kalenderdagen en haltes.",review_required,company_dossier,open
-MONTERREY,"MON-01 Latere/actuele rechtsgeldigheid tijdelijke 2018-vergunning",review_required,company_dossier,open
-MONTERREY,"MON-02 437-2016 B11-4146 versus B11-4166",review_required,company_dossier,open
-MONTERREY,"MON-03 geldigheidsduur, dienstperioden, haltes en kaartgeometrie.",review_required,company_dossier,open
+MONTERREY,"MON-01 Geen latere MONTERREY-resoluties onderzoeken; 390-2018 is afgesproken nieuwste bron; tijdelijke SITP-voorwaarde gedocumenteerd",closed_source_scope,company_dossier,closed_2026-11-04
+MONTERREY,"MON-02 437-2016 origineel gecontroleerd; 390-2018 bevat B11-4166 en B11-B-4192 als nieuwste bronselectie",resolved_source_selection,company_dossier,closed_2026-11-04
+MONTERREY,"MON-03 GTFS-uitvoer: dienstperioden, haltes, kalender en kaartgeometrie; geen nieuw juridisch onderzoek",gtfs_work_only,company_dossier,open_gtfs_only
 SOBUSA,"SOB-01 307-2014 20-page PDF recovered, extracted, six route headways reviewed",resolved,company_dossier,closed_2026-11-03
 SOBUSA,"SOB-02 artikelketen 173/225/466-2025 versus 082-2026",review_required,company_dossier,open
 SOBUSA,"SOB-03 pattern-varianten C12/C16 en B18 nauwkeurig uiteenhouden",review_required,company_dossier,open
