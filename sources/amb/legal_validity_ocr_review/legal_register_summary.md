@@ -6,13 +6,13 @@ De vergunningstekst, artikel, toepasselijke routevariant, duur, ingang en eventu
 
 ## Omvang
 
-- manifest rows: **280**
+- manifest rows: **281**
 - manifest agencies: **23**
-- distinct agency resolution keys: **280**
+- distinct agency resolution keys: **281**
 - exact route token chronology rows for article review: **149**
 - priority legal cases: **13**
 - ocr visual queue cases: **6**
-- manifest identity and outdated gap flags: **2**
+- manifest identity and outdated gap flags: **3**
 
 ## Hoogste prioriteit
 
