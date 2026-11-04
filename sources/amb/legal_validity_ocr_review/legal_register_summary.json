@@ -1,0 +1,13 @@
+{
+  "manifest_rows": 280,
+  "manifest_agencies": 23,
+  "distinct_agency_resolution_keys": 280,
+  "exact_route_token_chronology_rows_for_article_review": 149,
+  "priority_legal_cases": 13,
+  "ocr_visual_queue_cases": 6,
+  "manifest_identity_and_outdated_gap_flags": 2,
+  "coolitoral_256_2026_recovered_official_pdf": true,
+  "cootrantico_025_2011_correct_original_not_verified": true,
+  "all_new_juridical_supersession_conclusions_require_original_articles": true,
+  "current_service_or_publication_auto_approved": false
+}

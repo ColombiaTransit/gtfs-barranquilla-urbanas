@@ -1,0 +1,11 @@
+{
+  "queued": 6,
+  "PDF_downloaded_and_extracted": 6,
+  "failed_or_unavailable_original_PDFs": 0,
+  "total_pages_text_extracted": 61,
+  "total_ocr_pages": 61,
+  "total_review_page_images": 48,
+  "any_legal_effect_from_OCR_approved": false,
+  "original_PDF_identity_verified": false,
+  "manual_article_and_scan_QA_still_required": true
+}
