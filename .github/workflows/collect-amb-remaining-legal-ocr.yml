@@ -25,6 +25,16 @@ jobs:
         run: python -m py_compile scripts/collect_amb_remaining_legal_ocr.py
       - name: Download and OCR outstanding resolutions
         run: python scripts/collect_amb_remaining_legal_ocr.py
+      - name: Fail if no original PDFs were recovered
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary=json.loads(Path('build/amb-remaining-legal-ocr/summary.json').read_text())
+          print(f"Recovered {summary['ocr_staged']} of {summary['total']} target PDFs")
+          if summary['ocr_staged'] == 0:
+              raise SystemExit("FAIL: no PDFs recovered; successful OCR/legal review cannot be claimed")
+          PY
       - name: Report evidence completeness
         if: always()
         run: |
