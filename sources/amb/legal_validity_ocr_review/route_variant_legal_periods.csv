@@ -1,0 +1,17 @@
+agency,route,variant,source_resolution,prior_resolution,effective_from,effective_to_exclusive,peak_headway_min,offpeak_headway_min,headway_scope,legal_status,source_note
+COOLITORAL,PT4-4104,A,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
+COOLITORAL,PT4-4104,B,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
+COOLITORAL,PT5-4105,A,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
+COOLITORAL,PT5-4105,B,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
+SOBUSA,B18-4175,A,082-2026,466-2025,,,10,12,per_variant,dates_unverified,Do not use combined corridor interval as variant headway
+SOBUSA,B18-4175,B,082-2026,466-2025,,,10,12,per_variant,dates_unverified,Do not use combined corridor interval as variant headway
+SOBUSA,C12-4169,A,466-2025,,,,6,9,per_variant,dates_unverified,Legal headways only
+SOBUSA,C12-4169,B,466-2025,,,,3,6,per_variant,dates_unverified,Legal headways only
+SOBUSA,C16-4167,A,466-2025,,,,7,9,per_variant,dates_unverified,Legal headways only
+SOBUSA,C16-4167,B,466-2025,,,,7,9,per_variant,dates_unverified,Legal headways only
+COOTRAB;COOLITORAL,A1-4106,A,358-2024,192-2025,,,8.5,11,per_variant,dates_unverified,Shared operation; check later 192-2025 effects
+COOTRAB;COOLITORAL,A1-4106,B,358-2024,192-2025,,,8.5,11,per_variant,dates_unverified,Shared operation; check later 192-2025 effects
+EMBUSA,B9-4125,unspecified,010-2026,231-2025,,,4,6,whole_route_unverified,dates_unverified,00-24 authorization conditional on demand
+COOTRAB,C5-4136,unspecified,358-2024,378-2023,,,8,10,whole_route_unverified,route_code_conflict,C5-4135 appears in other AMB publications
+COOTRAB,C6-4137,unspecified,358-2024,378-2023,,,8,10,whole_route_unverified,dates_unverified,Legal headways only
+LA_CAROLINA,A16-4161,unspecified,199-2019,204-2012,,,3.5,5,whole_route_unverified,AB_allocation_unverified,Do not duplicate frequency over A/B
