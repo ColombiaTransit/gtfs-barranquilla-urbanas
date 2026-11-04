@@ -25,7 +25,7 @@ De vergunningstekst, artikel, toepasselijke routevariant, duur, ingang en eventu
 | SOBUSA C12-4169;C16-4167 | 349-2024;466-2025 | 466-2025 separate A/B headways; combined corridor intervals are not itinerary headways; **open:** Check whether intervening/later acts change corridor shares or timetable; establish A/B route boundaries |
 | EMBUSA B9-4125 | 113-2012;231-2025;010-2026 | 010-2026 Article 1 modifies B9-4125, 4/6 min; 00:00-24:00 is conditional on demand; **open:** Compare explicit articles of 231-2025 and 113-2012 for effectivity, revocations, and supersession |
 | COOTRAB C5-4136;C6-4137 | 200-2019;378-2023;358-2024 | 358-2024 modifies C5/C6 to 8/10 min and adds A1 shared operation with COOLITORAL; **open:** Compare A1 joint operation with COOLITORAL 192-2025; keep both operators attributable |
-| COOTRANTICO B20 | 331-2010;025-2011 | 025-2011 manifest URL points to document titled 331-2010; the original 025 was not inspected; **open:** Locate and validate exact original 025-2011 PDF, then determine legal effect on B20 |
+| COOTRANTICO B20 | 331-2010;025-2011 | 025-2011 manifest URL points to 331-2010 but original 025 articles 3 and 6 were recovered and visually checked; 462-2025 is documented separately; **open:** Do not repeat original 025 search; retain 462-2025 as later source without asserting current service |
 | COOCHOFAL C2-4133;C3-4134;C9-4140;C18-4141 | 407-2013;387-2018;242-2025 | 2025 eight route tables scan checked; potential internal legal/document conflicts remain; **open:** Compare operative wording with historical amendments; A15-4159 and C2-B-4188 aliases already resolved |
 
 ## Bron-/OCR-regels
