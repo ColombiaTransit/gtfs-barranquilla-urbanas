@@ -149,7 +149,7 @@ def main():
             "source_evidence_path":x["evidence"],
             "current_operation_verified":"no",
             "route_legal_status_auto_approved":"no",
-            "next_stage":"inspect_original_operational_articles_plus_last_amendments",
+            "next_stage":"research_closed_gtfs_handoff_see_sources_amb_research_closure_and_gtfs_handoff_2026_11_04_csv",
         })
     store(args.out/"priority_legal_decision_chains.csv",selected)
     c=Counter(r["agency"] for r in manifest)
