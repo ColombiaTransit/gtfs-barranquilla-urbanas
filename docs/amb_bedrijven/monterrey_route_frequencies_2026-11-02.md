@@ -25,7 +25,7 @@ De waarden met **onbevestigd** mogen niet worden ingevuld op basis van OCR-gissi
 | Besluit | Bron | Controleomvang |
 |---|---|---|
 | 390-2018 | [officiële PDF](https://www.ambq.gov.co/wp-content/uploads/2018/11/Resolucion-Metropolitana-390-18.pdf) | nieuwste / sleutelbesluit |
-| 437-2016 | [officiële PDF](https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/MONTERREY/RESOL-404-13-MONTERREY.pdf) | historisch; artikelen nader toetsen |
+| 437-2016 | [officiële PDF](https://www.ambq.gov.co/wp-content/uploads/2017/01/REOLUCION-437-16-MONTERREY..pdf) | historisch; originele 15 pagina's en artikelen gecontroleerd op 4 november 2026 |
 | 404-2013 | [officiële PDF](https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/MONTERREY/RESOL-404-13-MONTERREY.pdf) | historisch; artikelen nader toetsen |
 | 403-2013 | [officiële PDF](https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/MONTERREY/RESOL-403-13-MONTERREY.pdf) | historisch; artikelen nader toetsen |
 | 402-2013 | [officiële PDF](https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/MONTERREY/RESOL-402-13-MONTERREY.pdf) | historisch; artikelen nader toetsen |
@@ -39,11 +39,13 @@ De waarden met **onbevestigd** mogen niet worden ingevuld op basis van OCR-gissi
 
 De bronbestanden zijn technisch geëxtraheerd, behalve specifieke mislukte downloads die in de bestaande batchrapporten worden vermeld (bij SOBUSA: 307-2014). **Dit overzicht betekent niet dat ieder historisch document volledig juridisch is gevalideerd.** De recentste relevante routebladen en hun numerieke parameters zijn geselecteerd; oudere besluiten blijven voor effect-/intrekkingsvergelijking geregistreerd.
 
-## Ontbrekend werk (zelfstandig vervolg)
+## Afgesloten juridische bronkeuze (4 november 2026)
 
-- MON-01 Latere/actuele rechtsgeldigheid tijdelijke 2018-vergunning
-- MON-02 437-2016 B11-4146 versus B11-4166
-- MON-03 werkelijke ritten/haltes en kaartgeometrie.
+- **390-2018 is het nieuwste gepubliceerde MONTERREY-besluit volgens de vastgestelde onderzoeksafspraak.** Geen vervolgonderzoek naar hypothetische latere MONTERREY-resoluties; MON-01 gesloten als onderzoeksopdracht. De tijdelijke werking en SITP-voorwaarde uit artikel 3 blijven als expliciete bronvoorwaarde, niet als nieuwe zoekopdracht.
+- **437-2016 is inhoudelijk gecontroleerd:** originele 15 pagina's, artikel 1 en historische B8/B11/B12-tabellen; zie `docs/amb_monterrey_437_2016_original_review_2026-11-04.md`. De 2016-codes zijn historische brongegevens; voor de GTFS-bronselectie prevaleert 390-2018 met vier routes, inclusief B11-B-4192. MON-02 gesloten voor deze bronselectie.
+- **MON-03 is GTFS-uitvoerwerk:** haltes, routegeometrie, dienstperioden en kalender; geen juridisch brononderzoek.
+
+**Juridische dossierstatus: gesloten voor verder resolutieonderzoek op basis van de afgesproken bronset.** Geen bewering dat daadwerkelijke huidige exploitatie of een definitieve juridische geldigheidsdatum is bewezen.
 
 ## GTFS-status
 
