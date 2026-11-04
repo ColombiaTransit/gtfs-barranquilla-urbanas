@@ -62,6 +62,22 @@ async def main():
                        "mui_selects": await page.locator('[role="button"][aria-haspopup="listbox"]').count()})
             ui.append({"stage": "route_navigation_inventory", "links": await page.locator("a,button,[role=button]").evaluate_all(
                 """els => els.filter(e=>!!(e.offsetWidth||e.offsetHeight||e.getClientRects().length)).slice(0,65).map(e=>({tag:e.tagName.toLowerCase(),text:(e.innerText||e.getAttribute('aria-label')||'').trim().slice(0,65),href:(e.getAttribute('href')||'').slice(0,120)}))""")})
+            # Try the public "Rutas" navigation before inspecting route controls.
+            nav = page.get_by_text("Rutas", exact=True)
+            ui.append({"stage": "routes_nav", "matching_elements": await nav.count()})
+            for candidate in await nav.all():
+                try:
+                    if not await candidate.is_visible():
+                        continue
+                    await candidate.click(timeout=1600)
+                    ui.append({"stage": "routes_nav", "outcome": "clicked_visible_rutas"})
+                    await page.wait_for_timeout(1800)
+                    break
+                except Exception as exc:
+                    ui.append({"stage": "routes_nav", "error_type": type(exc).__name__})
+            ui.append({"stage": "after_nav", "route_titles": await page.locator(".l-card__inner .title").count(),
+                       "stop_cards": await page.locator(".stops-card").count(),
+                       "matching_route_text": await page.get_by_text(ROUTE, exact=True).count()})
             # Inspect each public Material UI listbox and its options before choosing.
             # A menu inspection is not evidence that an itinerary was selected.
             selects = page.locator('[role="button"][aria-haspopup="listbox"]')
