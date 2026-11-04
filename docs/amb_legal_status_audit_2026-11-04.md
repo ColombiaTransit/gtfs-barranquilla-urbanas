@@ -26,3 +26,10 @@ Deze status is gebaseerd op eerdere originele AMB-PDF-controles en een nieuwe ve
 5. Dienstkalender en feitelijke ritten los van juridische autorisatie valideren.
 
 **Eindstatus:** juridische bronnen en deelconclusies geactualiseerd; `legal_chain_complete=false`, `current_operation_verified=false`, `gtfs_release_approved=false`.
+
+## Vastgelegde routecodebesluiten — niet opnieuw als openstaand opvoeren
+
+- **COOCHOFAL A15:** GTFS-code **A15-4159** aanhouden; **A15-4129** uitsluitend als afwijkende historische bronvermelding/alias registreren. Eerder onderzocht met Resolución 242-2025 en Circular 010-2025.
+- **COOCHOFAL C2-B:** GTFS-code **C2-B-4188** aanhouden; **C2-B-4187** uitsluitend als afwijkende bronvermelding/alias registreren. De eerdere keuze 4187 is na aanvullend officieel bewijs vervangen door 4188.
+- Geen extra routes, trips of frequenties voor deze aliassen genereren. Een verschil in een oudere resolutietabel is **geen nieuwe routecodeblokkade**. De juridische geldigheid, variantreikwijdte en latere werking van 242-2025 blijven afzonderlijke onderzoekspunten.
+- Bij latere verwerking van `verified_462_242_route_headways_2026-11-04.csv` moet `C2-B-4187` expliciet naar canonieke `C2-B-4188` worden gekoppeld, met behoud van de originele broncode.
