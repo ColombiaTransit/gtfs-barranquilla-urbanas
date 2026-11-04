@@ -1,6 +1,12 @@
 name: COOLITORAL PT4 PT5 OSM overlay
 on:
   workflow_dispatch:
+    inputs:
+      overpass_file:
+        description: "Path to the uploaded Overpass Turbo JSON in this repository"
+        required: true
+        default: "sources/osm/overpass/coolitoral_pt4_pt5_20261104.json"
+        type: string
 jobs:
   overlay:
     runs-on: ubuntu-latest
@@ -8,20 +14,26 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Download OSM named streets from Overpass
-        shell: bash
+      - name: Validate uploaded Overpass JSON
+        env:
+          OVERPASS_FILE: ${{ inputs.overpass_file }}
         run: |
-          cat > /tmp/streets.overpass <<'EOF'
-          [out:json][timeout:180];
-          way["highway"]["name"~"^(Carrera (43|44|41B)|Calle (8|10))$",i](10.88,-74.90,11.07,-74.72);
-          out body geom;
-          EOF
-          curl --fail --retry 4 --retry-all-errors --retry-delay 8 --max-time 240 \
-            --data-urlencode "data@/tmp/streets.overpass" \
-            https://overpass.kumi.systems/api/interpreter -o /tmp/coolitoral_osm.json
-          python -c 'import json; j=json.load(open("/tmp/coolitoral_osm.json")); assert j.get("elements"),"No ways"'
-      - name: Overlay both KMZ routes with OSM streets
-        run: python scripts/overlay_coolitoral_256_osm.py --overpass /tmp/coolitoral_osm.json
+          python - <<'PY'
+          import json,os,pathlib
+          path=pathlib.Path(os.environ["OVERPASS_FILE"])
+          if path.is_absolute() or ".." in path.parts:
+              raise SystemExit("Overpass path must be inside the repository")
+          if not path.is_file():
+              raise SystemExit(f"Upload the Overpass Turbo JSON to {path} before running the workflow")
+          obj=json.loads(path.read_text())
+          ways=[e for e in obj.get("elements",[]) if e.get("type")=="way" and len(e.get("geometry",[]))>1]
+          if not ways: raise SystemExit("Expected Overpass JSON with elements[].geometry")
+          print(f"Loaded {len(ways)} OSM ways from {path}")
+          PY
+      - name: Overlay both KMZ routes with uploaded OSM streets
+        env:
+          OVERPASS_FILE: ${{ inputs.overpass_file }}
+        run: python scripts/overlay_coolitoral_256_osm.py --overpass "$OVERPASS_FILE"
       - uses: actions/upload-artifact@v4
         with:
           name: coolitoral-pt4-pt5-osm-overlay
