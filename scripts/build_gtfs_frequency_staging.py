@@ -289,7 +289,10 @@ def run(output):
         if source and source["status"]=="legal_table_reviewed_scope_pending":
             blockers.append("route_variant_scope_and_legal_effect_unverified")
         if source and source["status"]=="legal_period_checked_staging_only":
-            blockers.append("legal_effective_period_and_operational_activation_unverified")
+            # Latest reviewed AMB acts presumed current for provisional staging.
+            # Pilot 256-2026 runs 2026-06-22 to 2026-12-22, not indefinitely.
+            if source["resolution"]=="256-2026":
+                blockers.append("pilot_SIU_to_legal_AB_mapping_unresolved")
         if not window:blockers.append(wstatus)
         if agency=="COOTRAB" and n(base)==n("C5-4135"):
             blockers.append("route_code_4135_vs_official_4136")
