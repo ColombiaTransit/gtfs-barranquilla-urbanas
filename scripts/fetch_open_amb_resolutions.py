@@ -34,11 +34,18 @@ def main():
     if not data.startswith(b"%PDF-"):raise ValueError("response not PDF")
     p=folder/"source.pdf";p.write_bytes(data)
     rec.update(status="downloaded_pdf_identity_unverified",sha256=hashlib.sha256(data).hexdigest(),bytes=len(data))
-    meta=subprocess.run(["pdfinfo",str(p)],capture_output=True,text=True,timeout=30)
-    for line in meta.stdout.splitlines():
-     if line.startswith("Pages:"):rec["pages"]=line.split(":",1)[1].strip()
-    txt=subprocess.run(["pdftotext","-layout",str(p),str(folder/"native.txt")],capture_output=True,text=True,timeout=60)
-    if txt.returncode:rec["notes"]="pdftotext failed; scanned PDF may need OCR"
+    try:
+     meta=subprocess.run(["pdfinfo",str(p)],capture_output=True,text=True,timeout=30)
+     for line in meta.stdout.splitlines():
+      if line.startswith("Pages:"):rec["pages"]=line.split(":",1)[1].strip()
+     if meta.returncode:rec["notes"]="pdfinfo returned nonzero; metadata incomplete"
+    except (FileNotFoundError,subprocess.TimeoutExpired):
+     rec["notes"]="pdfinfo unavailable; PDF preserved for later metadata extraction"
+    try:
+     txt=subprocess.run(["pdftotext","-layout",str(p),str(folder/"native.txt")],capture_output=True,text=True,timeout=60)
+     if txt.returncode:rec["notes"]+="; pdftotext failed or scanned PDF needs OCR"
+    except (FileNotFoundError,subprocess.TimeoutExpired):
+     rec["notes"]+="; pdftotext unavailable; PDF preserved"
     break
    except Exception as exc:
     rec.update(status="download_failed",notes=f"{type(exc).__name__}: {str(exc)[:160]}")
