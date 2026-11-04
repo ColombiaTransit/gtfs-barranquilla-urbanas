@@ -141,6 +141,16 @@ def build_sources():
         push(data,agency,code,res,peak,off,
             "docs/amb_bedrijven/"+agency.lower()+"_route_frequencies_2026-11-02.md",
             "per_itinerary",variant,"Original route table "+ref)
+    # B15-4129: 458-2010 p7 existing OCR: peak 4 minutes,
+    # offpeak '5 mido' (OCR typo; digit 5 legible). This is a historical
+    # route-wide headway, split evenly across A/B for research GTFS.
+    # Review: Actions run 41818536403, artifact 13315847754.
+    for variant in ("A","B"):
+        push(data,"SODETRANS","B15-4129","458-2010",8,10,
+             "sources/amb/pdf_manifest.csv",
+             "per_itinerary",variant,
+             "50/50 modelling split of historical 458-2010 p7 route-wide 4/5 minutes; offpeak OCR reads '5 mido'; not confirmed 2026 operations",
+             "model_assumption_50_50_split_historical")
     # C21-4182: 719-2018 states a route-wide 4/6-minute interval.
     # Alternate A/B departures evenly, yielding 8/12 minutes per variant.
     # This is a transparent modelling assumption, not an observed timetable.
