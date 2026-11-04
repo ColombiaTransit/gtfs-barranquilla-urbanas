@@ -25,3 +25,17 @@ Een route krijgt geen 'juridisch afgerond' zolang niet zijn vastgelegd: originel
 
 ## Status
 **Werkpakket gestart; PDF-artikelcontrole van bovenstaande nog niet voltooid.** Deze notitie claimt geen toekomstige autonome uitvoering of voltooide inspectie. Geen GTFS release.
+
+## Aanvullende controle officiële AMB-routecatalogus (4 november 2026)
+De actuele AMB-TPC-catalogus is opnieuw gelezen: https://www.ambq.gov.co/transporte/transporte-publico-colectivo/ . De gepubliceerde lijst bevat:
+- **COOCHOFAL C2-B-4187 én COOASOATLAN C20-B-4187**: hetzelfde numerieke suffix **4187** voor twee verschillende operators en verschillende routecodes. Dit is een **route-ID-collision-risico** als software alleen het suffix als GTFS route_id gebruikt. Behoud daarom altijd de volledige code en een stabiele operator-/agency-namespace. Dit is geen bewijs dat de twee routes juridisch identiek zijn.
+- **COOTRAB C5-4135** in de catalogus versus **C5-4136** in het historische besluitregister. Conflict blijft open en moet met origineel wijzigingsartikel worden opgelost; geen stilzwijgende correctie.
+- **COOTRANTICO B20-4180 én B20-B-4191** staan afzonderlijk gepubliceerd; niet samenvoegen zonder identieke variantgeometrie.
+- **LA CAROLINA A16-4161 A/B**, **SOBUSA B18/C12/C16 A/B**, en **COOLITORAL A1-4106 A/B** zijn afzonderlijk gepubliceerd; de bronfrequenties blijven aan het juiste variantniveau gekoppeld.
+- De COOTRANTICO-index https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-cootrantico/ noemt 462-2025. De COOLITORAL-index https://www.ambq.gov.co/transporte/transporte-publico-colectivo/resoluciones-coolitoral/ noemt 210-2026 en 256-2026. **Indexvermelding is geen artikelverificatie**.
+
+### Veiligheidsregel voor GTFS-identiteiten
+Maak nooit `route_id` op basis van alleen het numerieke suffix (zoals `4187`). Gebruik de volledige routecode plus operator-/composite-agency-identiteit indien nodig. Een numerieke suffix-collision betekent niet dat de vergunningen dezelfde route betreffen.
+
+### Voortgang
+De AMB-route-identiteitscontrole is uitgevoerd en bovenstaande bronconflicten zijn aangetroffen. **De volledige PDF-artikelen van 462-2025, 210-2026 en 256-2026 zijn nog niet integraal beoordeeld**; geen statuswijziging naar juridisch afgerond.
