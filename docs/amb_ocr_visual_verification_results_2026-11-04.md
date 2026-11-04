@@ -17,3 +17,7 @@
 **LA CAROLINA 067-2011:** reeds eerder op originele p7–8 gecontroleerd: artikel 2 wijzigt traject, artikel 3 behoudt technische parameters uit 173-2010. Geen zelfstandig nieuw interval in 067. De volledige juridische keten 173/204/199 blijft open.
 
 **GTFS-status:** geen productieaanpassing of juridische actuele-service-goedkeuring. De 2010-bronnen geven historische vergunningswaarden.
+
+## Aanvullende LA CAROLINA-controle
+
+Originele PDF-pagina's 1, 6, 8 en 9 van 067-2011 opnieuw visueel geïnspecteerd. P8 artikel 2 wijzigt alleen het A16-traject ten opzichte van 173-2010; artikel 3 behoudt de technische kenmerken en capaciteit uit 173-2010. P9 bevat kennisgevingsregistraties gedateerd **30 maart 2011**; dit bewijst kennisgeving aan de genoemde vertegenwoordigers, niet op zichzelf de actuele dienstuitvoering in 2026. Geen nieuwe frequentie uit 067-2011 afgeleid.
