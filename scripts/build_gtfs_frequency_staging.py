@@ -197,6 +197,20 @@ def run(output):
     agencies={a["agency_id"] for a in load(ROOT/"gtfs/agency.txt")}
     windows=load(BASE/"amb_dispatch_window_assumptions_2026-11-03.csv")
     sources=build_sources()
+    legal_rows=load(BASE/"legal_validity_ocr_review/route_variant_legal_periods.csv")
+    for lr in legal_rows:
+        if lr["variant"] not in ("A","B") or ";" in lr["agency"]:
+            continue  # joint-operation sources need a composite agency, never separate trips
+        if lr["legal_status"]=="article_verified_ocr_table_review":
+            continue  # keep PT3 pending until visual table review
+        if lr["legal_status"] not in ("pilot_article_verified","article_verified_effective_date_unverified"):
+            continue
+        push(sources,lr["agency"],lr["route"],lr["source_resolution"],
+             lr["peak_headway_min"],lr["offpeak_headway_min"],
+             "sources/amb/legal_validity_ocr_review/route_variant_legal_periods.csv",
+             "per_itinerary",lr["variant"],
+             "Legal article source; period must be checked before publication",
+             "legal_period_checked_staging_only")
     candidates=[];periods=[];issues=[]
     seen=set()
     for rt in routes:
@@ -219,6 +233,12 @@ def run(output):
                 blockers.append(source["status"])
             if source["status"]=="pilot_256_primary_pdf_verified_pattern_link_pending":
                 blockers.append("pilot_SIU_to_legal_AB_mapping_unresolved")
+        if source and source["scope"] in ("shared_corridor_effective_not_per_itinerary","effective_combined_section"):
+            raise ValueError("Combined corridor interval must never generate trips: "+gid)
+        if source and source["variant"] and source["variant"]!=variant:
+            raise ValueError("A/B itinerary mismatch: "+gid)
+        if source and source["status"]=="legal_period_checked_staging_only":
+            blockers.append("legal_effective_period_and_operational_activation_unverified")
         if not window:blockers.append(wstatus)
         if agency=="COOTRAB" and n(base)==n("C5-4135"):
             blockers.append("route_code_4135_vs_official_4136")
@@ -263,6 +283,17 @@ def run(output):
                 "last_departure_inclusive":fmt(end),
                 "not_gtfs_frequencies_txt":"yes_requires_trip_id_and_stop_times_last_dispatch_handling"
             })
+    # A single route/variant may have one service owner only. Shared agencies
+    # must be consolidated upstream, not emitted as separate identical trips.
+    owner={}
+    for row in candidates:
+        key=(n(row["base_route_code"]),row["itinerary"])
+        if row["period_staging_status"]!="ready_to_stage":
+            continue
+        previous=owner.get(key)
+        if previous and previous!=row["agency_id"]:
+            raise ValueError("Duplicate route variant across agencies; consolidate shared operation: "+str(key))
+        owner[key]=row["agency_id"]
     write(output/"route_headway_candidates.csv",candidates)
     write(output/"weekday_period_staging.csv",periods)
     write(output/"unresolved_route_issues.csv",issues)
