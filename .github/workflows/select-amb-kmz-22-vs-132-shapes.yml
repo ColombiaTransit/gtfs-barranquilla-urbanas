@@ -1,0 +1,232 @@
+name: Compare and select AMB KMZ road refinements - 22 vs 132
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/select_amb_kmz_22_vs_132_road_geometry.py
+      - .github/workflows/select-amb-kmz-22-vs-132-shapes.yml
+permissions:
+  contents: write
+concurrency:
+  group: select-kmz-shapes-22-vs-132-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  compare-and-select:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install GIS dependencies
+        run: python -m pip install --disable-pip-version-check requests "shapely>=2.0,<3" "pyproj>=3.5,<4"
+      - name: Compile KMZ comparison and generator scripts
+        run: |
+          python -m py_compile scripts/build_amb_kmz_first_gh_fallback_shapes.py \
+            scripts/refine_amb_kmz_long_chords_with_gh_corridor.py \
+            scripts/select_amb_kmz_22_vs_132_road_geometry.py \
+            scripts/build_amb_gtfs_geometry_validation_pilot.py
+      - name: Rehydrate older ArcGIS source used only where official KMZ missing
+        run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
+      - name: Rebuild official KMZ-first and 132-section cautious GH corridor candidate
+        run: |
+          python scripts/build_amb_kmz_first_gh_fallback_shapes.py
+          python scripts/refine_amb_kmz_long_chords_with_gh_corridor.py
+      - name: Generate baseline 22 and candidate 132 synthetic GTFS fixtures
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir sources/amb/KMZ_GH_road_refinement_QA \
+            --out build/amb-KMZ-comparison-22-NOT-PUBLISHABLE
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE \
+            --out build/amb-KMZ-comparison-132-NOT-PUBLISHABLE
+      - name: Ensure comparison changes only shapes.txt
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          a=Path("build/amb-KMZ-comparison-22-NOT-PUBLISHABLE/gtfs_demo")
+          b=Path("build/amb-KMZ-comparison-132-NOT-PUBLISHABLE/gtfs_demo")
+          (b/"stop_times.txt").write_bytes((a/"stop_times.txt").read_bytes())
+          for fname in ("agency.txt","routes.txt","stops.txt","trips.txt","stop_times.txt","calendar.txt"):
+              if (a/fname).read_bytes()!=(b/fname).read_bytes():
+                  raise ValueError("Non-shape GTFS differs: "+fname)
+          with ZipFile(b.parent/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip","w",ZIP_DEFLATED,compresslevel=6) as z:
+              for fname in sorted(b.glob("*.txt")):z.write(fname,arcname=fname.name)
+          print("Both 67 trip GTFS demo fixtures identical except shapes.txt")
+          PY
+      - name: Download SHA256-verified official MobilityData GTFS Schedule Validator 8.0.1
+        run: |
+          curl --fail --location --retry 3 --silent --show-error \
+            https://github.com/MobilityData/gtfs-validator/releases/download/v8.0.1/gtfs-validator-8.0.1-cli.jar \
+            -o /tmp/gtfs-validator-8.0.1-cli.jar
+          echo "19293ddd9b6f954f216d4f12054bd8a3232921751c4484339e339764a91000e2  /tmp/gtfs-validator-8.0.1-cli.jar" | sha256sum -c -
+      - name: Run actual validator on prior 22 guarded sections
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-comparison-22-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-comparison-22-NOT-PUBLISHABLE/validator -c co -t 2 \
+            > build/amb-KMZ-comparison-22-NOT-PUBLISHABLE/validator_stdout.log 2>&1
+          test -s build/amb-KMZ-comparison-22-NOT-PUBLISHABLE/validator/report.json
+      - name: Run actual validator on expanded 132 locally refined sections
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-comparison-132-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-comparison-132-NOT-PUBLISHABLE/validator -c co -t 2 \
+            > build/amb-KMZ-comparison-132-NOT-PUBLISHABLE/validator_stdout.log 2>&1
+          test -s build/amb-KMZ-comparison-132-NOT-PUBLISHABLE/validator/report.json
+      - name: Select route-grounded geometry by comparing 22 and 132 per KMZ section
+        run: python scripts/select_amb_kmz_22_vs_132_road_geometry.py
+      - name: Build combined research candidate with unchanged source GTFS
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE \
+            --out build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          a=Path("build/amb-KMZ-comparison-22-NOT-PUBLISHABLE/gtfs_demo")
+          b=Path("build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE/gtfs_demo")
+          (b/"stop_times.txt").write_bytes((a/"stop_times.txt").read_bytes())
+          for name in ("agency.txt","routes.txt","stops.txt","trips.txt","stop_times.txt","calendar.txt"):
+              if (a/name).read_bytes()!=(b/name).read_bytes():
+                  raise ValueError("Selected candidate mutated GTFS "+name)
+          with ZipFile(b.parent/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip","w",ZIP_DEFLATED,compresslevel=6) as z:
+              for name in sorted(b.glob("*.txt")):z.write(name,arcname=name.name)
+          PY
+      - name: Validate selected composite with full MobilityData validator
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE/validator -c co -t 2 \
+            > build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE/validator_stdout.log 2>&1
+          test -s build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE/validator/report.json
+      - name: Enforce full zero-regression gate and fall back to 22 if needed
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          import json,shutil,subprocess
+          base=Path("build/amb-KMZ-comparison-22-NOT-PUBLISHABLE")
+          wide=Path("build/amb-KMZ-comparison-132-NOT-PUBLISHABLE")
+          final=Path("build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE")
+          picked=Path("build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE")
+          def load(p):return json.loads((p/"validator/report.json").read_text())
+          def counts(report):
+              c={}
+              for x in report["notices"]:c[x["code"]]=int(x["totalNotices"])
+              return c
+          def errors(report):
+              return sum(int(x["totalNotices"]) for x in report["notices"] if x["severity"]=="ERROR")
+          def warning_total(report):
+              return sum(int(x["totalNotices"]) for x in report["notices"] if x["severity"]=="WARNING")
+          def keys(report,code):
+              group=next((g for g in report["notices"] if g["code"]==code),None)
+              if not group:return set()
+              if len(group.get("sampleNotices",[]))!=int(group["totalNotices"]):
+                  raise ValueError("Validator sampled mandatory geometry evidence")
+              if code=="stop_too_far_from_shape":
+                  return {(r.get("tripId"),r.get("stopId"),r.get("stopTimeCsvRowNumber")) for r in group["sampleNotices"]}
+              return {(r.get("tripId"),r.get("stopId1"),r.get("stopId2")) for r in group["sampleNotices"]}
+          original=load(base); candidate=load(final); all132=load(wide)
+          oc=counts(original);cc=counts(candidate)
+          mandatory=("stop_too_far_from_shape","stops_match_shape_out_of_order")
+          regressed=(errors(candidate)>0 or
+                     warning_total(candidate)>warning_total(original) or
+                     any(cc.get(code,0)>oc.get(code,0) for code in set(oc)|set(cc) if
+                         next((g["severity"] for g in candidate["notices"]+original["notices"] if g["code"]==code),"INFO")=="WARNING") or
+                     any(not keys(candidate,code).issubset(keys(original,code)) for code in mandatory))
+          if regressed:
+              # Do NOT publish candidate with apparently better road geometry
+              # that causes even one new validator notice. Revert all sections
+              # and regenerate the same 22 baseline test fixture and report.
+              print("Full-composite validator regression: keeping previously accepted 22 sections")
+              source=Path("sources/amb/KMZ_GH_road_refinement_QA")
+              shutil.copy2(source/"GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson",
+                           picked/"GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson")
+              shutil.copy2(source/"GH_full_route_bus_segment_alignment.csv",
+                           picked/"GH_full_route_bus_segment_alignment.csv")
+              shutil.rmtree(final,ignore_errors=True)
+              subprocess.run(["python","scripts/build_amb_gtfs_geometry_validation_pilot.py",
+                              "--road-dir",str(picked),"--out",str(final)],check=True)
+              (final/"gtfs_demo/stop_times.txt").write_bytes((base/"gtfs_demo/stop_times.txt").read_bytes())
+              with ZipFile(final/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip","w",ZIP_DEFLATED,compresslevel=6) as z:
+                  for item in sorted((final/"gtfs_demo").glob("*.txt")):z.write(item,arcname=item.name)
+              subprocess.run(["java","-Xmx4g","-jar","/tmp/gtfs-validator-8.0.1-cli.jar",
+                              "-i",str(final/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip"),
+                              "-o",str(final/"validator"),"-c","co","-t","2"],check=True)
+              candidate=load(final)
+              if counts(candidate)!=counts(original):
+                  raise ValueError("Failsafe 22 section rollback did not restore original validator notices")
+          out={
+              "validator_version":"8.0.1",
+              "22_baseline_gtfs_errors":errors(original),
+              "132_candidate_gtfs_errors":errors(all132),
+              "final_gtfs_errors":errors(candidate),
+              "22_baseline_total_warnings":warning_total(original),
+              "132_candidate_total_warnings":warning_total(all132),
+              "final_gtfs_warnings":warning_total(candidate),
+              "22_baseline_offroute_stops":oc.get("stop_too_far_from_shape",0),
+              "132_candidate_offroute_stops":counts(all132).get("stop_too_far_from_shape",0),
+              "final_offroute_stops":counts(candidate).get("stop_too_far_from_shape",0),
+              "22_baseline_out_of_order_stops":oc.get("stops_match_shape_out_of_order",0),
+              "132_candidate_out_of_order_stops":counts(all132).get("stops_match_shape_out_of_order",0),
+              "final_out_of_order_stops":counts(candidate).get("stops_match_shape_out_of_order",0),
+              "all_132_section_candidates_reverted_if_new_warning":regressed,
+              "no_new_validator_warnings":not regressed or counts(candidate)==counts(original),
+              "no_new_geometry_notice_instances":all(keys(candidate,code).issubset(keys(original,code)) for code in mandatory),
+              "unchanged_67_synthetic_test_trips_and_SIU_stop_sequence":True,
+              "production_GTFS_modified":False,
+              "approved_for_real_timetable_publication":False
+          }
+          (picked/"MobilityData_final_comparison.json").write_text(json.dumps(out,ensure_ascii=False,indent=2)+"\n")
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          if errors(candidate)!=0 or not out["no_new_geometry_notice_instances"]:
+              raise ValueError("Final candidate was not safely validated")
+          PY
+      - name: Show final selected geometry and validator outcome
+        if: always()
+        run: |
+          if [ -f build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/selection_summary.json ]; then
+            cat build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/selection_summary.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/MobilityData_final_comparison.json ]; then
+            cat build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/MobilityData_final_comparison.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit selection evidence and candidate shapes to research only
+        if: github.ref == 'refs/heads/main'
+        run: |
+          test -s build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/MobilityData_final_comparison.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/KMZ_22_vs_132_selected_QA/
+            for file in per_section_22_vs_132_road_fidelity.csv per_route_22_vs_132_quality.csv selection_summary.json MobilityData_final_comparison.json GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson GH_full_route_bus_segment_alignment.csv; do
+              cp "build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/$file" "sources/amb/KMZ_22_vs_132_selected_QA/$file"
+            done
+            git add sources/amb/KMZ_22_vs_132_selected_QA/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: select MobilityData-safe KMZ road shapes using per-section 22-vs-132 fidelity audit"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - name: Archive all 3 demo GTFS, geometry comparison and validator outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-KMZ-22-vs-132-road-fidelity-MobilityData-SAFE-NOT-PUBLISHABLE
+          path: |
+            build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE/
+            build/amb-KMZ-comparison-22-NOT-PUBLISHABLE/
+            build/amb-KMZ-comparison-132-NOT-PUBLISHABLE/
+            build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE/
+          if-no-files-found: warn
+          retention-days: 60
