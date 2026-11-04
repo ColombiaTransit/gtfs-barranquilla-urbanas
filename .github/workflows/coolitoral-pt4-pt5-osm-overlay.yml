@@ -1,0 +1,28 @@
+name: COOLITORAL PT4 PT5 OSM overlay
+on:
+  workflow_dispatch:
+jobs:
+  overlay:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download OSM named streets from Overpass
+        shell: bash
+        run: |
+          cat > /tmp/streets.overpass <<'EOF'
+          [out:json][timeout:180];
+          way["highway"]["name"~"^(Carrera (43|44|41B)|Calle (8|10))$",i](10.88,-74.90,11.07,-74.72);
+          out body geom;
+          EOF
+          curl --fail --retry 4 --retry-all-errors --retry-delay 8 --max-time 240 \
+            --data-urlencode "data@/tmp/streets.overpass" \
+            https://overpass.kumi.systems/api/interpreter -o /tmp/coolitoral_osm.json
+          python -c 'import json; j=json.load(open("/tmp/coolitoral_osm.json")); assert j.get("elements"),"No ways"'
+      - name: Overlay both KMZ routes with OSM streets
+        run: python scripts/overlay_coolitoral_256_osm.py --overpass /tmp/coolitoral_osm.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coolitoral-pt4-pt5-osm-overlay
+          path: sources/amb/kmz/coolitoral_256_osm_overlay.json
