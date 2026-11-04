@@ -39,8 +39,15 @@ jobs:
           python scripts/refine_amb_kmz_long_chords_with_gh_corridor.py
       - name: Generate baseline 22 and candidate 132 synthetic GTFS fixtures
         run: |
+          # The prior 22-section research folder contains the selected GeoJSON,
+          # but not its unchanged 352-section GH/KMZ alignment CSV metadata.
+          mkdir -p build/amb-KMZ-22-rehydrated-road-input
+          cp sources/amb/KMZ_GH_road_refinement_QA/GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson \
+             build/amb-KMZ-22-rehydrated-road-input/
+          cp build/amb-kmz-first-GH-fallback-research/GH_full_route_bus_segment_alignment.csv \
+             build/amb-KMZ-22-rehydrated-road-input/
           python scripts/build_amb_gtfs_geometry_validation_pilot.py \
-            --road-dir sources/amb/KMZ_GH_road_refinement_QA \
+            --road-dir build/amb-KMZ-22-rehydrated-road-input \
             --out build/amb-KMZ-comparison-22-NOT-PUBLISHABLE
           python scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE \
@@ -149,7 +156,7 @@ jobs:
               source=Path("sources/amb/KMZ_GH_road_refinement_QA")
               shutil.copy2(source/"GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson",
                            picked/"GraphHopper_bus_road_shapes_RESEARCH_ONLY.geojson")
-              shutil.copy2(source/"GH_full_route_bus_segment_alignment.csv",
+              shutil.copy2(Path("build/amb-kmz-first-GH-fallback-research/GH_full_route_bus_segment_alignment.csv"),
                            picked/"GH_full_route_bus_segment_alignment.csv")
               shutil.rmtree(final,ignore_errors=True)
               subprocess.run(["python","scripts/build_amb_gtfs_geometry_validation_pilot.py",
