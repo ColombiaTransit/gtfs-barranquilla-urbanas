@@ -26,9 +26,6 @@ def main():
   if not url:
    url=next((v for k,v in matches[0].items() if "http" in str(v)),"")
   rec["url"]=url
-  if agency=="COOTRANTICO" and resolution=="025-2011":
-   rec.update(status="blocked_known_wrong_source",notes="Manifest points to 331-2010, not authentic 025-2011")
-   results.append(rec);continue
   folder=OUT/f"{agency.lower()}_{resolution}";folder.mkdir(exist_ok=True)
   for attempt in range(3):
    try:
