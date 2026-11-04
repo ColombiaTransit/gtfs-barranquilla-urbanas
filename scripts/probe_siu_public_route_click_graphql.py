@@ -56,10 +56,10 @@ def operation_name(request):
 async def main():
     OUT.mkdir(parents=True, exist_ok=True)
     events, pending, listing_labels = [], [], []
-    state = {"phase": "initial", "clicked": False, "click_target": "none", "route_cards_seen": 0}
+    state = {"phase": "initial", "clicked": False, "click_target": "none", "route_cards_seen": 0, "ui_diagnostics": {}}
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, args=["--no-sandbox"])
-        page = await browser.new_page(viewport={"width": 390, "height": 844}, locale="es-CO")
+        page = await browser.new_page(viewport={"width": 1366, "height": 880}, locale="es-CO")
         async def capture(response):
             if urlsplit(response.url).path != ENDPOINT or len(events) >= MAX_EVENTS:
                 return
@@ -97,6 +97,18 @@ async def main():
         try:
             await page.goto(PAGE, wait_until="domcontentloaded", timeout=60000)
             await page.wait_for_timeout(10000)
+            state["ui_diagnostics"] = await page.evaluate("""() => ({
+                title: document.title.slice(0, 100),
+                elements: [...document.querySelectorAll('a,button,[role="button"],tr,mat-row,mat-card,[class*="route"],[class*="itiner"]')]
+                    .slice(0, 150).map(el => ({
+                        tag: el.tagName.toLowerCase(),
+                        role: el.getAttribute('role') || '',
+                        classes: String(el.className || '').slice(0, 80),
+                        visible: !!el.getClientRects().length,
+                        textLength: (el.textContent || '').trim().length
+                    })),
+                tables: document.querySelectorAll('table,mat-table,[role="grid"]').length
+            })""")
             state["phase"] = "route_click"
             # User confirms the vehicle display appears after clicking a route.
             # Prefer visible route cards; do not click login, maps, or vehicle buttons.
@@ -120,6 +132,17 @@ async def main():
                             break
                 except Exception:
                     continue
+            if not state["clicked"] and listing_labels:
+                for label in listing_labels[:36]:
+                    try:
+                        rows = page.locator("tr,mat-row,[role='row']").filter(has_text=label)
+                        if await rows.count() and await rows.first.is_visible():
+                            await rows.first.click(timeout=3500)
+                            state["clicked"] = True
+                            state["click_target"] = "graphql_listing_matched_table_row"
+                            break
+                    except Exception:
+                        continue
             if not state["clicked"] and listing_labels:
                 # Use route names observed in the public listing; no IDs or values are persisted.
                 for label in listing_labels[:20]:
@@ -169,6 +192,7 @@ async def main():
         "observed_operation_names_after_click": sorted(set(x["operation_name"] for x in after)),
         "new_relevant_schema_fields": sorted(set(f for x in new for f in x["relevant_field_names"])),
         "capture_limit": MAX_EVENTS,
+        "ui_diagnostics": state["ui_diagnostics"],
         "interpretation": "Metadata only; no proof that times are actual departures, predictions or schedules.",
         "status": "clicked_and_observed" if state["clicked"] and after else "inconclusive",
     }
