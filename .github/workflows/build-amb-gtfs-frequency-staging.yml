@@ -53,3 +53,15 @@ jobs:
           path: build/gtfs-frequency-staging/
           if-no-files-found: warn
           retention-days: 45
+      - name: Consolidate route sources and inspect QA joins
+        run: |
+          python -m py_compile scripts/consolidate_amb_gtfs_sources.py
+          python scripts/consolidate_amb_gtfs_sources.py --out build/gtfs-source-consolidation
+      - name: Upload AMB GTFS source consolidation QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-GTFS-source-consolidation-QA
+          path: build/gtfs-source-consolidation/
+          if-no-files-found: warn
+          retention-days: 45
