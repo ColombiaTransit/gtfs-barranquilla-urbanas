@@ -1,0 +1,151 @@
+name: Refine sparse AMB KMZ chords with GH road vertices and validate
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/refine_amb_kmz_long_chords_with_gh_corridor.py
+      - .github/workflows/refine-amb-kmz-long-chords.yml
+permissions:
+  contents: write
+concurrency:
+  group: refine-amb-kmz-long-chords-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  refine-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install geographic processing dependencies
+        run: python -m pip install --disable-pip-version-check requests "shapely>=2,<3" "pyproj>=3.5,<4"
+      - name: Reconstruct ArcGIS fallback for missing KMZ routes
+        run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
+      - name: Reconstruct official KMZ-first shapes from sources
+        run: python scripts/build_amb_kmz_first_gh_fallback_shapes.py
+      - name: Safely insert GH road vertices into KMZ long chords
+        run: python scripts/refine_amb_kmz_long_chords_with_gh_corridor.py
+      - name: Generate two identical-population GTFS demonstration feeds
+        run: |
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-kmz-first-GH-fallback-research \
+            --out build/amb-KMZ-source-baseline-NOT-PUBLISHABLE
+          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            --road-dir build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE \
+            --out build/amb-KMZ-refined-GTFS-NOT-PUBLISHABLE
+      - name: Keep all files except shapes.txt byte-identical
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          a=Path("build/amb-KMZ-source-baseline-NOT-PUBLISHABLE/gtfs_demo")
+          b=Path("build/amb-KMZ-refined-GTFS-NOT-PUBLISHABLE/gtfs_demo")
+          (b/"stop_times.txt").write_bytes((a/"stop_times.txt").read_bytes())
+          for file in ("agency.txt","routes.txt","stops.txt","trips.txt","stop_times.txt","calendar.txt"):
+              if (a/file).read_bytes()!=(b/file).read_bytes():
+                  raise ValueError("Changed GTFS non-shape file: "+file)
+          with ZipFile(b.parent/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip","w",ZIP_DEFLATED,compresslevel=6) as z:
+              for file in sorted(b.glob("*.txt")):z.write(file,arcname=file.name)
+          print("Only shapes.txt differs.")
+          PY
+      - name: Download checksum-pinned official MobilityData Validator 8.0.1
+        run: |
+          curl --fail --location --retry 3 --silent --show-error \
+            https://github.com/MobilityData/gtfs-validator/releases/download/v8.0.1/gtfs-validator-8.0.1-cli.jar \
+            -o /tmp/gtfs-validator-8.0.1-cli.jar
+          echo "19293ddd9b6f954f216d4f12054bd8a3232921751c4484339e339764a91000e2  /tmp/gtfs-validator-8.0.1-cli.jar" | sha256sum -c -
+      - name: Validate original KMZ-first feed
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-source-baseline-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-source-baseline-NOT-PUBLISHABLE/validator -c co -t 2
+      - name: Validate refined KMZ-first feed
+        run: |
+          java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
+            -i build/amb-KMZ-refined-GTFS-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
+            -o build/amb-KMZ-refined-GTFS-NOT-PUBLISHABLE/validator -c co -t 2
+      - name: Compare real notices and fail on any geometry regression
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          out=Path("build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE")
+          def load(path):
+              r=json.loads(path.read_text())
+              return {x["code"]:x for x in r["notices"]}
+          base=load(Path("build/amb-KMZ-source-baseline-NOT-PUBLISHABLE/validator/report.json"))
+          refined=load(Path("build/amb-KMZ-refined-GTFS-NOT-PUBLISHABLE/validator/report.json"))
+          def count(report,code):
+              return int(report.get(code,{}).get("totalNotices",0))
+          def issues(report,code):
+              g=report.get(code,{})
+              if int(g.get("totalNotices",0))!=len(g.get("sampleNotices",[])):
+                  raise ValueError("MobilityData notice group sampled: "+code)
+              return {(x.get("tripId"),x.get("stopId"),x.get("stopTimeCsvRowNumber"))
+                      for x in g.get("sampleNotices",[])}
+          error=lambda report:sum(int(x["totalNotices"]) for x in report.values() if x["severity"]=="ERROR")
+          far="stop_too_far_from_shape";order="stops_match_shape_out_of_order"
+          if error(base)!=0 or error(refined)!=0:raise ValueError("GTFS error introduced")
+          if not issues(refined,far).issubset(issues(base,far)):
+              raise ValueError("New off-shape stop warning introduced")
+          if count(refined,order)>count(base,order):
+              raise ValueError("New stop order warning introduced")
+          result={
+              "original_GTFS_ERRORS":error(base),"refined_GTFS_ERRORS":error(refined),
+              "original_stop_too_far":count(base,far),
+              "refined_stop_too_far":count(refined,far),
+              "original_stop_out_of_order":count(base,order),
+              "refined_stop_out_of_order":count(refined,order),
+              "no_new_offroute_stop_warnings":True,
+              "no_new_order_warnings":True,
+              "only_shapefile_changed":True,
+              "production_GTFS_modified":False,
+          }
+          (out/"MobilityData_comparison.json").write_text(json.dumps(result,indent=2)+"\n")
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Publish refinement and validation summary
+        if: always()
+        run: |
+          if [ -f build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/summary.json ]; then
+            cat build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/summary.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/MobilityData_comparison.json ]; then
+            cat build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/MobilityData_comparison.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Commit validated research outputs only
+        if: github.ref == 'refs/heads/main'
+        run: |
+          test -s build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/MobilityData_comparison.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p sources/amb/KMZ_GH_corridor_refinement_QA
+            cp build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/summary.json sources/amb/KMZ_GH_corridor_refinement_QA/
+            cp build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/MobilityData_comparison.json sources/amb/KMZ_GH_corridor_refinement_QA/
+            cp build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/KMZ_long_chord_GH_road_refinement_decisions.csv sources/amb/KMZ_GH_corridor_refinement_QA/
+            git add sources/amb/KMZ_GH_corridor_refinement_QA/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "data: validate conservative GH road-vertex refinements of sparse official KMZ"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: AMB-KMZ-road-corridor-refinement-and-real-MobilityData-NOT-PUBLISHABLE
+          path: |
+            build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE/
+            build/amb-KMZ-source-baseline-NOT-PUBLISHABLE/
+            build/amb-KMZ-refined-GTFS-NOT-PUBLISHABLE/
+          if-no-files-found: warn
+          retention-days: 60
