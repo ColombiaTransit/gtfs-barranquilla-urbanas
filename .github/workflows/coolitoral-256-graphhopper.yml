@@ -22,6 +22,18 @@ jobs:
         run: |
           python scripts/prepare_coolitoral_256_graphhopper.py \
             --overpass sources/osm/overpass/coolitoral_pt4_pt5_20261104.json
+      - name: Publish unresolved street transitions in job summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          d=json.load(open("sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json"))
+          print("## Unresolved COOLITORAL street transitions")
+          print("| From | To | Reason | Nearest distance (m) | Routes |")
+          print("|---|---|---|---:|---|")
+          for j in d["unresolved_unique_pairs"]:
+              print(f"| {j['from']} | {j['to']} | {j['diagnosis']} | {j['distance_m']} | {', '.join(j['routes'])} |")
+          print("\\nCandidates are not verified road-network connections.")
+          PY
       - name: Optional GraphHopper candidate routing (reviewed only)
         if: ${{ inputs.route_approved }}
         env:
