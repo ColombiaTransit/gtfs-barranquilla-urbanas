@@ -60,6 +60,8 @@ async def main():
             ui.append({"stage": "initial", "route_titles": await page.locator(".l-card__inner .title").count(),
                        "stop_cards": await page.locator(".stops-card").count(),
                        "mui_selects": await page.locator('[role="button"][aria-haspopup="listbox"]').count()})
+            ui.append({"stage": "route_navigation_inventory", "links": await page.locator("a,button,[role=button]").evaluate_all(
+                """els => els.filter(e=>!!(e.offsetWidth||e.offsetHeight||e.getClientRects().length)).slice(0,65).map(e=>({tag:e.tagName.toLowerCase(),text:(e.innerText||e.getAttribute('aria-label')||'').trim().slice(0,65),href:(e.getAttribute('href')||'').slice(0,120)}))""")})
             # Inspect each public Material UI listbox and its options before choosing.
             # A menu inspection is not evidence that an itinerary was selected.
             selects = page.locator('[role="button"][aria-haspopup="listbox"]')
@@ -68,6 +70,9 @@ async def main():
             for index in range(min(await selects.count(), 8)):
                 item = selects.nth(index)
                 try:
+                    if index == 0:
+                        ui.append({"stage": "select_inspect", "index": 0, "outcome": "sort_control_skipped"})
+                        continue
                     if not await item.is_visible():
                         continue
                     await item.click(timeout=1800)
@@ -84,7 +89,7 @@ async def main():
                     ui.append({"stage": "select_inspect", "index": index, "error_type": type(exc).__name__})
                     await page.keyboard.press("Escape")
             # Select only an exact public route match; never guess organization filters.
-            for index in range(min(await selects.count(), 8)):
+            for index in range(1, min(await selects.count(), 8)):
                 if any(x.get("stage") == "route_select" and x.get("outcome") == "selected_mui_option" for x in ui):
                     break
                 try:
