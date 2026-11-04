@@ -1,5 +1,5 @@
 source_agency,source_resolution,source_route_code,canonical_route_code,mapping_status,geometry_unblocked,stops_unblocked,frequency_mapping_unblocked,legal_conflict_unresolved,notes
-COOCHOFAL,242-2025,A15-4129,A15-4159,provisional_alias,true,true,true,true,Article 1 heading differs from route and fleet tables; no duplicate GTFS route
-COOCHOFAL,242-2025,A15-4159,A15-4159,preferred_working_code,true,true,true,true,Route and fleet tables
+COOCHOFAL,242-2025,A15-4129,A15-4159,provisional_alias,true,true,true,true,Article 1 heading differs; AMB Circular 010-2025 explicitly uses A15-4159 twice; no duplicate GTFS route
+COOCHOFAL,242-2025,A15-4159,A15-4159,preferred_working_code,true,true,true,true,Route and fleet tables; AMB Circular 010-2025 pages 1-2 confirm A15-4159
 COOCHOFAL,242-2025,C2-B-4187,C2-B-4187,preferred_working_code,true,true,true,true,Article 1 and route heading
 COOCHOFAL,242-2025,C2-B-4188,C2-B-4187,provisional_alias,true,true,true,true,Fleet table differs; no duplicate GTFS route
