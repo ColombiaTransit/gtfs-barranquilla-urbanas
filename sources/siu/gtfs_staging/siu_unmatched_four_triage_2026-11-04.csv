@@ -1,0 +1,5 @@
+siu_itinerary_uuid,siu_name,siu_companies,stop_count,triage_status,gtfs_route_candidate,reason,next_action
+d1721476-04ba-48ae-a529-0e811add4c4d,ITINERARIO PRUEBA DOS,PRUEBAS AMB,163,excluded_test_itinerary,,Explicit likely_test_itinerary=true in SIU source,Keep in audit inventory; exclude from production mapping
+9cf74d50-81c0-439c-8afd-a04c9ae93ca5,INTENERARIO PRUEBA 3,PRUEBAS AMB,70,excluded_test_itinerary,,Explicit likely_test_itinerary=true in SIU source,Keep in audit inventory; exclude from production mapping
+f9b72492-b757-411e-b1eb-c116e80532d2,1234,PRUEBAS AMB,233,excluded_test_itinerary,,Explicit likely_test_itinerary=true in SIU source,Keep in audit inventory; exclude from production mapping
+74423094-02df-4fcc-88e3-402fa0e178e1,SOLEDAD CALLE 84,SODETRANS;TRANSDIAZ,,unresolved_operator_geometry_conflict,B17-4163,Top GIS candidate B17-4163 has operator mismatch with SIU; no verified mapping,Compare SIU stop sequence with official route shape and check shared operators
