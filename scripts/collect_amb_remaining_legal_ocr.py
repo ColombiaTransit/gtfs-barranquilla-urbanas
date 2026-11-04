@@ -82,7 +82,7 @@ def main():
         for resolution in resolutions:
             record = {"agency": agency, "resolution": resolution, "index_url": index,
                       "source_url": "", "status": "missing_link", "sha256": "",
-                      "pages": "", "article_hits": "", "error": index_error}
+                      "pages": "", "article_hits": "", "text_characters": "", "native_characters": "", "error": index_error}
             matches = [(label, urljoin(index, href)) for label, href in links
                        if match_resolution(label+" "+href, resolution)]
             # Some AMB pages use link labels without the numeric resolution.
@@ -108,15 +108,30 @@ def main():
                     pdf.write_bytes(raw)
                     record["sha256"] = hashlib.sha256(raw).hexdigest()
                     page_text = folder / "text.txt"
-                    subprocess.run(["pdftotext", "-layout", str(pdf), str(page_text)], check=True, timeout=60)
+                    native = folder / "native.txt"
+                    subprocess.run(["pdftotext", "-layout", str(pdf), str(native)], check=True, timeout=60)
+                    native_pages = native.read_text(encoding="utf-8", errors="replace").split("\\f")
+                    # Mixed text/scanned PDFs can contain a cover-page text layer
+                    # while all operative articles remain images. OCR every
+                    # image-only page, even if the PDF has some native text.
+                    subprocess.run(["ocrmypdf", "--skip-text", "-l", "spa",
+                                    "--jobs", "2", "--sidecar", str(folder / "ocr_sidecar.txt"),
+                                    "--output-type", "pdf", str(pdf), str(folder / "ocr.pdf")],
+                                   check=True, timeout=1200)
+                    subprocess.run(["pdftotext", "-layout", str(folder / "ocr.pdf"), str(page_text)],
+                                   check=True, timeout=60)
                     extracted = page_text.read_text(encoding="utf-8", errors="replace")
-                    if len(extracted.strip()) < 250:
-                        subprocess.run(["ocrmypdf", "--skip-text", "-l", "spa", "--jobs", "2",
-                                        str(pdf), str(folder / "ocr.pdf")],
-                                       check=True, timeout=1200)
-                        subprocess.run(["pdftotext", "-layout", str(folder / "ocr.pdf"), str(page_text)],
-                                       check=True, timeout=60)
-                        extracted = page_text.read_text(encoding="utf-8", errors="replace")
+                    effective_pages = [p for p in extracted.split("\\f") if p.strip()]
+                    record["text_characters"] = str(len(extracted.strip()))
+                    record["native_characters"] = str(len(native.read_text(encoding="utf-8", errors="replace").strip()))
+                    record["article_hits"] = ""
+                    if not effective_pages or not any(re.search(r"ART[IÍ]CULO|RESUELVE", p, re.I) for p in effective_pages):
+                        record["status"] = "ocr_incomplete_review_required"
+                        record["error"] = "No operative article markers in extracted text; visually review pages"
+                        record["pages"] = str(len(effective_pages))
+                        rows.append(record)
+                        print(agency, resolution, record["status"], flush=True)
+                        continue
                     record["pages"] = str(extracted.count("\f") or 1)
                     hits = []
                     for page, text in enumerate(extracted.split("\f"), 1):
