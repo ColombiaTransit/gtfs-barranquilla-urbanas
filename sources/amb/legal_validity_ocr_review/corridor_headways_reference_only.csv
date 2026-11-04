@@ -1,0 +1,7 @@
+agency,route,source_resolution,peak_corridor_headway_min,offpeak_corridor_headway_min,interpretation,gtfs_trip_generation
+COOLITORAL,PT4-4104,256-2026,4.5,7,Combined A/B busiest corridor reference only,never
+COOLITORAL,PT5-4105,256-2026,4.5,7,Combined A/B busiest corridor reference only,never
+SOBUSA,B18-4175,082-2026,5,6,Combined A/B busiest corridor reference only,never
+COOLITORAL,PT2-4102,210-2026,5,6,Combined A/B busiest corridor reference only,never
+COOLITORAL,PT3-4103,210-2026,5.5,6.5,Combined A/B busiest corridor reference only; PT3 OCR review pending,never
+COOTRAB;COOLITORAL,A1-4106,358-2024,4.5,6,Combined shared corridor reference only; one virtual agency per identical variant,never
