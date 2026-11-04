@@ -2,8 +2,6 @@ gtfs_route_id,agency,base_route_code,resolution,blockers,next_step
 AMB_TRANSMECAR_D10_4172,TRANSMECAR,D10-4172,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_TRANSMECAR_D11_4153,TRANSMECAR,D11-4153,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_TRANSMECAR_D9_4152,TRANSMECAR,D9-4152,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_LA_CAROLINA_A16_4161_A,LA_CAROLINA,A16-4161,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_LA_CAROLINA_A16_4161_B,LA_CAROLINA,A16-4161,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_A15_4159,COOCHOFAL,A15-4159,242-2025,route_variant_scope_and_legal_effect_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C2_4133,COOCHOFAL,C2-4133,242-2025,route_variant_scope_and_legal_effect_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C2_B_4188,COOCHOFAL,C2-B-4188,242-2025,route_variant_scope_and_legal_effect_unverified;historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
