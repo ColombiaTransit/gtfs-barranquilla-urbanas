@@ -35,6 +35,10 @@ jobs:
           python scripts/audit_coolitoral_256_gaps.py \
             --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json \
             --manifest sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json
+      - name: Audit directed connectivity via unnamed OSM roads
+        run: |
+          python scripts/audit_coolitoral_256_directed_connectivity.py \
+            --overpass sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
       - name: Publish unresolved street transitions in job summary
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
@@ -46,6 +50,13 @@ jobs:
           for j in d["unresolved_unique_pairs"]:
               print(f"| {j['from']} | {j['to']} | {j['diagnosis']} | {j['distance_m']} | {', '.join(j['routes'])} |")
           print("\\nCandidates are not verified road-network connections.")
+          x=json.load(open("sources/amb/kmz/coolitoral_256_directed_connectivity.json"))
+          print("\\n## Directed connectivity via unnamed roads")
+          print("| Variant | Connected transitions | Total | Ordered route verified |")
+          print("|---|---:|---:|---|")
+          for code,route in x["routes"].items():
+              n=sum(t["connection"] is not None for t in route["transitions"])
+              print(f"| {code} | {n} | {len(route['transitions'])} | No |")
           PY
       - name: Optional GraphHopper candidate routing (reviewed only)
         if: ${{ inputs.route_approved }}
@@ -63,5 +74,6 @@ jobs:
           path: |
             sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json
             sources/amb/kmz/coolitoral_256_gap_audit.json
+            sources/amb/kmz/coolitoral_256_directed_connectivity.json
             sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
             sources/amb/kmz/graphhopper_candidates/*.geojson
