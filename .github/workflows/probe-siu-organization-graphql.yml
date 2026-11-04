@@ -1,0 +1,39 @@
+name: Probe SIU organization GraphQL
+'on':
+  workflow_dispatch:
+    inputs:
+      company_id:
+        description: 'Optional verified SIU company ID; leave blank to skip company lookup'
+        required: false
+        type: string
+      organization_id:
+        description: 'Optional verified SIU organization ID; leave blank to skip company lookup'
+        required: false
+        type: string
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      SIU_COMPANY_ID: ${{ inputs.company_id }}
+      SIU_ORGANIZATION_ID: ${{ inputs.organization_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Probe observed read-only organization queries
+        run: python scripts/probe_siu_organization_graphql.py
+      - name: Publish summary
+        if: always()
+        run: |
+          if [ -f build/siu-organization-probe/report.md ]; then
+            cat build/siu-organization-probe/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siu-organization-graphql-probe
+          path: build/siu-organization-probe/
+          retention-days: 30
