@@ -1,0 +1,6 @@
+agency,historical_route_token,current_route_candidate,resolution,peak_minutes,offpeak_minutes,original_pdf_pages,verification,latest_amendment_to_check,current_operation_verified,gtfs_release_approved,source_evidence
+TRASALIANCO,D12,D12-4154,265-2010,4,6,1;6;8;9,original_image_checked,check_later_route_decisions,no,no,docs/amb_ocr_visual_verification_results_2026-11-04.md
+TRASALIANCO,B19,B19-4176,266-2010,4,6,1;6;8;9,original_image_checked,check_later_route_decisions,no,no,docs/amb_ocr_visual_verification_results_2026-11-04.md
+TRASALIANCO,D17,D17-4158,268-2010,5,7,1;6;8;9,original_image_checked,411-2010_partially_amends_route_geometry_no_new_headway_in_checked_articles,no,no,docs/amb_trasalianco_d17_411_2010_legal_comparison_2026-11-04.md
+TRASALIANCO,D18,D18-4179,408-2013,7,10,1;8;10;11,original_image_checked,267-2010_historical_comparison_open,no,no,docs/amb_ocr_visual_verification_results_2026-11-04.md
+TRANSMECAR,C17,C17-4160,324-2010,4,6,7;9;10,original_image_checked,check_later_route_decisions,no,no,docs/amb_ocr_visual_verification_results_2026-11-04.md
