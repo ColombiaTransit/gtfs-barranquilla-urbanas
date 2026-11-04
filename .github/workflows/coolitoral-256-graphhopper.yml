@@ -20,10 +20,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fetch complete roads from organization Overpass
         env:
-          API_OVERPASS: ${{ secrets.API_OVERPASS }}
+          API_OVERPASS: ${{ vars.API_OVERPASS }}
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
           CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: |
+          echo "::add-mask::$API_OVERPASS"
           python scripts/fetch_coolitoral_overpass_roads.py \
             --output sources/osm/overpass/coolitoral_pt4_pt5_full_roads.json
       - name: Derive all legal A/B junction candidates from uploaded OSM JSON
