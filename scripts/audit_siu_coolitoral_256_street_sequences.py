@@ -44,6 +44,36 @@ def norm(text):
     s=unicodedata.normalize("NFKD",str(text or "").upper())
     return "".join(c for c in s if not unicodedata.combining(c))
 
+def cyclic_street_score(stoprows, legal_streets):
+    """Rotation-invariant ordered street landmark comparison for circular routes.
+
+    This is a stop-name proxy, NOT GPS-to-road geometry matching. Preserve travel
+    direction: only rotate SIU sequence, never reverse it.
+    """
+    streets=[norm(x.strip()) for x in legal_streets.split(">") if x.strip()]
+    patterns=[PATTERNS.get(x) for x in streets]
+    if not all(patterns):
+        return {"score":None,"matched":0,"total":len(streets),"reason":"unknown_legal_street"}
+    n=len(stoprows)
+    best=(0,0,[])
+    # Greedy ordered subsequence on two cycles, testing each possible starting
+    # stop. Count at most one match per legal landmark.
+    for rotation in range(n):
+        hits=[]; pos=rotation
+        for street,pat in zip(streets,patterns):
+            found=None
+            for delta in range(n):
+                idx=(pos+delta)%n
+                if re.search(pat,norm(stoprows[idx]["stop_name"])):
+                    found=idx;break
+            if found is None:break
+            hits.append({"street":street,"siu_stop_sequence":stoprows[found]["siu_stop_sequence"]})
+            pos=(found+1)%n
+        if len(hits)>best[0]:best=(len(hits),rotation,hits)
+    return {"score":round(best[0]/len(streets),3),"matched":best[0],
+            "total":len(streets),"rotation_start":best[1],
+            "landmarks":best[2],"method":"cyclic_stop_name_proxy_not_gps_geometry"}
+
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     all_stops=[x for x in read(SRC) if x.get("likely_test_itinerary")=="false"]
@@ -53,7 +83,7 @@ def main():
     assert all(set(v)=={"A","B"} for v in bylegal.values())
     byname=defaultdict(list)
     for row in all_stops:byname[row["siu_display_name"]].append(row)
-    results=[];examples=[]
+    results=[];examples=[];cyclic_results=[]
     for siu_name,base,other,street,terminal in MAP:
         stoprows=sorted(byname[siu_name],key=lambda r:int(r["siu_stop_sequence"]))
         assert len(stoprows) in (124,132),len(stoprows)
@@ -70,6 +100,11 @@ def main():
                     "siu_stop_name":r["stop_name"],
                     "gps_lat":r["stop_lat"],"gps_lon":r["stop_lon"],
                 })
+        for legal_base, variants in bylegal.items():
+            for variant, legal_row in variants.items():
+                result=cyclic_street_score(stoprows,legal_row["main_street_sequence"])
+                cyclic_results.append({"siu_name":siu_name,"legal_base":legal_base,
+                    "legal_variant":variant,**result})
         count={}
         for k,pattern in PATTERNS.items():
             hit=[r for r in stoprows if re.search(pattern,norm(r["stop_name"]))]
@@ -98,6 +133,8 @@ def main():
             "review_notes":notes,
             **{f"siu_named_{k.lower().replace(' ','_')}":v["n_stopnames"] for k,v in count.items()},
         })
+    (OUT/"cyclic_street_comparison.json").write_text(
+        json.dumps(cyclic_results,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
     write(OUT/"pt4_pt5_street_sequence_review.csv",results,list(results[0]))
     write(OUT/"sample_matched_siu_street_landmarks.csv",examples,list(examples[0]))
     summary={
