@@ -1,0 +1,31 @@
+name: Crosswalk SIU organizations and itineraries
+'on':
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/crosswalk_siu_organizations.py
+      - .github/workflows/crosswalk-siu-organizations.yml
+permissions:
+  contents: read
+jobs:
+  crosswalk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Join public SIU organization IDs to previously exported itineraries
+        run: python scripts/crosswalk_siu_organizations.py
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f build/siu-org-itinerary-crosswalk/report.md ]; then
+            cat build/siu-org-itinerary-crosswalk/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siu-org-itinerary-crosswalk
+          path: build/siu-org-itinerary-crosswalk/
+          retention-days: 45
