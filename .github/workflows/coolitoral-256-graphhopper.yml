@@ -25,7 +25,7 @@ jobs:
       - name: Optional GraphHopper candidate routing (reviewed only)
         if: ${{ inputs.route_approved }}
         env:
-          GRAPHHOPPER_API_KEY: ${{ secrets.GRAPHHOPPER_API_KEY }}
+          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
           ROUTE: ${{ inputs.route }}
         run: |
           python scripts/route_coolitoral_256_graphhopper.py \
