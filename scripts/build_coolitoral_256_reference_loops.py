@@ -60,7 +60,13 @@ def main():
    item["status"]="anchor_too_far";summary[code]=item;continue
   if not url:
    item["status"]="awaiting_graphhopper_secret";summary[code]=item;continue
-  req=urllib.request.Request(url,data=json.dumps({"profile":a.profile,"points":pts,"points_encoded":False,"instructions":False,"calc_points":True}).encode(),headers={"Content-Type":"application/json"},method="POST")
+  headers={"Content-Type":"application/json"}
+  client_id=os.getenv("CF_ACCESS_CLIENT_ID","")
+  client_secret=os.getenv("CF_ACCESS_CLIENT_SECRET","")
+  if client_id and client_secret:
+   headers["CF-Access-Client-Id"]=client_id
+   headers["CF-Access-Client-Secret"]=client_secret
+  req=urllib.request.Request(url,data=json.dumps({"profile":a.profile,"points":pts,"points_encoded":False,"instructions":False,"calc_points":True}).encode(),headers=headers,method="POST")
   try:
    with urllib.request.urlopen(req,timeout=180) as resp:res=json.load(resp)
    route=res["paths"][0];coords=route["points"]["coordinates"]
