@@ -42,10 +42,6 @@ AMB_SOBUSA_B18_4175_B,SOBUSA,B18-4175,082-2026,legal_effective_period_and_operat
 AMB_SOBUSA_C16_4167_A,SOBUSA,C16-4167,466-2025,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_SOBUSA_C16_4167_B,SOBUSA,C16-4167,466-2025,legal_effective_period_and_operational_activation_unverified,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_SODETRANS_B13_B_4189,SODETRANS,B13-B-4189,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_SODETRANS_B15_4129_A,SODETRANS,B15-4129,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_SODETRANS_B15_4129_B,SODETRANS,B15-4129,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_SODETRANS_C21_4182_A,SODETRANS,C21-4182,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_SODETRANS_C21_4182_B,SODETRANS,C21-4182,,variant_headway_not_documented,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRANSNORTE_A6_4111,COOTRANSNORTE,A6-4111,183-2016,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRANSNORTE_A5_4110,COOTRANSNORTE,A5-4110,156-2015,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_TRASALIANCO_B19_4176,TRASALIANCO,B19-4176,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
