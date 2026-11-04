@@ -141,6 +141,15 @@ def build_sources():
         push(data,agency,code,res,peak,off,
             "docs/amb_bedrijven/"+agency.lower()+"_route_frequencies_2026-11-02.md",
             "per_itinerary",variant,"Original route table "+ref)
+    # C21-4182: 719-2018 states a route-wide 4/6-minute interval.
+    # Alternate A/B departures evenly, yielding 8/12 minutes per variant.
+    # This is a transparent modelling assumption, not an observed timetable.
+    for variant in ("A","B"):
+        push(data,"SODETRANS","C21-4182","719-2018",8,12,
+             "sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv",
+             "per_itinerary",variant,
+             "50/50 split of route-wide 4/6-minute licensed headway; not an independent A/B authorization",
+             "model_assumption_50_50_split")
     # SOBUSA C16-4167 A/B is already recorded in the legal period register.
     # This source has an explicit per-variant scope (not a combined corridor).
     for row in load(BASE/"legal_validity_ocr_review/route_variant_legal_periods.csv"):
