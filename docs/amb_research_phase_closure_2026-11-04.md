@@ -48,3 +48,9 @@ De bovenstaande afsluiting geldt voor **de gedocumenteerde onderzoekswerkzaamhed
 - `sources/amb/legal_validity_ocr_review/priority_legal_decision_chains.csv` (historische auditketens, niet automatische GTFS-blokkades)
 
 **Onderzoeksfase: administratief gesloten. GTFS-productiefase: nog niet gevalideerd of vrijgegeven.**
+
+## Generatorcorrecties (4 november 2026)
+
+De auditgenerator `scripts/audit_amb_legal_ocr_priority.py` is aangepast: MONTERREY 437-2016 staat als origineel geverifieerd, COOTRANTICO 025-2011 wordt niet meer als ontbrekend origineel aangemerkt, en de gegenereerde prioriteitsregels verwijzen voor de volgende fase naar dit afsluitregister en de GTFS-overdracht. Commits: `c569a98`, `80d1e1b`, `b73b7da`.
+
+**Controlegrens:** de generatorwijzigingen zijn gecommit, maar een nieuwe GitHub Actions-run ter verificatie van de gegenereerde bestanden is nog niet uitgevoerd. De historische tekstkolommen blijven bronbevindingen; de werkstatus `research_closed_gtfs_handoff` is leidend. Een bestaande statische CSV wordt pas bij een volgende succesvolle auditrun opnieuw gegenereerd.
