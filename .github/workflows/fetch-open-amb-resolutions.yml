@@ -1,0 +1,32 @@
+name: Fetch outstanding AMB resolution originals
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/fetch_open_amb_resolutions.py
+      - .github/workflows/fetch-open-amb-resolutions.yml
+permissions:
+  contents: read
+jobs:
+  fetch-originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch originals and verify PDF magic, metadata and SHA-256
+        run: python scripts/fetch_open_amb_resolutions.py
+      - name: Show download index
+        if: always()
+        run: |
+          cat build/amb-open-resolution-originals/download_index.csv || true
+      - name: Upload originals and audit index
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AMB-outstanding-original-PDFs-NOT-LEGALLY-APPROVED
+          path: build/amb-open-resolution-originals/
+          retention-days: 60
+          if-no-files-found: warn
