@@ -27,16 +27,16 @@ PRIORITY=[
  dict(agency="EMBUSA",route="B9-4125",decisions="113-2012;231-2025;010-2026",observed="010-2026 Article 1 modifies B9-4125, 4/6 min; 00:00-24:00 is conditional on demand",status="latest_documented_amendment_chain_unfinished",question="Compare explicit articles of 231-2025 and 113-2012 for effectivity, revocations, and supersession",evidence="docs/embusa_010_2026_validatie.md"),
  dict(agency="COOTRAB",route="C5-4136;C6-4137",decisions="200-2019;378-2023;358-2024",observed="358-2024 modifies C5/C6 to 8/10 min and adds A1 shared operation with COOLITORAL",status="articles_reviewed_cross_agency_current_status_open",question="Compare A1 joint operation with COOLITORAL 192-2025; keep both operators attributable",evidence="sources/amb/cootrab_resolution_legal_index_2026-11-02.csv"),
  dict(agency="COOTRANTICO",route="B20",decisions="331-2010;025-2011",observed="025-2011 manifest URL points to document titled 331-2010; the original 025 was not inspected",status="WRONG_SOURCE_BLOCKER",question="Locate and validate exact original 025-2011 PDF, then determine legal effect on B20",evidence="sources/amb/resolution_gap_audit_2026-11-02.csv"),
- dict(agency="COOCHOFAL",route="C2-4133;C3-4134;C9-4140;C18-4141",decisions="407-2013;387-2018;242-2025",observed="2025 eight route tables scan checked; potential internal legal/document conflicts remain",status="latest_article_tables_reviewed_legal_conflicts_open",question="Compare operative wording with historical amendments and check route code A/B relationships",evidence="docs/amb_bedrijven/coochofal_route_frequencies_2026-11-02.md"),
- dict(agency="TRASALIANCO",route="B19-4176;D12-4154;D17-4158;D18-4179",decisions="265-2010;266-2010;268-2010;408-2013",observed="2010 source PDFs present as URLs in manifest but not yet verified in this new OCR pass",status="DOC_IMAGE_REVIEW_BLOCKER",question="Verify original 265/266/268 identity and article tables; inspect 408-2013 map and street sequence",evidence="docs/ocr_wachtrij.md"),
- dict(agency="TRANSMECAR",route="C17-4160",decisions="324-2010",observed="Historical 324-2010 scan requires image/article verification",status="DOC_IMAGE_REVIEW_BLOCKER",question="Verify original resolution number, route designation, street itinerary, interval and later amendments",evidence="docs/ocr_wachtrij.md"),
- dict(agency="LA_CAROLINA",route="A16-4161",decisions="173-2010;067-2011;204-2012;199-2019",observed="067-2011 scanned route and legal dependency on 173-2010/204-2012 require visual verification",status="DOC_IMAGE_REVIEW_BLOCKER",question="Check the 067 scan and legal chain; do not infer a current A/B variant from date alone",evidence="docs/ocr_wachtrij.md"),
+ dict(agency="COOCHOFAL",route="C2-4133;C3-4134;C9-4140;C18-4141",decisions="407-2013;387-2018;242-2025",observed="2025 eight route tables scan checked; potential internal legal/document conflicts remain",status="latest_article_tables_reviewed_aliases_canonicalized",question="Compare operative wording with historical amendments; A15-4159 and C2-B-4188 aliases already resolved",evidence="docs/amb_bedrijven/coochofal_route_frequencies_2026-11-02.md"),
+ dict(agency="TRASALIANCO",route="B19-4176;D12-4154;D17-4158;D18-4179",decisions="265-2010;266-2010;268-2010;408-2013",observed="265/266/268-2010 and 408-2013 original article/table pages visually checked; historical D12/B19 4/6, D17 5/7, D18 7/10",status="HISTORICAL_ARTICLES_AND_INTERVALS_VISUALLY_VERIFIED",question="Only later amendments and current route-ID correspondence remain; do not repeat OCR",evidence="docs/amb_ocr_visual_verification_results_2026-11-04.md"),
+ dict(agency="TRANSMECAR",route="C17-4160",decisions="324-2010",observed="324-2010 original article/table pages visually verified: historical C17 4/6; implementation conditional on AMB notice",status="HISTORICAL_ARTICLES_AND_INTERVALS_VISUALLY_VERIFIED",question="Only later amendments and current route-ID correspondence remain; do not repeat OCR",evidence="docs/amb_ocr_visual_verification_results_2026-11-04.md"),
+ dict(agency="LA_CAROLINA",route="A16-4161",decisions="173-2010;067-2011;204-2012;199-2019",observed="067-2011 articles 2/3 visually verified: route changed; 173-2010 technical parameters retained; 2011-03-30 notifications recorded",status="067_ARTICLES_VISUALLY_VERIFIED_LATER_CHAIN_SEPARATE",question="Only compare 204-2012/199-2019 effect; do not repeat 067 OCR",evidence="docs/amb_ocr_visual_verification_results_2026-11-04.md"),
  dict(agency="ALL_OPERATORS",route="unknown",decisions="448-2025",observed="General metropolitan pilot appears in source audit; affected routes are not identified",status="SCOPE_UNKNOWN_BLOCKER",question="Obtain original act and identify concrete route effects before assigning to any agency",evidence="sources/amb/resolution_gap_audit_2026-11-02.csv"),
 ]
 OVERRIDES={
  ("COOLITORAL","256-2026"):{"url":"https://www.ambq.gov.co/wp-content/uploads/2026/06/RESOLUCION-256-2026-PILOTO-COOLITORAL-1.pdf","evidence":"docs/siu_remaining_21_route_links_review_2026-11-03.md","status":"verified_original_pdf_not_missing"},
- ("COOTRANTICO","025-2011"):{"status":"manifest_wrong_pdf_331_2010","evidence":"sources/amb/resolution_gap_audit_2026-11-02.csv"},
- ("MONTERREY","437-2016"):{"status":"manifest_pdf_name_404_2013_suspect","evidence":"sources/amb/pdf_manifest.csv"},
+ ("COOTRANTICO","025-2011"):{"status":"manifest_wrong_pdf_original_recovered_articles_visually_checked","evidence":"sources/amb/legal_validity_ocr_review/priority_legal_decision_chains.csv"},
+ ("MONTERREY","437-2016"):{"status":"manifest_link_corrected_original_pdf_identified","url":"https://www.ambq.gov.co/wp-content/uploads/2017/01/REOLUCION-437-16-MONTERREY..pdf","evidence":"sources/amb/details/resolucion_437-2016_monterrey.csv"},
 }
 def records(p):
     with p.open("r",newline="",encoding="utf-8-sig") as f:
@@ -114,7 +114,8 @@ def main():
                 "evidence":correction["evidence"],
                 "next_action":(
                     "replace_stale_document_gap_label_with_verified_article_source" if res=="256-2026" else
-                    "obtain_correct_original_document_before_legal_inference"),
+                    "original_page_review_pending_for_monterrey" if agency=="MONTERREY" else
+                    "original_025_articles_checked_current_effect_separate"),
                 "gtfs_legal_status":"still_requires_current_validity_check",
             })
     store(args.out/"manifest_document_identity_and_stale_gap_review.csv",anomalies)
@@ -161,7 +162,7 @@ def main():
         "ocr_visual_queue_cases":len(backlog),
         "manifest_identity_and_outdated_gap_flags":len(anomalies),
         "coolitoral_256_2026_recovered_official_pdf":True,
-        "cootrantico_025_2011_correct_original_not_verified":True,
+        "cootrantico_025_2011_original_articles_visually_checked":True,
         "all_new_juridical_supersession_conclusions_require_original_articles":True,
         "current_service_or_publication_auto_approved":False,
     }
@@ -185,7 +186,8 @@ def main():
                   "; **open:** "+x["open_legal_question"].replace("|","/")+" |")
     md+=["","## Bron-/OCR-regels","",
          "- 256-2026 COOLITORAL: **niet langer ontbrekend**; pilot-PDF is teruggevonden en eerder inhoudelijk gecontroleerd.",
-         "- 025-2011 COOTRANTICO: manifest verwijst verkeerd naar een PDF van 331-2010; identiteitsblokkade blijft.",
+         "- 025-2011 COOTRANTICO: oude manifestlink is onjuist; het origineel en artikelen 3/6 zijn eerder visueel gecontroleerd. Latere rechtswerking apart.",
+         "- 437-2016 MONTERREY: manifest-URL is gecorrigeerd; nieuwe volledige OCR/beeldcontrole volgt via de workflow.",
          "- De zes documenten in de centrale OCR-wachtrij hebben alle een manifest-URL, maar dit bewijst geen feitelijke download of bronidentiteit.",
          "- OCR + beelden moeten met de originele resolutie, datum, route en artikeltekst worden gecontroleerd voordat een rechtsgevolg wordt bevestigd.",
          "- Vloot-/capaciteitscijfers zijn buiten de GTFS-scope; ze blijven slechts ongewijzigd als historisch brongegeven.",
