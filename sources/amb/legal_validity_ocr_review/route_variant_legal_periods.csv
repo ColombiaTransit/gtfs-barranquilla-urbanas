@@ -1,10 +1,10 @@
 agency,route,variant,source_resolution,prior_resolution,effective_from,effective_to_exclusive,peak_headway_min,offpeak_headway_min,headway_scope,legal_status,source_note
-COOLITORAL,PT4-4104,A,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
-COOLITORAL,PT4-4104,B,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
-COOLITORAL,PT5-4105,A,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
-COOLITORAL,PT5-4105,B,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_dates_provisional,End exclusive based on six months; original article still needs confirmation
-SOBUSA,B18-4175,A,082-2026,466-2025,,,10,12,per_variant,dates_unverified,Do not use combined corridor interval as variant headway
-SOBUSA,B18-4175,B,082-2026,466-2025,,,10,12,per_variant,dates_unverified,Do not use combined corridor interval as variant headway
+COOLITORAL,PT4-4104,A,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_article_verified,Article 2 verified; 22 June 2026 plus six months; extension not evidenced; no current operation claim
+COOLITORAL,PT4-4104,B,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_article_verified,Article 2 verified; 22 June 2026 plus six months; extension not evidenced; no current operation claim
+COOLITORAL,PT5-4105,A,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_article_verified,Article 2 verified; 22 June 2026 plus six months; extension not evidenced; no current operation claim
+COOLITORAL,PT5-4105,B,256-2026,192-2025,2026-06-22,2026-12-22,9,14,per_variant,pilot_article_verified,Article 2 verified; 22 June 2026 plus six months; extension not evidenced; no current operation claim
+SOBUSA,B18-4175,A,082-2026,466-2025,,,10,12,per_variant,article_verified_effective_date_unverified,082-2026 article 1 and page 6 verified; notice and operation not proven; no corridor duplication
+SOBUSA,B18-4175,B,082-2026,466-2025,,,10,12,per_variant,article_verified_effective_date_unverified,082-2026 article 1 and page 6 verified; notice and operation not proven; no corridor duplication
 SOBUSA,C12-4169,A,466-2025,,,,6,9,per_variant,dates_unverified,Legal headways only
 SOBUSA,C12-4169,B,466-2025,,,,3,6,per_variant,dates_unverified,Legal headways only
 SOBUSA,C16-4167,A,466-2025,,,,7,9,per_variant,dates_unverified,Legal headways only
@@ -15,3 +15,7 @@ EMBUSA,B9-4125,unspecified,010-2026,231-2025,,,4,6,whole_route_unverified,dates_
 COOTRAB,C5-4136,unspecified,358-2024,378-2023,,,8,10,whole_route_unverified,route_code_conflict,C5-4135 appears in other AMB publications
 COOTRAB,C6-4137,unspecified,358-2024,378-2023,,,8,10,whole_route_unverified,dates_unverified,Legal headways only
 LA_CAROLINA,A16-4161,unspecified,199-2019,204-2012,,,3.5,5,whole_route_unverified,AB_allocation_unverified,Do not duplicate frequency over A/B
+COOLITORAL,PT2-4102,A,210-2026,192-2025,,,10,12,per_variant,article_verified_effective_date_unverified,Article 1; combined corridor 5/6 is not a separate service
+COOLITORAL,PT2-4102,B,210-2026,192-2025,,,10,12,per_variant,article_verified_effective_date_unverified,Article 1; combined corridor 5/6 is not a separate service
+COOLITORAL,PT3-4103,A,210-2026,192-2025,,,10.5,13,per_variant,article_verified_ocr_table_review,Article 1; verify OCR-distorted PT3 table against scan; corridor 5.5/6.5 not a service
+COOLITORAL,PT3-4103,B,210-2026,192-2025,,,10.5,13,per_variant,article_verified_ocr_table_review,Article 1; verify OCR-distorted PT3 table against scan; corridor 5.5/6.5 not a service
