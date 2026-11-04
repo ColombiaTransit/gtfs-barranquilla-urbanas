@@ -16,6 +16,8 @@ from pathlib import Path
 PAGE = "https://siu.ambq.gov.co/siu/schedule-mng/schedules"
 OUT = Path("build/siu-javascript-research")
 MAX_BUNDLES = 120
+TARGET = re.compile(r"ServiceMngPisScheduleModified|onServiceMngPisScheduleModified", re.I)
+CONTEXT_WINDOW = 320
 MAX_BYTES = 12_000_000
 TERMS = re.compile(r"ServiceMngCompressedItineraryListing|OrganizationMngOrganizationWithoutAuthListing|graphql|itinerary|routeId|orgId|schedule|departure|frequency|arrival|vehicle", re.I)
 OPERATIONS = re.compile(r"\b(?:query|mutation|subscription)\s+([A-Za-z][A-Za-z0-9_]{2,90})\b")
@@ -74,6 +76,7 @@ def main():
     except Exception as exc:
         browser_error = type(exc).__name__
     findings = []
+    schedule_contexts = []
     errors = []
     operation_names = set()
     cursor = 0
@@ -95,6 +98,14 @@ def main():
             for match in list(TERMS.finditer(content))[:120]:
                 # Keep only match names and offsets; raw JS can contain tokens or user data.
                 hits.append({"term": match.group(0), "offset": match.start()})
+            for match in list(TARGET.finditer(content))[:35]:
+                snippet = content[max(0, match.start()-CONTEXT_WINDOW):match.end()+CONTEXT_WINDOW]
+                # Only extract GraphQL identifiers and structural syntax, never raw JS or values.
+                schedule_contexts.append({"bundle_sha256": hashlib.sha256(payload).hexdigest(),
+                                          "term": match.group(0), "offset": match.start(),
+                                          "nearby_graphql_identifiers": sorted(set(GRAPHQL_NAMES.findall(snippet)))[:30],
+                                          "nearby_operation_declarations": sorted(set(OPERATIONS.findall(snippet)))[:20],
+                                          "nearby_structural_tokens": sorted(set(re.findall(r"\\b(?:subscription|mutation|query|subscribe|unsubscribe|useSubscription|WebSocket|onCompleted|refetch|variables)\\b", snippet)))})
             findings.append({"url": url, "bytes": len(payload), "sha256": hashlib.sha256(payload).hexdigest(), "operation_candidates": names[:150], "term_hits": hits})
         except Exception as exc:
             errors.append({"url": url, "error_type": type(exc).__name__})
@@ -106,6 +117,7 @@ def main():
         "inspected_script_count": len(findings),
         "operation_candidates": sorted(operation_names),
         "bundles": findings,
+        "schedule_modified_contexts": schedule_contexts,
         "errors": errors,
         "browser_discovery_error": browser_error,
         "script_limit": MAX_BUNDLES,
@@ -120,6 +132,12 @@ def main():
     lines.extend(["", "## Bundle matches", ""])
     for item in findings:
         lines.append(f"- {item['url']}: {len(item['term_hits'])} term hits; SHA-256 `{item['sha256']}`")
+    lines.extend(["", "## ScheduleModified static references", ""])
+    for item in schedule_contexts:
+        lines.append("- `" + item["term"] + "` bundle " + item["bundle_sha256"][:12] +
+                     " offset " + str(item["offset"]) + "; identifiers: " +
+                     ", ".join(item["nearby_graphql_identifiers"]) +
+                     "; structural tokens: " + ", ".join(item["nearby_structural_tokens"]))
     lines.extend(["", "## Limitations", "", report["limitations"], "",
                   "No bundles, API responses, credentials, cookies or personal data are saved."])
     (OUT / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
