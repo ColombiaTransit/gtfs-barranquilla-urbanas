@@ -248,6 +248,8 @@ def run(output):
             blockers.append("combined_corridor_not_per_itinerary")
         if source and source["variant"] and source["variant"]!=variant:
             blockers.append("itinerary_mismatch")
+        if source and source["status"]=="legal_table_reviewed_scope_pending":
+            blockers.append("route_variant_scope_and_legal_effect_unverified")
         if source and source["status"]=="legal_period_checked_staging_only":
             blockers.append("legal_effective_period_and_operational_activation_unverified")
         if not window:blockers.append(wstatus)
