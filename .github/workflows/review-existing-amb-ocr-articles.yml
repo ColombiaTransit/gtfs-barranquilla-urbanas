@@ -1,0 +1,41 @@
+name: Review existing AMB OCR articles (no re-OCR)
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: "Successful Collect remaining AMB legal OCR run ID"
+        required: true
+        default: "41803033009"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retrieve existing OCR artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ inputs.source_run_id }}
+        run: |
+          mkdir -p build/amb-remaining-legal-ocr
+          gh run download "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" --name amb-remaining-legal-pdfs-ocr-review-required --dir build/amb-remaining-legal-ocr
+      - name: Index legal article evidence (no OCR)
+        run: python scripts/review_existing_amb_ocr_articles.py
+      - name: Publish summary
+        if: always()
+        run: |
+          if [ -f build/amb-ocr-review/summary.json ]; then
+            cat build/amb-ocr-review/summary.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload review candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-legal-article-review-candidates
+          path: build/amb-ocr-review/
+          retention-days: 60
