@@ -174,12 +174,46 @@ def main():
    "publication_status":"research_only"
   })
  write(out/"source_coverage.csv",source_coverage,list(source_coverage[0]))
+
+ # Research-only geometry: exact KMZ matches, single LineString only, preserving source order.
+ # A/B direction and multipart sequencing remain unapproved until reviewed.
+ geometry_candidates=[];pattern_candidates=[]
+ for row in source_coverage:
+  if row["kmz_match_status"]!="exact_source_match":continue
+  source=ROOT/"sources/amb/kmz"/row["kmz_geojson_path"]
+  if not source.is_file():continue
+  obj=json.loads(source.read_text(encoding="utf-8"))
+  lines=[]
+  for feature in obj.get("features",[]):
+   geom=feature.get("geometry") or {}
+   if geom.get("type")=="LineString":lines.append(geom.get("coordinates") or [])
+   elif geom.get("type")=="MultiLineString":lines.extend(geom.get("coordinates") or [])
+  if len(lines)!=1 or len(lines[0])<2:continue
+  sid="KMZ_CAND_"+hashlib.sha256((row["route_id"]+":"+row["kmz_sha256"]).encode()).hexdigest()[:16]
+  for i,point in enumerate(lines[0],1):
+   if len(point)>=2:geometry_candidates.append({"shape_id":sid,"route_id":row["route_id"],"shape_pt_lat":point[1],"shape_pt_lon":point[0],"shape_pt_sequence":i,"review_status":"candidate_unverified_direction","source_sha256":row["kmz_sha256"]})
+ # SIU stop sequences are provisional. Retain itinerary identity, repeated visits, and provenance.
+ siu_orders=read(ROOT/"sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv")
+ siu_reviews={x.get("siu_itinerary_uuid"):x for x in read(ROOT/"sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv")}
+ valid_route_ids={x["route_id"] for x in routes}
+ for visit in siu_orders:
+  review=siu_reviews.get(visit.get("siu_itinerary_uuid"),{})
+  rid=review.get("suggested_gtfs_route_id","")
+  if rid not in valid_route_ids:continue
+  pattern_candidates.append({"route_id":rid,"siu_itinerary_uuid":visit.get("siu_itinerary_uuid",""),
+   "stop_sequence":visit.get("stop_sequence",""),"siu_stop_id":visit.get("stop_id",""),
+   "stop_name":visit.get("stop_name",""),"route_match_status":review.get("route_match_status",""),
+   "mapping_confirmed":review.get("final_gtfs_route_mapping_confirmed","no"),
+   "review_status":"candidate_not_approved"})
+ write(out/"kmz_shapes_research.csv",geometry_candidates,["shape_id","route_id","shape_pt_lat","shape_pt_lon","shape_pt_sequence","review_status","source_sha256"])
+ write(out/"siu_pattern_stop_visits_research.csv",pattern_candidates,["route_id","siu_itinerary_uuid","stop_sequence","siu_stop_id","stop_name","route_match_status","mapping_confirmed","review_status"])
+
  feed_version=hashlib.sha256(json.dumps({"routes":routes,"patterns":pattern,"services":service,"stops":stop_rows},sort_keys=True).encode()).hexdigest()[:16]
  for x in contract:x["feed_version"]=feed_version
  write(out/"gtfs_rt_static_contract.csv",contract,["pattern_id","trip_id","route_id","service_id","direction_id","shape_id","siu_itinerary_uuid","stop_sequence_signature","match_status","feed_version"])
  write(out/"held.csv",held,["kind","id","reason"])
  write(out/"shapes_candidate.csv",shapes,TABLES["shapes"])
- summary={"kmz_imported":len(sources),"source_exact_matches":sum(x["kmz_match_status"]=="exact_source_match" for x in source_coverage),"source_mapping_reviews":sum(x["kmz_match_status"]=="mapping_review_required" for x in source_coverage),"source_deferred":sum(x["kmz_match_status"]=="deferred_geometry_review" for x in source_coverage),"headway_source_matches":sum(x["headway_match_count"]==1 for x in source_coverage),"gtfs_routes":len(routes),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
+ summary={"kmz_imported":len(sources),"source_exact_matches":sum(x["kmz_match_status"]=="exact_source_match" for x in source_coverage),"source_mapping_reviews":sum(x["kmz_match_status"]=="mapping_review_required" for x in source_coverage),"source_deferred":sum(x["kmz_match_status"]=="deferred_geometry_review" for x in source_coverage),"headway_source_matches":sum(x["headway_match_count"]==1 for x in source_coverage),"gtfs_routes":len(routes),"research_shape_points":len(geometry_candidates),"research_shape_ids":len({x["shape_id"] for x in geometry_candidates}),"research_siu_stop_visits":len(pattern_candidates),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
  # Flex optional tables are copied only from reviewed, explicit source files; no fabricated polygons.
  for table in ("booking_rules","location_groups","location_group_stops"):
   rows=read(registry/(table+".txt"))
