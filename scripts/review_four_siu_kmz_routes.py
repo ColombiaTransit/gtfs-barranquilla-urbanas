@@ -20,7 +20,7 @@ TARGETS={
 def norm(s):
     return "".join(c for c in str(s).upper() if c.isalnum()).replace("TRANSPORTESMONTERREY","MONTERREY")
 
-def solve(points,line,reverse):
+def solve(points,line,reverse,include_trace=False):
     choices=occurrences(points,line,buffer_m=50,max_options=20)
     # State transitions score path distance against straight-line stop distance.
     # Strongly penalize backward travel and unrealistic long forward jumps.
@@ -66,7 +66,7 @@ def solve(points,line,reverse):
         if straight>30 and delta>=0:ratios.append(delta/straight)
     first=next((round(p,1) for p in chosen if p is not None),None)
     last=next((round(p,1) for p in reversed(chosen) if p is not None),None)
-    return {"direction":"reverse" if reverse else "forward",
+    result={"direction":"reverse" if reverse else "forward",
         "covered":sum(p is not None for p in chosen),"pairs":total,
         "backward_gt20m":backwards,"implausible_forward_gt_max500m_or_5x":excessive,
         "median_path_to_direct_ratio":round(statistics.median(ratios),2) if ratios else "",
@@ -75,6 +75,8 @@ def solve(points,line,reverse):
         "last_stop_to_shape_m":round(points[-1].distance(line),1),
         "ambiguous_stops":sum(len(x)>1 for x in choices),
         "section_length_m":round(line.length,1)}
+    if include_trace:result["_chosen"]=chosen
+    return result
 def main():
     p=argparse.ArgumentParser();p.add_argument("--repo",type=Path,default=Path("."))
     p.add_argument("--out",type=Path,default=Path("build/siu-kmz-four-route-review.csv"))
