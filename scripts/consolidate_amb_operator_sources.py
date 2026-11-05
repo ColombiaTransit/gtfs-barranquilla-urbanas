@@ -148,7 +148,9 @@ def main():
         writer.writeheader()
         writer.writerows(unresolved)
     summary = {
-        "kmz_rows": len(kmz),\n        "routes_needing_anchor_review": len(anchor_rows),\n        "geometry_endpoint_candidates_found": sum(x["anchor_status"] == "geometry_endpoints_only_not_stops" for x in anchor_rows), "siu_itineraries": len(siu),
+        "kmz_rows": len(kmz),
+        "routes_needing_anchor_review": len(anchor_rows),
+        "geometry_endpoint_candidates_found": sum(x["anchor_status"] == "geometry_endpoints_only_not_stops" for x in anchor_rows), "siu_itineraries": len(siu),
         "siu_single_route_candidates": len(siu)-len(unresolved),
         "siu_unresolved": len(unresolved),
         "operator_dispatch_records_included": len(dispatch),
@@ -160,7 +162,8 @@ def main():
             "COOLITORAL waypoint and dispatch artifact not yet joined",
             "LA CAROLINA original KML archive not yet verified in this pass",
             "Headways and legal resolutions remain in existing separate registers",
-            "Geometry endpoints are NOT confirmed terminals or GTFS stops",\n            "No inferred stops, headways or new GTFS route mappings"
+            "Geometry endpoints are NOT confirmed terminals or GTFS stops",
+            "No inferred stops, headways or new GTFS route mappings"
         ]
     }
     (OUT / "geometry_stops_dispatch_summary.json").write_text(
