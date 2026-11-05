@@ -1,0 +1,2 @@
+source_url,operator,source_route_label,map_type,route_geometry_visible,stop_coordinates,stop_sequence,horarios,amb_route_mapping,notes
+https://lacarolina.com.co/ruta-express/,LA-CAROLINA,Ruta Express,Leaflet,yes,no,no,not_verified,unresolved,User reports Leaflet map displaying route without stops; map geometry not yet extracted or compared with AMB KMZ
