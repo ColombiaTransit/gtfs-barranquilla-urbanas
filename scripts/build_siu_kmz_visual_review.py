@@ -38,7 +38,7 @@ def main():
         if not group: raise SystemExit("Missing SIU itinerary: "+name)
         uid=group[0]["siu_itinerary_uuid"]
         group=[s for s in group if s["siu_itinerary_uuid"]==uid]
-        candidates=sorted(ranks.get(uid,[]),key=lambda x:(int(x["rank"]),x["kmz_route_label"]))
+        candidates=sorted(ranks.get(uid,[]),key=lambda x:(int(x["rank"]),-float(x["coverage_50_pct"]),-float(x["sequence_coverage_pct"]),int(x["backward_gt20m"])+int(x["implausible_forward"]),float(x["median_distance_m"]),x["kmz_route_label"]))
         if not candidates: raise SystemExit("Missing ranked KMZ candidates for "+name)
         # Preserve close alternatives and at least top 3. No route assignments inferred here.
         candidates=[c for c in candidates if int(c["rank"])<=3 or float(c["coverage_50_pct"])>=float(candidates[0]["coverage_50_pct"])-10][:5]
