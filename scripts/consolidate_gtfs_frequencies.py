@@ -5,6 +5,7 @@ from pathlib import Path
 from collections import Counter
 root=Path(__file__).resolve().parents[1]
 out=root/"build/gtfs-v2"
+canonical=root/"build/registries"
 def read(p):
  with (root/p).open(encoding="utf-8-sig",newline="") as f:return list(csv.DictReader(f))
 def norm(x):return re.sub("[^A-Z0-9]","",str(x or "").upper())
@@ -51,12 +52,26 @@ def main():
    status="recovered_closed_research"
   r["consolidation_status"]=status
   audit.append({"route_id":r["gtfs_route_id"],"status":status,"source_file":r.get("source_file","")})
+ # Canonical operational register; legacy staging is only an input.
+ ids=[r["gtfs_route_id"] for r in staged]
+ if len(ids)!=len(set(ids)):raise ValueError("Duplicate route IDs in frequency register")
+ for r in staged:
+  try:
+   def minutes(x):
+    parts=[int(v) for v in x.split(":")]
+    return parts[0]*60+parts[1]
+   window_ok=minutes(r["last_dispatch_model"])>minutes(r["first_dispatch_model"])
+  except (ValueError,KeyError,IndexError):window_ok=False
+  r["operational_status"]="ready" if valid(r) and window_ok and r.get("consolidation_status")!="conflict_held" else "held"
  out.mkdir(parents=True,exist_ok=True)
+ canonical.mkdir(parents=True,exist_ok=True)
+ with (canonical/"route_service.csv").open("w",newline="",encoding="utf-8") as f:
+  w=csv.DictWriter(f,fieldnames=list(staged[0]));w.writeheader();w.writerows(staged)
  for filename,rows,fields in [
   ("consolidated_route_headways.csv",staged,list(staged[0])),
   ("frequency_consolidation_audit.csv",audit,["route_id","status","source_file"]),
   ("frequency_consolidation_conflicts.csv",conflicts,["route_id","reason"])]:
   with (out/filename).open("w",newline="",encoding="utf-8") as f:
    w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
- print(json.dumps({"routes":len(staged),"statuses":dict(Counter(x["status"] for x in audit)),"conflicts":len(conflicts)},indent=2))
+ print(json.dumps({"routes":len(staged),"statuses":dict(Counter(x["status"] for x in audit)),"conflicts":len(conflicts),"operational_statuses":dict(Counter(r["operational_status"] for r in staged))},indent=2))
 if __name__=="__main__":main()
