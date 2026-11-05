@@ -76,6 +76,24 @@ def discover(session, year, out):
     print(f"{year}: table {table_id}, {len(rows)} rows, {len(found)} unique PDFs", flush=True)
     return list(found.values())
 
+def download_pdf(session, url):
+    """Repair obvious source typos; preserve original source URL in manifest."""
+    candidates = [url]
+    if url.startswith("hhttps://"):
+        candidates.insert(0, url[1:])
+    if "://test2.ambq.gov.co/" in url:
+        candidates.append(url.replace("://test2.ambq.gov.co/", "://www.ambq.gov.co/"))
+    errors = []
+    for candidate in dict.fromkeys(candidates):
+        try:
+            body = fetch(session, candidate).content
+            if not body.startswith(b"%PDF-"):
+                raise ValueError("Not a PDF response")
+            return body, candidate
+        except (requests.RequestException, ValueError) as exc:
+            errors.append(f"{candidate}: {exc}")
+    raise ValueError(" | ".join(errors))
+
 def extract(pdf, txt, min_chars):
     doc = fitz.open(pdf)
     parts, ocr_pages = [], []
@@ -127,9 +145,9 @@ def main():
             record = dict(**item, file=str(pdf.relative_to(out)), sha256="", pages="", ocr_pages=[], status="", error="")
             try:
                 if not pdf.exists() or not pdf.stat().st_size:
-                    body = fetch(session, url).content
-                    if not body.startswith(b"%PDF-"): raise ValueError("Not a PDF response")
+                    body, resolved_url = download_pdf(session, url)
                     pdf.write_bytes(body)
+                    record["resolved_url"] = resolved_url
                 record["sha256"] = hashlib.sha256(pdf.read_bytes()).hexdigest()
                 prior = old.get(url, {})
                 if txt.exists() and prior.get("sha256") == record["sha256"] and prior.get("status") == "ok":
