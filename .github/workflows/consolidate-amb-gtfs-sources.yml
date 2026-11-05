@@ -5,6 +5,11 @@ name: Consolidate AMB GTFS sources
   push:
     paths:
       - scripts/consolidate_amb_gtfs_sources.py
+      - scripts/consolidate_amb_operator_sources.py
+      - sources/amb/kmz_stop_gaps/kmz_siu_route_stop_coverage.csv
+      - sources/siu/open_route_review/siu_amb_crosswalk_visual_decisions_2026-11-05.csv
+      - sources/operators/coochofal/dispatch_windows.csv
+      - sources/operators/transurbar/dispatch_windows.csv
       - scripts/select_amb_gtfs_first_seven.py
       - scripts/build_full_siu_gtfs_crosswalk.py
       - scripts/audit_siu_route_names_and_families.py
@@ -32,6 +37,8 @@ jobs:
         run: |
           python -m py_compile scripts/consolidate_amb_gtfs_sources.py
           python scripts/consolidate_amb_gtfs_sources.py --out build/gtfs-source-consolidation
+      - name: Consolidate geometry, SIU stop coverage and operator dispatch windows
+        run: python scripts/consolidate_amb_operator_sources.py
       - name: Select first seven GTFS patterns for review
         run: python scripts/select_amb_gtfs_first_seven.py --input build/gtfs-source-consolidation/route_source_consolidation.csv --out build/gtfs-source-consolidation
       - name: Publish shortlist summary
