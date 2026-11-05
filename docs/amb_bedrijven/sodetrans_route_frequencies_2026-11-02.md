@@ -70,3 +70,10 @@ Machineleesbare routegegevens: [13-bedrijven-register](https://github.com/Colomb
 | C21-4182 | — | — | 500-2025 bevat meerdere itinerarios; genoemde 4-minuten-drukste-sectie niet zonder meer per variant overnemen |
 
 **Besluit:** B13-B-4189 is niet langer `missing_headway`. Alle zes routes zijn juridisch aan 500-2025 gekoppeld; voor B15/B17/C21 is de afzonderlijke machineleesbare numerieke extractie nog niet bewezen. Het bestaan van een besluit is niet hetzelfde als een succesvolle GTFS-build. Voorkom heropening van afgeronde OCR-taken; voer een expliciete frequentiedekkingscontrole uit op alle routevarianten in de generator.
+
+
+## Archiefreconciliatie — 5 november 2026
+
+Archiefhercontrole 2020–2026: geen nieuwe tegenstrijdige SODETRANS-frequentiebron vastgesteld in de geselecteerde kandidaten. 500-2025 blijft de door gebruiker bevestigde geldende juridische bron; B13-B-4189 8/10 is afgesloten en wordt niet opnieuw onderzocht. De overige route-/variantdekkingscontrole blijft technisch, niet een heropening van de juridische bronvraag.
+
+Zie [route-voor-route classificatie](../../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](../amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
