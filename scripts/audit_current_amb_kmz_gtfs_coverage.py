@@ -48,12 +48,8 @@ def main():
              "corrected_override_routes":override_status,
              "note":"Source availability is not equivalent to GTFS shape_id, direction, stop order or publication approval.",
              "gtfs_written":False}
-    (out/"summary.json").write_text(json.dumps(summary,indent=2)+"
-")
-    (out/"summary.md").write_text("# Actuele AMBQ-KMZ dekking voor GTFS routes
-
-"+json.dumps(summary,indent=2)+"
-")
+    (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
+    (out/"summary.md").write_text("# Actuele AMBQ-KMZ dekking voor GTFS routes\n\n"+json.dumps(summary,indent=2)+"\n")
     print(json.dumps(summary,indent=2))
     if any(v["source_status"]!="KMZ_IMPORTED" for v in override_status.values()):
         raise SystemExit("Corrected source override absent or ambiguous in current GTFS coverage; inspect CSV")
