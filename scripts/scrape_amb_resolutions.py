@@ -30,23 +30,10 @@ def discover(session, year, out):
         raise ValueError("Ninja Tables data-footable_id not found")
     table_id = str(table["data-footable_id"])
     import html as html_lib
-    from urllib.parse import parse_qs, urlsplit
-    matches = re.findall(r'data_request_url[^\n]{0,1500}', html)
-    request_url = None
-    for match in matches:
-        decoded = html_lib.unescape(match).replace("\\/", "/")
-        m = re.search(r'https?://[^"\s<>]+admin-ajax\\.php[^"\s<>]*', decoded)
-        if m:
-            request_url = m.group(0).rstrip('\\')
-            break
-    if not request_url:
-        # The live page's Ninja Tables configuration includes the AJAX URL in JSON.
-        m = re.search(r'"data_request_url"\s*:\s*"([^"]+)"', html)
-        if m:
-            request_url = json.loads('"' + m.group(1) + '"')
-    if not request_url:
+    matches = re.findall(r'"data_request_url"\s*:\s*"([^"]+)"', html)
+    if not matches:
         raise ValueError("Ninja Tables data_request_url not found")
-    request_url = html_lib.unescape(request_url)
+    request_url = html_lib.unescape(json.loads('"' + matches[0] + '"'))
     response = fetch(session, request_url)
     rows = response.json()
     if not isinstance(rows, list):
