@@ -34,6 +34,33 @@ jobs:
           GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
           GRAPHHOPPER_PROFILE: bus
         run: python scripts/build_gtfs_first_version.py
+      - name: Validate generated GTFS with MobilityData GTFS Validator
+        if: success()
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, urllib.request
+          api = "https://api.github.com/repos/MobilityData/gtfs-validator/releases/latest"
+          request = urllib.request.Request(api, headers={"Accept": "application/vnd.github+json", "User-Agent": "gtfs-barranquilla-urbanas"})
+          with urllib.request.urlopen(request, timeout=30) as response:
+              release = json.load(response)
+          assets = [a for a in release["assets"] if a["name"].endswith(".jar") and "validator" in a["name"].lower()]
+          if len(assets) != 1:
+              raise RuntimeError(f"Expected one validator JAR, found {[a['name'] for a in assets]}")
+          url = assets[0]["browser_download_url"]
+          pathlib.Path("build/gtfs-validator.jar").parent.mkdir(parents=True, exist_ok=True)
+          urllib.request.urlretrieve(url, "build/gtfs-validator.jar")
+          print("MobilityData GTFS Validator release:", release["tag_name"])
+          PY
+          mkdir -p build/gtfs-v2/validator-report
+          java -jar build/gtfs-validator.jar -i build/gtfs-v2/gtfs-first-version.zip -o build/gtfs-v2/validator-report
+      - name: Summarize validator results
+        if: always()
+        run: |
+          if test -d build/gtfs-v2/validator-report; then
+            echo '### MobilityData GTFS Validator' >> "$GITHUB_STEP_SUMMARY"
+            find build/gtfs-v2/validator-report -maxdepth 2 -type f -printf '%P\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Show summary
         if: always()
         run: |
