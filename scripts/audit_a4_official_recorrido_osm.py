@@ -6,6 +6,7 @@ Read-only candidate analysis. Does not infer legal turns or publish a GTFS shape
 import csv
 import json
 import math
+import os
 import re
 import urllib.parse
 import urllib.request
@@ -14,7 +15,6 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 SOURCE=ROOT/"sources/amb/kmz/geojson/COOLITORAL/A4-4109_539ee1b2e3.geojson"
 OUT=ROOT/"build/a4-recorrido"
-OVERPASS="https://overpass-api.de/api/interpreter"
 # Street occurrences, NOT a unique unordered set. Explicit returns are retained.
 STREETS=[
 "Calle 120","Carrera 10","Avenida Circunvalar","Carrera 9G","Diagonal 138",
@@ -44,10 +44,24 @@ def project(p,a,b):
 def osm():
     if (OUT/"osm_roads.json").exists():
         return json.loads((OUT/"osm_roads.json").read_text())
+    url=os.environ.get("API_OVERPASS","").strip()
+    if not url:
+        raise RuntimeError("API_OVERPASS is required; public fallback disabled")
+    if not url.rstrip("/").endswith("/interpreter"):
+        url=url.rstrip("/")+"/interpreter"
     q='[out:json][timeout:90];way["highway"]["name"](10.95,-74.89,11.04,-74.76);out geom;'
-    req=urllib.request.Request(OVERPASS,data=urllib.parse.urlencode({"data":q}).encode(),headers={"User-Agent":"ColombiaTransit-A4-recorrido-audit/1.0"})
+    headers={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+             "Accept":"application/json, text/javascript, */*; q=0.01",
+             "Accept-Language":"nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7",
+             "Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"}
+    if os.getenv("CF_ACCESS_CLIENT_ID") and os.getenv("CF_ACCESS_CLIENT_SECRET"):
+        headers["CF-Access-Client-Id"]=os.environ["CF_ACCESS_CLIENT_ID"]
+        headers["CF-Access-Client-Secret"]=os.environ["CF_ACCESS_CLIENT_SECRET"]
+    req=urllib.request.Request(url,data=urllib.parse.urlencode({"data":q}).encode(),headers=headers,method="POST")
     with urllib.request.urlopen(req,timeout=130) as resp:
         data=json.load(resp)
+    if "remark" in data:
+        raise RuntimeError("Private Overpass returned an error remark")
     (OUT/"osm_roads.json").write_text(json.dumps(data))
     return data
 def main():
@@ -59,8 +73,7 @@ def main():
         roads=osm().get("elements",[])
         error=None
     except Exception as exc:
-        roads=[]
-        error=f"{type(exc).__name__}: {exc}"
+        raise SystemExit(f"Private Overpass failed ({type(exc).__name__}); check API_OVERPASS and Cloudflare credentials") from exc
     byname={}
     for road in roads:
         name=road.get("tags",{}).get("name","")
