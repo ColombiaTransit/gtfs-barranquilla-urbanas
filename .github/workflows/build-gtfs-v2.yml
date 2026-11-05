@@ -27,7 +27,7 @@ jobs:
         run: python scripts/build_gtfs_frequency_staging.py --out build/gtfs-frequency-staging
       - name: Build GTFS v2 research output and realtime static contract
         run: python scripts/build_gtfs_v2.py ${{ inputs.publish == 'true' && '--publish' || '' }}
-      - name: Consolidate accepted route frequency sources
+      - name: Build canonical route service register (only GTFS schedule input)
         run: python scripts/consolidate_gtfs_frequencies.py
       - name: Build first-version SIU GTFS with private GraphHopper
         env:
@@ -73,4 +73,5 @@ jobs:
           path: |
             build/gtfs-v2/
             build/gtfs-frequency-staging/
+            build/registries/
           if-no-files-found: warn
