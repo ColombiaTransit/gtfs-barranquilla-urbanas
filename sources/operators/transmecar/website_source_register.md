@@ -8,3 +8,5 @@
 - The supplied *Quiénes Somos* page contains no KML/KMZ, Leaflet map, public route list, stop coordinates, first/last departures or numerical frequencies. Generic claims of punctuality are not timetable data.
 - Source: user-supplied MHT capture `Transmecar S.A.S..mht` (HTML Content-Location /quienes-somos).
 - Status: company page content verified from snapshot; other site pages not yet inspected; geometry/schedules still unverified.
+- User confirms Parque Automotor page displays only: “Próximamente — Esta sección estará disponible pronto.” No additional route data available there.
+- Website research phase: CLOSED for TRANSMECAR; no operator-sourced geometry or timetable available from reviewed pages. Reopen only on new material.
