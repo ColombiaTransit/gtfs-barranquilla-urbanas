@@ -1,5 +1,5 @@
-source_url,operator,source_route_label,map_type,route_geometry_visible,stop_coordinates,stop_sequence,horarios,amb_route_mapping,notes
-https://lacarolina.com.co/bebuilder-240/,LA-CAROLINA,Ruta Miramar,not_verified,not_verified,not_verified,not_verified,not_verified,A16-4161,Listed on Soy Usuario; AMB mapping provisional
-https://lacarolina.com.co/ruta-express/,LA-CAROLINA,Ruta Express,Leaflet,yes,no,no,not_verified,unresolved,User reports Leaflet route without stops; geometry not extracted
-https://lacarolina.com.co/ruta-17/,LA-CAROLINA,Ruta Calle 17,Leaflet,yes,not_verified,not_verified,not_verified,D7-4151,Leaflet confirmed by page; AMB mapping provisional
-https://lacarolina.com.co/soy-usuario/,LA-CAROLINA,Ruta Calle 30,not_verified,not_verified,not_verified,not_verified,not_verified,D6-4150,Listed on overview; detail URL not confirmed; AMB mapping provisional
+source_url,operator,source_route_label,map_type,route_geometry_visible,stop_coordinates,stop_sequence,horarios,amb_route_mapping,notes,original_kml_url
+https://lacarolina.com.co/bebuilder-240/,LA-CAROLINA,Ruta Miramar,not_verified,not_verified,not_verified,not_verified,not_verified,A16-4161,Listed on Soy Usuario; AMB mapping provisional,https://lacarolina.com.co/wp-content/uploads/2025/09/A-16-MIRAMAR.kml
+https://lacarolina.com.co/ruta-express/,LA-CAROLINA,Ruta Express,Leaflet,yes,no,no,not_verified,unresolved,User reports Leaflet route without stops; geometry not extracted,
+https://lacarolina.com.co/ruta-17/,LA-CAROLINA,Ruta Calle 17,Leaflet,yes,not_verified,not_verified,not_verified,D7-4151,Leaflet confirmed by page; AMB mapping provisional,https://lacarolina.com.co/wp-content/uploads/2025/09/D7-CALLE-17.kml
+https://lacarolina.com.co/soy-usuario/,LA-CAROLINA,Ruta Calle 30,not_verified,not_verified,not_verified,not_verified,not_verified,D6-4150,Listed on overview; detail URL not confirmed; AMB mapping provisional,
