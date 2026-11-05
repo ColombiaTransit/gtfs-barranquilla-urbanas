@@ -23,6 +23,8 @@ jobs:
         run: python -m py_compile scripts/build_gtfs_v2.py
       - name: Refresh official KMZ manifest with corrected URLs
         run: python scripts/harvest_amb_kmz_routes.py --output sources/amb/kmz
+      - name: Regenerate frequency staging from latest dispatch assumptions
+        run: python scripts/build_gtfs_frequency_staging.py --out build/gtfs-frequency-staging
       - name: Build GTFS v2 research output and realtime static contract
         run: python scripts/build_gtfs_v2.py ${{ inputs.publish == 'true' && '--publish' || '' }}
       - name: Consolidate accepted route frequency sources
@@ -41,5 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gtfs-v2-flex-rt-contract
-          path: build/gtfs-v2/
+          path: |
+            build/gtfs-v2/
+            build/gtfs-frequency-staging/
           if-no-files-found: warn
