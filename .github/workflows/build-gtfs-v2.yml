@@ -19,8 +19,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install 'requests>=2,<3' 'beautifulsoup4>=4,<5' 'holidays>=0.60,<1'
-      - name: Verify Python builder
-        run: python -m py_compile scripts/build_gtfs_v2.py
+      - name: Verify all Python scripts before expensive harvest
+        run: python -m compileall -q scripts
       - name: Refresh official KMZ manifest with corrected URLs
         run: python scripts/harvest_amb_kmz_routes.py --output sources/amb/kmz
       - name: Regenerate frequency staging from latest dispatch assumptions
