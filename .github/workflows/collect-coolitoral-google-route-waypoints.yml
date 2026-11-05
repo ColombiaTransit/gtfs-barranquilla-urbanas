@@ -1,0 +1,23 @@
+name: Collect COOLITORAL Google route waypoints
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 8 * * 1'
+permissions:
+  contents: read
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Extract route waypoints and compare against known crosswalk
+        run: python scripts/collect_coolitoral_google_waypoints.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coolitoral-google-waypoints
+          path: build/coolitoral_google/
+          retention-days: 90
