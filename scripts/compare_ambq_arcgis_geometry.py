@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Read-only AMBQ-first shape audit. Never writes GTFS files."""
-import csv, io, json, math, re, urllib.parse, urllib.request, zipfile
+import ast, csv, io, json, math, re, urllib.parse, urllib.request, zipfile
 import xml.etree.ElementTree as ET
 from collections import Counter
 from pathlib import Path
@@ -69,6 +69,21 @@ def proximity(a,b,limit=100):
     aa=sample(a);bb=sample(b)
     return round(sum(min(distance(p,q) for q in bb)<=limit for p in aa)/len(aa),3)
 def clean(v):return re.sub("[^A-Z0-9]","",str(v or "").upper())
+def verified_overrides():
+    """Read the existing harvester's literal override registry; avoid a second list."""
+    tree=ast.parse((ROOT/"scripts/harvest_amb_kmz_routes.py").read_text(encoding="utf-8"))
+    for node in tree.body:
+        if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id=="DIRECT_ROUTE_OVERRIDES" for t in node.targets):
+            return ast.literal_eval(node.value)
+    raise RuntimeError("Missing DIRECT_ROUTE_OVERRIDES in KMZ harvester")
+
+def effective_url(row,overrides):
+    label=row["kmz_base_route_code"]+(" "+row["kmz_variant"].strip() if row["kmz_variant"].strip() else "")
+    filename=overrides.get((row["company"],label))
+    if filename:
+        return "https://www.ambq.gov.co/ruta-de-buses/"+urllib.parse.quote(row["company"],safe="")+"/"+urllib.parse.quote(filename,safe="._-"),True
+    return row["source_kmz_url"],False
+
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     routes=csvrows(ROOT/"sources/amb/kmz_stop_gaps/kmz_siu_route_stop_coverage.csv")
@@ -77,9 +92,11 @@ def main():
     for m in matches:
         base=re.sub(r"([ -][AB])$","",m["route_short_name"],flags=re.I)
         bycode.setdefault(clean(base),[]).append(m)
-    cache={};gis_cache={};output=[]
+    cache={};gis_cache={};output=[];overrides=verified_overrides()
+    effective_urls=[effective_url(row,overrides)[0] for row in routes]
+    counts=Counter(effective_urls)
     for row in routes:
-        url=row["source_kmz_url"];code=row["kmz_base_route_code"];variant=row["kmz_variant"].strip()
+        url,overridden=effective_url(row,overrides);code=row["kmz_base_route_code"];variant=row["kmz_variant"].strip()
         errors=[]
         if url not in cache:
             try:cache[url]=kmz_lines(url)
@@ -106,7 +123,7 @@ def main():
             gis=gis_cache[oid]
         gis_merged,gis_unjoined,_=chain(gis)
         forward=proximity(merged,gis_merged);reverse=proximity(gis_merged,merged)
-        collision=row["source_url_collision"].lower()=="yes"
+        collision=counts[url]>1
         # ArcGIS may corroborate an AMBQ shape, but never auto-approve a historic variant.
         if collision:decision="GEOMETRY_UNRESOLVED";reason="ambq_source_url_collision"
         elif amb_ok:decision="AMBQ_OK" if len(lines)==1 else "AMBQ_RECONSTRUCTED";reason="ambq_segments_connected"
@@ -114,6 +131,7 @@ def main():
             decision="ARCGIS_FALLBACK_CANDIDATE";reason="bidirectional_100m_overlap_at_least_90pct"
         else:decision="GEOMETRY_UNRESOLVED";reason="insufficient_continuity_or_corroboration"
         output.append({"operator":row["company"],"route_code":code,"variant":variant,"ambq_url":url,
+            "original_page_url":row["source_kmz_url"],"verified_direct_override":overridden,
             "ambq_sections":len(lines),"ambq_unjoined_sections":unjoined,"ambq_connected":amb_ok,
             "arcgis_objectid":oid,"arcgis_sections":len(gis),"arcgis_unjoined_sections":gis_unjoined,
             "ambq_near_arcgis_fraction":forward,"arcgis_near_ambq_fraction":reverse,
