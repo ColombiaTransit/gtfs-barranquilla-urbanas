@@ -16,8 +16,10 @@ Deze lijst bevat operationele baseroutekandidaten die uit de resterende visuele 
 | ROJA RIOMAR | B14-4174 (SODETRANS) | 238 SIU-haltepassages; 100% forward; B13/B13-B 67,65% | **Sterke operationele koppeling** | Geen A/B-variant gekozen |
 | RIOMAR AMARILLA | B13-4128 / B13-B-4189 (SODETRANS) | 249 SIU-haltepassages; beide 100% forward; B14 65,06% | **Sterke baseroutefamilie, variant onbeslist** | B13 versus B13-B met juridische straatvolgorde/bronduplicatie onderscheiden |
 
+| VILLA SAN PABLO | PT1-4101 (COOLITORAL), voorlopig | 141 SIU-haltepassages; PT1 en PT2 elk 81,56% forward (identieke KMZ-bron); B3-4119 47,52%; officiële PT1-titel noemt Villas de San Pablo | **Voorlopige operationele baseroutekoppeling op titelbewijs** | 18,44% buiten matchafstand; onderscheid PT1/PT2 niet op KMZ aantoonbaar; straatvolgorde nog toetsen |
+
 ## Bronwaarschuwing JUAN MINA
 Het KMZ-manifest verwijst voor PT1-4101 én PT2-4102 naar dezelfde `PT1-4101.kmz` met dezelfde SHA-256. De KMZ-score is dus **niet onafhankelijk onderscheidend**. PT1 is gekozen op officiële routetitel, niet op een bewezen rijrichting. Zie `docs/juan-mina-pt1-pt2-resolution-crosscheck-2026-11-05.md`.
 
 ## Telling
-Van de 11 oorspronkelijke visueel onduidelijke SIU-itinerarios zijn **9** beoordeeld (waaronder RIOMAR AMARILLA met variant onbeslist). **2** blijven voor visuele review: LAS GAVIOTAS CALLE 76 en VILLA SAN PABLO. Definitieve A/B-varianten en exploitanten blijven afzonderlijk open waar aangegeven.
+Van de 11 oorspronkelijke visueel onduidelijke SIU-itinerarios zijn **10** beoordeeld (waaronder RIOMAR AMARILLA met variant onbeslist). **1** blijft voor visuele review: LAS GAVIOTAS CALLE 76. Definitieve A/B-varianten en exploitanten blijven afzonderlijk open waar aangegeven.
