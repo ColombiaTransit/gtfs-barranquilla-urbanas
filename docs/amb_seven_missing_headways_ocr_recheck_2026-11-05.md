@@ -19,3 +19,8 @@ Bron: bestaande GitHub Actions OCR-artifacts van run 41480204032, **geen nieuwe 
 3. **B13-B:** gerichte controle bestaande SODETRANS OCR afgerond op 2026-11-05: geen expliciete B13-B-4189-toewijzing gevonden. 216-2016 p6–7 en 719-2018 p8 tonen 5/7 voor **B13-4128**. Alleen nieuw route-identiteitsbewijs kan de koppeling alsnog onderbouwen; geen nieuwe OCR nodig.
 
 Status: **OCR-hercontrole uitgevoerd; historische kandidaten gevonden; definitieve consolidatie geblokkeerd op genoemde bronvragen.** Niet verwarren met actuele 2026-exploitatie.
+
+
+## Aanvulling 2026-11-05 — SODETRANS B13-B-4189 definitief opgelost
+
+De eerdere constatering dat in de toen onderzochte OCR-bronnen geen eigen frequentie voor B13-B-4189 voorkwam, blijft historisch juist maar is **niet langer een openstaande blokkade**. Nieuwe officiële bron: [Resolución Metropolitana 500-2025 — SODETRANS](https://www.ambq.gov.co/wp-content/uploads/2026/02/Resolucion-Metropolitana-No.-500-2025-SODETRANS.pdf), **pagina 8**. B13-B-4189: **8 minuten hora pico, 10 minuten hora valle**. De gebruiker heeft de pagina visueel en de afwezigheid van een nieuwer wijzigingsbesluit bevestigd. Status: `resolved_user_validated`; geen nieuwe OCR, geen heropening van historisch bronnenonderzoek. Voor GTFS blijven koppeling aan routevariant, modelspitsvensters en generator-output afzonderlijk te testen.
