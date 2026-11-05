@@ -66,3 +66,10 @@ De bronbestanden zijn technisch geëxtraheerd, behalve specifieke mislukte downl
 **Niet vrijgegeven** voor `calendar.txt`, `frequencies.txt`, `stop_times.txt` of `shapes.txt`. Diensturen van 00:00–24:00 zijn doorgaans **vraagafhankelijk** geformuleerd en impliceren niet dat er 's nachts daadwerkelijk bussen rijden. Voor opname eerst de werkelijke weekkalender, spits-/dalvensters, richtingen, haltes en georeferentie vaststellen.
 
 Machineleesbare routegegevens: [13-bedrijven-register](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/blob/main/sources/amb/remaining_13_route_parameters_2026-11-02.csv).
+
+
+## Archiefreconciliatie — 5 november 2026
+
+Archiefhercontrole: 349-2024 is historische kandidaat, niet leidend voor B18/C11/C12. B18 volgt 082-2026 (A/B elk 10/12; gedeelde sectie 5/6). C11 volgt 466-2025 3,5/5, niet de 349-2024 kandidaat 3/5. C12 is 4169 volgens latere vergunning; 4149 uit oudere tabel is een codeconflict/waarschijnlijke verschrijving, geen nieuwe route. C12 A 6/9 en B 3/6; gecombineerde 3/5 is geen extra dienst.
+
+Zie [route-voor-route classificatie](../../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](../amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
