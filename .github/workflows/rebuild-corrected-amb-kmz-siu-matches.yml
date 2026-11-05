@@ -1,0 +1,50 @@
+name: Rebuild corrected AMB KMZ and SIU matches
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install 'requests>=2,<3' 'beautifulsoup4>=4,<5' 'shapely>=2,<3' 'pyproj>=3,<4'
+      - name: Harvest AMB page with corrected direct URLs
+        run: python scripts/harvest_amb_kmz_routes.py --output sources/amb/kmz
+      - name: Assert four corrected routes have distinct valid source geometries
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          rows=list(csv.DictReader(open('sources/amb/kmz/manifest.csv',encoding='utf-8')))
+          expected={'PT2-4102':'PT1-4101','A16-4161 B':'A16-4161 A','B13-B-4189':'B13-4128','C18-4141':'C9-4140'}
+          for code,other in expected.items():
+              a=next(r for r in rows if r['route_label']==code)
+              b=next(r for r in rows if r['route_label']==other)
+              assert a['status']=='geometry_imported' and b['status']=='geometry_imported',(code,a['status'],b['status'])
+              assert a['sha256']!=b['sha256'],(code,other,'still identical')
+              assert Path('sources/amb/kmz',a['geojson_path']).is_file(),code
+              print(code,a['sha256'],a['point_count'])
+          PY
+      - name: Recalculate SIU stop coverage and sequence ranking
+        run: python scripts/match_siu_routes_to_all_kmz.py --repo . --top 10
+      - name: Build updated visual review maps
+        run: python scripts/build_siu_kmz_visual_review.py --repo .
+      - name: Upload corrected source and review results
+        uses: actions/upload-artifact@v4
+        with:
+          name: corrected-amb-kmz-siu-matches
+          path: |
+            sources/amb/kmz/manifest.csv
+            sources/amb/kmz/source_url_collisions.csv
+            sources/amb/kmz/summary.json
+            sources/amb/kmz/raw/
+            sources/amb/kmz/geojson/
+            build/siu_kmz_all_matches/
+            build/siu_kmz_visual_review/
+          if-no-files-found: error
