@@ -137,14 +137,46 @@ def main():
   (OUT/"first_version_summary.json").write_text(json.dumps({"trips":0,"held":len(issues),"reason":"No complete routable SIU trips"},indent=2))
   raise SystemExit("No SIU trips with complete GraphHopper travel times; no empty GTFS generated")
 
- # Official KMZ-based continuous boarding: two real geometry endpoints are the only anchors.
- # A fixed-route service with continuous_pickup/drop_off=0 is NOT demand-responsive booking.
+
+ # Link existing SIU trip templates to the official KMZ source, without GraphHopper shape reconstruction.
+ # Exact operator + KMZ route label is required; variant ambiguity is never silently resolved.
  manifest=read(ROOT/"sources/amb/kmz/manifest.csv")
  kmz_index=defaultdict(list)
  for m in manifest:
   if m.get("status")=="geometry_imported":
    kmz_index[(norm(m.get("company")),norm(m.get("route_label")))].append(m)
- flex_audit=[];shape_rows=[];flex_count=0
+ route_index={r["route_id"]:r for r in routes}
+ siu_shapes=[];siu_shape_audit=[];siu_shape_issues=[]
+ for trip in generated:
+  rid=trip["route_id"];r=route_index[rid]
+  company=r.get("agency_id","").removeprefix("AMB_")
+  matches=kmz_index.get((norm(company),norm(r.get("route_short_name"))),[])
+  if len(matches)!=1:
+   siu_shape_issues.append((rid,"siu_official_kmz_missing_or_ambiguous"));continue
+  source=matches[0]
+  try:
+   geo=json.loads((ROOT/"sources/amb/kmz"/source["geojson_path"]).read_text(encoding="utf-8"))
+   lines=[]
+   for feature in geo.get("features",[]):
+    geom=feature.get("geometry") or {}
+    if geom.get("type")=="LineString":lines.append(geom["coordinates"])
+    elif geom.get("type")=="MultiLineString":lines.extend(geom["coordinates"])
+   if len(lines)!=1 or len(lines[0])<2:raise ValueError("multipart_or_invalid")
+   coords=lines[0]
+   if any(len(p)<2 for p in coords):raise ValueError("invalid_point")
+  except (OSError,ValueError,KeyError,TypeError):
+   siu_shape_issues.append((rid,"siu_official_kmz_invalid_or_multipart"));continue
+  sid="KMZ_"+hashlib.sha256((rid+source.get("sha256","")).encode()).hexdigest()[:16]
+  trip["shape_id"]=sid
+  for n,p in enumerate(coords,1):
+   siu_shapes.append({"shape_id":sid,"shape_pt_lat":p[1],"shape_pt_lon":p[0],"shape_pt_sequence":n})
+  siu_shape_audit.append({"route_id":rid,"shape_id":sid,"kmz_route_label":source["route_label"],"kmz_sha256":source.get("sha256",""),"points":len(coords),"status":"exact_operator_and_route_match"})
+ write(OUT/"siu_kmz_shape_audit.csv",siu_shape_audit,["route_id","shape_id","kmz_route_label","kmz_sha256","points","status"])
+ issues.extend(siu_shape_issues)
+
+ # Official KMZ-based continuous boarding: two real geometry endpoints are the only anchors.
+ # A fixed-route service with continuous_pickup/drop_off=0 is NOT demand-responsive booking.
+ flex_audit=[];shape_rows=list(siu_shapes);flex_count=0
  for r in routes:
   rid=r["route_id"]
   if rid in used_routes:continue
@@ -238,7 +270,7 @@ def main():
  with zipfile.ZipFile(OUT/"gtfs-first-version.zip","w",zipfile.ZIP_DEFLATED) as z:
   for name in tables:z.write(folder/name,name)
  summary={"gtfs_zip":"gtfs-first-version.zip","status":"MODEL_NOT_VERIFIED_FOR_PUBLICATION",
-  "siu_trip_templates":len(audit),"continuous_boarding_route_templates":flex_count,"holiday_exception_dates":len(calendar_dates)//2,"routes":len(used_routes),"stops":len(used_stops),"stop_times":len(times),
+  "siu_trip_templates":len(audit),"continuous_boarding_route_templates":flex_count,"holiday_exception_dates":len(calendar_dates)//2,"siu_kmz_shapes":len(siu_shape_audit),"siu_kmz_shapes_unmatched":len(siu_shape_issues),"routes":len(used_routes),"stops":len(used_stops),"stop_times":len(times),
   "held":len(issues),"notes":"GraphHopper SIU travel times; 18 km/h geometry-based flex model; holiday schedule currently duplicates daily headways; source dispatch windows may be historical"}
  (OUT/"first_version_summary.json").write_text(json.dumps(summary,indent=2))
  print(json.dumps(summary,indent=2))
