@@ -17,3 +17,11 @@ Four AMB webpage source-link collisions were resolved by directly downloading a 
 4. Keep legal route codes and SIU itinerary identities distinct; do not merge routes or approve GTFS shapes before recomputation.
 
 The earlier PT4/PT5 entries have **different** file SHA-256 values and are not part of these collisions.
+
+## Reproduceerbaarheid en bewaarbeleid (besluit 2026-11-05)
+
+**GitHub Actions-artifacts zijn voor dit project voldoende als opslag van de herbouwde AMB-KMZ-brondata.** Er is geen eis om elke KMZ-snapshot automatisch terug te committen naar de repository, en er komt hiervoor geen afzonderlijke persistente bronarchiefworkflow.
+
+De workflow [Rebuild corrected AMB KMZ and SIU matches](../../.github/workflows/rebuild-corrected-amb-kmz-siu-matches.yml) is handmatig te starten via `workflow_dispatch`. Hij haalt de AMB-pagina op, downloadt de KMZ's met de vier gecontroleerde directe URL-overrides uit `scripts/harvest_amb_kmz_routes.py`, converteert naar GeoJSON, controleert de vier herstelde bronverschillen en berekent de SIU-matches en reviewkaarten opnieuw. Het artifact `corrected-amb-kmz-siu-matches` bevat de ruwe KMZ's, GeoJSON, manifest/metadata en match- en reviewresultaten.
+
+**Grenzen:** artifacts hebben een door GitHub ingestelde bewaartermijn en zijn geen onbeperkt archief. Een nieuwe run is reproduceerbaar zolang de publieke AMB-bronnen beschikbaar blijven en dezelfde inhoud aanbieden; `manifest.csv` met bron-URL's en SHA-256 maakt verschillen tussen runs controleerbaar. De workflow is toegevoegd maar de succesvolle uitvoering en artifact-inhoud zijn nog niet bevestigd. De workflow commit geen bronbestanden en wijzigt geen goedgekeurde GTFS-routes of -shapes.
