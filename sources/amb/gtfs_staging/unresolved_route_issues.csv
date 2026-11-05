@@ -1,4 +1,20 @@
 gtfs_route_id,agency,base_route_code,resolution,blockers,next_step
+AMB_TRANSMECAR_C17_4160,TRANSMECAR,C17-4160,324/325-2010 (beide 2010),historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRANSMECAR_D10_4172,TRANSMECAR,D10-4172,220-2010;325-2010,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRANSMECAR_D11_4153,TRANSMECAR,D11-4153,219-2010,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRANSMECAR_D9_4152,TRANSMECAR,D9-4152,221-2010,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRAB_C5_4136,COOTRAB,C5-4136,358-2024,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRAB_C6_4137,COOTRAB,C6-4137,358-2024,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_MONTERREY_B11_4166,MONTERREY,B11-4166,390-2018,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_MONTERREY_B12_4127,MONTERREY,B12-4127,390-2018,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_MONTERREY_B8_4124,MONTERREY,B8-4124,390-2018,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_MONTERREY_B11_B_4192,MONTERREY,B11-B-4192,390-2018,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_LA_CAROLINA_A16_4161_A,LA_CAROLINA,A16-4161,199-2019,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_LA_CAROLINA_A16_4161_B,LA_CAROLINA,A16-4161,199-2019,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_LA_CAROLINA_D6_4150,LA_CAROLINA,D6-4150,404-2023,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_LA_CAROLINA_D7_4151,LA_CAROLINA,D7-4151,404-2023,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANSPORCAR_C8_4139,COOTRANSPORCAR,C8-4139,389-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOCHOFAL_C2_4133,COOCHOFAL,C2-4133,242-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C2_B_4188,COOCHOFAL,C2-B-4188,242-2025,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C3_4134,COOCHOFAL,C3-4134,242-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOCHOFAL_C9_4140,COOCHOFAL,C9-4140,242-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
@@ -8,18 +24,40 @@ AMB_TRASALFA_D14_4156,TRASALFA,D14-4156,139-2013,historic_last_dispatch_invalid,
 AMB_TRASALFA_B2_B_4118,TRASALFA,B2-B-4118,287-2010;111-2012,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_A1_4106_A,COOLITORAL,A1-4106,192-2025,conflicting_official_extractions,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_A1_4106_B,COOLITORAL,A1-4106,192-2025,conflicting_official_extractions,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_B3_4119,COOLITORAL,B3-4119,192-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_C19_4178,COOLITORAL,C19-4178,199-2025 correction of 192-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_PT1_4101,COOLITORAL,PT1-4101,192-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_PT2_4102_A,COOLITORAL,PT2-4102,210-2026,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_PT2_4102_B,COOLITORAL,PT2-4102,210-2026,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_PT3_4103_A,COOLITORAL,PT3-4103,210-2026,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOLITORAL_PT3_4103_B,COOLITORAL,PT3-4103,210-2026,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT4_4104_A,COOLITORAL,PT4-4104,256-2026,pilot_SIU_to_legal_AB_mapping_unresolved,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT4_4104_B,COOLITORAL,PT4-4104,256-2026,pilot_SIU_to_legal_AB_mapping_unresolved,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT5_4105_A,COOLITORAL,PT5-4105,256-2026,pilot_SIU_to_legal_AB_mapping_unresolved,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOLITORAL_PT5_4105_B,COOLITORAL,PT5-4105,256-2026,pilot_SIU_to_legal_AB_mapping_unresolved,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRANTICO_A18_4183,COOTRANTICO,A18-4183,462-2025,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANTICO_B4_4120,COOTRANTICO,B4-4120,462-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANTICO_B5_4121,COOTRANTICO,B5-4121,462-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANTICO_B5_B_4190,COOTRANTICO,B5-B-4190,462-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANTICO_B6_4122,COOTRANTICO,B6-4122,462-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANTICO_B7_4123,COOTRANTICO,B7-4123,462-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANTICO_B20_4180,COOTRANTICO,B20-4180,462-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOTRANTICO_B20_B_4191,COOTRANTICO,B20-B-4191,462-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRANSCO_C7_4138,COOTRANSCO,C7-4138,258-2024,permanent_backup_pending_pilot_expiry_check;pilot_A_B_not_in_routes_txt,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRASOL_D3_4147,COOTRASOL,D3-4147,467-2025,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRASOL_D4_4148,COOTRASOL,D4-4148,467-2025,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRASOL_D5_4149,COOTRASOL,D5-4149,467-2025,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_SODETRANS_B13_B_4189,SODETRANS,B13-B-4189,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRANSURBAR_A14_4116,TRANSURBAR,A14-4116,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRANSURBAR_D16_4173,TRANSURBAR,D16-4173,051-2017 (routewijzigingen); 717-2018 (voertuigautorisatie),historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRANSNORTE_A6_4111,COOTRANSNORTE,A6-4111,183-2016,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
 AMB_COOTRANSNORTE_A5_4110,COOTRANSNORTE,A5-4110,156-2015,historic_window_not_found,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_TRASALIANCO_B19_4176,TRASALIANCO,B19-4176,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_TRASALIANCO_D12_4154,TRASALIANCO,D12-4154,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
-AMB_TRASALIANCO_D17_4158,TRASALIANCO,D17-4158,,missing_headway_source,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRASALIANCO_B19_4176,TRASALIANCO,B19-4176,,missing_headway_source;historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRASALIANCO_D18_4179,TRASALIANCO,D18-4179,408-2013,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRASALIANCO_D12_4154,TRASALIANCO,D12-4154,,missing_headway_source;historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRASALIANCO_D17_4158,TRASALIANCO,D17-4158,,missing_headway_source;historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOASOATLAN_C1_4132,COOASOATLAN,C1-4132,369-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOASOATLAN_C1_B_4186,COOASOATLAN,C1-B-4186,369-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOASOATLAN_C20_4181,COOASOATLAN,C20-4181,369-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_COOASOATLAN_C20_B_4187,COOASOATLAN,C20-B-4187,369-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRANSDIAZ_A11_4115,TRANSDIAZ,A11-4115,501-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
+AMB_TRANSDIAZ_B16_4130,TRANSDIAZ,B16-4130,501-2025,historic_last_dispatch_invalid,Check cited license and itinerary / add missing route source. Do not fabricate stop_times or shapes.
