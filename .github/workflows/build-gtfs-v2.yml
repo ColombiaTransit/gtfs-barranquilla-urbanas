@@ -1,0 +1,38 @@
+name: Build GTFS v2 with Flex and GTFS-RT contract
+'on':
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Attempt publication gate (default research only)
+        required: false
+        default: 'false'
+        type: boolean
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'requests>=2,<3' 'beautifulsoup4>=4,<5'
+      - name: Verify Python builder
+        run: python -m py_compile scripts/build_gtfs_v2.py
+      - name: Refresh official KMZ manifest with corrected URLs
+        run: python scripts/harvest_amb_kmz_routes.py --output sources/amb/kmz
+      - name: Build GTFS v2 research output and realtime static contract
+        run: python scripts/build_gtfs_v2.py ${{ inputs.publish == 'true' && '--publish' || '' }}
+      - name: Show summary
+        if: always()
+        run: |
+          if test -f build/gtfs-v2/summary.json; then cat build/gtfs-v2/summary.json >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Upload generated QA, Flex and realtime contract
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gtfs-v2-flex-rt-contract
+          path: build/gtfs-v2/
+          if-no-files-found: warn
