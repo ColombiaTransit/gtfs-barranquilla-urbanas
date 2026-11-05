@@ -7,6 +7,7 @@ name: Consolidate AMB GTFS sources
       - scripts/consolidate_amb_gtfs_sources.py
       - scripts/consolidate_amb_operator_sources.py
       - scripts/audit_amb_continuous_anchors.py
+      - scripts/compare_ambq_arcgis_geometry.py
       - sources/amb/kmz_stop_gaps/kmz_siu_route_stop_coverage.csv
       - sources/siu/open_route_review/siu_amb_crosswalk_visual_decisions_2026-11-05.csv
       - sources/operators/coochofal/dispatch_windows.csv
@@ -44,6 +45,10 @@ jobs:
         run: |
           python -m py_compile scripts/consolidate_amb_operator_sources.py scripts/audit_amb_continuous_anchors.py
           python scripts/audit_amb_continuous_anchors.py
+      - name: Compare AMBQ KMZ with registered ArcGIS shapes
+        run: |
+          python -m py_compile scripts/compare_ambq_arcgis_geometry.py
+          python scripts/compare_ambq_arcgis_geometry.py
       - name: Select first seven GTFS patterns for review
         run: python scripts/select_amb_gtfs_first_seven.py --input build/gtfs-source-consolidation/route_source_consolidation.csv --out build/gtfs-source-consolidation
       - name: Publish shortlist summary
