@@ -65,7 +65,8 @@ def main():
  occurrences=read(ROOT/"sources/siu/gtfs_staging/siu_stop_occurrence_crosswalk.csv")
  by_it=defaultdict(list)
  for x in occurrences:by_it[x.get("siu_itinerary_uuid","")].append(x)
- headways={r["gtfs_route_id"]:r for r in read(ROOT/"sources/amb/gtfs_staging/route_headway_candidates.csv")}
+ headways={r["gtfs_route_id"]:r for r in read(OUT/"consolidated_route_headways.csv")}
+ if len(headways)!=len(routes):raise ValueError("Consolidated frequency coverage does not match GTFS routes")
  url=os.environ.get("GRAPHHOPPER_URL","").rstrip("/")
  if not url:raise SystemExit("GRAPHHOPPER_URL organization variable required for SIU stop_times")
  if url.endswith("/route"):endpoint=url
