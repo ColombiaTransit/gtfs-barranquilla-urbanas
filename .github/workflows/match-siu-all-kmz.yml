@@ -1,0 +1,25 @@
+name: Match all SIU routes against AMB KMZ
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  match:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geometry dependencies
+        run: python -m pip install 'shapely>=2,<3' 'pyproj>=3,<4'
+      - name: Match every SIU itinerary against every KMZ
+        run: python scripts/match_siu_routes_to_all_kmz.py --repo . --top 5
+      - name: Upload research reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-kmz-all-route-matches
+          path: build/siu_kmz_all_matches/
+          if-no-files-found: warn
