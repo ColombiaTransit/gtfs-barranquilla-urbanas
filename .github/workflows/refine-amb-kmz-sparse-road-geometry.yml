@@ -33,7 +33,7 @@ jobs:
             scripts/refine_amb_sparse_kmz_edges_on_gh_bus_roads.py \
             scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py \
             scripts/compare_amb_kmz_refined_with_mobilitydata.py \
-            scripts/build_amb_gtfs_geometry_validation_pilot.py
+            archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py
       - name: Reconstruct source ArcGIS only for routes without usable 2026 KMZ
         run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
       - name: Rebuild exact official AMB KMZ-first baseline with existing GH fallback
@@ -52,12 +52,12 @@ jobs:
             --max-end-snap-m 45 --max-road-detour-ratio 1.55
       - name: Build baseline GTFS from official KMZ plus existing fallback
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-kmz-first-GH-fallback-research \
             --out build/amb-KMZ-sparse-baseline-validation
       - name: Build provisional GTFS with local KMZ sparse-road improvements
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-KMZ-dense-roads-research \
             --out build/amb-KMZ-sparse-proposal-validation
       - name: Require byte-identical GTFS fields except shapes.txt
@@ -104,7 +104,7 @@ jobs:
         run: python scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py
       - name: Build final candidate with only validator-guarded KMZ road refinements
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-KMZ-road-refinement-safe \
             --out build/amb-KMZ-sparse-final-validation
           python - <<'PY'
@@ -136,7 +136,7 @@ jobs:
           if [ "$comparison_status" -ne 0 ]; then
             echo "::warning::Final validator regression detected, reverting ALL sparse GH improvements"
             python scripts/select_amb_kmz_sparse_road_candidates_by_mobilitydata.py --rollback-all
-            python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+            python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
               --road-dir build/amb-KMZ-road-refinement-safe \
               --out build/amb-KMZ-sparse-final-validation
             python - <<'PY'
