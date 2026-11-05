@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - scripts/build_amb_gtfs_geometry_validation_pilot.py
+      - archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py
       - scripts/summarize_amb_gtfs_mobilitydata_validation.py
       - .github/workflows/validate-amb-gtfs-geometry-pilot.yml
 permissions:
@@ -27,9 +27,9 @@ jobs:
       - name: Install coordinate geometry helpers
         run: python -m pip install --disable-pip-version-check "pyproj>=3.5,<4"
       - name: Compile pilot generator and report parser
-        run: python -m py_compile scripts/build_amb_gtfs_geometry_validation_pilot.py scripts/summarize_amb_gtfs_mobilitydata_validation.py
+        run: python -m py_compile archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py scripts/summarize_amb_gtfs_mobilitydata_validation.py
       - name: Generate GH-road shapes and all valid demo GTFS text files
-        run: python scripts/build_amb_gtfs_geometry_validation_pilot.py
+        run: python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py
       - name: Download pinned official MobilityData CLI validator 8.0.1 and verify SHA256
         run: |
           curl --fail --location --retry 3 --silent --show-error \
