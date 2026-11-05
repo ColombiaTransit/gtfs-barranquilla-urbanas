@@ -25,6 +25,11 @@ def solve(points,line,reverse,include_trace=False):
     # State transitions score path distance against straight-line stop distance.
     # Strongly penalize backward travel and unrealistic long forward jumps.
     positions=[[(line.length-p if reverse else p,d) for p,d in opts] for opts in choices]
+    # Closed rings can cross the geometry origin once. Duplicate each position
+    # into a second lap so a valid cyclic sequence stays monotonic.
+    is_ring=Point(line.coords[0]).distance(Point(line.coords[-1]))<=50
+    if is_ring:
+        positions=[sorted(opts+[(p+line.length,d) for p,d in opts]) for opts in positions]
     blocks=[];block=[]
     for i,opts in enumerate(positions):
         if opts:block.append(i)
@@ -74,6 +79,9 @@ def solve(points,line,reverse,include_trace=False):
         "first_stop_to_shape_m":round(points[0].distance(line),1),
         "last_stop_to_shape_m":round(points[-1].distance(line),1),
         "ambiguous_stops":sum(len(x)>1 for x in choices),
+        "is_ring":is_ring,
+        "ring_wrap_count":sum(1 for a,b in zip(chosen,chosen[1:]) if a is not None and b is not None and a<line.length<=b) if is_ring else 0,
+        "sequence_violations":backwards+excessive,
         "section_length_m":round(line.length,1)}
     if include_trace:result["_chosen"]=chosen
     return result
