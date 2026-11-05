@@ -1,0 +1,26 @@
+name: Build SIU KMZ OSM visual review (11 unresolved)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  maps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install geometry dependencies
+        run: python -m pip install 'shapely>=2,<3' 'pyproj>=3,<4'
+      - name: Refresh candidate ranking
+        run: python scripts/match_siu_routes_to_all_kmz.py --repo . --top 5
+      - name: Build 11 interactive OSM HTML pages
+        run: python scripts/build_siu_kmz_visual_review.py --repo .
+      - name: Upload interactive HTML review pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: siu-kmz-osm-11-review-pages
+          path: build/siu_kmz_visual_review/
+          if-no-files-found: error
