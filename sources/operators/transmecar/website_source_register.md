@@ -1,7 +1,10 @@
 # TRANSMECAR — website source (2026-11-05)
 
-- User-provided candidate company page: https://transmecarsas.com/quienes-somos
-- Status: **candidate URL supplied; content not independently retrievable** at review time (web fetch cache miss and runtime DNS resolution failure). Do not claim page content or official ownership independently verified.
-- No downloadable KML/KMZ/GPX, stop sequences, service windows or frequencies verified from this page.
-- Keep AMB route/resolution/KMZ evidence independently.
-- Next: inspect accessible route/map/service subpages or a saved HTML/MHT snapshot if available.
+- Confirmed from user-supplied MHT snapshot of https://transmecarsas.com/quienes-somos
+- Page title: Transmecar S.A.S.; footer identifies Transportes Metropolitanos del Caribe S.A.S.
+- Company says it operates urban collective transport based in Soledad, under the Área Metropolitana de Barranquilla, serving Malambo, Soledad and Barranquilla.
+- Main navigation: Inicio, Quiénes Somos, Parque Automotor, NotiTransmecar, Contacto.
+- Next possible page to inspect: https://transmecarsas.com/parque-automotor
+- The supplied *Quiénes Somos* page contains no KML/KMZ, Leaflet map, public route list, stop coordinates, first/last departures or numerical frequencies. Generic claims of punctuality are not timetable data.
+- Source: user-supplied MHT capture `Transmecar S.A.S..mht` (HTML Content-Location /quienes-somos).
+- Status: company page content verified from snapshot; other site pages not yet inspected; geometry/schedules still unverified.
