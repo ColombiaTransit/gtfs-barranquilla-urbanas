@@ -38,7 +38,10 @@ def main():
                 siu_stop_count=row["siu_stop_count"],issue=issue,kmz_company=c["kmz_company"],
                 kmz_route_label=c["kmz_route_label"],candidate_rank=c["rank"],
                 coverage_50_pct=c["coverage_50_pct"],sequence_coverage_pct=c["sequence_coverage_pct"],
-                orientation=c["orientation"],backward_gt20m=c["backward_gt20m"],
+                orientation=c["orientation"],is_ring=c.get("is_ring",""),
+                ring_wrap_count=c.get("ring_wrap_count",""),
+                sequence_violations=c.get("sequence_violations",""),
+                backward_gt20m=c["backward_gt20m"],
                 implausible_forward=c["implausible_forward"],recommendation=recommendation,
                 operational_mapping_status="pending_geographic_review",
                 legal_confirmation_required="no"))
