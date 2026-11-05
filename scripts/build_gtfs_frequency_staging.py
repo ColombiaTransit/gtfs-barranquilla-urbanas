@@ -233,7 +233,10 @@ def match_window(windows,agency,base):
     if not candidates:
         return None,"historic_window_not_found"
     rec=candidates[0]
-    if rec.get("assumption_status") not in (\n        "accepted_as_provisional_2026_schedule_assumption",\n        "provisional_2100_user_model_override_2026_11_05",\n    ):
+    if rec.get("assumption_status") not in (
+        "accepted_as_provisional_2026_schedule_assumption",
+        "provisional_2100_user_model_override_2026_11_05",
+    ):
         return None,"historic_last_dispatch_invalid"
     start,end=clock(rec["first_dispatch_model_local"]),clock(rec["last_dispatch_model_local"])
     if start is None or end is None or end<=start:
