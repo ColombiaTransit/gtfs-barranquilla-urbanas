@@ -10,7 +10,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Match official street names to six AMBQ segments (read only)
-        run: python scripts/audit_a4_official_recorrido_osm.py
+        env:
+          API_OVERPASS: ${{ vars.API_OVERPASS }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: |
+          if [ -z "$API_OVERPASS" ]; then
+            echo "::error::Organization variable API_OVERPASS is missing"
+            exit 1
+          fi
+          echo "::add-mask::$API_OVERPASS"
+          python scripts/audit_a4_official_recorrido_osm.py
       - name: Publish QA summary
         if: always()
         run: |
