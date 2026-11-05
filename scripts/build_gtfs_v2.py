@@ -79,7 +79,7 @@ def main():
  for x in flex_scope:
   if x.get("continuous_pickup")=="0" or x.get("continuous_drop_off")=="0":
    if x.get("review_status")!="approved":hold("flex",x.get("route_id",""),"continuous_boarding_scope_unapproved")
- # Strictly no trips until explicitly reviewed, with real or explicitly modelled timing templates.
+ # Apply reviewed continuous-boarding scope without treating fixed-route service as demand-responsive Flex.\n scope_by_route={x.get("route_id"):x for x in flex_scope if x.get("review_status")=="approved"}\n for route in routes:\n  scope=scope_by_route.get(route["route_id"])\n  if scope:\n   for field in ("continuous_pickup","continuous_drop_off"):\n    if scope.get(field) in ("0","1","2","3"):route[field]=scope[field]\n # Strictly no trips until explicitly reviewed, with real or explicitly modelled timing templates.
  triprows=[];stoprows=[];freqrows=[]
  for t in service:
   pid=t.get("pattern_id","");p=patterns.get(pid);trip=t.get("trip_id","")
@@ -119,14 +119,14 @@ def main():
  (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
  if args.publish:
   # Publication must never succeed with missing reviewed calendar, stops, or incomplete source coverage.
-  calendar=read(registry/"calendar.txt")
+  calendar=read(registry/"calendar.txt")\n  if any(x.get("continuous_pickup")=="2" or x.get("continuous_drop_off")=="2" for x in routes) and not (registry/"booking_rules.txt").is_file():\n   raise SystemExit("Flex booking rule required for on-demand scope")
   if held or not triprows or not calendar or not stop_rows or not shapes or len(patterns)!=len(triprows):
    raise SystemExit("Publication gate blocked; inspect held.csv and required calendar/stops/shape coverage")
   folder=out/"publish";folder.mkdir(exist_ok=True)
   files={"agency.txt":agencies,"routes.txt":routes,"stops.txt":stop_rows,"trips.txt":triprows,"stop_times.txt":stoprows,"frequencies.txt":freqrows,"calendar.txt":calendar,"shapes.txt":shapes}
-  for name,rows in files.items():write(folder/name,rows,list(rows[0]))
+  for name,rows in files.items():write(folder/name,rows,list(dict.fromkeys(list(rows[0])+[k for row in rows for k in row])))\n  for optional in ("booking_rules.txt","location_groups.txt","location_group_stops.txt","locations.geojson"):\n   source=out/optional\n   if source.is_file(): (folder/optional).write_bytes(source.read_bytes())
   with zipfile.ZipFile(out/"gtfs.zip","w",zipfile.ZIP_DEFLATED) as z:
-   for name in files:z.write(folder/name,name)
+   for name in files:z.write(folder/name,name)\n   for optional in ("booking_rules.txt","location_groups.txt","location_group_stops.txt","locations.geojson"):\n    if (folder/optional).is_file():z.write(folder/optional,optional)
   summary["published"]=True;(out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
  print(json.dumps(summary,indent=2))
 if __name__=="__main__":main()
