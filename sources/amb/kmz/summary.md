@@ -8,4 +8,5 @@ Bron: https://www.ambq.gov.co/transporte/transporte-publico-colectivo/
 - geometry_imported: 93
 
 Originele KMZ, geconverteerde GeoJSON en manifest bewaren de provenance en variant.
-LET OP: 4 gedeelde KMZ-URL's bij 8 routelabels; zie source_url_collisions.csv. Deze mapping is NIET gevalideerd, ook als de KMZ downloadt.\nHistorische geometrie: controleer tegen toepasselijke vergunning en SIU. **Niet rechtstreeks naar GTFS shapes.txt publiceren.**
+LET OP: 0 gedeelde KMZ-URL's bij 0 routelabels; zie source_url_collisions.csv. Deze mapping is NIET gevalideerd, ook als de KMZ downloadt.
+Historische geometrie: controleer tegen toepasselijke vergunning en SIU. **Niet rechtstreeks naar GTFS shapes.txt publiceren.**
