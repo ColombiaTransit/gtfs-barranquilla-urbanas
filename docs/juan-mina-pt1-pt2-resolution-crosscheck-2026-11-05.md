@@ -14,3 +14,7 @@
 De bestaande CSV-extracten bevatten titel, lengtes en frequenties, maar **niet de volledige geordende stratenreeksen** van PT1 (192-2025 p.25–26) en PT2-A/B (210-2026 p.3–5). De officiële PDF-links leverden bij deze controle geen direct leesbare pagina's. Daarom is **geen** verzonnen straat-voor-straatvergelijking met de 170 SIU-haltes uitgevoerd.
 
 Heropen alleen dit concrete geometriedeel zodra de betreffende PDF-pagina's als tekst of afbeelding beschikbaar zijn; juridische geldigheid hoeft niet opnieuw onderzocht te worden. Bewaar de originele SIU-volgorde, en wijzig nog geen GTFS route_id/stop_times.
+
+## Nieuwe primaire KMZ-bron — 5 november 2026
+
+Gebruiker heeft de rechtstreeks geconstrueerde URL `https://www.ambq.gov.co/ruta-de-buses/COOLITORAL/PT2-4102.kmz` succesvol gedownload en het KMZ-bestand aangeleverd. Lokale inspectie bevestigt `doc.kml` met Placemark **PT2-4102**, één coördinatenreeks van **964 punten**, bestandsgrootte **23.270 bytes**, SHA-256 **`912e3afbd7b55dae5010831ac8de4b45f9bd1281fa54bac02114da8849d3b39a`**. De eerdere PT1-bron heeft SHA-256 `980cfa94668f42e87dc0de8441232ff59109aa8839053dffe4c5bab28339ad98`. Dit bewijst dat een afzonderlijk PT2-bestand bestaat en dat het oorspronkelijke AMB-paginamanifest de verkeerde PT2-link gebruikte. **De eerdere PT1/PT2-identieke-KMZ-score mag niet langer worden gebruikt om PT2 te beoordelen.** De geometrische vergelijking met PT1 en de SIU-stopvolgorde moet opnieuw worden uitgevoerd na import van het echte PT2-bestand. Dit is geen bewijs dat beide routes tegengestelde richtingen zijn.
