@@ -1,12 +1,12 @@
 {
   "routes_in_routes_txt": 97,
-  "routes_ready_to_stage": 35,
-  "routes_held_for_review": 62,
-  "staged_weekday_periods": 133,
+  "routes_ready_to_stage": 74,
+  "routes_held_for_review": 23,
+  "staged_weekday_periods": 328,
   "source_records_considered": 138,
   "blocker_counts": {
-    "historic_last_dispatch_invalid": 47,
     "historic_window_not_found": 8,
+    "historic_last_dispatch_invalid": 5,
     "conflicting_official_extractions": 2,
     "pilot_SIU_to_legal_AB_mapping_unresolved": 4,
     "permanent_backup_pending_pilot_expiry_check": 1,
