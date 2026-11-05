@@ -48,3 +48,10 @@ De genoemde bestanden staan in het lokale onderzoeksstartpakket; deze index is g
 ## SODETRANS — actualisatie 2026-11-05
 
 Officiële actuele frequentiebron: [Resolución Metropolitana 500-2025](https://www.ambq.gov.co/wp-content/uploads/2026/02/Resolucion-Metropolitana-No.-500-2025-SODETRANS.pdf). Betrokken routes: B13-4128, B13-B-4189, B14-4174, B15-4129, B17-4163 en C21-4182. Gebruiker bevestigt geen later besluit dat de frequenties wijzigt. **B13-B-4189, pagina 8: 8 min piek / 10 min dal; visueel gevalideerd, juridische bronvraag afgesloten.** Historische OCR-registratie met `missing_headway` is voor deze route achterhaald. Voor overige routevarianten zijn exacte machineleesbare frequentiegegevens en GTFS-dekking afzonderlijk te toetsen; claim geen volledige dekking zonder build-audit.
+
+
+## Archiefreconciliatie — 5 november 2026
+
+De archiefkandidaten 2020–2026 zijn vergeleken met de bestaande visueel geverifieerde frequentietabellen. De machineleesbare classificatie staat in `sources/amb/amb_archive_route_reconciliation_2026-11-05.csv`, de onderbouwing in `docs/amb_archive_2020_2026_existing_register_comparison_2026-11-05.md`. Oudere intervallen overschrijven geen latere beschikkingen. Alleen C7-4138 (348-2026), A4-4109 en de afzonderlijke tijdelijke A16-C/D9-C-varianten blijven voor nieuwe bronkoppeling open. Geen nieuwe OCR of GTFS-publicatie.
+
+Zie [route-voor-route classificatie](../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
