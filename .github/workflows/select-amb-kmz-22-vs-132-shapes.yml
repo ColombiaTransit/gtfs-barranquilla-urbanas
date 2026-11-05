@@ -30,7 +30,7 @@ jobs:
           python -m py_compile scripts/build_amb_kmz_first_gh_fallback_shapes.py \
             scripts/refine_amb_kmz_long_chords_with_gh_corridor.py \
             scripts/select_amb_kmz_22_vs_132_road_geometry.py \
-            scripts/build_amb_gtfs_geometry_validation_pilot.py
+            archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py
       - name: Rehydrate older ArcGIS source used only where official KMZ missing
         run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
       - name: Rebuild official KMZ-first and 132-section cautious GH corridor candidate
@@ -46,10 +46,10 @@ jobs:
              build/amb-KMZ-22-rehydrated-road-input/
           cp build/amb-kmz-first-GH-fallback-research/GH_full_route_bus_segment_alignment.csv \
              build/amb-KMZ-22-rehydrated-road-input/
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-KMZ-22-rehydrated-road-input \
             --out build/amb-KMZ-comparison-22-NOT-PUBLISHABLE
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE \
             --out build/amb-KMZ-comparison-132-NOT-PUBLISHABLE
       - name: Ensure comparison changes only shapes.txt
@@ -91,7 +91,7 @@ jobs:
         run: python scripts/select_amb_kmz_22_vs_132_road_geometry.py
       - name: Build combined research candidate with unchanged source GTFS
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-KMZ-22-vs-132-selection-NOT-PUBLISHABLE \
             --out build/amb-KMZ-22-vs-132-finalGTFS-NOT-PUBLISHABLE
           python - <<'PY'
@@ -159,7 +159,7 @@ jobs:
               shutil.copy2(Path("build/amb-kmz-first-GH-fallback-research/GH_full_route_bus_segment_alignment.csv"),
                            picked/"GH_full_route_bus_segment_alignment.csv")
               shutil.rmtree(final,ignore_errors=True)
-              subprocess.run(["python","scripts/build_amb_gtfs_geometry_validation_pilot.py",
+              subprocess.run(["python","archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py",
                               "--road-dir",str(picked),"--out",str(final)],check=True)
               (final/"gtfs_demo/stop_times.txt").write_bytes((base/"gtfs_demo/stop_times.txt").read_bytes())
               with ZipFile(final/"barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip","w",ZIP_DEFLATED,compresslevel=6) as z:
