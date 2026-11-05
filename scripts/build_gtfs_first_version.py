@@ -8,6 +8,8 @@ from collections import defaultdict, Counter
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 import requests
+import holidays
+from datetime import date, timedelta
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/"build/gtfs-v2"
@@ -134,23 +136,110 @@ def main():
  if not generated:
   (OUT/"first_version_summary.json").write_text(json.dumps({"trips":0,"held":len(issues),"reason":"No complete routable SIU trips"},indent=2))
   raise SystemExit("No SIU trips with complete GraphHopper travel times; no empty GTFS generated")
+
+ # Official KMZ-based continuous boarding: two real geometry endpoints are the only anchors.
+ # A fixed-route service with continuous_pickup/drop_off=0 is NOT demand-responsive booking.
+ manifest=read(ROOT/"sources/amb/kmz/manifest.csv")
+ kmz_index=defaultdict(list)
+ for m in manifest:
+  if m.get("status")=="geometry_imported":
+   kmz_index[(norm(m.get("company")),norm(m.get("route_label")))].append(m)
+ flex_audit=[];shape_rows=[];flex_count=0
+ for r in routes:
+  rid=r["route_id"]
+  if rid in used_routes:continue
+  h=headways.get(rid,{})
+  try:
+   first=seconds(h["first_dispatch_model"]);last=seconds(h["last_dispatch_model"])
+   headway=int(h.get("offpeak_headway_secs") or h.get("peak_headway_secs") or 0)
+   if not (0<=first<last<=30*3600 and headway>0):raise ValueError()
+  except (ValueError,KeyError):
+   issues.append((rid,"flex_missing_frequency_or_dispatch_window"));continue
+  company=r.get("agency_id","").removeprefix("AMB_")
+  candidates=kmz_index.get((norm(company),norm(r.get("route_short_name"))),[])
+  if len(candidates)!=1:
+   issues.append((rid,"flex_missing_or_ambiguous_official_kmz"));continue
+  source=candidates[0]
+  try:
+   geo=json.loads((ROOT/"sources/amb/kmz"/source["geojson_path"]).read_text(encoding="utf-8"))
+   lines=[]
+   for feature in geo.get("features",[]):
+    geom=feature.get("geometry") or {}
+    if geom.get("type")=="LineString":lines.append(geom["coordinates"])
+    elif geom.get("type")=="MultiLineString":lines.extend(geom["coordinates"])
+   if len(lines)!=1 or len(lines[0])<2:raise ValueError("multipart_or_invalid")
+   coords=lines[0]
+   if any(len(p)<2 for p in coords):raise ValueError("invalid_coordinates")
+  except (OSError,ValueError,KeyError,TypeError):
+   issues.append((rid,"flex_invalid_or_multipart_kmz"));continue
+  def haversine(a,b):
+   p1,p2=math.radians(a[1]),math.radians(b[1])
+   dp=p2-p1;dl=math.radians(b[0]-a[0])
+   x=math.sin(dp/2)**2+math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
+   return 12742000*math.asin(min(1,math.sqrt(x)))
+  distance=sum(haversine(a,b) for a,b in zip(coords,coords[1:]))
+  if distance<100:
+   issues.append((rid,"flex_geometry_too_short"));continue
+  # Transparent first-version assumption: 18 km/h urban running speed.
+  travel=max(60,math.ceil(distance/5))
+  sid="KMZ_"+hashlib.sha256((rid+source.get("sha256","")).encode()).hexdigest()[:16]
+  for n,p in enumerate(coords,1):
+   shape_rows.append({"shape_id":sid,"shape_pt_lat":p[1],"shape_pt_lon":p[0],"shape_pt_sequence":n})
+  a,b="KMZ_START_"+hashlib.sha256(rid.encode()).hexdigest()[:12],"KMZ_END_"+hashlib.sha256(rid.encode()).hexdigest()[:12]
+  by_stop[a]={"stop_id":a,"stop_name":r["route_short_name"]+" - inicio de geometría","stop_lat":coords[0][1],"stop_lon":coords[0][0],"location_type":0}
+  by_stop[b]={"stop_id":b,"stop_name":r["route_short_name"]+" - fin de geometría","stop_lat":coords[-1][1],"stop_lon":coords[-1][0],"location_type":0}
+  trip="FLEX_"+hashlib.sha256(rid.encode()).hexdigest()[:16]
+  generated.append({"route_id":rid,"service_id":"MODEL_DAILY","trip_id":trip,"shape_id":sid})
+  times.extend([
+   {"trip_id":trip,"arrival_time":"00:00:00","departure_time":"00:00:00","stop_id":a,"stop_sequence":1,"continuous_pickup":0,"continuous_drop_off":0},
+   {"trip_id":trip,"arrival_time":clock(travel),"departure_time":clock(travel),"stop_id":b,"stop_sequence":2,"continuous_pickup":0,"continuous_drop_off":0}])
+  frequencies.append({"trip_id":trip,"start_time":clock(first),"end_time":clock(last),"headway_secs":headway,"exact_times":0})
+  used_stops.update((a,b));used_routes.add(rid);flex_count+=1
+  flex_audit.append({"route_id":rid,"source_sha256":source.get("sha256",""),"shape_id":sid,"distance_m":round(distance),
+    "model_travel_seconds":travel,"model_speed_kmh":18,"frequency_source":h.get("source_file",""),"source_year":h.get("dispatch_window_source_year","")})
+ write(OUT/"continuous_boarding_generated_audit.csv",flex_audit,
+  ["route_id","source_sha256","shape_id","distance_m","model_travel_seconds","model_speed_kmh","frequency_source","source_year"])
+ # Colombian public holidays are modelled as Sunday-equivalent service exceptions.
+ # Duplicate templates preserve distinct GTFS service IDs; do not double-count a holiday.
+ calendar_start=date(2026,11,5);calendar_end=date(2027,12,31)
+ calendar=[
+  {"service_id":"MODEL_DAILY","monday":1,"tuesday":1,"wednesday":1,"thursday":1,"friday":1,"saturday":1,"sunday":1,"start_date":"20261105","end_date":"20271231"},
+  {"service_id":"MODEL_HOLIDAY","monday":0,"tuesday":0,"wednesday":0,"thursday":0,"friday":0,"saturday":0,"sunday":0,"start_date":"20261105","end_date":"20271231"}]
+ calendar_dates=[]
+ for day in sorted(holidays.country_holidays("CO",years=[2026,2027])):
+  if calendar_start<=day<=calendar_end:
+   stamp=day.strftime("%Y%m%d")
+   calendar_dates.extend([
+    {"service_id":"MODEL_DAILY","date":stamp,"exception_type":2},
+    {"service_id":"MODEL_HOLIDAY","date":stamp,"exception_type":1}])
+ holiday_trips=[];holiday_times=[];holiday_freq=[]
+ for trip in generated:
+  copy=dict(trip);copy["trip_id"]=trip["trip_id"]+"_HOL";copy["service_id"]="MODEL_HOLIDAY";holiday_trips.append(copy)
+ for st in times:
+  copy=dict(st);copy["trip_id"]+="_HOL";holiday_times.append(copy)
+ for freq in frequencies:
+  copy=dict(freq);copy["trip_id"]+="_HOL";holiday_freq.append(copy)
+ generated+=holiday_trips;times+=holiday_times;frequencies+=holiday_freq
+ write(OUT/"first_version_held.csv",[{"name":a,"reason":b} for a,b in issues],["name","reason"])
+
  folder=OUT/"first-version";folder.mkdir(exist_ok=True)
  tables={
   "agency.txt":(agency,["agency_id","agency_name","agency_url","agency_timezone"]),
   "routes.txt":([r for r in routes if r["route_id"] in used_routes],["route_id","agency_id","route_short_name","route_long_name","route_type"]),
   "stops.txt":([by_stop[k] for k in sorted(used_stops)],["stop_id","stop_name","stop_lat","stop_lon","location_type"]),
-  "trips.txt":(generated,["route_id","service_id","trip_id"]),
-  "stop_times.txt":(times,["trip_id","arrival_time","departure_time","stop_id","stop_sequence"]),
+  "trips.txt":(generated,["route_id","service_id","trip_id","shape_id"]),
+  "stop_times.txt":(times,["trip_id","arrival_time","departure_time","stop_id","stop_sequence","continuous_pickup","continuous_drop_off"]),
   "frequencies.txt":(frequencies,["trip_id","start_time","end_time","headway_secs","exact_times"]),
-  "calendar.txt":([{"service_id":"MODEL_DAILY","monday":1,"tuesday":1,"wednesday":1,"thursday":1,"friday":1,"saturday":1,"sunday":1,"start_date":"20261105","end_date":"20271231"}],
-   ["service_id","monday","tuesday","wednesday","thursday","friday","saturday","sunday","start_date","end_date"])
+  "calendar.txt":(calendar,["service_id","monday","tuesday","wednesday","thursday","friday","saturday","sunday","start_date","end_date"]),
+  "calendar_dates.txt":(calendar_dates,["service_id","date","exception_type"]),
+  "shapes.txt":(shape_rows,["shape_id","shape_pt_lat","shape_pt_lon","shape_pt_sequence"])
  }
  for name,(rows,fields) in tables.items():write(folder/name,rows,fields)
  with zipfile.ZipFile(OUT/"gtfs-first-version.zip","w",zipfile.ZIP_DEFLATED) as z:
   for name in tables:z.write(folder/name,name)
  summary={"gtfs_zip":"gtfs-first-version.zip","status":"MODEL_NOT_VERIFIED_FOR_PUBLICATION",
-  "siu_trips":len(generated),"routes":len(used_routes),"stops":len(used_stops),"stop_times":len(times),
-  "held":len(issues),"notes":"GraphHopper estimated relative stop times; 2020 dispatch windows and DAILY calendar are provisional, not current certified service"}
+  "siu_trip_templates":len(audit),"continuous_boarding_route_templates":flex_count,"holiday_exception_dates":len(calendar_dates)//2,"routes":len(used_routes),"stops":len(used_stops),"stop_times":len(times),
+  "held":len(issues),"notes":"GraphHopper SIU travel times; 18 km/h geometry-based flex model; holiday schedule currently duplicates daily headways; source dispatch windows may be historical"}
  (OUT/"first_version_summary.json").write_text(json.dumps(summary,indent=2))
  print(json.dumps(summary,indent=2))
 if __name__=="__main__":main()
