@@ -1,0 +1,24 @@
+name: Audit other AMB route geometries
+'on':
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/audit_other_amb_route_geometries.py
+      - sources/amb/KMZ_first_GH_fallback_validation/source_shape_source_by_pattern.csv
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build route geometry worklist without A4 and D8
+        run: |
+          python -m py_compile scripts/audit_other_amb_route_geometries.py
+          python scripts/audit_other_amb_route_geometries.py
+          cat build/other-route-geometry-review/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: other-AMB-route-geometry-worklist
+          path: build/other-route-geometry-review/
+          if-no-files-found: error
