@@ -1,0 +1,12 @@
+source_url,source_group,source_label,day_group,first_departure,last_departure,amb_route_candidate,source_type,notes
+"https://coochofal.com/rutas-y-horarios/","Nevada de Gran Abasto","Soledad 2000","monday_saturday","04:20","21:00","A15-4159","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de Gran Abasto","Central","monday_saturday","05:00","19:00","","operator_published_dispatch_window","No unambiguous AMB route mapping; preserve source label"
+"https://coochofal.com/rutas-y-horarios/","Nevada de Gran Abasto","San Luis","monday_saturday","05:00","19:30","C2-4133","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de Gran Abasto","Soledad 2000","sunday_holiday","05:00","21:00","A15-4159","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de Gran Abasto","Central","sunday_holiday","05:00","19:00","","operator_published_dispatch_window","No unambiguous AMB route mapping; preserve source label"
+"https://coochofal.com/rutas-y-horarios/","Nevada de Gran Abasto","San Luis","sunday_holiday","05:30","19:30","C2-4133","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de 7 de Abril","Victoria 84","monday_saturday","04:40","20:30","D20-4185","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de 7 de Abril","C9","monday_saturday","05:10","20:00","C9-4140","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de 7 de Abril","C18","monday_saturday","05:00","20:00","C18-4141","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de 7 de Abril","C4","monday_saturday","04:50","20:30","C4-4135","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
+"https://coochofal.com/rutas-y-horarios/","Nevada de 7 de Abril","C3","monday_saturday","05:10","19:00","C3-4134","operator_published_dispatch_window","AMB code is candidate crosswalk; no headway implied"
