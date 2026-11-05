@@ -1,0 +1,23 @@
+name: Triage remaining AMBQ KMZ geometry
+'on':
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/triage_remaining_kmz_geometry.py
+permissions:
+  contents: read
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reuse existing KMZ geometry evidence and prioritize individual edges
+        run: |
+          python -m py_compile scripts/triage_remaining_kmz_geometry.py
+          python scripts/triage_remaining_kmz_geometry.py
+          cat build/kmz-remaining-geometry-qa/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: remaining-AMBQ-KMZ-geometry-QA
+          path: build/kmz-remaining-geometry-qa/
+          if-no-files-found: error
