@@ -25,6 +25,11 @@ jobs:
         run: python scripts/harvest_amb_kmz_routes.py --output sources/amb/kmz
       - name: Build GTFS v2 research output and realtime static contract
         run: python scripts/build_gtfs_v2.py ${{ inputs.publish == 'true' && '--publish' || '' }}
+      - name: Build first-version SIU GTFS with private GraphHopper
+        env:
+          GRAPHHOPPER_URL: ${{ vars.GRAPHHOPPER_URL }}
+          GRAPHHOPPER_PROFILE: bus
+        run: python scripts/build_gtfs_first_version.py
       - name: Show summary
         if: always()
         run: |
