@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/audit-siu-kmz-stop-order.yml
       - scripts/audit_siu_kmz_stop_order.py
+      - scripts/audit_siu_kmz_loop_aware.py
 permissions:
   contents: write
 jobs:
@@ -33,13 +34,16 @@ jobs:
           PY
       - name: Audit all SIU/KMZ candidates
         run: python scripts/audit_siu_kmz_stop_order.py --repo . --out build/siu-kmz-ordered-audit.csv
+      - name: Run loop-aware ordered-stop audit
+        run: python scripts/audit_siu_kmz_loop_aware.py --repo . --out build/siu-kmz-loop-aware-audit.csv
       - name: Preserve full ordered-stop audit
         run: |
           mkdir -p sources/amb/kmz_stop_research/siu_crosswalk
           cp build/siu-kmz-ordered-audit.csv sources/amb/kmz_stop_research/siu_crosswalk/siu_kmz_ordered_stop_audit_DIAGNOSTIC.csv
+          cp build/siu-kmz-loop-aware-audit.csv sources/amb/kmz_stop_research/siu_crosswalk/siu_kmz_loop_aware_audit_DIAGNOSTIC.csv
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sources/amb/kmz_stop_research/siu_crosswalk/siu_kmz_ordered_stop_audit_DIAGNOSTIC.csv
+          git add sources/amb/kmz_stop_research/siu_crosswalk/siu_kmz_ordered_stop_audit_DIAGNOSTIC.csv sources/amb/kmz_stop_research/siu_crosswalk/siu_kmz_loop_aware_audit_DIAGNOSTIC.csv
           if ! git diff --cached --quiet; then
             git commit -m "research(siu): audit ordered stops against AMB KMZ candidates"
             git pull --rebase origin main
@@ -49,5 +53,7 @@ jobs:
         if: always()
         with:
           name: siu-kmz-ordered-stop-audit
-          path: build/siu-kmz-ordered-audit.csv
+          path: |
+            build/siu-kmz-ordered-audit.csv
+            build/siu-kmz-loop-aware-audit.csv
           if-no-files-found: warn
