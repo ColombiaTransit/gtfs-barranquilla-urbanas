@@ -62,3 +62,8 @@ Een routevergunning noemt **4 minuten spits** en **6 minuten dal**. Stel dat we 
 **06:00–21:00 is alleen een rekenvoorbeeld, niet het dienstvenster van een concrete route.**
 
 Machineleesbare tijdvakken: [`sources/amb/gtfs_peak_offpeak_period_model_2026-11-03.csv`](../sources/amb/gtfs_peak_offpeak_period_model_2026-11-03.csv). `00:00–07:00` en `20:00–24:00` in dat bestand **beschrijven uitsluitend categorieën van de klok**, geen daadwerkelijke exploitatie.
+
+
+## Modelaanpassing 5 november 2026 — algemeen eindvenster 21:00
+
+Op expliciet verzoek van de gebruiker worden **uitsluitend bestaande model-eindtijden van precies 18:00** voorlopig op **21:00** gezet. De oorspronkelijke 2020-vertrekuren blijven als historisch brongegeven behouden. Andere eindtijden (zoals 18:30, 19:00 en 20:00), ontbrekende of foutieve tijden en eerste vertrekken blijven ongewijzigd. De Google-samenvatting 'TPC ongeveer 05:00–21:00' is een **niet onafhankelijk geverifieerde secundaire plausibiliteitsindicatie**, geen officiële routegebonden dienstregeling. Deze keuze is een **gebruikersmodelaanname**, niet een vastgesteld AMB-besluit. Model-ID `AMB_2026_GENERAL_2100_PROVISIONAL_V2`. De piekuren blijven 07:00–09:00 en 17:00–20:00; 20:00–21:00 is dal wanneer de route volgens het model rijdt. De bestaande afgeleide frequentieperioden-CSV uit 3 november is hiermee **verouderd** en moet vóór GTFS-generatie worden herberekend. Geen productie-GTFS gewijzigd.
