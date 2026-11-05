@@ -43,3 +43,8 @@ De voorlopige topologische reconstructie leverde 493 afzonderlijke ketens op. Va
 - docs/shape_koppeling_review.csv
 
 De genoemde bestanden staan in het lokale onderzoeksstartpakket; deze index is geen vervanging voor de bronbestanden.
+
+
+## SODETRANS — actualisatie 2026-11-05
+
+Officiële actuele frequentiebron: [Resolución Metropolitana 500-2025](https://www.ambq.gov.co/wp-content/uploads/2026/02/Resolucion-Metropolitana-No.-500-2025-SODETRANS.pdf). Betrokken routes: B13-4128, B13-B-4189, B14-4174, B15-4129, B17-4163 en C21-4182. Gebruiker bevestigt geen later besluit dat de frequenties wijzigt. **B13-B-4189, pagina 8: 8 min piek / 10 min dal; visueel gevalideerd, juridische bronvraag afgesloten.** Historische OCR-registratie met `missing_headway` is voor deze route achterhaald. Voor overige routevarianten zijn exacte machineleesbare frequentiegegevens en GTFS-dekking afzonderlijk te toetsen; claim geen volledige dekking zonder build-audit.
