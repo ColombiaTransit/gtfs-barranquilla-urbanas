@@ -1,0 +1,22 @@
+name: Publish provisional SIU KMZ mapping
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/build_provisional_siu_kmz_mapping.py
+      - .github/workflows/publish-provisional-siu-kmz-mapping.yml
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/build_provisional_siu_kmz_mapping.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: provisional-siu-kmz-mapping-33
+          path: sources/amb/kmz_stop_research/siu_crosswalk/provisional_siu_kmz_mapping_33_NOT_LEGAL.csv
