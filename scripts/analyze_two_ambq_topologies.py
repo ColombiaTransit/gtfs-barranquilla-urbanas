@@ -72,7 +72,11 @@ def main():
         ids={m["matching_objectids"] for m in candidates}
         if len(ids)==1:
             oid=next(iter(ids))
-            payload=json.loads(base.request(base.LAYER+"/query",{"where":"OBJECTID="+str(int(oid)),"outFields":"OBJECTID","returnGeometry":"true","outSR":"4326","f":"geojson"}))
+            try:
+                payload=json.loads(base.request(base.LAYER+"/query",{"where":"OBJECTID="+str(int(oid)),"outFields":"OBJECTID","returnGeometry":"true","outSR":"4326","f":"geojson"}))
+            except Exception as exc:
+                report["arcgis"]={"status":"FETCH_OR_PARSE_FAILED","error_type":type(exc).__name__,"error":str(exc)}
+                payload={}
             features=payload.get("features",[])
             if len(features)==1:
                 geom=features[0]["geometry"]
@@ -91,7 +95,10 @@ def main():
             if source not in r:continue
             v=r[source]
             if v.get("status")=="FETCH_OR_PARSE_FAILED":
-                lines.append(f"- {source.upper()}: source unavailable or invalid ({v['error_type']}: {v['error']}); no geometry conclusion possible")
+                if v.get("status")=="FETCH_OR_PARSE_FAILED":
+                lines.append(f"- {source.upper()}: source unavailable or invalid ({v['error_type']}: {v['error']}); topology not assessed")
+                continue
+            lines.append(f"- {source.upper()}: source unavailable or invalid ({v['error_type']}: {v['error']}); no geometry conclusion possible")
                 continue
             lines.append(f"- {source.upper()}: {v['segments']} segments, {v['points']} vertices; components at 10/30/100 m: "+"/".join(str(v["endpoint_components"][str(t)+"m"]["count"]) for t in (10,30,100))+f"; endpoints near other line vertices (30m): {v['endpoints_near_other_segment_vertex_30m']}/{v['endpoints_total']}")
             if "nearest_component_endpoint_gap_m" in v:lines.append(f"  - Nearest gap from largest component: {v['nearest_component_endpoint_gap_m']} m")
