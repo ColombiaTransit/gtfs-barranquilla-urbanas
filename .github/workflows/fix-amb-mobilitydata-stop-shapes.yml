@@ -29,7 +29,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check requests "shapely>=2.0,<3" "pyproj>=3.5,<4"
       - name: Verify Python scripts compile
         run: |
-          python -m py_compile scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python -m py_compile archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             scripts/retry_amb_mobilitydata_stop_shape_warnings.py \
             scripts/compare_amb_gtfs_geometry_validator_reports.py \
             scripts/guard_amb_gh_shape_fixes_against_validator_order.py
@@ -41,7 +41,7 @@ jobs:
           echo "19293ddd9b6f954f216d4f12054bd8a3232921751c4484339e339764a91000e2  /tmp/gtfs-validator-8.0.1-cli.jar" | sha256sum -c -
       - name: Build baseline NON-PUBLISHABLE research GTFS and run real MobilityData
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py
           java -Xmx4g -jar /tmp/gtfs-validator-8.0.1-cli.jar \
             -i build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/barranquilla_geometry_ONLY_TEST_NOT_FOR_PUBLICATION.zip \
             -o build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/validator \
@@ -63,7 +63,7 @@ jobs:
             --max-affected-sections 300 --spacing-m 240
       - name: Generate NEW GTFS geometry research fixture from accepted GH sections
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-gtfs-geometry-stop-aware-retry \
             --out build/amb-gtfs-mobilitydata-STOP-AWARE-NOT-PUBLISHABLE
       - name: Run official MobilityData validator against regenerated STOP-AWARE demo
@@ -80,7 +80,7 @@ jobs:
             --jar /tmp/gtfs-validator-8.0.1-cli.jar --max-probes 100
       - name: Build final nonpublishing GTFS with distance AND order-safe GH routes
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-gtfs-geometry-stop-aware-SAFE \
             --out build/amb-gtfs-mobilitydata-ORDER-GUARDED
       - name: Run final MobilityData 8.0.1 validator on order-guarded GH geometry
