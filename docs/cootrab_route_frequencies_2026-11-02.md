@@ -88,3 +88,10 @@ De nieuwste zichtbare routecodes komen uit officiële beschikkingen. De AMB **Vi
 - 192-2025 (Coolitoral): https://www.ambq.gov.co/wp-content/uploads/2025/06/RESOLUCION-METROPOLITANA-No.-192-2025.pdf
 - 200-2019: https://www.ambq.gov.co/wp-content/uploads/2019/11/RESOLUCION-N-200-1920190820.pdf
 - 303-2014: https://www.ambq.gov.co/wp-content/uploads/2017/11/COOTRAB-C5-C6-Resolucion-303-14.pdf
+
+
+## Archiefreconciliatie — 5 november 2026
+
+Archiefhercontrole: C5-4136 en C6-4137 358-2024 elk 8/10 waren reeds visueel gecontroleerd. Geen nieuwe waarden. A1-4106 volgt de latere gezamenlijke COOLITORAL/COOTRAB 192-2025: itinerary A 8,5/14, B 8,5/11; gedeelde corridor 4,5/6. 358-2024 niet als één A1-ritinterval hergebruiken. C5-4135 kaartviewer versus C5-4136 beschikkingen blijft een afzonderlijk open codeconflict.
+
+Zie [route-voor-route classificatie](../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
