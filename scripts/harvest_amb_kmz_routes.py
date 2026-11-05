@@ -27,6 +27,15 @@ COMPANIES = """FLOTA-ANGULO TRANSMECAR FLOTA-ROJA TRANSDIAZ COOTRAB EMBUSA
 MONTERREY LA-CAROLINA COOTRANSPORCAR COOCHOFAL TRASALFA COOLITORAL
 COOTRANTICO LOLAYA COOTRANSCO COOTRASOL SOBUSA TRANSOLEDAD TRANSURBAR
 SODETRANS COOTRANSNORTE TRASALIANCO COOASOATLAN""".split()
+# Direct public AMB KMZ URLs verified by independent user downloads (2026-11-05).
+# The page's data-kmz attributes incorrectly reuse another route's file.
+DIRECT_ROUTE_OVERRIDES = {
+    ("COOLITORAL", "PT2-4102"): "PT2-4102.kmz",
+    ("LA-CAROLINA", "A16-4161 B"): "A16-4161 B.kmz",
+    ("SODETRANS", "B13-B-4189"): "B13-B-4189.kmz",
+    ("COOCHOFAL", "C18-4141"): "C18-4141.kmz",
+}
+
 FIELDS = """company route_label route_code base_route_id_candidate variant source_attribute
 kmz_url final_url http_last_modified sha256 size_bytes raw_kmz_path geojson_path
 kml_members linestring_count point_count bbox status error legal_route_verified
@@ -175,6 +184,12 @@ def main():
         if not urls:
             continue
         label, base, variant = split_variant(name, raw)
+        override = DIRECT_ROUTE_OVERRIDES.get((company, label))
+        if override:
+            direct = "https://www.ambq.gov.co/ruta-de-buses/" + quote(company, safe="") + "/" + quote(override, safe="._-")
+            # Never silently fall back to the known-wrong linked route geometry.
+            urls = [direct]
+            attribute += "+verified_direct_route_url"
         key = (company, label, urls[0])
         if key in seen:
             continue
