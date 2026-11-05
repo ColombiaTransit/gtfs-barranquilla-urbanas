@@ -1,0 +1,50 @@
+name: Archive LA CAROLINA original KML sources
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and validate original KML
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p sources/operators/la_carolina/kml
+          for file in A-16-MIRAMAR.kml D7-CALLE-17.kml D6-CALLE-30.kml EXPRES.kml; do
+            url="https://lacarolina.com.co/wp-content/uploads/2025/09/${file}"
+            echo "Fetching ${url}"
+            curl --fail --location --retry 3 --connect-timeout 20 --max-time 90 \
+              --output "sources/operators/la_carolina/kml/${file}" "${url}"
+            FILE="sources/operators/la_carolina/kml/${file}" python - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+          path = os.environ["FILE"]
+          root = ET.parse(path).getroot()
+          if not root.tag.lower().endswith("kml"):
+              raise SystemExit(f"Unexpected XML root in {path}: {root.tag}")
+          coords = [n for n in root.iter() if n.tag.endswith("coordinates") and (n.text or "").strip()]
+          if not coords:
+              raise SystemExit(f"No KML coordinates in {path}")
+          print(f"Validated {path}: {len(coords)} coordinate elements")
+          PY
+          done
+          sha256sum sources/operators/la_carolina/kml/*.kml > sources/operators/la_carolina/kml/SHA256SUMS
+      - name: Commit archived sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/operators/la_carolina/kml
+          if git diff --cached --quiet; then
+            echo "No source changes"
+          else
+            git commit -m "Archive original La Carolina KML route geometry sources"
+            git push
+          fi
