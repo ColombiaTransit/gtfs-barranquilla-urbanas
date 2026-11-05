@@ -74,6 +74,8 @@ def main():
                 sequence_coverage_pct=round(seqcov,2),backward_gt20m=seq["backward_gt20m"],
                 implausible_forward=seq["implausible_forward_gt_max500m_or_5x"],
                 chosen_section=section,orientation="reverse" if reverse else "forward",
+                is_ring=seq["is_ring"],ring_wrap_count=seq["ring_wrap_count"],
+                sequence_violations=seq["sequence_violations"],
                 median_distance_m=round(sorted(dists)[total//2],1),max_distance_m=round(max(dists),1),
                 match_class=status,legal_mapping_confirmed="no",gtfs_approved="no"))
             for s,d in zip(group,dists):
