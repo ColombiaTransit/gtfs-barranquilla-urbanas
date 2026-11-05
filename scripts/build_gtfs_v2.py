@@ -149,8 +149,7 @@ def main():
   obj=json.loads(geo.read_text(encoding="utf-8"))
   if obj.get("type")!="FeatureCollection":raise ValueError("Invalid Flex locations GeoJSON")
   (out/"locations.geojson").write_text(json.dumps(obj,ensure_ascii=False))
- (out/"summary.json").write_text(json.dumps(summary,indent=2)+"
-")
+ (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
  if args.publish:
   # Publication must never succeed with missing reviewed calendar, stops, or incomplete source coverage.
   calendar=read(registry/"calendar.txt")
@@ -171,7 +170,6 @@ def main():
    for name in files:z.write(folder/name,name)
    for optional in ("booking_rules.txt","location_groups.txt","location_group_stops.txt","locations.geojson"):
     if (folder/optional).is_file():z.write(folder/optional,optional)
-  summary["published"]=True;(out/"summary.json").write_text(json.dumps(summary,indent=2)+"
-")
+  summary["published"]=True;(out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
  print(json.dumps(summary,indent=2))
 if __name__=="__main__":main()
