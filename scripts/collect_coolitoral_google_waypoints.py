@@ -41,3 +41,53 @@ with (OUT/"crosswalk_reference.csv").open("w",newline="") as f:
             for row in matches:writer.writerow([r["route"],row["siu_name"],row["amb_base_candidate"],row["decision_status"],"name-based reference only; not geometry validation"])
         else:writer.writerow([r["route"],"","","","unmatched by route code"])
 print(f"Extracted {len(routes)} maps; waypoint counts:",[(r["route"],len(r["waypoints"])) for r in routes])
+
+
+# Preserve the source table's irregular rows, including Saturday overrides and
+# PT1 subservices. No inferred headways or missing end times.
+from html.parser import HTMLParser
+class DispatchTableParser(HTMLParser):
+    def __init__(self):
+        super().__init__(); self.in_table=False; self.depth=0; self.in_row=False; self.in_cell=False
+        self.cells=[]; self.rows=[]; self.cell_text=[]; self.table_text=""
+    def handle_starttag(self,tag,attrs):
+        if tag=="table" and not self.in_table:
+            self.in_table=True; self.depth=1
+        elif tag=="table" and self.in_table: self.depth+=1
+        if not self.in_table:return
+        if tag=="tr":self.in_row=True;self.cells=[]
+        elif tag in ("td","th") and self.in_row:self.in_cell=True;self.cell_text=[]
+    def handle_data(self,data):
+        if self.in_table:
+            self.table_text+=data
+            if self.in_cell:self.cell_text.append(data)
+    def handle_endtag(self,tag):
+        if not self.in_table:return
+        if tag in ("td","th") and self.in_cell:
+            self.cells.append(" ".join(" ".join(self.cell_text).split()));self.in_cell=False
+        elif tag=="tr" and self.in_row:
+            if self.cells:self.rows.append(self.cells[:])
+            self.in_row=False
+        elif tag=="table":
+            self.depth-=1
+            if self.depth==0:self.in_table=False
+parser=DispatchTableParser();parser.feed(raw)
+if "DESPACHOS" not in parser.table_text.upper() or len(parser.rows)<15:
+    raise SystemExit("Dispatch table not found or unexpectedly short")
+records=[];section=""
+for index,cells in enumerate(parser.rows):
+    if len(cells)==1:
+        section=cells[0];continue
+    if len(cells)==6 and "PRIMER DESPACHO" in cells[1].upper():continue
+    def val(i):return cells[i] if i<len(cells) else ""
+    records.append({"source_row":index,"section":section,"label_mon_sat":val(0),
+        "first_mon_sat":val(1),"last_mon_sat":val(2),
+        "label_sun_holiday":val(3),"first_sun_holiday":val(4),
+        "last_sun_holiday":val(5),"raw_cells":cells,
+        "interpretation":"source_table_raw; Saturday and CUÑA rows require contextual interpretation"})
+(OUT/"dispatches.json").write_text(json.dumps({"source":URL,"source_sha256":hashlib.sha256(source).hexdigest(),"rows":records},ensure_ascii=False,indent=2))
+with (OUT/"dispatches.csv").open("w",newline="",encoding="utf-8") as fp:
+    columns=["source_row","section","label_mon_sat","first_mon_sat","last_mon_sat","label_sun_holiday","first_sun_holiday","last_sun_holiday","interpretation"]
+    writer=csv.DictWriter(fp,fieldnames=columns);writer.writeheader()
+    for record in records:writer.writerow({k:record[k] for k in columns})
+print(f"Preserved {len(records)} dispatch rows, including special service rows")
