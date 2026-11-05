@@ -1,0 +1,25 @@
+name: Audit COOLITORAL A4 official street itinerary against OSM
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Match official street names to six AMBQ segments (read only)
+        run: python scripts/audit_a4_official_recorrido_osm.py
+      - name: Publish QA summary
+        if: always()
+        run: |
+          if [ -f build/a4-recorrido/report.md ]; then
+            cat build/a4-recorrido/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A4-4109-OSM-recorrido-candidate-QA
+          path: build/a4-recorrido/
+          if-no-files-found: warn
