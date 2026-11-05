@@ -1,0 +1,25 @@
+name: Inspect AMB raw HTML 2020-2026
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture-html:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests
+      - name: Capture raw HTML and response metadata
+        run: python scripts/capture_amb_html.py
+      - name: Upload complete HTML responses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-raw-html-2020-2026
+          path: data/amb_html_diagnostic/
+          retention-days: 30
+          if-no-files-found: warn
