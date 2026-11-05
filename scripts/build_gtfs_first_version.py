@@ -184,6 +184,8 @@ def main():
   rid=r["route_id"]
   if rid in used_routes:continue
   h=headways.get(rid,{})
+  if h.get("operational_status")!="ready":
+   issues.append((rid,"flex_canonical_route_service_held"));continue
   try:
    first=seconds(h["first_dispatch_model"]);last=seconds(h["last_dispatch_model"])
    headway=int(h.get("offpeak_headway_secs") or h.get("peak_headway_secs") or 0)
