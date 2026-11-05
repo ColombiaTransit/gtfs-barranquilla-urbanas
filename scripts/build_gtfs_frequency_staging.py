@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "sources" / "amb"
 MODEL = "AMB_WEEKDAY_0709_1720_V1"
-WINDOW_MODEL = "AMB_2020_DISPATCH_PROVISIONAL_2026_V1"
+WINDOW_MODEL = "AMB_2020_DISPATCH_PROVISIONAL_2026_V1"  # default; each row carries its actual model ID
 PERIODS = [
     ("early_offpeak", 0, 420, "offpeak"),
     ("morning_peak", 420, 540, "peak"),
@@ -310,7 +310,7 @@ def run(output):
             "last_dispatch_model":window["last_dispatch_model_local"] if window else "",
             "dispatch_window_source_year":"2020" if window else "",
             "weekday_period_model_id":MODEL,"model_timezone":"America/Bogota",
-            "source_window_model_id":WINDOW_MODEL if window else "",
+            "source_window_model_id":window.get("model_id", WINDOW_MODEL) if window else "",
             "period_staging_status":"ready_to_stage" if not blockers else "held_for_review",
             "blockers":";".join(dict.fromkeys(blockers)),
             "publication_status":"NOT_A_COMPLETE_GTFS",
@@ -332,7 +332,7 @@ def run(output):
                 "headway_secs":source["peak"] if kind=="peak" else source["offpeak"],
                 "exact_times":0,"source_resolution":source["resolution"],
                 "headway_source":source["source"],
-                "window_source":"AMB_2020_ROUTE_POSTERS_2020_07_MODEL",
+                "window_source":window.get("model_id", WINDOW_MODEL),
                 "first_departure_inclusive":fmt(start),
                 "last_departure_inclusive":fmt(end),
                 "not_gtfs_frequencies_txt":"yes_requires_trip_id_and_stop_times_last_dispatch_handling"
