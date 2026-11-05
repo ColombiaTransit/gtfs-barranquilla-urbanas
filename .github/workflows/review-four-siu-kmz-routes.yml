@@ -1,0 +1,39 @@
+name: Review four disputed SIU KMZ route candidates
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/review_four_siu_kmz_routes.py
+      - .github/workflows/review-four-siu-kmz-routes.yml
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install shapely pyproj
+      - name: Compare path distance, direction, endpoints and loops
+        run: python scripts/review_four_siu_kmz_routes.py --repo . --out build/siu-kmz-four-route-review.csv
+      - name: Record provisional geographic review without changing GTFS
+        run: |
+          mkdir -p sources/amb/kmz_stop_research/siu_crosswalk
+          cp build/siu-kmz-four-route-review.csv sources/amb/kmz_stop_research/siu_crosswalk/four_disputed_routes_path_review_NOT_LEGAL.csv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/amb/kmz_stop_research/siu_crosswalk/four_disputed_routes_path_review_NOT_LEGAL.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record four SIU KMZ path plausibility reviews"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: four-siu-kmz-route-reviews
+          path: build/siu-kmz-four-route-review.csv
+          if-no-files-found: warn
