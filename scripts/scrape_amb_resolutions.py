@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 BASE = "https://www.ambq.gov.co/secretaria-general/normatividad/resoluciones/"
-FIELDS = ["year","resolution","title","source_page","pdf_url","file","sha256","pages","ocr_pages","status","error"]
+FIELDS = ["year","resolution","title","source_page","pdf_url","resolved_url","file","sha256","pages","ocr_pages","status","error"]
 
 def fetch(session, url):
     for attempt in range(4):
