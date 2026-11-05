@@ -33,10 +33,10 @@ jobs:
         run: python scripts/refine_amb_kmz_long_chords_with_gh_corridor.py
       - name: Generate two identical-population GTFS demonstration feeds
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-kmz-first-GH-fallback-research \
             --out build/amb-KMZ-source-baseline-NOT-PUBLISHABLE
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-KMZ-refined-GH-corridor-NOT-PUBLISHABLE \
             --out build/amb-KMZ-refined-GTFS-NOT-PUBLISHABLE
       - name: Keep all files except shapes.txt byte-identical
