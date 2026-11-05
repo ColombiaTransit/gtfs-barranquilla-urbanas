@@ -95,10 +95,7 @@ def main():
             if source not in r:continue
             v=r[source]
             if v.get("status")=="FETCH_OR_PARSE_FAILED":
-                if v.get("status")=="FETCH_OR_PARSE_FAILED":
                 lines.append(f"- {source.upper()}: source unavailable or invalid ({v['error_type']}: {v['error']}); topology not assessed")
-                continue
-            lines.append(f"- {source.upper()}: source unavailable or invalid ({v['error_type']}: {v['error']}); no geometry conclusion possible")
                 continue
             lines.append(f"- {source.upper()}: {v['segments']} segments, {v['points']} vertices; components at 10/30/100 m: "+"/".join(str(v["endpoint_components"][str(t)+"m"]["count"]) for t in (10,30,100))+f"; endpoints near other line vertices (30m): {v['endpoints_near_other_segment_vertex_30m']}/{v['endpoints_total']}")
             if "nearest_component_endpoint_gap_m" in v:lines.append(f"  - Nearest gap from largest component: {v['nearest_component_endpoint_gap_m']} m")
