@@ -134,12 +134,52 @@ def main():
   for z in v:stoprows.append({"trip_id":trip,"stop_id":z["gtfs_stop_id"],"stop_sequence":z["stop_sequence"],"arrival_time":z["arrival_time"],"departure_time":z["departure_time"]})
   freqrows.append({"trip_id":trip,"start_time":t["start_time"],"end_time":t["end_time"],"headway_secs":t["headway_secs"],"exact_times":"0"})
   contract.append({"pattern_id":pid,"trip_id":trip,"route_id":p["route_id"],"service_id":t["service_id"],"direction_id":p.get("direction_id",""),"shape_id":p["shape_id"],"siu_itinerary_uuid":p.get("siu_itinerary_uuid",""),"stop_sequence_signature":hashlib.sha256("|".join(z["gtfs_stop_id"]+":"+z["stop_sequence"] for z in v).encode()).hexdigest()[:20],"match_status":"STATIC_ONLY","feed_version":""})
+
+ # Consolidate available official sources into route-level QA, without granting shape/trip approval.
+ import re
+ def norm(v):return re.sub(r"[^A-Z0-9]","",str(v or "").upper())
+ kmz_index=defaultdict(list)
+ for item in kmz:
+  if item.get("status")=="geometry_imported":
+   kmz_index[(norm(item.get("company")),norm(item.get("route_label")))].append(item)
+ headways=defaultdict(list)
+ for item in read(ROOT/"sources/amb/gtfs_staging/route_headway_candidates.csv"):
+  headways[item.get("gtfs_route_id","")].append(item)
+ source_coverage=[]
+ for route in routes:
+  rid=route["route_id"]
+  company=route.get("agency_id","").removeprefix("AMB_")
+  matches=kmz_index.get((norm(company),norm(route.get("route_short_name"))),[])
+  h=headways.get(rid,[])
+  status="exact_source_match" if len(matches)==1 else "ambiguous_source_match" if len(matches)>1 else "mapping_review_required"
+  if rid in ("AMB_COOLITORAL_A4_4109","AMB_LOLAYA_D8_4165"):status="deferred_geometry_review"
+  candidate=matches[0] if len(matches)==1 else {}
+  frequency=h[0] if len(h)==1 else {}
+  source_coverage.append({
+   "route_id":rid,"agency_id":route.get("agency_id",""),"route_short_name":route.get("route_short_name",""),
+   "kmz_match_status":status,"kmz_match_count":len(matches),
+   "kmz_company":candidate.get("company",""),"kmz_route_label":candidate.get("route_label",""),
+   "kmz_geojson_path":candidate.get("geojson_path",""),"kmz_sha256":candidate.get("sha256",""),
+   "kmz_linestring_count":candidate.get("linestring_count",""),
+   "headway_match_count":len(h),"peak_headway_secs":frequency.get("peak_headway_secs",""),
+   "offpeak_headway_secs":frequency.get("offpeak_headway_secs",""),
+   "headway_source_type":frequency.get("source_type",""),
+   "headway_source_file":frequency.get("source_file",""),
+   "first_dispatch_model":frequency.get("first_dispatch_model",""),
+   "last_dispatch_model":frequency.get("last_dispatch_model",""),
+   "headway_staging_status":frequency.get("period_staging_status",""),
+   "headway_blockers":frequency.get("blockers",""),
+   "shape_approved":"yes" if any(z.get("route_id")==rid and z.get("review_status")=="approved" for z in shape_crosswalk) else "no",
+   "trip_approved":"yes" if any(z.get("route_id")==rid and z.get("review_status")=="approved" for z in pattern) else "no",
+   "publication_status":"research_only"
+  })
+ write(out/"source_coverage.csv",source_coverage,list(source_coverage[0]))
  feed_version=hashlib.sha256(json.dumps({"routes":routes,"patterns":pattern,"services":service,"stops":stop_rows},sort_keys=True).encode()).hexdigest()[:16]
  for x in contract:x["feed_version"]=feed_version
  write(out/"gtfs_rt_static_contract.csv",contract,["pattern_id","trip_id","route_id","service_id","direction_id","shape_id","siu_itinerary_uuid","stop_sequence_signature","match_status","feed_version"])
  write(out/"held.csv",held,["kind","id","reason"])
  write(out/"shapes_candidate.csv",shapes,TABLES["shapes"])
- summary={"kmz_imported":len(sources),"gtfs_routes":len(routes),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
+ summary={"kmz_imported":len(sources),"source_exact_matches":sum(x["kmz_match_status"]=="exact_source_match" for x in source_coverage),"source_mapping_reviews":sum(x["kmz_match_status"]=="mapping_review_required" for x in source_coverage),"source_deferred":sum(x["kmz_match_status"]=="deferred_geometry_review" for x in source_coverage),"headway_source_matches":sum(x["headway_match_count"]==1 for x in source_coverage),"gtfs_routes":len(routes),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
  # Flex optional tables are copied only from reviewed, explicit source files; no fabricated polygons.
  for table in ("booking_rules","location_groups","location_group_stops"):
   rows=read(registry/(table+".txt"))
