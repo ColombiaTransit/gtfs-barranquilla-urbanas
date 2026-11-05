@@ -9,6 +9,7 @@ name: Consolidate AMB GTFS sources
       - scripts/audit_amb_continuous_anchors.py
       - scripts/compare_ambq_arcgis_geometry.py
       - scripts/report_unresolved_ambq_arcgis.py
+      - scripts/analyze_two_ambq_topologies.py
       - sources/amb/kmz_stop_gaps/kmz_siu_route_stop_coverage.csv
       - sources/siu/open_route_review/siu_amb_crosswalk_visual_decisions_2026-11-05.csv
       - sources/operators/coochofal/dispatch_windows.csv
@@ -54,6 +55,10 @@ jobs:
         run: |
           python scripts/report_unresolved_ambq_arcgis.py | tee build/gtfs-source-consolidation/unresolved_report.txt
           cat build/gtfs-source-consolidation/unresolved_report.txt >> "$GITHUB_STEP_SUMMARY"
+      - name: Analyze remaining two KMZ topologies
+        run: |
+          python scripts/analyze_two_ambq_topologies.py | tee build/gtfs-source-consolidation/two_route_topology_stdout.md
+          cat build/gtfs-source-consolidation/two_route_topology.md >> "$GITHUB_STEP_SUMMARY"
       - name: Select first seven GTFS patterns for review
         run: python scripts/select_amb_gtfs_first_seven.py --input build/gtfs-source-consolidation/route_source_consolidation.csv --out build/gtfs-source-consolidation
       - name: Publish shortlist summary
