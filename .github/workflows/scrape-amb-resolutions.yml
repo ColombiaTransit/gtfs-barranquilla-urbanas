@@ -1,0 +1,39 @@
+name: Download AMB resolutions 2020-2026
+on:
+  workflow_dispatch:
+    inputs:
+      start_year:
+        description: First year
+        default: '2020'
+        type: string
+      end_year:
+        description: Last year
+        default: '2026'
+        type: string
+permissions:
+  contents: read
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install OCR and Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-spa
+          python -m pip install requests beautifulsoup4 PyMuPDF
+      - name: Scrape AMB resolutions
+        run: |
+          python scripts/scrape_amb_resolutions.py --start '${{ inputs.start_year }}' --end '${{ inputs.end_year }}'
+      - name: Upload PDFs, extracted text and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-resolutions-2020-2026
+          path: data/amb_resolutions/
+          retention-days: 30
+          if-no-files-found: warn
