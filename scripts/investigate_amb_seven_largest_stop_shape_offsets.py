@@ -47,7 +47,7 @@ GH_SECTIONS=ROOT/"sources/amb/GH_combined_bus_road_geometry/GH_full_route_bus_se
 SIU=ROOT/"sources/siu/gtfs_staging/candidate_stops.csv"
 SEVEN=BASE/"67_remaining_stop_vs_shape_source_evidence.csv"
 OUT=ROOT/"build/amb-seven-P1-GH-shape-investigation"
-PILOT_GENERATOR=ROOT/"scripts/build_amb_gtfs_geometry_validation_pilot.py"
+PILOT_GENERATOR=ROOT/"archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py"
 
 def read_csv(path):
     with path.open(newline="",encoding="utf-8-sig") as f:
