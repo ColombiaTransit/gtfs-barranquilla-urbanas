@@ -91,3 +91,10 @@ Dit toont waarom oude vergunningen **niet** automatisch de huidige vlootwaarden 
 - 210-2026: https://www.ambq.gov.co/wp-content/uploads/2026/05/RESOLUCION-METROPOLITANA-No.-210-2026-COOLITORAL-PT2-y-PT3_.pdf
 - 332-2023: https://www.ambq.gov.co/wp-content/uploads/2026/03/RESOLUCION-METROPOLITANA-332-2023.pdf
 - 264-2024: https://www.ambq.gov.co/wp-content/uploads/2024/12/RESOLUCION-METROPOLITANA-264-24.pdf
+
+
+## Archiefreconciliatie — 5 november 2026
+
+Archiefhercontrole: A4-4109 264-2024 9/11 is al in het bestaande besluitoverzicht opgenomen; geen nieuw gevonden interval. De latere 192-2025 route-/vlootcontext moet voor de juridische werking per artikel worden aangehouden; 264-2024 niet zonder meer als actueel publiceren. Gezamenlijke A1 met COOTRAB: 192-2025 A 8,5/14 en B 8,5/11; 4,5/6 alleen gedeeld traject. De reeds gevonden 256-2026 pilot niet opnieuw als ontbrekende PDF behandelen.
+
+Zie [route-voor-route classificatie](../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
