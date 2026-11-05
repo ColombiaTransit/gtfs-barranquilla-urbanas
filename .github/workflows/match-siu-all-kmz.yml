@@ -16,6 +16,8 @@ jobs:
         run: python -m pip install 'shapely>=2,<3' 'pyproj>=3,<4'
       - name: Match every SIU itinerary against every KMZ
         run: python scripts/match_siu_routes_to_all_kmz.py --repo . --top 5
+      - name: Review ambiguous and low-coverage matches
+        run: python scripts/review_ambiguous_siu_kmz_matches.py --repo .
       - name: Upload research reports
         if: always()
         uses: actions/upload-artifact@v4
