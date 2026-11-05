@@ -192,28 +192,60 @@ def main():
   sid="KMZ_CAND_"+hashlib.sha256((row["route_id"]+":"+row["kmz_sha256"]).encode()).hexdigest()[:16]
   for i,point in enumerate(lines[0],1):
    if len(point)>=2:geometry_candidates.append({"shape_id":sid,"route_id":row["route_id"],"shape_pt_lat":point[1],"shape_pt_lon":point[0],"shape_pt_sequence":i,"review_status":"candidate_unverified_direction","source_sha256":row["kmz_sha256"]})
- # SIU stop sequences are provisional. Retain itinerary identity, repeated visits, and provenance.
+ # Reuse reviewed operational base-route decisions; do not infer A/B variants.
+ operational_base={
+  "MAKRO":"B17-4163","JUAN MINA":"PT1-4101",
+  "MIRAMAR ALAMEDA DEL RIO":"A16-4161",
+  "VIA 40 MURILLO":"PT3-4103",
+  "SOLEDAD CALLE 84":"A10-4114 B",
+  "SOLEDAD CALLE 84 VILLA CAROLINA":"A10-4114 A",
+  "SOLEDAD 2000 CORREDOR UNIVERSITARIO":"C21-4182 B",
+  "ROJA RIOMAR":"B14-4174",
+  "RIOMAR AMARILLA":"B13-4128",
+  "VILLA SAN PABLO":"PT1-4101",
+  "LAS GAVIOTAS CALLE 76":"A16-4161"
+ }
+ import re
+ def normal_code(x):return re.sub(r"[^A-Z0-9]","",str(x or "").upper())
  siu_orders=read(ROOT/"sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv")
  siu_reviews={x.get("siu_itinerary_uuid"):x for x in read(ROOT/"sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv")}
- valid_route_ids={x["route_id"] for x in routes}
+ provisional={x.get("siu_itinerary_uuid"):x for x in read(ROOT/"sources/siu/open_route_review/provisional_base_route_code_candidates.csv")}
+ route_by_code=defaultdict(list)
+ for r in routes:route_by_code[normal_code(r["route_short_name"])].append(r["route_id"])
+ pattern_candidates=[];siu_mapping=[]
+ seen=set()
  for visit in siu_orders:
-  review=siu_reviews.get(visit.get("siu_itinerary_uuid"),{})
-  rid=review.get("suggested_gtfs_route_id","")
-  if rid not in valid_route_ids:continue
-  pattern_candidates.append({"route_id":rid,"siu_itinerary_uuid":visit.get("siu_itinerary_uuid",""),
+  uid=visit.get("siu_itinerary_uuid","")
+  review=siu_reviews.get(uid,{})
+  prior=provisional.get(uid,{})
+  name=(review.get("siu_name") or prior.get("siu_name") or "").upper().strip()
+  base=operational_base.get(name,"")
+  source="operational_review_2026_11_05" if base else "provisional_crosswalk"
+  if not base:base=prior.get("proposed_amb_base_code") or review.get("candidate_amb_route_code","")
+  matched=route_by_code.get(normal_code(base),[])
+  # A/B variants cannot be selected from a base-code decision.
+  if not matched and base:
+   matched=[r["route_id"] for r in routes if normal_code(r["route_short_name"]).startswith(normal_code(base)) and normal_code(r["route_short_name"])!=normal_code(base)]
+  rid=matched[0] if len(matched)==1 else ""
+  status="candidate_variant_unresolved" if len(matched)>1 else "candidate_operational" if rid and source.startswith("operational") else "candidate_provisional" if rid else "unmapped"
+  if uid not in seen:
+   siu_mapping.append({"siu_itinerary_uuid":uid,"siu_name":name,"amb_base_code":base,"gtfs_route_id":rid,
+    "candidate_route_ids":";".join(matched),"source":source,"mapping_status":status,"legal_variant_approved":"no"})
+   seen.add(uid)
+  pattern_candidates.append({"route_id":rid,"amb_base_code":base,"siu_itinerary_uuid":uid,
    "stop_sequence":visit.get("stop_sequence",""),"siu_stop_id":visit.get("stop_id",""),
-   "stop_name":visit.get("stop_name",""),"route_match_status":review.get("route_match_status",""),
-   "mapping_confirmed":review.get("final_gtfs_route_mapping_confirmed","no"),
-   "review_status":"candidate_not_approved"})
+   "stop_name":visit.get("stop_name",""),"route_match_status":status,
+   "mapping_confirmed":"no","review_status":"candidate_not_approved"})
+ write(out/"siu_amb_operational_crosswalk_research.csv",siu_mapping,["siu_itinerary_uuid","siu_name","amb_base_code","gtfs_route_id","candidate_route_ids","source","mapping_status","legal_variant_approved"])
  write(out/"kmz_shapes_research.csv",geometry_candidates,["shape_id","route_id","shape_pt_lat","shape_pt_lon","shape_pt_sequence","review_status","source_sha256"])
- write(out/"siu_pattern_stop_visits_research.csv",pattern_candidates,["route_id","siu_itinerary_uuid","stop_sequence","siu_stop_id","stop_name","route_match_status","mapping_confirmed","review_status"])
+ write(out/"siu_pattern_stop_visits_research.csv",pattern_candidates,["route_id","amb_base_code","siu_itinerary_uuid","stop_sequence","siu_stop_id","stop_name","route_match_status","mapping_confirmed","review_status"])
 
  feed_version=hashlib.sha256(json.dumps({"routes":routes,"patterns":pattern,"services":service,"stops":stop_rows},sort_keys=True).encode()).hexdigest()[:16]
  for x in contract:x["feed_version"]=feed_version
  write(out/"gtfs_rt_static_contract.csv",contract,["pattern_id","trip_id","route_id","service_id","direction_id","shape_id","siu_itinerary_uuid","stop_sequence_signature","match_status","feed_version"])
  write(out/"held.csv",held,["kind","id","reason"])
  write(out/"shapes_candidate.csv",shapes,TABLES["shapes"])
- summary={"kmz_imported":len(sources),"source_exact_matches":sum(x["kmz_match_status"]=="exact_source_match" for x in source_coverage),"source_mapping_reviews":sum(x["kmz_match_status"]=="mapping_review_required" for x in source_coverage),"source_deferred":sum(x["kmz_match_status"]=="deferred_geometry_review" for x in source_coverage),"headway_source_matches":sum(x["headway_match_count"]==1 for x in source_coverage),"gtfs_routes":len(routes),"research_shape_points":len(geometry_candidates),"research_shape_ids":len({x["shape_id"] for x in geometry_candidates}),"research_siu_stop_visits":len(pattern_candidates),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
+ summary={"kmz_imported":len(sources),"source_exact_matches":sum(x["kmz_match_status"]=="exact_source_match" for x in source_coverage),"source_mapping_reviews":sum(x["kmz_match_status"]=="mapping_review_required" for x in source_coverage),"source_deferred":sum(x["kmz_match_status"]=="deferred_geometry_review" for x in source_coverage),"headway_source_matches":sum(x["headway_match_count"]==1 for x in source_coverage),"gtfs_routes":len(routes),"research_shape_points":len(geometry_candidates),"research_shape_ids":len({x["shape_id"] for x in geometry_candidates}),"research_siu_stop_visits":len(pattern_candidates),"siu_operational_crosswalk_rows":len(siu_mapping),"siu_resolved_unique_route_candidates":sum(bool(x["gtfs_route_id"]) for x in siu_mapping),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
  # Flex optional tables are copied only from reviewed, explicit source files; no fabricated polygons.
  for table in ("booking_rules","location_groups","location_group_stops"):
   rows=read(registry/(table+".txt"))
