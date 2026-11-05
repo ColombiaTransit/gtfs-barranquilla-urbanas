@@ -18,8 +18,10 @@ Deze lijst bevat operationele baseroutekandidaten die uit de resterende visuele 
 
 | VILLA SAN PABLO | PT1-4101 (COOLITORAL), voorlopig | 141 SIU-haltepassages; PT1 en PT2 elk 81,56% forward (identieke KMZ-bron); B3-4119 47,52%; officiële PT1-titel noemt Villas de San Pablo | **Voorlopige operationele baseroutekoppeling op titelbewijs** | 18,44% buiten matchafstand; onderscheid PT1/PT2 niet op KMZ aantoonbaar; straatvolgorde nog toetsen |
 
+| LAS GAVIOTAS CALLE 76 | A16-4161 (LA-CAROLINA), A/B onbeslist | 148 SIU-haltepassages; A en B elk 66,22% forward, D6-4150 27,03%; zuidelijke SIU-haltesequentie ligt duidelijk buiten beide A16-KMZ-lijnen | **Voorlopige baseroutefamilie; geometrie niet vrijgegeven** | 33,78% buiten matchafstand; afzonderlijk SIU-patroon behouden; resolutie-/straatvolgordecontrole nodig; A/B-KMZ duplicaat |
+
 ## Bronwaarschuwing JUAN MINA
 Het KMZ-manifest verwijst voor PT1-4101 én PT2-4102 naar dezelfde `PT1-4101.kmz` met dezelfde SHA-256. De KMZ-score is dus **niet onafhankelijk onderscheidend**. PT1 is gekozen op officiële routetitel, niet op een bewezen rijrichting. Zie `docs/juan-mina-pt1-pt2-resolution-crosscheck-2026-11-05.md`.
 
 ## Telling
-Van de 11 oorspronkelijke visueel onduidelijke SIU-itinerarios zijn **10** beoordeeld (waaronder RIOMAR AMARILLA met variant onbeslist). **1** blijft voor visuele review: LAS GAVIOTAS CALLE 76. Definitieve A/B-varianten en exploitanten blijven afzonderlijk open waar aangegeven.
+Van de 11 oorspronkelijke visueel onduidelijke SIU-itinerarios zijn **11** visueel beoordeeld. **0** kaarten resterend. Dit sluit uitsluitend de visuele beoordelingsronde; onzekere varianten, juridische straatvolgorde en geometrische afwijkingen blijven open voor consolidatie. Definitieve A/B-varianten en exploitanten blijven afzonderlijk open waar aangegeven.
