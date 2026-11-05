@@ -192,51 +192,55 @@ def main():
   sid="KMZ_CAND_"+hashlib.sha256((row["route_id"]+":"+row["kmz_sha256"]).encode()).hexdigest()[:16]
   for i,point in enumerate(lines[0],1):
    if len(point)>=2:geometry_candidates.append({"shape_id":sid,"route_id":row["route_id"],"shape_pt_lat":point[1],"shape_pt_lon":point[0],"shape_pt_sequence":i,"review_status":"candidate_unverified_direction","source_sha256":row["kmz_sha256"]})
- # Reuse reviewed operational base-route decisions; do not infer A/B variants.
- operational_base={
-  "MAKRO":"B17-4163","JUAN MINA":"PT1-4101",
-  "MIRAMAR ALAMEDA DEL RIO":"A16-4161",
-  "VIA 40 MURILLO":"PT3-4103",
-  "SOLEDAD CALLE 84":"A10-4114 B",
-  "SOLEDAD CALLE 84 VILLA CAROLINA":"A10-4114 A",
-  "SOLEDAD 2000 CORREDOR UNIVERSITARIO":"C21-4182 B",
-  "ROJA RIOMAR":"B14-4174",
-  "RIOMAR AMARILLA":"B13-4128",
-  "VILLA SAN PABLO":"PT1-4101",
-  "LAS GAVIOTAS CALLE 76":"A16-4161"
- }
+ # Full 33-row reviewed SIU decisions are authoritative over legacy provisional guesses.
  import re
  def normal_code(x):return re.sub(r"[^A-Z0-9]","",str(x or "").upper())
+ decisions=read(ROOT/"sources/siu/open_route_review/siu_amb_crosswalk_visual_decisions_2026-11-05.csv")
+ if len(decisions)!=33 or len({x["siu_name"] for x in decisions})!=33:
+  raise ValueError("Expected 33 unique reviewed SIU route decisions")
+ by_name={x["siu_name"].upper().strip():x for x in decisions}
  siu_orders=read(ROOT/"sources/siu/gtfs_staging/candidate_route_stop_orders_NO_TIMES.csv")
  siu_reviews={x.get("siu_itinerary_uuid"):x for x in read(ROOT/"sources/siu/gtfs_staging/siu_amb_route_crosswalk_review.csv")}
  provisional={x.get("siu_itinerary_uuid"):x for x in read(ROOT/"sources/siu/open_route_review/provisional_base_route_code_candidates.csv")}
  route_by_code=defaultdict(list)
  for r in routes:route_by_code[normal_code(r["route_short_name"])].append(r["route_id"])
- pattern_candidates=[];siu_mapping=[]
- seen=set()
+ siu_mapping=[];pattern_candidates=[]
+ # Iterate decisions rather than just existing stop-order rows: every reviewed route is reported.
+ names_to_uuid=defaultdict(list)
+ for uid,review in siu_reviews.items():names_to_uuid[(review.get("siu_name") or "").upper().strip()].append(uid)
+ for uid,review in provisional.items():
+  name=(review.get("siu_name") or "").upper().strip()
+  if uid not in names_to_uuid[name]:names_to_uuid[name].append(uid)
+ resolved_by_uid={}
+ for name,d in by_name.items():
+  code=d.get("amb_base_candidate","")
+  variant=d.get("operational_kmz_variant","")
+  status=d.get("decision_status","")
+  candidates=[]
+  if code and "|" not in code and status!="unmapped_pending_distinct_route_evidence":
+   for r in routes:
+    label=normal_code(r["route_short_name"])
+    base=normal_code(code)
+    if label==base or label.startswith(base) and label[len(base):] in ("A","B"):
+     if not variant or label==base+normal_code(variant):candidates.append(r["route_id"])
+  rid=candidates[0] if len(candidates)==1 else ""
+  state=("unmapped_by_decision" if status=="unmapped_pending_distinct_route_evidence" else
+         "variant_unresolved" if len(candidates)>1 or "|" in code else
+         "unique_operational_candidate" if rid else "route_code_review")
+  for uid in names_to_uuid.get(name,[""]):
+   siu_mapping.append({"siu_itinerary_uuid":uid,"siu_name":name,"amb_base_code":code,
+    "gtfs_route_id":rid,"candidate_route_ids":";".join(candidates),
+    "source":"siu_amb_crosswalk_visual_decisions_2026-11-05.csv",
+    "mapping_status":state,"decision_status":status,"legal_variant_approved":"no"})
+   if uid:resolved_by_uid[uid]=(rid,code,state)
  for visit in siu_orders:
   uid=visit.get("siu_itinerary_uuid","")
-  review=siu_reviews.get(uid,{})
-  prior=provisional.get(uid,{})
-  name=(review.get("siu_name") or prior.get("siu_name") or "").upper().strip()
-  base=operational_base.get(name,"")
-  source="operational_review_2026_11_05" if base else "provisional_crosswalk"
-  if not base:base=prior.get("proposed_amb_base_code") or review.get("candidate_amb_route_code","")
-  matched=route_by_code.get(normal_code(base),[])
-  # A/B variants cannot be selected from a base-code decision.
-  if not matched and base:
-   matched=[r["route_id"] for r in routes if normal_code(r["route_short_name"]).startswith(normal_code(base)) and normal_code(r["route_short_name"])!=normal_code(base)]
-  rid=matched[0] if len(matched)==1 else ""
-  status="candidate_variant_unresolved" if len(matched)>1 else "candidate_operational" if rid and source.startswith("operational") else "candidate_provisional" if rid else "unmapped"
-  if uid not in seen:
-   siu_mapping.append({"siu_itinerary_uuid":uid,"siu_name":name,"amb_base_code":base,"gtfs_route_id":rid,
-    "candidate_route_ids":";".join(matched),"source":source,"mapping_status":status,"legal_variant_approved":"no"})
-   seen.add(uid)
-  pattern_candidates.append({"route_id":rid,"amb_base_code":base,"siu_itinerary_uuid":uid,
+  rid,code,state=resolved_by_uid.get(uid,("","","no_reviewed_name_match"))
+  pattern_candidates.append({"route_id":rid,"amb_base_code":code,"siu_itinerary_uuid":uid,
    "stop_sequence":visit.get("stop_sequence",""),"siu_stop_id":visit.get("stop_id",""),
-   "stop_name":visit.get("stop_name",""),"route_match_status":status,
+   "stop_name":visit.get("stop_name",""),"route_match_status":state,
    "mapping_confirmed":"no","review_status":"candidate_not_approved"})
- write(out/"siu_amb_operational_crosswalk_research.csv",siu_mapping,["siu_itinerary_uuid","siu_name","amb_base_code","gtfs_route_id","candidate_route_ids","source","mapping_status","legal_variant_approved"])
+ write(out/"siu_amb_operational_crosswalk_research.csv",siu_mapping,["siu_itinerary_uuid","siu_name","amb_base_code","gtfs_route_id","candidate_route_ids","source","mapping_status","decision_status","legal_variant_approved"])
  write(out/"kmz_shapes_research.csv",geometry_candidates,["shape_id","route_id","shape_pt_lat","shape_pt_lon","shape_pt_sequence","review_status","source_sha256"])
  write(out/"siu_pattern_stop_visits_research.csv",pattern_candidates,["route_id","amb_base_code","siu_itinerary_uuid","stop_sequence","siu_stop_id","stop_name","route_match_status","mapping_confirmed","review_status"])
 
