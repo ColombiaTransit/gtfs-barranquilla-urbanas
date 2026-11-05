@@ -1,11 +1,11 @@
 {
   "routes_in_routes_txt": 97,
-  "routes_ready_to_stage": 70,
-  "routes_held_for_review": 27,
-  "staged_weekday_periods": 273,
-  "source_records_considered": 133,
+  "routes_ready_to_stage": 71,
+  "routes_held_for_review": 26,
+  "staged_weekday_periods": 277,
+  "source_records_considered": 134,
   "blocker_counts": {
-    "missing_headway_source": 7,
+    "missing_headway_source": 6,
     "historic_window_not_found": 8,
     "historic_last_dispatch_invalid": 5,
     "official_interval_missing": 3,
