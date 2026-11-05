@@ -38,7 +38,7 @@ def main():
         w=csv.DictWriter(f,fieldnames=list(results[0]));w.writeheader();w.writerows(results)
     counts=Counter(x["status"] for x in results)
     overrides=["PT2-4102","A16-4161 B","B13-B-4189","C18-4141"]
-    override_status={code:next((x["status"] for x in results if x["route_short_name"]==code),"NOT_IN_ROUTES") for code in overrides}
+    override_status={}\n    for code in overrides:\n        matched=[m for m in manifest if m.get("route_label")==code]\n        source_ok=len(matched)==1 and matched[0].get("status")=="geometry_imported"\n        route_status=next((x["status"] for x in results if x["route_short_name"]==code),"NOT_IN_ROUTES")\n        override_status[code]={"source_status":"KMZ_IMPORTED" if source_ok else "KMZ_MISSING_OR_AMBIGUOUS","gtfs_route_status":route_status}
     summary={"gtfs_routes":len(routes),"source_coverage":dict(counts),
              "corrected_override_routes":override_status,
              "note":"Source availability is not equivalent to GTFS shape_id, direction, stop order or publication approval.",
@@ -46,6 +46,6 @@ def main():
     (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
     (out/"summary.md").write_text("# Actuele AMBQ-KMZ dekking voor GTFS routes\n\n"+json.dumps(summary,indent=2)+"\n")
     print(json.dumps(summary,indent=2))
-    if any(v!="KMZ_SOURCE_AVAILABLE" for v in override_status.values()):
+    if any(v["source_status"]!="KMZ_IMPORTED" for v in override_status.values()):
         raise SystemExit("Corrected source override absent or ambiguous in current GTFS coverage; inspect CSV")
 if __name__=="__main__":main()
