@@ -20,20 +20,73 @@ def fetch(session, url):
             if attempt == 3: raise
             time.sleep(2 ** attempt)
 
-def discover(session, year):
+def discover(session, year, out):
+    """Read the actual Ninja Tables JSON, preserving original rows as evidence."""
     page = urljoin(BASE, f"resoluciones-{year}/")
-    soup = BeautifulSoup(fetch(session, page).content, "html.parser")
+    html = fetch(session, page).text
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.select_one("[data-footable_id]")
+    if table is None:
+        raise ValueError("Ninja Tables data-footable_id not found")
+    table_id = str(table["data-footable_id"])
+    import html as html_lib
+    from urllib.parse import parse_qs, urlsplit
+    matches = re.findall(r'data_request_url[^\n]{0,1500}', html)
+    request_url = None
+    for match in matches:
+        decoded = html_lib.unescape(match).replace("\\/", "/")
+        m = re.search(r'https?://[^"\s<>]+admin-ajax\\.php[^"\s<>]*', decoded)
+        if m:
+            request_url = m.group(0).rstrip('\\')
+            break
+    if not request_url:
+        # The live page's Ninja Tables configuration includes the AJAX URL in JSON.
+        m = re.search(r'"data_request_url"\s*:\s*"([^"]+)"', html)
+        if m:
+            request_url = json.loads('"' + m.group(1) + '"')
+    if not request_url:
+        raise ValueError("Ninja Tables data_request_url not found")
+    request_url = html_lib.unescape(request_url)
+    response = fetch(session, request_url)
+    rows = response.json()
+    if not isinstance(rows, list):
+        raise ValueError("Unexpected Ninja Tables response: not a JSON list")
+    evidence = out / "source_json"
+    evidence.mkdir(parents=True, exist_ok=True)
+    (evidence / f"{year}_table_{table_id}.json").write_text(
+        json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
     found = {}
-    for a in soup.select("a[href]"):
-        url = urljoin(page, a["href"]).split("#")[0]
-        if not urlparse(url).path.lower().endswith(".pdf"): continue
-        if urlparse(url).hostname not in ("ambq.gov.co", "www.ambq.gov.co"): continue
-        title = a.get_text(" ", strip=True) or urlparse(url).path.rsplit("/", 1)[-1]
-        parent = a.find_parent(["p", "li", "div"])
-        description = parent.get_text(" ", strip=True)[:500] if parent else title
-        m = re.search(r"(\d{1,4})\s*[-_/]\s*(20\d{2})", title + " " + url)
-        code = f"{int(m.group(1)):03d}-{m.group(2)}" if m else ""
-        found[url] = dict(year=year, resolution=code, title=description, source_page=page, pdf_url=url)
+    for row_index, row in enumerate(rows):
+        value = row.get("value", {})
+        title_html = str(value.get("ttulo", ""))
+        title = BeautifulSoup(title_html, "html.parser").get_text(" ", strip=True)
+        links = []
+        for field in ("ttulo", "documento"):
+            for a in BeautifulSoup(str(value.get(field, "")), "html.parser").select("a[href]"):
+                link = urljoin(page, a["href"]).split("#")[0]
+                if urlparse(link).path.lower().endswith(".pdf"):
+                    links.append(link)
+        for link in dict.fromkeys(links):
+            m = re.search(r"(\\d{1,4})\\s*[-_/]\\s*(20\\d{2}|\\d{2})(?!\\d)", title + " " + link)
+            code = ""
+            if m:
+                yy = m.group(2)
+                code = f"{int(m.group(1)):03d}-{('20' + yy) if len(yy) == 2 else yy}"
+            found[link] = dict(year=year, resolution=code, title=title[:1000],
+                               source_page=page, pdf_url=link)
+    (evidence / f"{year}_discovery.json").write_text(json.dumps(
+        {"year": year, "table_id": table_id, "row_count": len(rows),
+         "unique_pdf_count": len(found),
+         "rows_without_pdf": [
+             {"index": i, "value": row.get("value", {})}
+             for i, row in enumerate(rows)
+             if not any(urlparse(urljoin(page, a["href"])).path.lower().endswith(".pdf")
+                        for field in ("ttulo", "documento")
+                        for a in BeautifulSoup(str(row.get("value", {}).get(field, "")), "html.parser").select("a[href]"))
+         ]}, ensure_ascii=False, indent=2), encoding="utf-8")
+    if not rows or not found:
+        raise ValueError(f"No rows or PDF links found in table {table_id}")
+    print(f"{year}: table {table_id}, {len(rows)} rows, {len(found)} unique PDFs", flush=True)
     return list(found.values())
 
 def extract(pdf, txt, min_chars):
@@ -71,7 +124,7 @@ def main():
     errors = []
     for year in range(args.start, args.end + 1):
         try:
-            entries = discover(session, year)
+            entries = discover(session, year, out)
             print(f"{year}: {len(entries)} PDF links", flush=True)
             if not entries: errors.append({"year": year, "error": "No PDF links found"})
         except Exception as exc:
