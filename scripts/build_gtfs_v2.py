@@ -143,7 +143,7 @@ def main():
   if item.get("status")=="geometry_imported":
    kmz_index[(norm(item.get("company")),norm(item.get("route_label")))].append(item)
  headways=defaultdict(list)
- for item in read(ROOT/"sources/amb/gtfs_staging/route_headway_candidates.csv"):
+ for item in read(ROOT/"build/gtfs-frequency-staging/route_headway_candidates.csv" if (ROOT/"build/gtfs-frequency-staging/route_headway_candidates.csv").is_file() else ROOT/"sources/amb/gtfs_staging/route_headway_candidates.csv"):
   headways[item.get("gtfs_route_id","")].append(item)
  source_coverage=[]
  for route in routes:
