@@ -44,7 +44,7 @@ jobs:
           request = urllib.request.Request(api, headers={"Accept": "application/vnd.github+json", "User-Agent": "gtfs-barranquilla-urbanas"})
           with urllib.request.urlopen(request, timeout=30) as response:
               release = json.load(response)
-          assets = [a for a in release["assets"] if a["name"].endswith(".jar") and "validator" in a["name"].lower()]
+          assets = [a for a in release["assets"] if a["name"].endswith("-cli.jar") and "validator" in a["name"].lower()]
           if len(assets) != 1:
               raise RuntimeError(f"Expected one validator JAR, found {[a['name'] for a in assets]}")
           url = assets[0]["browser_download_url"]
