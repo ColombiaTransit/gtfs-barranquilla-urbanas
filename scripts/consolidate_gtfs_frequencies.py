@@ -11,6 +11,15 @@ def norm(x):return re.sub("[^A-Z0-9]","",str(x or "").upper())
 def valid(r):
  try:return int(r.get("peak_headway_secs") or 0)>0 and int(r.get("offpeak_headway_secs") or 0)>0
  except ValueError:return False
+# Closed legal research: original 2010 route tables visually checked.
+# D17 retains a caveat: 411-2010 changes its itinerary, not a proven new headway.
+CLOSED_RESEARCH_HEADWAYS = {
+ "AMB_TRASALIANCO_B19_4176": ("266-2010", 240, 360),
+ "AMB_TRASALIANCO_D12_4154": ("265-2010", 240, 360),
+ "AMB_TRASALIANCO_D17_4158": ("268-2010", 300, 420),
+}
+CLOSED_RESEARCH_SOURCE = "docs/amb_research_phase_closure_2026-11-04.md"
+
 def main():
  source="sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv"
  staged=read("sources/amb/gtfs_staging/route_headway_candidates.csv")
@@ -34,6 +43,12 @@ def main():
   elif len(found)>1:
    status="conflict_held";conflicts.append({"route_id":r["gtfs_route_id"],"reason":"multiple_accepted_candidates"})
   elif not valid(r):status="missing_verified_headway"
+  if r["gtfs_route_id"] in CLOSED_RESEARCH_HEADWAYS:
+   resolution,peak,offpeak=CLOSED_RESEARCH_HEADWAYS[r["gtfs_route_id"]]
+   r.update(peak_headway_secs=str(peak),offpeak_headway_secs=str(offpeak),
+    official_resolution=resolution,source_type="authoritative_historical",
+    source_scope="per_route",source_file=CLOSED_RESEARCH_SOURCE)
+   status="recovered_closed_research"
   r["consolidation_status"]=status
   audit.append({"route_id":r["gtfs_route_id"],"status":status,"source_file":r.get("source_file","")})
  out.mkdir(parents=True,exist_ok=True)
