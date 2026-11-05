@@ -242,6 +242,50 @@ def main():
    "mapping_confirmed":"no","review_status":"candidate_not_approved"})
  write(out/"siu_amb_operational_crosswalk_research.csv",siu_mapping,["siu_itinerary_uuid","siu_name","amb_base_code","gtfs_route_id","candidate_route_ids","source","mapping_status","decision_status","legal_variant_approved"])
  write(out/"kmz_shapes_research.csv",geometry_candidates,["shape_id","route_id","shape_pt_lat","shape_pt_lon","shape_pt_sequence","review_status","source_sha256"])
+
+ # Assemble source-backed SIU stops and stop-patterns, keeping the 33-decision register authoritative.
+ staged_stops=read(ROOT/"sources/siu/gtfs_staging/candidate_stops.csv")
+ staged_occ=read(ROOT/"sources/siu/gtfs_staging/siu_stop_occurrence_crosswalk.csv")
+ stop_lookup={r["stop_id"]:r for r in staged_stops if r.get("stop_id")}
+ occ_by_itinerary=defaultdict(list)
+ for r in staged_occ:
+  occ_by_itinerary[r.get("siu_itinerary_uuid","")].append(r)
+ source_pattern_rows=[];source_stop_ids=set()
+ for mapping in siu_mapping:
+  uid=mapping["siu_itinerary_uuid"]
+  if not uid:continue
+  occurrences=sorted(occ_by_itinerary.get(uid,[]),key=lambda x:int(x.get("stop_sequence") or 0))
+  if not occurrences:continue
+  for r in occurrences:
+   stop_id=r.get("candidate_stop_id","")
+   if stop_id not in stop_lookup:hold("siu_stop",uid,"missing_staged_stop");continue
+   source_stop_ids.add(stop_id)
+   source_pattern_rows.append({"pattern_id":"SIU_"+uid,"route_id":mapping["gtfs_route_id"],
+    "siu_itinerary_uuid":uid,"stop_sequence":r.get("stop_sequence",""),
+    "stop_id":stop_id,"mapping_status":mapping["mapping_status"],
+    "arrival_time":"","departure_time":"","time_status":"unavailable_in_SIU"})
+ write(out/"stops_source_candidates.txt",[stop_lookup[k] for k in sorted(source_stop_ids)],
+       ["stop_id","stop_name","stop_lat","stop_lon","location_type"])
+ write(out/"siu_source_stop_patterns.csv",source_pattern_rows,
+       ["pattern_id","route_id","siu_itinerary_uuid","stop_sequence","stop_id","mapping_status","arrival_time","departure_time","time_status"])
+ # Headways are only schedule candidates; 2020 dispatch windows are not certified current service.
+ schedule_candidates=[]
+ for row in source_coverage:
+  schedule_candidates.append({"route_id":row["route_id"],"peak_headway_secs":row["peak_headway_secs"],
+   "offpeak_headway_secs":row["offpeak_headway_secs"],"first_dispatch":row["first_dispatch_model"],
+   "last_dispatch":row["last_dispatch_model"],"source":row["headway_source_file"],
+   "staging_status":row["headway_staging_status"],"blockers":row["headway_blockers"],
+   "publishable":"no"})
+ write(out/"schedule_source_candidates.csv",schedule_candidates,
+       ["route_id","peak_headway_secs","offpeak_headway_secs","first_dispatch","last_dispatch","source","staging_status","blockers","publishable"])
+ # No invented terminals for the SIU-uncovered fixed routes: route-level Flex scope is an explicit model.
+ siu_covered={m["gtfs_route_id"] for m in siu_mapping if m["gtfs_route_id"] and any(x["siu_itinerary_uuid"]==m["siu_itinerary_uuid"] for x in source_pattern_rows)}
+ flex_route_candidates=[{"route_id":r["route_id"],"continuous_pickup":"0","continuous_drop_off":"0",
+   "scope_status":"model_assumption_requires_route_anchor_and_geometry_review"}
+  for r in routes if r["route_id"] not in siu_covered]
+ write(out/"continuous_boarding_route_candidates.csv",flex_route_candidates,
+       ["route_id","continuous_pickup","continuous_drop_off","scope_status"])
+
  write(out/"siu_pattern_stop_visits_research.csv",pattern_candidates,["route_id","amb_base_code","siu_itinerary_uuid","stop_sequence","siu_stop_id","stop_name","route_match_status","mapping_confirmed","review_status"])
 
  feed_version=hashlib.sha256(json.dumps({"routes":routes,"patterns":pattern,"services":service,"stops":stop_rows},sort_keys=True).encode()).hexdigest()[:16]
@@ -249,7 +293,7 @@ def main():
  write(out/"gtfs_rt_static_contract.csv",contract,["pattern_id","trip_id","route_id","service_id","direction_id","shape_id","siu_itinerary_uuid","stop_sequence_signature","match_status","feed_version"])
  write(out/"held.csv",held,["kind","id","reason"])
  write(out/"shapes_candidate.csv",shapes,TABLES["shapes"])
- summary={"kmz_imported":len(sources),"source_exact_matches":sum(x["kmz_match_status"]=="exact_source_match" for x in source_coverage),"source_mapping_reviews":sum(x["kmz_match_status"]=="mapping_review_required" for x in source_coverage),"source_deferred":sum(x["kmz_match_status"]=="deferred_geometry_review" for x in source_coverage),"headway_source_matches":sum(x["headway_match_count"]==1 for x in source_coverage),"gtfs_routes":len(routes),"research_shape_points":len(geometry_candidates),"research_shape_ids":len({x["shape_id"] for x in geometry_candidates}),"research_siu_stop_visits":len(pattern_candidates),"siu_operational_crosswalk_rows":len(siu_mapping),"siu_resolved_unique_route_candidates":sum(bool(x["gtfs_route_id"]) for x in siu_mapping),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
+ summary={"kmz_imported":len(sources),"source_exact_matches":sum(x["kmz_match_status"]=="exact_source_match" for x in source_coverage),"source_mapping_reviews":sum(x["kmz_match_status"]=="mapping_review_required" for x in source_coverage),"source_deferred":sum(x["kmz_match_status"]=="deferred_geometry_review" for x in source_coverage),"headway_source_matches":sum(x["headway_match_count"]==1 for x in source_coverage),"gtfs_routes":len(routes),"research_shape_points":len(geometry_candidates),"research_shape_ids":len({x["shape_id"] for x in geometry_candidates}),"research_siu_stop_visits":len(pattern_candidates),"siu_source_pattern_visits":len(source_pattern_rows),"siu_source_stops":len(source_stop_ids),"continuous_boarding_route_candidates":len(flex_route_candidates),"siu_operational_crosswalk_rows":len(siu_mapping),"siu_resolved_unique_route_candidates":sum(bool(x["gtfs_route_id"]) for x in siu_mapping),"candidate_shapes":len(shape_ids),"approved_trip_templates":len(triprows),"held":dict(Counter(x["reason"] for x in held)),"flex_scope_records":len(flex_scope),"siu_rt_crosswalk_records":len(rt_crosswalk),"feed_version":feed_version,"published":False}
  # Flex optional tables are copied only from reviewed, explicit source files; no fabricated polygons.
  for table in ("booking_rules","location_groups","location_group_stops"):
   rows=read(registry/(table+".txt"))
