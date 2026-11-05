@@ -54,3 +54,19 @@ De bronbestanden zijn technisch geëxtraheerd, behalve specifieke mislukte downl
 **Niet vrijgegeven** voor `calendar.txt`, `frequencies.txt`, `stop_times.txt` of `shapes.txt`. Diensturen van 00:00–24:00 zijn doorgaans **vraagafhankelijk** geformuleerd en impliceren niet dat er 's nachts daadwerkelijk bussen rijden. Voor opname eerst de werkelijke weekkalender, spits-/dalvensters, richtingen, haltes en georeferentie vaststellen.
 
 Machineleesbare routegegevens: [13-bedrijven-register](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/blob/main/sources/amb/remaining_13_route_parameters_2026-11-02.csv).
+
+
+## Actualisatie 5 november 2026 — Resolución Metropolitana 500-2025
+
+**Leidende officiële bron:** https://www.ambq.gov.co/wp-content/uploads/2026/02/Resolucion-Metropolitana-No.-500-2025-SODETRANS.pdf. De gebruiker heeft bevestigd dat geen nieuwer besluit de frequenties wijzigt. Dit besluit gaat voor op de hierboven weergegeven historische 719-2018-waarden waar het dezelfde routes wijzigt; de oudere tabellen zijn uitsluitend historisch en mogen niet automatisch in de huidige GTFS worden gebruikt.
+
+| Route | Piek (min) | Dal (min) | Bron / status |
+|---|---:|---:|---|
+| B13-4128 | 7 | 9 | 500-2025, eerdere gespreksextractie; controleren bij machineleesbare import |
+| B13-B-4189 | **8** | **10** | 500-2025 p8, **visueel en juridisch door gebruiker gevalideerd** |
+| B14-4174 | 7 | 9 | 500-2025, eerdere gespreksextractie; controleren bij machineleesbare import |
+| B15-4129 | — | — | 500-2025 bevat A/B-itinerarios; exacte eigen intervallen per variant nog uitlezen, niet afleiden uit sectiefrequentie |
+| B17-4163 | — | — | gezamenlijke exploitatie met COOLITORAL behouden; 500-2025-waarden en samenloop verifiëren |
+| C21-4182 | — | — | 500-2025 bevat meerdere itinerarios; genoemde 4-minuten-drukste-sectie niet zonder meer per variant overnemen |
+
+**Besluit:** B13-B-4189 is niet langer `missing_headway`. Alle zes routes zijn juridisch aan 500-2025 gekoppeld; voor B15/B17/C21 is de afzonderlijke machineleesbare numerieke extractie nog niet bewezen. Het bestaan van een besluit is niet hetzelfde als een succesvolle GTFS-build. Voorkom heropening van afgeronde OCR-taken; voer een expliciete frequentiedekkingscontrole uit op alle routevarianten in de generator.
