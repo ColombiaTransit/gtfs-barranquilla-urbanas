@@ -6,6 +6,8 @@ Inputs are explicit reviewed CSVs; the legacy synthetic pilot is not an input.
 """
 from __future__ import annotations
 import argparse,csv,hashlib,json,zipfile
+from datetime import date, timedelta
+import holidays
 from collections import Counter,defaultdict
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -34,6 +36,30 @@ def write(path,rows,fields):
  path.parent.mkdir(parents=True,exist_ok=True)
  with path.open("w",newline="",encoding="utf-8") as f:
   w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore");w.writeheader();w.writerows(rows)
+
+def generate_holiday_exceptions(calendar, mapping, existing):
+ """Apply reviewed Colombian holiday -> Sunday/holiday service mappings only."""
+ by_id={r["service_id"]:r for r in calendar}
+ result={(r["service_id"],r["date"]):r for r in existing}
+ for rule in mapping:
+  if rule.get("review_status")!="approved":continue
+  regular=rule.get("regular_service_id","")
+  holiday=rule.get("holiday_service_id","")
+  if regular not in by_id or holiday not in by_id:
+   raise ValueError("Holiday mapping references unknown service_id")
+  src=by_id[regular];dst=by_id[holiday]
+  start=max(date.fromisoformat(src["start_date"][:4]+"-"+src["start_date"][4:6]+"-"+src["start_date"][6:]),date.fromisoformat(dst["start_date"][:4]+"-"+dst["start_date"][4:6]+"-"+dst["start_date"][6:]))
+  end=min(date.fromisoformat(src["end_date"][:4]+"-"+src["end_date"][4:6]+"-"+src["end_date"][6:]),date.fromisoformat(dst["end_date"][:4]+"-"+dst["end_date"][4:6]+"-"+dst["end_date"][6:]))
+  if start>end:continue
+  days=holidays.country_holidays("CO",years=range(start.year,end.year+1))
+  for day in sorted(days):
+   if not start<=day<=end:continue
+   key=day.strftime("%Y%m%d")
+   weekday=("monday","tuesday","wednesday","thursday","friday","saturday","sunday")[day.weekday()]
+   if src[weekday]=="1":result.setdefault((regular,key),{"service_id":regular,"date":key,"exception_type":"2"})
+   if dst[weekday]!="1":result.setdefault((holiday,key),{"service_id":holiday,"date":key,"exception_type":"1"})
+ return sorted(result.values(),key=lambda r:(r["date"],r["service_id"]))
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument("--registry",type=Path,default=REG);ap.add_argument("--out",type=Path,default=ROOT/"build/gtfs-v2");ap.add_argument("--publish",action="store_true");args=ap.parse_args()
  out=args.out;out.mkdir(parents=True,exist_ok=True);registry=args.registry
@@ -79,7 +105,14 @@ def main():
  for x in flex_scope:
   if x.get("continuous_pickup")=="0" or x.get("continuous_drop_off")=="0":
    if x.get("review_status")!="approved":hold("flex",x.get("route_id",""),"continuous_boarding_scope_unapproved")
- # Apply reviewed continuous-boarding scope without treating fixed-route service as demand-responsive Flex.\n scope_by_route={x.get("route_id"):x for x in flex_scope if x.get("review_status")=="approved"}\n for route in routes:\n  scope=scope_by_route.get(route["route_id"])\n  if scope:\n   for field in ("continuous_pickup","continuous_drop_off"):\n    if scope.get(field) in ("0","1","2","3"):route[field]=scope[field]\n # Strictly no trips until explicitly reviewed, with real or explicitly modelled timing templates.
+ # Apply reviewed continuous-boarding scope without treating fixed-route service as demand-responsive Flex.
+ scope_by_route={x.get("route_id"):x for x in flex_scope if x.get("review_status")=="approved"}
+ for route in routes:
+  scope=scope_by_route.get(route["route_id"])
+  if scope:
+   for field in ("continuous_pickup","continuous_drop_off"):
+    if scope.get(field) in ("0","1","2","3"):route[field]=scope[field]
+ # Strictly no trips until explicitly reviewed, with real or explicitly modelled timing templates.
  triprows=[];stoprows=[];freqrows=[]
  for t in service:
   pid=t.get("pattern_id","");p=patterns.get(pid);trip=t.get("trip_id","")
@@ -116,17 +149,29 @@ def main():
   obj=json.loads(geo.read_text(encoding="utf-8"))
   if obj.get("type")!="FeatureCollection":raise ValueError("Invalid Flex locations GeoJSON")
   (out/"locations.geojson").write_text(json.dumps(obj,ensure_ascii=False))
- (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
+ (out/"summary.json").write_text(json.dumps(summary,indent=2)+"
+")
  if args.publish:
   # Publication must never succeed with missing reviewed calendar, stops, or incomplete source coverage.
-  calendar=read(registry/"calendar.txt")\n  if any(x.get("continuous_pickup")=="2" or x.get("continuous_drop_off")=="2" for x in routes) and not (registry/"booking_rules.txt").is_file():\n   raise SystemExit("Flex booking rule required for on-demand scope")
+  calendar=read(registry/"calendar.txt")
+  holiday_map=read(registry/"holiday_service_map.csv")
+  calendar_dates=generate_holiday_exceptions(calendar,holiday_map,read(registry/"calendar_dates.txt"))
+  if any(x.get("continuous_pickup")=="2" or x.get("continuous_drop_off")=="2" for x in routes) and not (registry/"booking_rules.txt").is_file():
+   raise SystemExit("Flex booking rule required for on-demand scope")
   if held or not triprows or not calendar or not stop_rows or not shapes or len(patterns)!=len(triprows):
    raise SystemExit("Publication gate blocked; inspect held.csv and required calendar/stops/shape coverage")
   folder=out/"publish";folder.mkdir(exist_ok=True)
   files={"agency.txt":agencies,"routes.txt":routes,"stops.txt":stop_rows,"trips.txt":triprows,"stop_times.txt":stoprows,"frequencies.txt":freqrows,"calendar.txt":calendar,"shapes.txt":shapes}
-  for name,rows in files.items():write(folder/name,rows,list(dict.fromkeys(list(rows[0])+[k for row in rows for k in row])))\n  for optional in ("booking_rules.txt","location_groups.txt","location_group_stops.txt","locations.geojson"):\n   source=out/optional\n   if source.is_file(): (folder/optional).write_bytes(source.read_bytes())
+  if calendar_dates:files["calendar_dates.txt"]=calendar_dates
+  for name,rows in files.items():write(folder/name,rows,list(dict.fromkeys(list(rows[0])+[k for row in rows for k in row])))
+  for optional in ("booking_rules.txt","location_groups.txt","location_group_stops.txt","locations.geojson"):
+   source=out/optional
+   if source.is_file(): (folder/optional).write_bytes(source.read_bytes())
   with zipfile.ZipFile(out/"gtfs.zip","w",zipfile.ZIP_DEFLATED) as z:
-   for name in files:z.write(folder/name,name)\n   for optional in ("booking_rules.txt","location_groups.txt","location_group_stops.txt","locations.geojson"):\n    if (folder/optional).is_file():z.write(folder/optional,optional)
-  summary["published"]=True;(out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
+   for name in files:z.write(folder/name,name)
+   for optional in ("booking_rules.txt","location_groups.txt","location_group_stops.txt","locations.geojson"):
+    if (folder/optional).is_file():z.write(folder/optional,optional)
+  summary["published"]=True;(out/"summary.json").write_text(json.dumps(summary,indent=2)+"
+")
  print(json.dumps(summary,indent=2))
 if __name__=="__main__":main()
