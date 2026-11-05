@@ -2,6 +2,8 @@
 
 Onderzoeksrepository voor een **statische GTFS-feed van het traditionele collectieve busvervoer (TPC)** in het Área Metropolitana de Barranquilla. **Niet** de Transmetro-GTFS.
 
+> **Registerbeleid (5 november 2026):** [Canonical register architecture](docs/canonical_register_architecture.md) is leidend. De GTFS-generator leest frequenties en vertrekvensters uitsluitend uit `build/registries/route_service.csv`, dat tijdens de workflow wordt geconsolideerd. Oudere staging- en bronbestanden zijn bewijs/QA, geen alternatieve operationele invoer. De volledige migratie van haltes, shapes en Flex naar één generator is nog openstaand.
+
 ## Huidige status — 3 november 2026
 
 **GTFS-onderzoeksmodel, nog geen volledige publiceerbare feed.**
