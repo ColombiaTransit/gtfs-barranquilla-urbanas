@@ -30,8 +30,8 @@ for year in range(2020, 2027):
                     candidates.append({"tag": node.name, "attribute": key, "value": str(val)[:1200]})
         # Extract table IDs from known Ninja Tables markup and from embedded configuration.
         ids = set()
-        for node in soup.select("[data-ninja_table_id], [data-table_id]"):
-            for key in ("data-ninja_table_id", "data-table_id"):
+        for node in soup.select("[data-ninja_table_id], [data-table_id], [data-footable_id]"):
+            for key in ("data-ninja_table_id", "data-table_id", "data-footable_id"):
                 if node.get(key) and str(node.get(key)).isdigit():
                     ids.add(str(node.get(key)))
         ids.update(re.findall(r'ninja_table_(\\d+)', html))
@@ -40,8 +40,11 @@ for year in range(2020, 2027):
         entry["table_attributes"] = candidates[:30]
         (OUT / f"{year}.discovery.json").write_text(json.dumps(entry, ensure_ascii=False, indent=2), encoding="utf-8")
         # Discover AJAX URL directly in the page. A nonce is session/page-specific.
+        request_urls = re.findall(r'"data_request_url"\s*:\s*"([^"]+)"', html)
+        request_urls = [json.loads('"' + u + '"') for u in request_urls]
         urls = re.findall(r'https?[^"\\s<>]+admin-ajax\\.php[^"\\s<>]*', html)
         urls = [u.replace("&amp;", "&").replace("\\/", "/") for u in urls]
+        urls = request_urls + urls
         ajax_base = "https://www.ambq.gov.co/wp-admin/admin-ajax.php"
         for table_id in sorted(ids):
             params = {"action": "wp_ajax_ninja_tables_public_action",
@@ -79,5 +82,7 @@ for year in range(2020, 2027):
     except Exception as exc:
         entry["error"] = str(exc)
         print(f"{year}: ERROR {exc}", flush=True)
+    if not entry.get("requests"):
+        entry["error"] = entry.get("error", "No AJAX requests made")
     summary.append(entry)
 (OUT / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
