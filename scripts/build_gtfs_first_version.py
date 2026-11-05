@@ -65,8 +65,8 @@ def main():
  occurrences=read(ROOT/"sources/siu/gtfs_staging/siu_stop_occurrence_crosswalk.csv")
  by_it=defaultdict(list)
  for x in occurrences:by_it[x.get("siu_itinerary_uuid","")].append(x)
- headways={r["gtfs_route_id"]:r for r in read(OUT/"consolidated_route_headways.csv")}
- if len(headways)!=len(routes):raise ValueError("Consolidated frequency coverage does not match GTFS routes")
+ headways={r["gtfs_route_id"]:r for r in read(ROOT/"build/registries/route_service.csv")}
+ if len(headways)!=len(routes):raise ValueError("Canonical route service register coverage does not match GTFS routes")
  url=os.environ.get("GRAPHHOPPER_URL","").rstrip("/")
  if not url:raise SystemExit("GRAPHHOPPER_URL organization variable required for SIU stop_times")
  if url.endswith("/route"):endpoint=url
@@ -100,6 +100,8 @@ def main():
   if any(i not in by_stop for i in ids):
    issues.append((uid,"missing_siu_stop_coordinates"));continue
   h=headways.get(rid,{})
+  if h.get("operational_status")!="ready":
+   issues.append((uid,"canonical_route_service_held"));continue
   try:
    start=seconds(h["first_dispatch_model"]);end=seconds(h["last_dispatch_model"])
    peak=int(h.get("peak_headway_secs") or 0);offpeak=int(h.get("offpeak_headway_secs") or 0)
