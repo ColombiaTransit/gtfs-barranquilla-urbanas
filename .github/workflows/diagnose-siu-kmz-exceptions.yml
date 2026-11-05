@@ -1,0 +1,38 @@
+name: Diagnose remaining SIU KMZ mapping exceptions
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/diagnose_two_siu_kmz_exceptions.py
+      - .github/workflows/diagnose-siu-kmz-exceptions.yml
+permissions:
+  contents: write
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install shapely pyproj
+      - name: Produce per-stop anomaly and geographic review registers
+        run: python scripts/diagnose_two_siu_kmz_exceptions.py --repo .
+      - name: Record diagnostic results
+        run: |
+          cp build/two-route-exceptions.csv sources/amb/kmz_stop_research/siu_crosswalk/two_route_stop_exceptions_DIAGNOSTIC.csv
+          cp build/two-route-summary.csv sources/amb/kmz_stop_research/siu_crosswalk/two_route_exception_summary_DIAGNOSTIC.csv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources/amb/kmz_stop_research/siu_crosswalk/two_route_*
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record remaining two SIU KMZ geographic exceptions"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siu-kmz-two-route-exceptions
+          path: build/two-route-*.csv
+          if-no-files-found: warn
