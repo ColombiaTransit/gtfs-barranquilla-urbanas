@@ -82,7 +82,9 @@ def main():
     for row in dispatch:
         if row["amb_route_candidate"].strip():
             windows[(row["operator"], row["amb_route_candidate"].strip())].append(row)
-    output = []\n    anchor_rows = []\n    endpoint_cache = {}
+    output = []
+    anchor_rows = []
+    endpoint_cache = {}
     for k in kmz:
         op, code = k["company"].strip(), k["kmz_base_route_code"].strip()
         sm = matches[(op, code)]
