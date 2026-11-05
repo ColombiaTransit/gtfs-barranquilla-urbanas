@@ -13,7 +13,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribu
 const cluster=L.markerClusterGroup({chunkedLoading:true,chunkInterval:100,chunkDelay:25,showCoverageOnHover:false,maxClusterRadius:55});map.addLayer(cluster);
 const search=document.querySelector('#search'),direction=document.querySelector('#direction'),status=document.querySelector('#status');let stops=[];
 function csvParse(text){const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean),headers=lines.shift().split(',');return lines.map(line=>{const cells=[];let s='',q=false;for(let i=0;i<line.length;i++){let c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){s+='"';i++}else q=!q}else if(c===','&&!q){cells.push(s);s=''}else s+=c}cells.push(s);return Object.fromEntries(headers.map((h,i)=>[h,cells[i]||'']))})}
-function code(name){const matches=[...name.matchAll(/(?:^|[\s\-(])(?:NS|SN|EO|OE)(?=\s|\)|-|$)/gi)];return matches.length?matches[matches.length-1][0].match(/NS|SN|EO|OE/i)[0].toUpperCase():''}
+function code(name){const matches=[...name.matchAll(/(?:^|[\s\-(])(?:NS|SN|EO|OE)(?=\s|\)|\(|-|$)/gi)];return matches.length?matches[matches.length-1][0].match(/NS|SN|EO|OE/i)[0].toUpperCase():''}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 const dot=L.divIcon({className:'',html:'<div class="stop-dot"></div>',iconSize:[12,12],iconAnchor:[6,6]});
 function nearby(s){return stops.filter(x=>x.stop_id!==s.stop_id).map(x=>({...x,d:map.distance([s.lat,s.lon],[x.lat,x.lon])})).sort((a,b)=>a.d-b.d).slice(0,5)}
