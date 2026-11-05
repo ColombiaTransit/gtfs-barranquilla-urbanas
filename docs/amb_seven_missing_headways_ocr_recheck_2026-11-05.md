@@ -10,11 +10,11 @@ Bron: bestaande GitHub Actions OCR-artifacts van run 41480204032, **geen nieuwe 
 | SODETRANS B13-B-4189 | 719-2018 p8–10 | geen eigen waarde | 719 toont B13/B14-tabellen met 5/7, niet bewezen voor afzonderlijke B13-B |
 | TRASALFA B2-B-4118 | 287-2010 p8; 111-2012 p10 | 5 / 8 | 111-2012 wijzigt traject en behoudt capaciteit; frequentie-overerving juridisch verifiëren |
 | TRASALFA D14-4156 | 286-2010 p8; 139-2013 p15,19–20 | 5/8 (2010), 4/6 (ontwerp 2013) | 139-2013 herstructureert beide routes en wijzigt 285/286 gedeeltelijk; 4/6 staat in technisch ontwerp, niet expliciet in dispositieve artikelen |
-| TRASALFA D15-4157 | 285-2010 p7; 139-2013 p15,19–20 | 3 / onleesbaar (2010), 4/6 (ontwerp 2013) | Visuele controle oorspronkelijke dalwaarde; 2013-ontwerp niet automatisch als vergunningsinterval promoveren |
+| TRASALFA D15-4157 | 285-2010 p7; 139-2013 p15,19–20 | 3 / **5 (visueel bevestigd door gebruiker, 2026-11-05)** (2010), 4/6 (ontwerp 2013) | Originele dalwaarde p7 bevestigd als 5 minuten; 2013-ontwerp niet automatisch als vergunningsinterval promoveren |
 
 ## Gericht resterend werk
 
-1. **Beeldcontrole alleen waar OCR ambigu is:** TRANSMECAR 219-2010 p8 (D11 dal) en TRASALFA 285-2010 p7 (D15 dal).
+1. **Beeldcontrole alleen waar OCR ambigu is:** TRANSMECAR 219-2010 p8 (D11 dal). TRASALFA 285-2010 p7 (D15 dal) is op 2026-11-05 visueel bevestigd als **5 minuten**.
 2. **Juridische bronkoppeling, zonder nieuwe OCR:** TRANSMECAR 325-2010 p5 verwijst naar '120-2010' terwijl D10 onder 220-2010 staat; TRASALFA 139-2013 p15 versus p19–20 voor D14/D15; B2-B 111-2012 p10 versus 287-2010.
 3. **B13-B:** zoek in bestaande SODETRANS-tekst naar een expliciete B13-B-toewijzing; 719-2018 B13 is onvoldoende bewijs voor de B-variant.
 
