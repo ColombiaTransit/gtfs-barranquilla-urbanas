@@ -253,7 +253,34 @@ def main():
   copy=dict(freq);copy["trip_id"]+="_HOL";holiday_freq.append(copy)
  generated+=holiday_trips;times+=holiday_times;frequencies+=holiday_freq
  write(OUT/"first_version_held.csv",[{"name":a,"reason":b} for a,b in issues],["name","reason"])
-
+ # Route-level coverage register: distinguishes 31 missing routes from SIU review issues.
+ # The source's route_id is the stable key, not the human-readable route label.
+ held_by_route=defaultdict(list)
+ for name,reason in issues:
+  if name in route_index:held_by_route[name].append(reason)
+ coverage=[]
+ for r in routes:
+  rid=r["route_id"];h=headways.get(rid,{})
+  if rid in used_routes:
+   mode="SIU" if any(t["route_id"]==rid and t["trip_id"].startswith("SIU_") for t in generated) else "CONTINUOUS"
+   reason=""
+  else:
+   mode="MISSING"
+   reason="|".join(sorted(set(held_by_route.get(rid,[])))) or "siu_not_generated_or_source_mapping_review"
+  coverage.append({"route_id":rid,"agency_id":r["agency_id"],"route_short_name":r["route_short_name"],
+   "coverage":mode,"blocking_reason":reason,"frequency_source_type":h.get("source_type",""),
+   "frequency_blockers":h.get("blockers",""),"peak_headway_secs":h.get("peak_headway_secs",""),
+   "offpeak_headway_secs":h.get("offpeak_headway_secs",""),
+   "first_dispatch_model":h.get("first_dispatch_model",""),"last_dispatch_model":h.get("last_dispatch_model","")})
+ write(OUT/"first_version_route_coverage.csv",coverage,
+  ["route_id","agency_id","route_short_name","coverage","blocking_reason","frequency_source_type",
+   "frequency_blockers","peak_headway_secs","offpeak_headway_secs","first_dispatch_model","last_dispatch_model"])
+ missing=[x for x in coverage if x["coverage"]=="MISSING"]
+ write(OUT/"first_version_missing_routes.csv",missing,
+  ["route_id","agency_id","route_short_name","coverage","blocking_reason","frequency_source_type",
+   "frequency_blockers","peak_headway_secs","offpeak_headway_secs","first_dispatch_model","last_dispatch_model"])
+ print("Missing route reasons:",json.dumps(dict(Counter(x["blocking_reason"] for x in missing)),sort_keys=True))
+ 
  folder=OUT/"first-version";folder.mkdir(exist_ok=True)
  tables={
   "agency.txt":(agency,["agency_id","agency_name","agency_url","agency_timezone"]),
@@ -271,7 +298,7 @@ def main():
   for name in tables:z.write(folder/name,name)
  summary={"gtfs_zip":"gtfs-first-version.zip","status":"MODEL_NOT_VERIFIED_FOR_PUBLICATION",
   "siu_trip_templates":len(audit),"continuous_boarding_route_templates":flex_count,"holiday_exception_dates":len(calendar_dates)//2,"siu_kmz_shapes":len(siu_shape_audit),"siu_kmz_shapes_unmatched":len(siu_shape_issues),"routes":len(used_routes),"stops":len(used_stops),"stop_times":len(times),
-  "held":len(issues),"notes":"GraphHopper SIU travel times; 18 km/h geometry-based flex model; holiday schedule currently duplicates daily headways; source dispatch windows may be historical"}
+  "held":len(issues),"missing_routes":len(missing),"missing_route_reasons":dict(Counter(x["blocking_reason"] for x in missing)),"notes":"GraphHopper SIU travel times; 18 km/h geometry-based flex model; holiday schedule currently duplicates daily headways; source dispatch windows may be historical"}
  (OUT/"first_version_summary.json").write_text(json.dumps(summary,indent=2))
  print(json.dumps(summary,indent=2))
 if __name__=="__main__":main()
