@@ -30,17 +30,17 @@ jobs:
         run: |
           python -m py_compile scripts/build_amb_kmz_first_gh_fallback_shapes.py \
              scripts/compare_amb_kmz_first_gtfs_mobilitydata.py \
-             scripts/build_amb_gtfs_geometry_validation_pilot.py
+             archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py
       - name: Reconstruct read-only older ArcGIS sources for missing official AMB KMZ
         run: python scripts/harvest_amb_arcgis_route_shapes.py build/amb-arcgis-fallback
       - name: Build KMZ-first with existing GH bus fallback, 352 source sections
         run: python scripts/build_amb_kmz_first_gh_fallback_shapes.py
       - name: Build two equal-population GTFS pilot ZIP files
         run: |
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir sources/amb/GTFS_7_largest_shape_offset_review \
             --out build/amb-mobilitydata-GH-reference-NOT-PUBLISHABLE
-          python scripts/build_amb_gtfs_geometry_validation_pilot.py \
+          python archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py \
             --road-dir build/amb-kmz-first-GH-fallback-research \
             --out build/amb-mobilitydata-KMZ-first-NOT-PUBLISHABLE
       - name: Hold fictional stop times exactly equal across both geometries
