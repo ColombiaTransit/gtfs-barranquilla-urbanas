@@ -23,3 +23,13 @@ Classify per route/pattern:
 - `SCOPE_NOT_CONFIRMED`: applicability of continuous boarding not established.
 
 **Important:** the user confirmed practice for 'these routes', not an individual exhaustive route-code allowlist. Do not mass-enable all AMB routes without confirming the target set.
+
+## Automated endpoint candidate audit (2026-11-05)
+
+The workflow `consolidate-amb-gtfs-sources.yml` runs `scripts/consolidate_amb_operator_sources.py` and emits:
+
+- `build/gtfs-source-consolidation/amb_route_geometry_stops_dispatch_gaps.csv`: route classification and anchor status.
+- `build/gtfs-source-consolidation/continuous_pickup_anchor_candidates.csv`: raw AMB KMZ LineString endpoints for routes without an accepted SIU mapping, with explicit unverified terminal status.
+- `build/gtfs-source-consolidation/geometry_stops_dispatch_summary.json`: counts and audit summary.
+
+A single LineString's first/last coordinate is **not** evidence of a terminal stop. Multiple LineStrings and reused/colliding KMZ URLs are excluded from automatic endpoint selection. The workflow fetches original KMZ URLs at runtime and may report fetch failures; source endpoints must be independently validated against terminals, route direction and turnaround before stop_times generation. This step does not yet update the GTFS generator.
