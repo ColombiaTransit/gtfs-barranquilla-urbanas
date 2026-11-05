@@ -1,0 +1,3 @@
+source_url,source_route_label,day_group,first_departure,last_departure,amb_route_candidate,source_type,notes
+https://transurbar.com/servicio/,Circunvalar - Manuela Beltrán,monday_saturday,04:45,19:00,D16-4173,operator_published_image,AMB mapping provisional; first and last departure only; no headway implied
+https://transurbar.com/servicio/,Circunvalar - Manuela Beltrán,sunday_holiday,05:00,19:00,D16-4173,operator_published_image,AMB mapping provisional; first and last departure only; no headway implied
