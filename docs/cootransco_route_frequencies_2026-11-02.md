@@ -80,3 +80,10 @@
 - [024-2017](https://www.ambq.gov.co/wp-content/uploads/2017/02/Resolucion-metropolitana-024-17.pdf)
 - [120-2010](https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/COOTRANSCO/COOTRANSCO-C7-Resolucion-120-10.pdf)
 - [222-2010](https://www.ambq.gov.co/wp-content/uploads/2016/RESOLUCIONES-DE-RUTAS/COOTRANSCO/COOTRANSCO-C7-Resolucion-222-10.pdf)
+
+
+## Archiefreconciliatie — 5 november 2026
+
+Archiefhercontrole: 258-2024 3/5 blijft de gedocumenteerde permanente basis. 098-2026 A/B elk 5/7 is een tijdelijke pilot met onbekende verlenging. In het nieuwe archief is 348-2026 als potentiële opvolger aangemerkt, maar het beschikkende artikel en eventuele verlenging zijn nog **niet geverifieerd**. Daarom de pilot niet automatisch als actueel en 258 evenmin automatisch als hervat aanmerken. Alleen gerichte artikelcontrole 348-2026, zonder her-OCR van 258/098.
+
+Zie [route-voor-route classificatie](../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
