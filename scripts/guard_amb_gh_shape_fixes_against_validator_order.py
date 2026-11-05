@@ -65,7 +65,7 @@ def run_check(features,uid,jar,folder):
                  road/"GH_full_route_bus_segment_alignment.csv")
     output=folder/"fixture"
     generated=subprocess.run(
-        [sys.executable,str(ROOT/"scripts/build_amb_gtfs_geometry_validation_pilot.py"),
+        [sys.executable,str(ROOT/"archive/research_2026/scripts/build_amb_gtfs_geometry_validation_pilot.py"),
          "--road-dir",str(road),"--out",str(output)],
         cwd=ROOT,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE,text=True,timeout=75
     )
