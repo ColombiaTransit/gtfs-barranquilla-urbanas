@@ -99,3 +99,10 @@ De andere juridische ketens: **243/450-2010** (B4+B7, gedeeltelijk bevestigde be
 - [108-2023 — B4 en B7, 26 april 2023](https://www.ambq.gov.co/wp-content/uploads/2023/06/RESOLUCION-M.-108-2023-L.pdf)
 - [259-2024 — B4 itinerarios A/B](https://www.ambq.gov.co/wp-content/uploads/2024/10/RESOLUCION-METROPOLITANA-N%C2%B0-259-2024-COOTRANTICO.pdf)
 - [284-2024 — B4 tekstcorrectie](https://www.ambq.gov.co/wp-content/uploads/2024/10/RESOLUCION-METROPOLITANA-N%C2%B0-284-2024.pdf)
+
+
+## Archiefreconciliatie — 5 november 2026
+
+Archiefhercontrole: B4 108-2023 7/9 is historisch en stemt numeriek overeen met 462-2025 7/9, maar 259-2024 A/B 15/17 betreft afzonderlijke itineraria en 7/9 daar de gedeelde sectie. B7 108-2023 7/9 is vervangen door 462-2025 6/8. De visueel gecontroleerde 462-2025 tabellen blijven leidend. Geen nieuwe OCR nodig.
+
+Zie [route-voor-route classificatie](../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
