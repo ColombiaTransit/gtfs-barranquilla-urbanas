@@ -41,3 +41,10 @@ De bronbestanden zijn technisch geëxtraheerd, behalve specifieke mislukte downl
 **Niet vrijgegeven** voor `calendar.txt`, `frequencies.txt`, `stop_times.txt` of `shapes.txt`. Diensturen van 00:00–24:00 zijn doorgaans **vraagafhankelijk** geformuleerd en impliceren niet dat er 's nachts daadwerkelijk bussen rijden. Voor opname eerst de werkelijke weekkalender, spits-/dalvensters, richtingen, haltes en georeferentie vaststellen.
 
 Machineleesbare routegegevens: [13-bedrijven-register](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/blob/main/sources/amb/remaining_13_route_parameters_2026-11-02.csv).
+
+
+## Archiefreconciliatie — 5 november 2026
+
+Archiefhercontrole: A8-4113 260-2024 3/5 komt exact overeen met de reeds visueel gecontroleerde tabel op p5. Classificatie `confirmed_existing`; geen nieuwe OCR, geen wijziging van actuele GTFS.
+
+Zie [route-voor-route classificatie](../../sources/amb/amb_archive_route_reconciliation_2026-11-05.csv) en [inhoudelijke vergelijking](../amb_archive_2020_2026_existing_register_comparison_2026-11-05.md).
