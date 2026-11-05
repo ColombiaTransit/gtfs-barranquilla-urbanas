@@ -77,7 +77,7 @@ def main():
             for seg_idx,line in enumerate(lines,1):
                 best=(float("inf"),None,None)
                 for k in range(len(line)-1):
-                    for a in coords:
+                    for a in coords[::max(1,len(coords)//25)]:
                         pt,t=project(a,line[k],line[k+1])
                         d=meters(a,pt)
                         if d<best[0]:best=(d,k+t,pt)
