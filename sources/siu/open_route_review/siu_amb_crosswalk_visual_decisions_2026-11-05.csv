@@ -1,6 +1,6 @@
 siu_name,amb_base_candidate,operational_kmz_variant,amb_operator,decision_status,kmz_stop_coverage_pct,siu_stop_occurrences,caution
 MAKRO,B17-4163,,COOLITORAL,strong_base,98.85,174,192-2025 title; operator allocation open
-JUAN MINA,PT1-4101,,COOLITORAL,provisional_base,100,170,PT1 and PT2 duplicate KMZ; official PT1 title; operator allocation open
+JUAN MINA,PT1-4101,,COOLITORAL,selected_best_coverage,100,170,Selected as sole SIU mapping to PT1-4101 based on 100 percent coverage; do not double-count frequencies or trips; operator allocation open
 MIRAMAR ALAMEDA DEL RIO,A16-4161,,LA-CAROLINA,confirmed_base_title,86.54,156,199-2019 official title; A/B duplicate KMZ; geometry gap
 VIA 40 MURILLO,PT3-4103,,COOLITORAL,strong_base,99.53,211,A/B unresolved
 SOLEDAD CALLE 84,A10-4114,B,TRANSDIAZ,strong_operational_variant,100,168,KMZ B; legal variant not independently verified
@@ -8,5 +8,5 @@ SOLEDAD CALLE 84 VILLA CAROLINA,A10-4114,A,TRANSDIAZ,strong_operational_variant,
 SOLEDAD 2000 CORREDOR UNIVERSITARIO,C21-4182,B,SODETRANS,strong_operational_variant,100,230,KMZ B; SIU multi-operator attribution open
 ROJA RIOMAR,B14-4174,,SODETRANS,strong_base,100,238,Do not use legacy B13B guess; operator allocation open
 RIOMAR AMARILLA,B13-4128|B13-B-4189,,SODETRANS,family_variant_unresolved,100,249,Both KMZ candidates match 100%; do not select variant
-VILLA SAN PABLO,PT1-4101,,COOLITORAL,provisional_base,81.56,141,PT1/PT2 duplicate KMZ; legal title favors PT1; geometry gap
+VILLA SAN PABLO,,,,unmapped_pending_distinct_route_evidence,81.56,141,PT1-4101 was a geometric candidate at 81.56 percent but is assigned to JUAN MINA at 100 percent; do not map Villa San Pablo to PT1 or duplicate GTFS trips; seek distinct route evidence
 LAS GAVIOTAS CALLE 76,A16-4161,,LA-CAROLINA,provisional_family_geometry_gap,66.22,148,A/B duplicate KMZ; 33.78 percent stops unmatched; retain SIU pattern
