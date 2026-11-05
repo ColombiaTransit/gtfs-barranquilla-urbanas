@@ -127,7 +127,10 @@ def main():
             "operator_dispatch_windows": ";".join(
                 f"{w['day_group']}:{w['first_departure']}-{w['last_departure']}" for w in ws
             ),
-            "continuous_pickup_class": continuous_status,\n            "continuous_pickup_policy": "user_confirmed_for_applicable_urban_routes_scope_review_required",\n            "anchor_status": anchor_status,\n            "headway_status": "not_assessed_in_supplement",
+            "continuous_pickup_class": continuous_status,
+            "continuous_pickup_policy": "user_confirmed_for_applicable_urban_routes_scope_review_required",
+            "anchor_status": anchor_status,
+            "headway_status": "not_assessed_in_supplement",
             "source_geometry_validation": "not_revalidated_in_supplement",
             "gaps": ";".join(flags)
         })
