@@ -59,6 +59,11 @@ def main():
   uid=next(iter(uuids))
   if uid in assignments and assignments[uid]!=matches[0]["route_id"]:
    issues.append((name,"siu_uuid_conflict"));continue
+  # These routes deliberately use official KMZ-only continuous boarding (Flex).
+  # Do not associate SIU stops/trips with their KMZ geometry.
+  if norm(matches[0]["route_short_name"]) in {"B11B4192","C44135"}:
+   issues.append((name,"siu_mapping_removed_use_kmz_flex"))
+   continue
   assignments[uid]=matches[0]["route_id"]
  stops=read(ROOT/"sources/siu/gtfs_staging/candidate_stops.csv")
  by_stop={s["stop_id"]:s for s in stops if s.get("stop_id")}
