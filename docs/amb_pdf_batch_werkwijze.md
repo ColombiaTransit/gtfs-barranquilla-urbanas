@@ -1,21 +1,21 @@
-# AMB PDF-verwerking — volledige batch (2 november 2026)
+# AMB PDF processing — full batch (November 2, 2026)
 
-De centrale werklijst staat in [pdf_manifest.csv](../sources/amb/pdf_manifest.csv): 273 PDF-verwijzingen voor 22 bedrijven. Zes documenten stonden al in het oorspronkelijke manifest en zijn in run 41476363247 eerder geëxtraheerd; de overige 267 zijn toegevoegd op basis van het publieke resolutieoverzicht van `IngBenichi/Urban-Route_AI` (`scraper/data/ambq/resoluciones_index.json`).
+The central worklist is [pdf_manifest.csv](../sources/amb/pdf_manifest.csv): 273 PDF references for 22 operators. Six documents were already included in the original manifest and extracted in run 41476363247; the remaining 267 were added from the public resolution index maintained by IngBenichi/Urban-Route_AI.
 
-## Uitvoeren
+## Running the batch
 
-Open [Extract AMB PDFs by company (batch)](../.github/workflows/extract-amb-pdfs-batch.yml) in GitHub Actions, kies **Run workflow** en laat het veld `agency` leeg om alle 22 bedrijven te verwerken. Een bedrijf afzonderlijk verwerken kan met de exacte waarde uit de kolom `agency`, bijvoorbeeld `TRANSURBAR`. Maximaal vier bedrijven lopen parallel. Ieder bedrijf krijgt een apart artifact `amb-pdf-BEDRIJF` met bron-PDF's, paginagewijze tekst en `report.json`. De bestaande workflow `extract-amb-pdfs.yml` blijft beschikbaar voor een specifieke resolutie.
+Open [Extract AMB PDFs by company (batch)](../.github/workflows/extract-amb-pdfs-batch.yml) in GitHub Actions, select **Run workflow**, and leave `agency` blank to process all 22 operators. To process one operator, enter its exact `agency` column value, such as `TRANSURBAR`. Up to four operators run in parallel. Each operator produces an `amb-pdf-OPERATOR` artifact containing source PDFs, page-by-page text, and `report.json`. The existing `extract-amb-pdfs.yml` workflow remains available for individual resolutions.
 
-## Kwaliteitscontrole
+## Quality assurance
 
-- `pending` betekent: in de werklijst, **niet** geverifieerd als succesvol gedownload of uitgelezen.
-- De index is een externe inventaris; URL, resolutienummer en bedrijf kunnen fouten bevatten.
-- Suffixen `-v2` etc. in de manifest-resolutie zijn technische sleutels voor dubbele nummers en **geen officiële resolutienummers**.
-- `177-undated` heeft geen betrouwbaar jaartal uit de index.
-- Elke batch heeft een downloadlimiet van 35 MB per PDF en een maximum van 150 pagina's; fouten verschijnen in `report.json`.
-- OCR-tekst, tabellen en routevolgordes blijven `extracted_requires_review`; pas na inhoudelijke validatie mogen gegevens in GTFS worden verwerkt.
-- De batch maakt geen aanpassingen aan `gtfs/`.
+- `pending` means listed for processing, **not** verified as successfully downloaded or extracted.
+- The index is an external inventory; URLs, resolution numbers, and operator names may contain errors.
+- Suffixes such as `-v2` in manifest resolution keys disambiguate duplicate numbers and are **not official resolution numbers**.
+- `177-undated` has no reliable year in the index.
+- Each batch limits downloads to 35 MB per PDF and 150 pages; failures are recorded in `report.json`.
+- OCR text, tables, and route sequences remain `extracted_requires_review`; only substantively validated data may enter GTFS.
+- The batch does not modify `gtfs/`.
 
-## Analysevolgorde
+## Review order
 
-Eerst TRANSURBAR (12 resoluties) en TRASALFA (8), vervolgens de andere bedrijven per bedrijf. Vergelijk basisbesluiten en latere wijzigingen, rapporteer routecodes, beide rijrichtingen, straatvolgorde, spits-/dalinterval, voertuigcapaciteit, diensturen en eventuele tegenstrijdigheden. Maak een aparte herverwerkingslijst van `failed` records en onleesbare pagina's.
+Review TRANSURBAR (12 resolutions) and TRASALFA (8) first, then process the remaining operators individually. Compare original resolutions with subsequent amendments; report route codes, both directions, street sequences, peak/off-peak headways, vehicle capacity, service hours, and contradictions. Maintain a separate reprocessing list for `failed` records and unreadable pages.
