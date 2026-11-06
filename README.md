@@ -1,56 +1,54 @@
 # GTFS Barranquilla Urbanas
 
-Onderzoeksrepository voor een **statische GTFS-feed van het traditionele collectieve busvervoer (TPC)** in het Área Metropolitana de Barranquilla. **Niet** de Transmetro-GTFS.
+Research repository for a **static GTFS feed for traditional collective bus transport (TPC)** in the Barranquilla metropolitan area, Colombia. **This is not the Transmetro GTFS feed.**
 
-> **Registerbeleid (5 november 2026):** [Canonical register architecture](docs/canonical_register_architecture.md) is leidend. De GTFS-generator leest frequenties en vertrekvensters uitsluitend uit `build/registries/route_service.csv`, dat tijdens de workflow wordt geconsolideerd. Oudere staging- en bronbestanden zijn bewijs/QA, geen alternatieve operationele invoer. De volledige migratie van haltes, shapes en Flex naar één generator is nog openstaand.
+> **Canonical register policy (November 5, 2026):** [Canonical register architecture](docs/canonical_register_architecture.md) governs the build. The generator reads service frequencies and dispatch windows exclusively from `build/registries/route_service.csv`, produced during the workflow. Historical staging and source files provide evidence and quality assurance, not alternative operational inputs.
 
-## Huidige status — 3 november 2026
+## Current research status
 
-**GTFS-onderzoeksmodel, nog geen volledige publiceerbare feed.**
+**Research-grade GTFS model — not yet verified for public release.** Figures below are from the most recent confirmed successful build, [run 42166319999](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/42166319999), before subsequent changes were revalidated.
 
-| Onderdeel | Status |
+| Item | Last confirmed result |
 |---|---|
-| `gtfs/agency.txt` | 23 vervoerbedrijven |
-| `gtfs/routes.txt` | 97 route-/variant-ID's, waaronder correctie COOTRAB C5-4136 |
-| Vergunningsfrequenties + voorlopig dienstvenster | 63/97 routepatronen voorbereid |
-| Weekdagperiodeblokken | 245 kandidaten voor een latere `frequencies.txt` |
-| Nog te onderzoeken | 34 route-/variantregistraties |
-| GIS-geometry | 93 bronfeatures, 97/97 **routecodekoppelingen** (geen gevalideerde shapes) |
-| Haltes en haltevolgorde | **3.117 conservatief samengevoegde concept-haltes** uit 6.407 SIU-stopvermeldingen; 12 sterke plus 8 extra voorlopige SIU→AMB-basisroutekoppelingen en 3.981 concept-route-stopvolgorderegels |
+| Registered routes / variants | 97 |
+| Generated routes | 73 (23 SIU stop-sequence routes; 50 KMZ-based continuous-boarding routes) |
+| Missing routes | 24 (13 dispatch-window/service holds, 9 geometry mappings, 2 invalid or multipart geometries) |
+| Generated stops | 2,781 |
+| Generated trips | 146, including holiday templates |
+| MobilityData GTFS Validator | 0 errors; warnings remain under review |
 
-De officiële AMB-resoluties gelden als onze leidende bron voor de **spits-/dalfrequenties**. De [eerste/laatste vertrekuren uit AMB-kaarten van juli 2020](sources/amb/amb_dispatch_window_assumptions_2026-11-03.csv) en de indeling 07:00–09:00 / 17:00–20:00 spits maandag–vrijdag vormen **expliciete, vervangbare modelaannames**, niet officieel bevestigde 2026-rijtijden. **Voertuigcapaciteit telt niet mee.**
+Recent unverified changes include provisional 05:00–21:00 dispatch windows for 13 selected routes, display-name normalization for stops, and moving B11-B-4192 and C4-4135 to KMZ-based continuous boarding. **Do not treat these changes as validated until the next workflow report is reviewed.**
 
-Twee evidente SIU-spelfouten zijn via een [controleerbare correctietabel](sources/siu/stop_name_spelling_corrections_2026-11-03.csv) genormaliseerd, zonder oorspronkelijke namen of richtingsinformatie te verliezen. Eén eerder afzonderlijke stop-ID is [als alias](sources/siu/gtfs_staging/stop_id_alias_history.csv) bewaard.
+## Modelling and source policies
 
-## Reproduceerbare GitHub Actions
+- Official AMB resolutions are the primary evidence for authorized peak and off-peak headways. Operational service is not independently verified.
+- Missing or invalid dispatch windows for 13 explicitly selected routes may use a **provisional** 05:00–21:00 model; original source values are preserved.
+- No reliable weekday-versus-weekend headway breakdown is currently available. The daily and holiday schedule assumptions are provisional.
+- Official KMZ geometry is preferred. Do not automatically assign a base-route KMZ to unresolved A/B variants.
+- **SIU routes with verified stop order and coordinates can be generated without a shape.** Leave `shape_id` empty and do not enable continuous pickup/drop-off.
+- **KMZ-only routes** may use continuous boarding along a valid, correctly matched shape, with explicitly documented modelled travel times.
+- Routes lacking both usable SIU stop sequences and valid variant geometry remain excluded pending source review.
+- Preserve raw source evidence and provenance. Do not invent stop coordinates, official schedules, or variant directions.
 
-- [Build AMB GTFS frequency staging](.github/workflows/build-amb-gtfs-frequency-staging.yml): leest de onderzochte resoluties, matcht de huidige route-ID's en schrijft 245 voorlopige perioden, 34 open issues en samenvatting.
-- [Harvest Barranquilla ArcGIS route shape candidates](.github/workflows/harvest-amb-arcgis-shapes.yml): downloadt de historische gemeentelijke geometrielijnen en matcht routecodes; publiceert een bron-/matchingrapport en bewaart de GeoJSON als artifact.
-- [Extract AMB PDFs](.github/workflows/extract-amb-pdfs.yml), [PDF batch-extractie](.github/workflows/extract-amb-pdfs-batch.yml) en [validatie](.github/workflows/validate-amb-resolutions.yml): originele vergunningen, OCR en artikelcontrole.
-- [Extract historic AMB first/last departures](.github/workflows/harvest-amb-2020-route-posters.yml): verwerkt 24 officiële historische routekaarten.
-- [Stage SIU route crosswalk and GTFS stop candidates](.github/workflows/stage-siu-gtfs-stops.yml): maakt conservatieve fysieke stop-ID's, 12 voorlopige routekoppelingen, 53 stopnaamconflicten en een complete reviewqueue.
-- [Review all unresolved SIU to AMB route links](.github/workflows/review-siu-open-route-links.yml): controleert 21 open SIU-itineraries, levert 8 extra basisroutevoorstellen en 3.981 stopvolgorderegels voor 20 voorgestelde routecodes.
-- [Recover AMB Coolitoral 256-2026 original pilot PDF](.github/workflows/recover-amb-coolitoral-256.yml) en [SIU/PT4/PT5-straatcontrole](.github/workflows/audit-siu-coolitoral-256-streets.yml): geverifieerd origineel besluit en vier A/B-straattrajecten, maar nog geen bevestigde SIU→A/B-koppeling.
+## Build and validation
 
-## Belangrijke bestanden
+Run [Build GTFS v2 with Flex and GTFS-RT contract](.github/workflows/build-gtfs-v2.yml) from GitHub Actions. The workflow refreshes the KMZ manifest, consolidates route service inputs, builds the research GTFS feed, runs the MobilityData validator, and uploads QA artifacts.
 
-- [Onderzoeksrapport GTFS-bouwketen](docs/gtfs_build_staging_progress_2026-11-03.md)
-- [Inventaris haltebronnen en nog ontbrekende TPC-stopdata](docs/stop_data_inventory_2026-11-03.md)
-- [**SIU-route- en halteonderzoek:** 36 itineraries, 6.873 route-halteregels, inclusief 33 reguliere itineraries](docs/siu_sibus_mht_route_stop_analysis_2026-11-03.md)
-- [SIU-routehaltelijst met naam, GPS en volgorde](sources/siu/public_extract/siu_route_stop_sequences.csv)
-- [**SIU-review: 12 sterke + 8 nieuwe voorlopige routekoppelingen; 13 nog ambigu**](docs/siu_remaining_21_route_links_review_2026-11-03.md)
-- [**3.117 concept-haltes en 53 naamconflicten**](docs/siu_gtfs_stop_crosswalk_staging_2026-11-03.md)
-- [Concept `stops.txt` — niet publiceren](sources/siu/gtfs_staging/stops_draft_NOT_FOR_PUBLICATION.txt)
-- [OSM/Overpass-resultaten: 599 bushalteobjecten, 34 mogelijke instapplaatsen en 16 GIS-prioriteitslocaties](sources/osm/README.md)
-- [Frequentiebron per GTFS-route](sources/amb/gtfs_staging/route_headway_candidates.csv)
-- [Voorgestelde weekdagperiodeblokken](sources/amb/gtfs_staging/weekday_period_staging.csv)
-- [34 routes met open punten](sources/amb/gtfs_staging/unresolved_route_issues.csv)
-- [ArcGIS-shape-koppelingen](sources/amb/arcgis_shape_staging/route_shape_matches.csv)
-- [23-bedrijven- en resolutieregister](docs/amb_bedrijven/README.md)
-- [Tijdvakkenmodel](docs/amb_peak_offpeak_model_2026-11-03.md)
+The generated feed is **not automatically approved for publication**. Review `build/gtfs-v2/first_version_route_coverage.csv`, `first_version_missing_routes.csv`, `first_version_summary.json`, and the validator report from the workflow artifact.
 
-## Vervolg: haltegegevens en ritpatronen
+## Documentation and source registers
 
-De SIU-bron heeft nu **33 reguliere geordende itineraries met 6.407 GPS-stopvermeldingen** (plus drie testitineraries). Voor een echte GTFS moeten we nog haltes correct dedupliceren, de SIU-itineraries aan de AMB-routecodes koppelen en `stops.txt`, `trips.txt`, `stop_times.txt`, een kalender en geverifieerde `shapes.txt` genereren. **We maken geen fictieve halteposities of rijtijden.** De ArcGIS-lijnen stammen hoofdzakelijk uit een 2019-collectie, laatste GIS-bewerking december 2023. Recentere resolutiegeometrie uit 2025/2026 kan daarvan afwijken; A/B-varianten die één lijn delen zijn nog geen afzonderlijk gecontroleerde ritgeometrieën.
+- [Canonical register architecture](docs/canonical_register_architecture.md)
+- [GTFS v2 generator design](docs/gtfs-generator-v2-design-2026-11-05.md)
+- [Geometry validator review and deferred shape work](docs/validator_geometry_review_2026-11-06.md)
+- [Closure of legal/source research phase](docs/amb_research_phase_closure_2026-11-04.md)
+- [Source register](docs/bronregister.md)
+- [SIU route and stop research](docs/siu_sibus_mht_route_stop_analysis_2026-11-03.md)
+- [Stop data inventory](docs/stop_data_inventory_2026-11-03.md)
+- [Operator and resolution research](docs/amb_bedrijven/README.md)
 
-Vaste officiële bron: https://www.ambq.gov.co/transporte/transporte-publico-colectivo/
+Official AMB transport source: https://www.ambq.gov.co/transporte/transporte-publico-colectivo/
+
+## Documentation language
+
+**English is the required language for public-facing documentation, including the README, research notes, QA summaries, and workflow descriptions.** Preserve Spanish names of operators, routes, legal acts, and original quoted source material. Technical GTFS fields, file paths, identifiers, and source records must not be translated. Historical documentation is being migrated; some archived research notes may still contain Dutch text.
