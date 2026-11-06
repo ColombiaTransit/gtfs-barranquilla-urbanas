@@ -44,3 +44,12 @@ Evidence: MobilityData 8.0.1 `stops_match_shape_out_of_order` samples and `gtfs-
 - **Not confirmed:** whether KMZ travel direction, loop/repeated segment, nearest-shape projection or SIU stop order causes each warning. Do not call these resolved.
 - **Next source review:** compare the relevant KMZ LineString around each flagged stop pair with SIU stop occurrences and direction, including adjacent stops; record whether the shape revisits a segment. Only change source mapping or stop order with positive source evidence.
 - **Scope:** no KMZ shapes, SIU source records or generator output modified in this investigation. The three small distance warnings remain deferred.
+
+## User visual review of OSM/KMZ overlay (2026-11-06)
+
+The user inspected the four flagged pairs in the interactive OSM/KMZ/SIU viewer and reported:
+
+- **A7-4112, B13-4128, B14-4174:** the **KMZ geometry/direction appears wrong**, not the SIU stop sequence. Classification: `suspected_kmz_geometry_or_direction`. Preserve SIU stop order and existing KMZ until checked against original official KMZ and surrounding road direction. Do not swap stops or silently reverse a whole shape.
+- **C21-4182 B:** the **KMZ appears correct**, while the SIU #135 → #136 order is suspect. Classification: `suspected_siu_stop_order`. Verify KMZ vertex direction and adjacent #134/#137 before changing stop occurrences, including any shared stop IDs/trips.
+
+This is a user visual assessment, not yet a validated source correction. Re-run MobilityData after evidence-based changes.
