@@ -8,9 +8,9 @@ The report contains 64 `stop_too_far_from_shape` notices and 4 `stops_match_shap
 |---|---:|---:|---|---|
 | B11-B-4192 | 44 | 0 | Stops 235–1996 m from KMZ; investigate wrong direction/variant or shape mapping before moving stops | needs_source_review |
 | C4-4135 | 17 | 0 | Stops 112–417 m from KMZ; inspect SIU stop sequence versus official KMZ | needs_source_review |
-| D7-4151 | 1 | 0 | Villa de Andalucia 146 m from shape | needs_source_review |
-| B9-4125 | 1 | 0 | Calle 56 con Carrera 32 138 m from shape | needs_source_review |
-| A16-4161 B | 1 | 0 | Carrera 22 con Calle 35 144 m from shape | needs_source_review |
+| D7-4151 | 1 | 0 | Villa de Andalucia 146 m from shape | deferred_minor_distance |
+| B9-4125 | 1 | 0 | Calle 56 con Carrera 32 138 m from shape | deferred_minor_distance |
+| A16-4161 B | 1 | 0 | Carrera 22 con Calle 35 144 m from shape | deferred_minor_distance |
 | A7-4112 | 0 | 1 | Conjunto Tortola / CC Jardin del Rio order conflict | needs_source_review |
 | B14-4174 | 0 | 1 | Carrera 30 con Calle 143B / Calle 143D con Carrera 29B order conflict | needs_source_review |
 | B13-4128 | 0 | 1 | Calle 143D con Carrera 29B and adjacent stop order conflict | needs_source_review |
@@ -25,4 +25,4 @@ The report contains 64 `stop_too_far_from_shape` notices and 4 `stops_match_shap
 5. Record route_id, trip_id, stop_id, source evidence, proposed correction, review status and validation outcome in a canonical audit, rather than introducing a competing route register.
 6. Re-run the GTFS generator and MobilityData validator; close a route only when warnings are resolved or documented as source-supported exceptions.
 
-**Priority:** B11-B-4192 (44), C4-4135 (17), then the 3 single-distance routes, then 4 order warnings. No geometry or stop data were changed by this review document.
+**Current decision (2026-11-06):** B11-B-4192 and C4-4135 have been excluded from SIU-to-KMZ matching in generator commit `2e7664cfb34bf825f277bb7ed147af61c5d7a9d0` and will be built as KMZ Flex routes; rerun validation pending. The three remaining single-stop distance warnings (138–146 m) are deliberately **deferred** to a later review, not corrected or closed. Keep their stop coordinates and KMZ geometry unchanged. **Next active priority:** the four stop-order warnings. This document is the worklist; no competing register is introduced.
