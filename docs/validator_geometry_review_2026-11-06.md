@@ -61,3 +61,9 @@ User decision: **park the four `stops_match_shape_out_of_order` warnings** for A
 Status for all four: `deferred_source_limit`. Preserve existing KMZ-first geometry and SIU stop sequence; do not reroute with GraphHopper, swap stop order or reverse geometry solely to eliminate warnings. The user's visual hypotheses from the preceding section remain recorded as unverified. Reopen only if a better authoritative geometry, SIU source correction or other concrete contradictory evidence becomes available.
 
 The three minor stop-distance warnings remain `deferred_minor_distance`. Continue with GTFS route coverage and remaining source blockers rather than further geometry refinement.
+
+## Calendar model decision (2026-11-06)
+
+There is currently no reliable per-weekday, Saturday, Sunday or holiday frequency source. Preserve the existing `MODEL_DAILY` Monday–Sunday schedule and holiday-only `MODEL_HOLIDAY` exceptions in `calendar_dates.txt`, with the same provisional headways. This is a transparent modelling assumption, **not** a verified claim of equal daily service.
+
+MobilityData `service_has_no_active_day_of_the_week` is a non-blocking warning resulting from `MODEL_HOLIDAY` having seven zeros in `calendar.txt` and being activated solely through `calendar_dates.txt`. Accept and document this warning; do not turn on arbitrary weekdays to suppress it. Revisit only when authoritative day-specific service information becomes available.
