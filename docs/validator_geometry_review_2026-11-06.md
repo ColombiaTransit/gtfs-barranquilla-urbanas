@@ -53,3 +53,11 @@ The user inspected the four flagged pairs in the interactive OSM/KMZ/SIU viewer 
 - **C21-4182 B:** the **KMZ appears correct**, while the SIU #135 → #136 order is suspect. Classification: `suspected_siu_stop_order`. Verify KMZ vertex direction and adjacent #134/#137 before changing stop occurrences, including any shared stop IDs/trips.
 
 This is a user visual assessment, not yet a validated source correction. Re-run MobilityData after evidence-based changes.
+
+## Closure decision: defer all four stop-order warnings (2026-11-06)
+
+User decision: **park the four `stops_match_shape_out_of_order` warnings** for A7-4112, B14-4174, B13-4128 and C21-4182 B. No better official KMZ route shapes are available. These are MobilityData **warnings, not errors**, and do not block continued GTFS generation.
+
+Status for all four: `deferred_source_limit`. Preserve existing KMZ-first geometry and SIU stop sequence; do not reroute with GraphHopper, swap stop order or reverse geometry solely to eliminate warnings. The user's visual hypotheses from the preceding section remain recorded as unverified. Reopen only if a better authoritative geometry, SIU source correction or other concrete contradictory evidence becomes available.
+
+The three minor stop-distance warnings remain `deferred_minor_distance`. Continue with GTFS route coverage and remaining source blockers rather than further geometry refinement.
