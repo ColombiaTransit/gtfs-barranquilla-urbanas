@@ -27,6 +27,27 @@ def clock(v):
 def norm(v):
  import re
  return re.sub("[^A-Z0-9]","",str(v or "").upper())
+def display_stop_name(value):
+ """Normalize display casing only; preserve source names, IDs and abbreviations."""
+ import re
+ name=" ".join(str(value or "").split())
+ if not name:return name
+ # Avoid changing names that already use mixed case, including proper names.
+ if name!=name.upper():return name
+ acronyms={"CC","C.C.","SENA","UFC","IPS","EPS","UCI","UCC","UTB","ITSA","I.E.","IE","INEM","UNAD","UAN","UDEA","UPB","UDB","U","N","S","E","O"}
+ words=[]
+ for token in name.split(" "):
+  # Preserve punctuation and digit-containing labels, e.g. 143D, 7A.
+  if any(ch.isdigit() for ch in token):
+   words.append(token);continue
+  core=token.strip(".,;:()[]")
+  if core in acronyms:
+   words.append(token);continue
+  if core in {"CON","DE","DEL","LA","LAS","LOS","EL","Y","EN","AL","POR"} and words:
+   words.append(token.lower());continue
+  words.append(token.capitalize())
+ return " ".join(words)
+
 def main():
  OUT.mkdir(parents=True,exist_ok=True)
  routes=read(ROOT/"gtfs/routes.txt");agency=read(ROOT/"gtfs/agency.txt")
@@ -295,7 +316,7 @@ def main():
  tables={
   "agency.txt":(agency,["agency_id","agency_name","agency_url","agency_timezone"]),
   "routes.txt":([r for r in routes if r["route_id"] in used_routes],["route_id","agency_id","route_short_name","route_long_name","route_type"]),
-  "stops.txt":([by_stop[k] for k in sorted(used_stops)],["stop_id","stop_name","stop_lat","stop_lon","location_type"]),
+  "stops.txt":([{**by_stop[k],"stop_name":display_stop_name(by_stop[k].get("stop_name",""))} for k in sorted(used_stops)],["stop_id","stop_name","stop_lat","stop_lon","location_type"]),
   "trips.txt":(generated,["route_id","service_id","trip_id","shape_id"]),
   "stop_times.txt":(times,["trip_id","arrival_time","departure_time","stop_id","stop_sequence","continuous_pickup","continuous_drop_off"]),
   "frequencies.txt":(frequencies,["trip_id","start_time","end_time","headway_secs","exact_times"]),
