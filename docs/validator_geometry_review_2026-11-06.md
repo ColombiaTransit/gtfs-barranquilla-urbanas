@@ -67,3 +67,13 @@ The three minor stop-distance warnings remain `deferred_minor_distance`. Continu
 There is currently no reliable per-weekday, Saturday, Sunday or holiday frequency source. Preserve the existing `MODEL_DAILY` Monday–Sunday schedule and holiday-only `MODEL_HOLIDAY` exceptions in `calendar_dates.txt`, with the same provisional headways. This is a transparent modelling assumption, **not** a verified claim of equal daily service.
 
 MobilityData `service_has_no_active_day_of_the_week` is a non-blocking warning resulting from `MODEL_HOLIDAY` having seven zeros in `calendar.txt` and being activated solely through `calendar_dates.txt`. Accept and document this warning; do not turn on arbitrary weekdays to suppress it. Revisit only when authoritative day-specific service information becomes available.
+
+
+## Openstaande werkitems — ontbrekende route-shapes (2026-11-06)
+
+**Besluit / publicatiepoort:** een route zonder bruikbare, aan de juiste variant gekoppelde `shape_id` en `shapes.txt`-geometrie wordt **niet** in de gegenereerde GTFS opgenomen, ook niet als SIU-haltevolgorde en frequentie beschikbaar zijn. Geen fictieve KMZ-koppeling en geen ongedocumenteerde omkering van een basisroute. Dit geldt voor SIU- en Flex-generatie. De generator moet dit als harde route-dekkingsvoorwaarde afdwingen; controleer bij de volgende build dat geen trips zonder geldige shape doorlekken.
+
+- [ ] **GEOM-01 — SIU-koppeling aanwezig, eigen KMZ ontbreekt:** genereer later een route-shape op basis van de SIU-haltevolgorde en controleer de rijrichting. Kandidaten: PT3-4103 A/B (SIU VIA 40 MURILLO), PT4-4104 A/B en PT5-4105 A/B (SIU CIRCUNVALAR VIA 40 / VIA 40 CIRCUNVALAR; toewijzing PT4 versus PT5 en A versus B nog niet bevestigd). Pas na gevalideerde koppeling en shape toevoegen aan GTFS. PT2-4102 A/B heeft nog geen afzonderlijk bevestigde SIU-koppeling en blijft buiten deze automatische reconstructie.
+- [ ] **GEOM-02 — Geen bruikbare variant-shape / geen voldoende bevestigde SIU-koppeling:** afzonderlijk brononderzoek om de bestaande basis-KMZ aan de hand van de geldende resoluties te beoordelen en waar nodig een **afgeleide, expliciet gedocumenteerde variant-KMZ** te maken/corrigeren. Kandidaten: PT2-4102 A/B; ook C5-4136 (conflict SIU LAS PALMAS versus C5-4135) en C2-B-4188 (geen bevestigde SIU-koppeling) afzonderlijk toetsen. Basis-KMZ niet zonder bewijs aan beide varianten toewijzen. Bewaar originele KMZ en juridische bronverwijzing; publiceer pas na geometrie- en richtingscontrole.
+
+Deze twee werkitems zijn uitgesteld en geen toestemming om afgesloten KMZ/ArcGIS-bronzoektochten opnieuw te starten. 
