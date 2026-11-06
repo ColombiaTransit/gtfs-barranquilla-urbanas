@@ -20,6 +20,22 @@ CLOSED_RESEARCH_HEADWAYS = {
  "AMB_TRASALIANCO_D17_4158": ("268-2010", 300, 420),
 }
 CLOSED_RESEARCH_SOURCE = "docs/amb_research_phase_closure_2026-11-04.md"
+# Explicitly approved provisional windows for 13 routes with missing/invalid dispatch times.
+# Only applied where the source window cannot be parsed; source staging stays unchanged.
+PROVISIONAL_WINDOW_ROUTES = {
+ "C2B4188","C34134","C94140","C184141","D154157","D144156",
+ "B2B4118","A184183","D34147","D44148","D54149","A64111","A54110",
+}
+PROVISIONAL_FIRST = "05:00:00"
+PROVISIONAL_LAST = "21:00:00"
+def valid_window(r):
+ try:
+  def seconds(v):
+   parts=[int(p) for p in v.split(":")]
+   if len(parts) not in (2,3):return -1
+   return parts[0]*3600+parts[1]*60+(parts[2] if len(parts)==3 else 0)
+  return 0<=seconds(r["first_dispatch_model"])<seconds(r["last_dispatch_model"])<=30*3600
+ except (ValueError,KeyError,TypeError):return False
 
 def main():
  source="sources/amb/gtfs_route_frequency_candidates_no_fleet_2026-11-02.csv"
@@ -56,13 +72,18 @@ def main():
  ids=[r["gtfs_route_id"] for r in staged]
  if len(ids)!=len(set(ids)):raise ValueError("Duplicate route IDs in frequency register")
  for r in staged:
-  try:
-   def minutes(x):
-    parts=[int(v) for v in x.split(":")]
-    return parts[0]*60+parts[1]
-   window_ok=minutes(r["last_dispatch_model"])>minutes(r["first_dispatch_model"])
-  except (ValueError,KeyError,IndexError):window_ok=False
+  window_ok=valid_window(r)
+  r["dispatch_window_model_status"]="source_window" if window_ok else "invalid_or_missing"
+  r["dispatch_window_original_first"]=r.get("first_dispatch_model","")
+  r["dispatch_window_original_last"]=r.get("last_dispatch_model","")
+  if not window_ok and norm(r.get("route_short_name","")) in PROVISIONAL_WINDOW_ROUTES:
+   r["first_dispatch_model"]=PROVISIONAL_FIRST
+   r["last_dispatch_model"]=PROVISIONAL_LAST
+   r["dispatch_window_model_status"]="provisional_dispatch_window"
+   window_ok=True
   r["operational_status"]="ready" if valid(r) and window_ok and r.get("consolidation_status")!="conflict_held" else "held"
+ assert len(PROVISIONAL_WINDOW_ROUTES)==13
+ print("Provisional dispatch windows:", [r["route_short_name"] for r in staged if r["dispatch_window_model_status"]=="provisional_dispatch_window"])
  out.mkdir(parents=True,exist_ok=True)
  canonical.mkdir(parents=True,exist_ok=True)
  with (canonical/"route_service.csv").open("w",newline="",encoding="utf-8") as f:
