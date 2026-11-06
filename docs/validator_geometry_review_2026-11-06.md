@@ -26,3 +26,21 @@ The report contains 64 `stop_too_far_from_shape` notices and 4 `stops_match_shap
 6. Re-run the GTFS generator and MobilityData validator; close a route only when warnings are resolved or documented as source-supported exceptions.
 
 **Current decision (2026-11-06):** B11-B-4192 and C4-4135 have been excluded from SIU-to-KMZ matching in generator commit `2e7664cfb34bf825f277bb7ed147af61c5d7a9d0` and will be built as KMZ Flex routes; rerun validation pending. The three remaining single-stop distance warnings (138–146 m) are deliberately **deferred** to a later review, not corrected or closed. Keep their stop coordinates and KMZ geometry unchanged. **Next active priority:** the four stop-order warnings. This document is the worklist; no competing register is introduced.
+
+## Detailed stop-order investigation (2026-11-06)
+
+Evidence: MobilityData 8.0.1 `stops_match_shape_out_of_order` samples and `gtfs-first-version.zip` from run 42166319999. Sequence numbers below are the actual SIU trip `stop_sequence` (not the validator's CSV row numbers).
+
+| Route | SIU trip_id | First stop in GTFS order | Next stop in GTFS order | Evidence / disposition |
+|---|---|---|---|---|
+| A7-4112 | `SIU_3ef82d0c83c4627e` | #55 CC JARDIN DEL RIO (CALLE 114) | #56 CONJUNTO TORTOLA (CALLE 114) | Validator finds #56 earlier on the KMZ shape than #55. Review the local Calle 114 direction and loops; **no automatic swap**. |
+| B14-4174 | `SIU_945609c6696a63a7` | #3 CALLE 143D CON CARRERA 29B (SN) | #4 CARRERA 30 CON CALLE 143B (OE) | Validator finds #4 earlier than #3. Review shared Carrera 28–30 / Calle 143D circuit with B13; **no automatic swap**. |
+| B13-4128 | `SIU_8e5e5a0b4aa613af` | #2 CARRERA 28 CON CALLE 143D (EO) | #3 CALLE 143D CON CARRERA 29B (SN) | Validator finds #3 earlier than #2. Same SIU stop IDs and nearby sequence as B14; check common loop and direction once for both routes. |
+| C21-4182 B | `SIU_b45398378e9e743b` | #135 EDIFICIO VERONA (CARRERA 44 - OE) | #136 CARRERA 44 CON CALLE 84 (OE) | Very close neighboring stops; validator finds #136 earlier on the KMZ. Check road side and projection ambiguity; **no automatic swap**. |
+
+### Review result and next decision
+
+- **Confirmed:** four warnings are reproducible in generated trip sequences; two belong to a shared geographic cluster (B13/B14). No evidence yet that the original SIU ordering is wrong.
+- **Not confirmed:** whether KMZ travel direction, loop/repeated segment, nearest-shape projection or SIU stop order causes each warning. Do not call these resolved.
+- **Next source review:** compare the relevant KMZ LineString around each flagged stop pair with SIU stop occurrences and direction, including adjacent stops; record whether the shape revisits a segment. Only change source mapping or stop order with positive source evidence.
+- **Scope:** no KMZ shapes, SIU source records or generator output modified in this investigation. The three small distance warnings remain deferred.
