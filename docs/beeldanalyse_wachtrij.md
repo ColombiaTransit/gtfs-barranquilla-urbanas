@@ -1,21 +1,20 @@
-# Beeldanalyse — wachtrij (2026-11-02)
+# Image-based source verification — work queue (2026-11-02)
 
-## Uitvoering 4 november 2026
+## Processing completed on November 4, 2026
 
-Alle **6** originele PDF's uit deze wachtrij zijn via [Action 41786660704](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41786660704) opgehaald (61/61 pagina's Spaanse OCR, 48 originele controlegegevens als afbeeldingen). De resterende taken betreffen **inhoudelijke bronbeeld-/artikelverificatie**, niet meer het vinden of OCR'en van de bron-PDF.
+All **six** original PDFs in this queue were retrieved through [Action 41786660704](https://github.com/ColombiaTransit/gtfs-barranquilla-urbanas/actions/runs/41786660704) (Spanish OCR for all 61 pages; 48 original page images for verification). Remaining work concerns **substantive verification of scanned source pages and legal provisions**, not locating or OCR-processing the source PDFs.
 
-De eerste visuele beoordeling is vastgelegd in [broncontrole per besluit](amb_ocr_first_visual_verification_2026-11-04.md): LA CAROLINA 067-2011 heeft uitsluitend het traject A16 gewijzigd en verwijst voor technische parameters naar 173-2010; TRANSMECAR 324-2010 is een gefaseerde herstructurering, waarvoor het toenmalige AMB-uitvoeringsbericht nog niet is teruggevonden. Niet als bewezen actuele 2026-exploitatie gebruiken.
+The initial visual review is documented in the [resolution-by-resolution source review](amb_ocr_first_visual_verification_2026-11-04.md): LA CAROLINA 067-2011 only modified the A16 itinerary and refers to 173-2010 for technical parameters. TRANSMECAR 324-2010 concerns a phased restructuring; the corresponding historical AMB implementation notice has not yet been located. Neither should be presented as proof of actual 2026 operation.
 
+Automatic text extraction did not fully verify the following content; manual examination of page images is required.
 
-Niet via automatische tekstextractie volledig verwerkt; handmatige inspectie van pagina-afbeeldingen vereist.
-
-| Prioriteit | Bedrijf | Resolutie | Route | Actie |
+| Priority | Operator | Resolution | Route | Review task |
 |---|---|---|---|---|
-| Hoog | TRANSMECAR | 324-2010 | C17-4160 | Scan pagina's; lees traject, frequentie, capaciteit en kaart |
-| Hoog | TRASALIANCO | 408-2013 | D18-4179 | Controleer kaart en volledige straatvolgorde tegen voorlopige extractie |
-| Middel | LA CAROLINA | 067-2011 | A16-4161 | Verifieer kaart, traject en verwijzingen naar 173-2010 en 204-2012 |
-| Middel | TRASALIANCO | 266-2010 | B19-4176 | Zoek exact PDF-bestand en lees tabellen |
-| Middel | TRASALIANCO | 265-2010 | D12-4154 | Zoek exact PDF-bestand en lees tabellen |
-| Middel | TRASALIANCO | 268-2010 | D17-4158 | Zoek exact PDF-bestand en lees tabellen |
+| High | TRANSMECAR | 324-2010 | C17-4160 | Examine scanned pages; verify itinerary, headway, capacity, and map |
+| High | TRASALIANCO | 408-2013 | D18-4179 | Compare map and complete street sequence against provisional extraction |
+| Medium | LA CAROLINA | 067-2011 | A16-4161 | Verify map, itinerary, and references to 173-2010 and 204-2012 |
+| Medium | TRASALIANCO | 266-2010 | B19-4176 | Verify exact source PDF and read tables |
+| Medium | TRASALIANCO | 265-2010 | D12-4154 | Verify exact source PDF and read tables |
+| Medium | TRASALIANCO | 268-2010 | D17-4158 | Verify exact source PDF and read tables |
 
-Geen cijfers of shapes overnemen zonder verificatie. Gescande resoluties blijven historische bronnen, niet automatisch actuele exploitatie.
+Do not import numerical values or shapes without verification. Scanned resolutions remain historical evidence, not automatic confirmation of current service.
