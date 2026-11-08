@@ -1,7 +1,5 @@
 # Review of 21 unresolved public SIU→AMB itinerary crosswalks
 
-> **Update 2026-11-05:** De bovenstaande tellingen en onderstaande oorspronkelijke kandidaten zijn een historisch gegenereerd review-snapshot van 3 november, niet de actuele beslissingen. De 11 handmatig beoordeelde routes zijn geconsolideerd in [`siu_amb_crosswalk_visual_decisions_2026-11-05.csv`](siu_amb_crosswalk_visual_decisions_2026-11-05.csv). Alle 11 kaarten beoordeeld; A/B, operator-toewijzing en geometriegaten blijven waar vermeld open. Bij conflicten (zoals ROJA RIOMAR en SOLEDAD CALLE 84) heeft de nieuwere handmatige review voorrang. Dit bestand wijzigt geen GTFS-output of generatorlogica.
-
 **All 21 cases processed. No assignment to an A/B route pattern has been verified.**
 
 ## Results
