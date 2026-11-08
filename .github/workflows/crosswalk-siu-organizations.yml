@@ -28,4 +28,4 @@ jobs:
         with:
           name: siu-org-itinerary-crosswalk
           path: build/siu-org-itinerary-crosswalk/
-          retention-days: 45
+          retention-days: 7

@@ -59,4 +59,4 @@ jobs:
           name: amb-resolution-validation
           path: validation-results/
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 7

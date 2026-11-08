@@ -36,5 +36,6 @@ jobs:
         run: python scripts/overlay_coolitoral_256_osm.py --overpass "$OVERPASS_FILE"
       - uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: coolitoral-pt4-pt5-osm-overlay
           path: sources/amb/kmz/coolitoral_256_osm_overlay.json

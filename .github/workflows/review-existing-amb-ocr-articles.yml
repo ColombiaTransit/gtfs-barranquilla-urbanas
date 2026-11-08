@@ -38,4 +38,4 @@ jobs:
         with:
           name: amb-legal-article-review-candidates
           path: build/amb-ocr-review/
-          retention-days: 60
+          retention-days: 7

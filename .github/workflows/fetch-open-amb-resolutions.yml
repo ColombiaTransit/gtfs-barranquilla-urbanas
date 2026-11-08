@@ -32,5 +32,5 @@ jobs:
         with:
           name: AMB-outstanding-original-PDFs-NOT-LEGALLY-APPROVED
           path: build/amb-open-resolution-originals/
-          retention-days: 60
+          retention-days: 7
           if-no-files-found: warn

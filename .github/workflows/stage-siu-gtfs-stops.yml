@@ -52,4 +52,4 @@ jobs:
           name: siu-gtfs-stop-and-crosswalk-staging
           path: build/siu-gtfs-staging/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

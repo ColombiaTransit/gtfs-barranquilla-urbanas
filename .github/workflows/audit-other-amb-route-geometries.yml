@@ -19,6 +19,7 @@ jobs:
           cat build/other-route-geometry-review/summary.md >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: other-AMB-route-geometry-worklist
           path: build/other-route-geometry-review/
           if-no-files-found: error

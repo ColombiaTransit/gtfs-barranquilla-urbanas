@@ -33,4 +33,4 @@ jobs:
           name: siu-public-asset-audit
           path: build/siu-public-asset-audit/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

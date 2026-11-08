@@ -52,4 +52,4 @@ jobs:
         with:
           name: sodetrans-458-2010-existing-text-review
           path: build/sodetrans-b15/report/
-          retention-days: 45
+          retention-days: 7

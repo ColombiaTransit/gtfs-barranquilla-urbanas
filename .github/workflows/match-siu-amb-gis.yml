@@ -46,4 +46,4 @@ jobs:
           name: siu-to-amb-route-candidate-audit
           path: build/siu-to-amb-gis/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

@@ -45,7 +45,7 @@ jobs:
           name: siu-public-itinerary-stop-tables
           path: build/siu-gtfs-stops/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7
       - name: Probe anonymous public route-click GraphQL metadata
         if: always()
         run: |
@@ -64,4 +64,4 @@ jobs:
           name: siu-public-route-click-graphql-metadata
           path: build/siu-route-click-graphql/
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 7

@@ -20,4 +20,4 @@ jobs:
         with:
           name: coolitoral-google-waypoints
           path: build/coolitoral_google/
-          retention-days: 90
+          retention-days: 7

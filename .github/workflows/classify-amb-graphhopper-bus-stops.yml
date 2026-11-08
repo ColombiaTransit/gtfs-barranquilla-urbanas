@@ -53,4 +53,4 @@ jobs:
           name: graphhopper-125-stop-candidate-classes
           path: build/amb-GH-bus-stop-classification/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

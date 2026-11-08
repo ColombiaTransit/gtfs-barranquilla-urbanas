@@ -20,5 +20,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          retention-days: 7
           name: amb-legal-status-audit
           path: sources/amb/legal_validity_ocr_review/gtfs_legal_status_audit.json

@@ -49,4 +49,4 @@ jobs:
           name: siu-21-open-route-links-review
           path: build/siu-open-route-review/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

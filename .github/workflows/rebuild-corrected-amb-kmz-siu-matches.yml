@@ -38,6 +38,7 @@ jobs:
       - name: Upload corrected source and review results
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: corrected-amb-kmz-siu-matches
           path: |
             sources/amb/kmz/manifest.csv

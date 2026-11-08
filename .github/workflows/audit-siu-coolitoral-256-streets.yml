@@ -45,4 +45,4 @@ jobs:
           name: siu-coolitoral-256-street-audit
           path: build/siu-coolitoral-256-street-audit/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

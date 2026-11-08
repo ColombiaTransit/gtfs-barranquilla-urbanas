@@ -43,4 +43,4 @@ jobs:
           name: original-coolitoral-256-2026-source
           path: build/amb-coolitoral-pilot-recovery/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

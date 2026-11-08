@@ -104,6 +104,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          retention-days: 7
           name: coolitoral-256-waypoint-candidates
           path: |
             sources/amb/kmz/coolitoral_256_graphhopper_waypoints.json

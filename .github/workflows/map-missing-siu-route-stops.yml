@@ -82,4 +82,4 @@ jobs:
           name: missing-siu-trip-patterns-with-physical-stop-order-no-times
           path: build/amb-missing-route-stop-trip-patterns/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

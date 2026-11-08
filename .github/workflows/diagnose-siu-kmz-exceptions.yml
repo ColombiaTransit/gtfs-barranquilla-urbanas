@@ -33,6 +33,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          retention-days: 7
           name: siu-kmz-two-route-exceptions
           path: build/two-route-*.csv
           if-no-files-found: warn

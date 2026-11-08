@@ -46,4 +46,4 @@ jobs:
           name: amb-arcgis-route-shape-candidates
           path: build/amb-arcgis-shapes/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

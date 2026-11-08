@@ -55,4 +55,4 @@ jobs:
           name: existing-siu-osm-gap-direction-candidates
           path: build/amb-gap-direction-candidate-staging/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

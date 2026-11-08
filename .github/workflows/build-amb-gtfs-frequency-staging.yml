@@ -52,7 +52,7 @@ jobs:
           name: amb-gtfs-frequency-staging
           path: build/gtfs-frequency-staging/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7
       - name: Consolidate route sources and inspect QA joins
         run: |
           python -m py_compile scripts/consolidate_amb_gtfs_sources.py
@@ -64,4 +64,4 @@ jobs:
           name: AMB-GTFS-source-consolidation-QA
           path: build/gtfs-source-consolidation/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

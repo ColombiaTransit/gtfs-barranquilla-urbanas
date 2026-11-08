@@ -34,4 +34,4 @@ jobs:
           name: siu-public-javascript-graphql-research
           path: build/siu-javascript-research/
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 7

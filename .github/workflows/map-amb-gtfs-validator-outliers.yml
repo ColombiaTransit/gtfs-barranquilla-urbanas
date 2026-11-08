@@ -49,4 +49,4 @@ jobs:
           name: AMB-MobilityData-67-stop-4-order-geojson-review
           path: build/amb-GTFS-remaining-geography-review/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7
