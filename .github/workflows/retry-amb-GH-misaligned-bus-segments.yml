@@ -69,4 +69,4 @@ jobs:
           name: AMB-KMZ-GH-42-geometry-retries
           path: build/amb-GH-dense-KMZ-segment-retry/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

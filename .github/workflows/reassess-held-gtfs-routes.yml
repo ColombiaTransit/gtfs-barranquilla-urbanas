@@ -30,4 +30,4 @@ jobs:
         with:
           name: multisource-held-route-reassessment
           path: build/multisource-route-reassessment/
-          retention-days: 45
+          retention-days: 7

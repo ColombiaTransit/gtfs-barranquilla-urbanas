@@ -59,4 +59,4 @@ jobs:
           name: provisional-AMB-trip-stop-sequences-v2
           path: build/amb-provisional-trip-stop-order-v2/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

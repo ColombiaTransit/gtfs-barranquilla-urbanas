@@ -23,6 +23,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: current-AMBQ-KMZ-GTFS-coverage
           path: |
             build/amb-current-kmz-shape-coverage/

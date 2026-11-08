@@ -36,4 +36,4 @@ jobs:
         with:
           name: gtfs-tripupdates-readiness
           path: build/gtfs-tripupdates-readiness/
-          retention-days: 45
+          retention-days: 7

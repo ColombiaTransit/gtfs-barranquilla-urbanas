@@ -89,4 +89,4 @@ jobs:
           name: graphhopper-bus-gap-direction-review
           path: build/amb-graphhopper-bus-direction-QA/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

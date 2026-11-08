@@ -36,4 +36,4 @@ jobs:
         with:
           name: siu-organization-graphql-probe
           path: build/siu-organization-probe/
-          retention-days: 30
+          retention-days: 7

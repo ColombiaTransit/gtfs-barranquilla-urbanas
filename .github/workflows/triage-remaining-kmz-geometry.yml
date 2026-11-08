@@ -18,6 +18,7 @@ jobs:
           cat build/kmz-remaining-geometry-qa/summary.md >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: remaining-AMBQ-KMZ-geometry-QA
           path: build/kmz-remaining-geometry-qa/
           if-no-files-found: error

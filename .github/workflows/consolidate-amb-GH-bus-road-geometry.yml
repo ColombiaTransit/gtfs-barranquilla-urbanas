@@ -72,4 +72,4 @@ jobs:
             build/amb-GH-best-geometry/
             build/amb-GH-best-refined/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

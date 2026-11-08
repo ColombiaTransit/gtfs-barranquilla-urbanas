@@ -62,4 +62,4 @@ jobs:
             build/gtfs-trip-timing-staging/
             build/amb-shared-stop-reuse/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

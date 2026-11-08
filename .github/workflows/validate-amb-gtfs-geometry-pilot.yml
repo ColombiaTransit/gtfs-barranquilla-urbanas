@@ -92,4 +92,4 @@ jobs:
           name: Barranquilla-GTFS-GH-Shapes-MobilityData-QA-NOT-PUBLISHABLE
           path: build/amb-gtfs-mobilitydata-PILOT-NOT-PUBLISHABLE/
           if-no-files-found: warn
-          retention-days: 60
+          retention-days: 7

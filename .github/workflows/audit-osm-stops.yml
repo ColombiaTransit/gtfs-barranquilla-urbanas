@@ -50,4 +50,4 @@ jobs:
           name: barranquilla-osm-stop-audit
           path: build/amb-osm-stops/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

@@ -30,4 +30,4 @@ jobs:
           name: amb-2020-first-last-departures
           path: amb-2020-posters/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

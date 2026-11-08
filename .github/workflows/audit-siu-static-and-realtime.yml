@@ -46,4 +46,4 @@ jobs:
           name: siu-source-audit
           path: build/siu-source-audit/
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 7

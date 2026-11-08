@@ -48,4 +48,4 @@ jobs:
           name: amb-kmz-route-stop-coverage-and-candidates
           path: build/amb-kmz-stop-gaps/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

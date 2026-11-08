@@ -78,4 +78,4 @@ jobs:
           name: AMB-seven-worst-stop-shape-source-and-validator-QA
           path: build/amb-seven-P1-GH-shape-investigation/
           if-no-files-found: warn
-          retention-days: 60
+          retention-days: 7

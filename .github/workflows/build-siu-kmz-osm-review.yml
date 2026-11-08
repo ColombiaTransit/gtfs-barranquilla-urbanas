@@ -21,6 +21,7 @@ jobs:
       - name: Upload interactive HTML review pages
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: siu-kmz-osm-11-review-pages
           path: build/siu_kmz_visual_review/
           if-no-files-found: error

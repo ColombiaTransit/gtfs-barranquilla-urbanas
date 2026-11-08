@@ -35,4 +35,4 @@ jobs:
           name: public-siu-alameda-stop-probe
           path: build/siu-public-route-probe/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7

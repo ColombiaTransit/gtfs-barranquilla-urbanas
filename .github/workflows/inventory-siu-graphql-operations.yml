@@ -27,4 +27,4 @@ jobs:
         with:
           name: siu-graphql-operation-inventory
           path: build/siu-graphql-operations/
-          retention-days: 30
+          retention-days: 7

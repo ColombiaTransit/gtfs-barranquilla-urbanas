@@ -49,4 +49,4 @@ jobs:
             flota-link-results/
             flota-pdf-output/
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 7

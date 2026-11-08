@@ -70,6 +70,7 @@ jobs:
       - name: Upload complete SIU crosswalk
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: SIU-GTFS-full-crosswalk-QA
           path: build/siu-gtfs-crosswalk/
           if-no-files-found: error
@@ -78,6 +79,7 @@ jobs:
       - name: Upload SIU name and family audit
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: SIU-route-names-and-families-QA
           path: build/siu-gtfs-name-audit/
           if-no-files-found: error
@@ -86,12 +88,14 @@ jobs:
       - name: Upload SIU family stop-to-shape spatial QA
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: SIU-family-stop-to-shape-QA
           path: build/siu-family-shape-validation/
           if-no-files-found: error
       - name: Upload route source consolidation and summary
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: AMB-GTFS-source-consolidation-QA
           path: build/gtfs-source-consolidation/
           if-no-files-found: error

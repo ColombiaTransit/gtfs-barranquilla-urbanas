@@ -34,4 +34,4 @@ jobs:
         with:
           name: combined-gtfs-123-route-audit
           path: build/combined-gtfs-123/
-          retention-days: 45
+          retention-days: 7

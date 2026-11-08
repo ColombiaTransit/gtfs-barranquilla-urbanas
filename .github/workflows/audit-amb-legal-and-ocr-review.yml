@@ -122,4 +122,4 @@ jobs:
             build/amb-ocr-image-evidence/
             build/amb-monterrey-437-2016/
           if-no-files-found: warn
-          retention-days: 60
+          retention-days: 7

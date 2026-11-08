@@ -80,4 +80,4 @@ jobs:
           name: AMB-70-patterns-GH-bus-road-and-stop-order-QA
           path: build/amb-graphhopper-full-route-geometry-QA/
           if-no-files-found: warn
-          retention-days: 45
+          retention-days: 7
