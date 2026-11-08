@@ -12,7 +12,7 @@
   "uncovered_route_variant_records": 60,
   "uncovered_variants_with_osm_candidate_30m": 38,
   "uncovered_variants_with_siu_candidate_30m": 60,
-  "nearby_50m_route_stop_candidates": 16623,
+  "nearby_50m_route_stop_candidates": 16923,
   "legal_mapping_final_confirmed": 0,
   "tpc_route_stops_confirmed_from_geographic_proximity": 0,
   "no_stop_times_or_gtfs_shapes_generated": true
