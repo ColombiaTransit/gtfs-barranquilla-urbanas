@@ -4,7 +4,7 @@ OBJECTID,Name,FolderPath,route_code_tokens,geometry_type
 3,C20-4181,Rutas Transporte Publico 2019/RS_AMB_2019/Cooasoatlan,C204181,MultiLineString
 4,C20-B-4187,Rutas Transporte Publico 2019/RS_AMB_2019/Cooasoatlan,C20B4187,LineString
 5,C2-4133,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C24133,MultiLineString
-6,C2-B-4187,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C2B4187,LineString
+6,C2-B-4187,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,,LineString
 7,C18- 4141,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C184141,MultiLineString
 8,C9-4140,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,C94140,MultiLineString
 9,A15-4159,Rutas Transporte Publico 2019/RS_AMB_2019/Coochofal,A154159,MultiLineString
