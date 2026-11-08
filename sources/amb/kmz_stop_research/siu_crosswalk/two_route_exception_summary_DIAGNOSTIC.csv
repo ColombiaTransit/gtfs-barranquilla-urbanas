@@ -1,3 +1,3 @@
 siu_name,kmz_candidate,total_stops,outside_50m,backward_gt20m,implausible_forward,first_stop_distance_m,last_stop_distance_m,selected_orientation,geographic_mapping_status,legal_mapping_confirmed,gtfs_approved
-LAS PALMAS,C5-4135,159,8,15,1,2.9,0.3,forward,provisional_exception_open,no,no
+LAS PALMAS,C5-4135,159,8,6,1,2.9,0.3,forward,provisional_exception_open,no,no
 VILLA CAROLINA ZOOLOGICO,B11-4166,139,8,0,0,1388.7,866.6,forward,provisional_exception_open,no,no
