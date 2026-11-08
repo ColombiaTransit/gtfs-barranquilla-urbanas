@@ -1,7 +1,7 @@
 # SIU TPC haltegegevens — publieke gecomprimeerde itinerarylijst
 
-**Vastlegging:** 2026-11-04T16:55:28+00:00. **Bron:** https://siu.ambq.gov.co/siu/schedule-mng/schedules. Anonieme openbare browser zonder account.
-**36 SIU-itineraries, 6873 route-haltevermeldingen, 6873 unieke halte-UUID's.**
+**Vastlegging:** 2026-11-08T14:03:20+00:00. **Bron:** https://siu.ambq.gov.co/siu/schedule-mng/schedules. Anonieme openbare browser zonder account.
+**37 SIU-itineraries, 7090 route-haltevermeldingen, 7090 unieke halte-UUID's.**
 **GPS-validatie:** 0 ontbrekende of ongeldige coördinaten; 0 UUID's met uiteenlopende coördinaten.
 
 ## Twee MHT-opnamen als tegencontrole
